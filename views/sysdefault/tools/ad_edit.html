@@ -86,21 +86,7 @@
 					<th>描述：</th>
 					<td><textarea class='textarea' name='description' alt='请填写文章内容'>{$this->adRow['description']}</textarea></td>
 				</tr>
-				<tr>
-					<th>绑定商品分类：</th>
-					<td>
-						<!--分类数据显示-->
-						<span id="__categoryBox" style="margin-bottom:8px"></span>
-						<script id="categoryButtonTemplate" type="text/html">
-						<button class="btn" type="button" onclick="return confirm('确定删除此分类？') ? $(this).remove() : '';">
-							<input type="hidden" value="<%=templateData['id']%>" name="goods_cat_id" />
-							<span class="del"><%=templateData['name']%></span>
-						</button>
-						</script>
-						<button class="btn" type="button" onclick="selectGoodsCategory('{url:/block/goods_category/type/radio}','goods_cat_id')"><span class="add">设置分类</span></button>
-						<label> 可选项，与商品分类做关联，与商品分类绑定在一起，动态的展示 </label>
-					</td>
-				</tr>
+				
 				<tr>
 					<th></th><td><button class='submit' type='submit'><span>确 定</span></button></td>
 				</tr>

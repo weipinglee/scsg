@@ -4,7 +4,7 @@ select, textarea, input[type="email"], input[type="text"], input[type="tel"], in
 	
 }
 
-/*ÊÕ»õÈËµØÖ·*/
+/*ï¿½Õ»ï¿½ï¿½Ëµï¿½Ö·*/
 .pages .qrdd{
 	background: #fff;
 }
@@ -17,8 +17,8 @@ select, textarea, input[type="email"], input[type="text"], input[type="tel"], in
 .pages .qrdd .float_rt{
 	float:right;
 }
-/*ÊÕ»õÈËµØÖ·½áÊø*/
-/* ÉÌÆ·ÏêÇé */
+/*ï¿½Õ»ï¿½ï¿½Ëµï¿½Ö·ï¿½ï¿½ï¿½ï¿½*/
+/* ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½ */
 .pages .qrdds{
 	margin-top:15px; 
 	
@@ -55,7 +55,7 @@ select, textarea, input[type="email"], input[type="text"], input[type="tel"], in
 	/* left: -10px; */
 }
 
-/* Ö§¸¶·½Ê½ */
+/* Ö§ï¿½ï¿½ï¿½ï¿½Ê½ */
 .pages .qrdds .qrdds_zf{
 	margin-top: 0px;
 	border-top:1px solid #c0c0c0;
@@ -121,10 +121,9 @@ select, textarea, input[type="email"], input[type="text"], input[type="tel"], in
 	font-size:20px;
 }
 
-/*·¢Æ±*/
+/*ï¿½ï¿½Æ±*/
 
 .qrdd .fapiao{
-	display:none;
 	padding-left: 10px;
 	border-top: 1px solid #c0c0c0;
 	padding-top: 10px;
@@ -132,4 +131,8 @@ select, textarea, input[type="email"], input[type="text"], input[type="tel"], in
 .qrdd .fapiao .fa_tit{
 	height:30px;
 	line-height: 30px;
+}
+.qrdds_sum .total{
+	font-size:16px;
+	font-weight:bold;
 }

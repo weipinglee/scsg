@@ -31,6 +31,9 @@ class direct_alipay extends paymentPlugin
 	{
 		echo "success";
 	}
+	public function refund(){
+		
+	}
 	/**
 	 * 获取退款提交地址
 	 */

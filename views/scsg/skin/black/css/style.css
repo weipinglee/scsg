@@ -31,4 +31,5 @@ ul, ul li{list-style-type:none;}
 #navul li.navmoon ul a:hover{color:#0573bd;background:#FFF;}
 
 #navul .erwei{width:25px;}
+#navul .erwei ul{float:left; left:-50px;}
 #navul .erwei:hover{width:25px;}

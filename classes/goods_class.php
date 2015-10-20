@@ -759,4 +759,5 @@ class goods_class
 		$where = 'id='.$goodId;
 		return $goodsDB->getField($where,'seller_id');
 	}
+
 }

@@ -426,7 +426,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{query: name=order_log as ol where=ol.order_id eq $order_id}
+				{query: name=order_log as ol where=ol.order_id eq $order_id and ol.order_id eq 0}
 				<tr>
 					<td>{$item['addtime']}</td>
 					<td>{$item['user']}</td>

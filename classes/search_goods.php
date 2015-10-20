@@ -202,7 +202,7 @@ class search_goods
 	 * @param bool $isCondition 是否筛选出商品的属性，价格等数据
 	 * @return IQuery
 	 */
-	public static function find($defaultWhere = '',$limit = 21,$isCondition = true)
+	public static function find($defaultWhere = '',$limit = 20,$isCondition = true)
 	{
 		//获取配置信息
 		$siteConfigObj = new Config("site_config");
@@ -211,13 +211,13 @@ class search_goods
 
 		//开始查询
 		$goodsObj = new IQuery("goods as go");
-		$goodsObj->page     = isset($_GET['page']) ? intval($_GET['page']) : 1;
+		$goodsObj->page     = IReq::get('page') ? intval(IReq::get('page')) : 1;
 		$goodsObj->fields   = ' go.id,go.name,go.comments,go.grade,go.goods_no,go.sell_price,go.market_price,go.store_nums,go.img,go.sale,go.seller_id ';
 		$goodsObj->pagesize = $limit;
 
 		/*where条件拼接*/
 		//(1),当前产品分类
-		$where = ' go.is_del = 0 ';
+		$where = '( go.is_del = 0 OR go.is_del = 4) ';
 
 		//(2),商品属性,规格筛选
 		$attrCond  = array();
@@ -363,7 +363,7 @@ class search_goods
 				$goodsDB = new IModel("goods as go");
 			}
 			
-			$goodsCondData = $goodsDB->query("go.id in (".join(',',$GoodsId).") and go.is_del = 0 ","id");
+			$goodsCondData = $goodsDB->query("go.id in (".join(',',$GoodsId).") and (go.is_del = 0 OR go.is_del = 4) ","id");
 			
 			$GoodsId = array();
 			foreach($goodsCondData as $key => $val)
@@ -499,7 +499,6 @@ class search_goods
 		//设置IQuery类的各个属性
 		$goodsObj->where = $where;
 		$goodsObj->order = join(',',$orderArray);
-		
 		return $goodsObj;
 	}
 }

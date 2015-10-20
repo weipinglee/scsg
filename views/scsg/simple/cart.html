@@ -109,11 +109,7 @@
 				
 				<li>
 					<a href="{url:/site/products/id/$item[id]}">
-						{if:$item['img']!=''}
-								<img width="98px" height="106px" src="{url:/pic/thumb/img/$item[img]/w/98/h/106}" alt="{$item['name']}" title="{$item['name']}">
-						{else:}
-								<img width="98px" height="106px" src="{skin:images/front/nopic_435_435.gif}" alt="{$item['name']}" title="{$item['name']}">
-						{/if}
+						<img width="98px" height="106px" src="{url:/pic/thumb/img/$item[img]/w/98/h/106}" alt="{$item['name']}" title="{$item['name']}" onerror='this.src="{skin:images/front/nopic_435_435.gif}"'>
 					</a>
 					<p class="pro_title"><a href="{url:/site/products/id/$item[id]}">"{$item['name']}"</a></p>
 					<p class="brown"><b>￥{$item['sell_price']}</b></p>

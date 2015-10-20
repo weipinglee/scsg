@@ -13,7 +13,7 @@ return array(
 	'getGoodsInfo' => array(
 		'query' => array(
 			'name'   => 'goods as go',
-			'where'  => 'id = #id# and is_del = 0',
+			'where'  => 'id = #id# and (is_del = 0 or is_del = 4)',
 			'fields' => 'go.name,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id',
 			'type'   => 'row',
 		)
@@ -22,7 +22,7 @@ return array(
 	'getProductInfo' => array(
 		'query' => array(
 			'name'   => 'goods as go,products as pro',
-			'where'  => 'pro.id = #id# and pro.goods_id = go.id and go.is_del = 0',
+			'where'  => 'pro.id = #id# and pro.goods_id = go.id and (go.is_del = 0 or go.is_del=4)',
 			'fields' => 'pro.sell_price,pro.weight,pro.id as product_id,pro.spec_array,pro.goods_id,pro.store_nums,pro.products_no as goods_no,go.name,go.point,go.exp,go.img,go.seller_id',
 			'type'   => 'row',
 		)
@@ -197,7 +197,7 @@ return array(
 	    'query'=>array(
 	    	'name'  => 'category_extend as ca',
 	    	'join'  => 'left join goods as go on go.id = ca.goods_id',
-	    	'where' => ' ca.category_id = #categroy_id# and go.is_del = 0',
+	    	'where' => ' ca.category_id = #categroy_id# and (go.is_del = 0 OR go.is_del = 4)',
 	    	'order' => ' go.sort asc,go.id desc',
 	    	'limit' => 10,
 	    )
@@ -256,7 +256,7 @@ return array(
 	'getVipSellerList'=>array(
 	    'query'=>array(
 	    	'name'  => 'seller',
-	    	'order'=> ' sort acs ',
+	    	'order'=> ' sort asc ',
 	    	'limit' => 10,
 	    	'where' => 'is_del = 0 and is_vip = 1',
 	    )
@@ -264,6 +264,14 @@ return array(
 	//取得VIP商户列表
 	'getSellerList'=>array(
 	   'file' => 'seller.php','class' => 'APISeller'
+	),
+	'getSellerList2'=>array(
+			'query'=>array(
+					'name'  => 'seller',
+					'order'=> ' sort asc ',
+					'limit' => 4,
+					'where' => 'is_del = 0 ',
+			)
 	),
 	//按顶级分类取得推荐商户列表xin
 	'getSellerListByCat'=>array(
@@ -559,6 +567,9 @@ return array(
 	//用户中心-订单列表
 	'getOrderList' => array(
 		'file' => 'ucenter.php','class' => 'APIUcenter'
+	),
+	'getPreorderList'=>array(
+			'file' => 'ucenter.php','class' => 'APIUcenter'
 	),
 	//用户中心-订单中商品列表
 	'getOrderGoodsListByGoodsid'=>array(

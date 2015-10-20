@@ -273,6 +273,11 @@ text-overflow: ellipsis;
 white-space: nowrap;
 overflow: hidden;
 }
+.notice .news-list a:hover{
+	color:#E71F19;
+}
+.red-a:hover{color:#E71F19;}
+.underline-a:hover{text-decoration:underline;}
 .notice .small-pro {
 width: 228px;
 height: 205px;
@@ -288,7 +293,6 @@ display: block;
 .big-pro {
 margin-top:10px;
 width: 1190px;
-height: 60px;
 overflow: hidden;
 }
 .big-shop {
@@ -383,12 +387,11 @@ height:15px;
 float:left;
 padding:20px 0 0 25px;
 }
-.floor .fl-cnt .fl-rcmd .fl-rcmd-bg .admanage{
-clear:both;
+.ad-shine .admanage{
+clear:both;position:relative;
 }
-.floor .fl-cnt .fl-rcmd .fl-rcmd-bg .admanage .shine{position:absolute; z-index: 3; position: absolute; top: 140px; left: 0; background: url(../images/shine.png) no-repeat 0; opacity:0;filter:"alpha(opacity=0)";-ms-filter:"alpha(opacity=0)"; /* �ɰ�IE */}
+.ad-shine .admanage .shine{position:absolute; z-index: 3; position: absolute; top: 0; left: 0; background: url(../images/shine.png) repeat-x; opacity:0;filter:"alpha(opacity=0)";-ms-filter:"alpha(opacity=0)"; /* �ɰ�IE */}
 
-.floor .fl-cnt .fl-rcmd1 .fl-rcmd-bg1 .admanage .shine{position:absolute; z-index: 3; position: absolute; top: 0; left: 0; background: url(../images/shine.png) no-repeat 0; opacity:0;filter:"alpha(opacity=0)";-ms-filter:"alpha(opacity=0)"; /* �ɰ�IE */}
 
 .floor .fl-cnt .f-r {
 width: 630px;

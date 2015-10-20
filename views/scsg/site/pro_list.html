@@ -11,6 +11,7 @@ $seller = new IModel('seller');
 $seller_arr = array();
 $seller_arr[0]='平台自营';
 }
+
 {foreach:items =$resultData}
 	{if:!isset($seller_arr[$item['seller_id']])}
 	{set:$seller_arr[$item['seller_id']]=$seller->getField('id='.$item['seller_id'],'true_name')}

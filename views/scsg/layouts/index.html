@@ -122,7 +122,7 @@
 		        <div class="notice f-r">
 		        	  <!--tabs-->
 		        	<div class="tabs">
-		        			{set:$promotion=Api::run('getPromotionList')}
+		        			
 							
 		    				<ul class="tab-title clearfix">
 		    					<li class="tab-title-hover"><h2 class="t14">商城公告</h2></li>
@@ -140,58 +140,6 @@
 								</ul>
 								</div>
 							
-		                    <div class="tab-item tab-item-hover" style="display: none;">
-								<ul class="news-list">
-									{if:count($promotion)!=0}
-									{set:$end=strtotime($promotion[0]['end_time'])}
-									<li>
-										<!--limit-->
-										<div class="limit">
-											<!--limit-zero-->
-											<div class="limit-zero">
-												<!--limit-title-->
-												<div class="limit-title">
-													<!--limit-title-->
-													<div class="limit-title">
-														<h2 class="t16">限时抢购</h2>
-														<div class="limit-timeout">
-															<ul id='limit-2' class="time-format clearfix countdown">
-																<li>剩余 </li>
-																<li class="time-num day"><b id='cd_day_2'></b></li>
-																<li class="split day">天</li>
-																<li class="time-num"><b id='cd_hour_2'></b></li>
-																<li class="split">:</li>
-																<li class="time-num"><b id='cd_minute_2'></b></li>
-																<li class="split">: </li>
-																<li class="time-num"><b id='cd_second_2'></b></li>
-																<li>结束 </li>
-																<input name='endTime' type='hidden' value='{$end}' />
-															</ul>
-		
-															
-														</div>
-													</div>
-													<!--limit-title-->
-												</div>
-												<!--limit-title-->
-													<a title="速度抢购" href="{url:/site/shangou}" style="">
-														<img class="jImg" width="95%" height="100%" src="{webroot:$promotion[0]['img']}" >
-													</a>
-												</div>
-											<!--limit-zero-->
-			
-			
-											<!--limit-pro-->
-											<div class="limit-pro">
-															  				
-											</div>
-											<!--limit-pro-->
-										</div>
-										<!--limit-->
-									</li>
-									{/if}
-								</ul>
-		   						</div>
 		    				</div>
 						</div>
 						  <!--tabs-->

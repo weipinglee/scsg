@@ -8,7 +8,7 @@ $(document).ready(function(){
 			shine.css('width',w).css('height',h);
 			$(this).append(shine);
 		});
-	$(".floor  .admanage").on('mouseenter',function(){
+	$(".ad-shine  .admanage").on('mouseenter',function(){
 		$(this).find(".shine").stop();
 		$(this).find(".shine").css("opacity","0.4"); 
 		$(this).find(".shine").animate({opacity: '0'},500);

@@ -73,5 +73,6 @@ class IViewAction extends IAction
 		$view = strtr($viewPath,'-','/');
 
 		$this->view = $this->basePath = $this->getController()->getViewFile($view);
+		
 	}
 }

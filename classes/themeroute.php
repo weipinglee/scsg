@@ -26,7 +26,7 @@ class themeroute extends IInterceptorBase
 
 	//后台管理的控制器
 	private static $syscontroller = array(
-		'pic','block','brand','comment','goods','market','member','message','order','system','systemadmin','tools'
+		'pic','block','brand','comment','goods','market','member','message','order','system','systemadmin','tools','presell','preorder'
 	);
 
 	//卖家管理的控制器

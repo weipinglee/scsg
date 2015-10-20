@@ -16,19 +16,19 @@
 .history img{width: 100%;}
 .history p{margin: 10px;}
 /*商品评价*/
-.history #topPriceHistroyDiv .sppj{
+.history #commentBox .sppj{
 	margin: 5px 0 0 0;
 }
-.history #topPriceHistroyDiv .more{
+.history #commentBox .more{
 	float:right;margin-right:10px;
 }
-.history #topPriceHistroyDiv .sppj .yhimg{
+.history #commentBox .sppj .yhimg{
 	width: 30px;
 	display: block;
 	float: left;
 	margin: 0px 10px;
 }
-.history #topPriceHistroyDiv .sppj.yhname{
+.history #commentBox .sppj.yhname{
 	line-height: 30px;
 	padding:0 5px;
 }
@@ -254,12 +254,10 @@
 .tc_gmsl{
 	height:41px;
 }
-.tc_le .tc_backgr{
+.tc_le .current{
 	background: red;
 	color:#fff;
 }
 /*点击购物车后出现弹框样式结束*/
-
-
 
 

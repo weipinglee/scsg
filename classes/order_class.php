@@ -419,10 +419,11 @@ class Order_Class
 	/**
 	 * 获取订单基本信息
 	 * @param $orderIdString string 订单ID序列
+	 * @param $type string 订单类型 预售时有效
 	 */
-	public function getOrderInfo($orderIdString)
+	public function getOrderInfo($orderIdString,$type)
 	{
-		$orderObj    = new IModel('order');
+		$orderObj    = $type ? new IModel('order_presell') : new IModel('order');
 		$areaIdArray = array();
 		$orderList   = $orderObj->query('id in ('.$orderIdString.')');
 
@@ -481,6 +482,37 @@ class Order_Class
 				$goodsArray['delivery_fee']= $val['deliveryPrice'];
 				$goodsArray['save_price']  = $val['insuredPrice'];
 				$goodsArray['tax']         = $val['taxPrice'];
+				$orderGoodsObj->setData($goodsArray);
+				$orderGoodsObj->add();
+			}
+		}
+	}
+	/**
+	 * @brief 把预售订单商品同步到order_goods_pre表中
+	 * @param $order_id 订单ID
+	 * @param $goodsInfo 商品和货品信息（购物车数据结构,countSum 最终生成的格式）
+	 */
+	public function insertOrderGoodsPresell($order_id,$goodsResult = array())
+	{
+		$orderGoodsObj = new IModel('order_goods_pre');
+	
+		//清理旧的关联数据
+		$orderGoodsObj->del('order_id = '.$order_id);
+	
+		$goodsArray = array(
+				'order_id' => $order_id
+		);
+	
+		if(isset($goodsResult['goodsList']))
+		{
+			foreach($goodsResult['goodsList'] as $key => $val)
+			{
+				
+	
+				$goodsArray['product_id']  = $val['product_id'];
+				$goodsArray['goods_id']    = $val['goods_id'];
+				$goodsArray['img']         = $val['img'];
+				$goodsArray['goods_nums']  = $val['count'];
 				$orderGoodsObj->setData($goodsArray);
 				$orderGoodsObj->add();
 			}
@@ -742,7 +774,6 @@ class Order_Class
 	 		'time'          => ITime::getDateTime(),
 	 		'freight_id'    => IFilter::act(IReq::get('freight_id'),'int'),
 	 	);
-
 	 	switch($sendor)
 	 	{
 	 		case "admin":
@@ -772,7 +803,7 @@ class Order_Class
 	 	$tb_delivery_doc = new IModel('delivery_doc');
 	 	$tb_delivery_doc->setData($paramArray);
 	 	$deliveryId = $tb_delivery_doc->add();
-
+	 	
 		//订单对象
 		$tb_order   = new IModel('order');
 		$tbOrderRow = $tb_order->getObj('id = '.$order_id);
@@ -848,11 +879,11 @@ class Order_Class
     	);
     	$mobileMsg = smsTemplate::sendGoods($replaceData);
     	Hsms::send($paramArray['mobile'],$mobileMsg);
-
+    	
     	//同步发货接口，如支付宝担保交易等
     	if($sendResult && $sendStatus == 1)
     	{
-    		sendgoods::run($order_id);
+    		sendgoods::run($paramArray);
     	}
 	}
 
@@ -1079,6 +1110,7 @@ class Order_Class
 		$refundDB->update('id = '.$refundId);
 		
 		$orderGoodsRow = $orderGoodsDB->getObj('order_id = '.$order_id.' and goods_id = '.$refundsRow['goods_id'].' and product_id = '.$refundsRow['product_id']);
+	
 		$order_goods_id = $orderGoodsRow['id'];
 
 		//未发货的情况下还原商品库存
@@ -1301,7 +1333,7 @@ class Order_Class
 	public static function is_cancle($order_id){
 		$orderM = new IModel('order');
 		$orderRow = $orderM->getObj('id='.$order_id);
-		$period = 6;//有效期6小时
+		$period = 48;//有效期6小时
 		$now = ITime::getNow();
 		$orderTime = ITime::getTime($orderRow['create_time']);
 		if($orderRow['pay_status']==1 && $orderRow['status']==6){//已付款、已退款可以作废
@@ -1330,5 +1362,17 @@ class Order_Class
 			}
 		}
 		return $statusText;
+	}
+	/**
+	 * 判断订单是否过期
+	 * @$start_time  开始时间
+	 * @$days int 超过此时间失效
+	 * @return bool
+	 */
+	public static function is_overdue($start_time,$days){
+		if(ITime::getTime()-ITime::getTime($start_time)>$days*24*3600){
+			return false;
+		}
+		return true;
 	}
 }

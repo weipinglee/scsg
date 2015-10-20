@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>javascript</title>
+{js:jquery}
+<script type='text/javascript' src='{theme:javascript/common.js}'></script>
+<link rel="stylesheet" href="{skin:css/afterpay.css}" type="text/css">
+</head>
+<body >
+
+<div class="tanchu">
+	<div class="dialog">
+		<p class="con countdown" id="timeRemaining-1">请于
+			<span id='cd_day_1'></span>天
+			<span id='cd_hour_1'></span>小时
+			<span id='cd_minute_1'></span>分
+			<span id='cd_second_1'></span>秒	
+			<input name='endTime' type='hidden' value='{$this->end_time}' />
+		</p>
+		{if:isset($_GET['order_type'])&&$_GET['order_type']==4}
+		<p class="pay"><i class="succeed"></i>如已经成功支付，请点击：<a class="pay_ok" href='javascript:void(0)' onclick='window.parent.location.href="{url:/ucenter/preorder_detail/id/$this->order_id}"'>已完成付款</a></p>
+		<p class="pay"><i class="warning"></i>如付款遇到问题，你可以：<a class="pay_error" href='javascript:void(0)' onclick='window.parent.location.href="{url:/block/doPayPresell/order_id/$this->order_id}"'>重新支付</a></p>
+		{else:}
+		<p class="pay"><i class="succeed"></i>如已经成功支付，请点击：<a class="pay_ok" href='javascript:void(0)' onclick='window.parent.location.href="{url:/ucenter/order_detail/id/$this->order_id}"'>已完成付款</a></p>
+		<p class="pay"><i class="warning"></i>如付款遇到问题，你可以：<a class="pay_error" href='javascript:void(0)' onclick='window.parent.location.href="{url:/block/doPay/order_id/$this->order_id}"'>重新支付</a></p>
+		{/if}
+		<p class="con"><a href='javascript:void(0)' onclick='window.parent.location.href="{url:/site/help_list/id/4}"'>支付常见问题</a></p>
+	</div>
+</div>
+</body>
+</html>

@@ -67,16 +67,17 @@ class IPaging
     /**
      * @brief 得到对应要查询分页的数据内容
      * @param int  $page要查询的页数
+     * @param int  $p  查询的页码大于最大页面的标示 
      * @return Array 数据
      */
-	public function getPage($page)
+	public function getPage($page,&$p=0)
 	{
 		$page=intval($page);
 		$this->index=$page;
 		if($page<=0)$this->index=1;
 		if($this->totalpage>0)
 		{
-			if($page>$this->totalpage)$this->index=$this->totalpage;
+			if($page>$this->totalpage){$this->index=$this->totalpage;$p=1;}
 			$this->firstpage=$this->index-floor($this->pagelength/2);
 			if($this->firstpage<=0)$this->firstpage=1;
 			$this->lastpage=$this->firstpage+$this->pagelength-1;

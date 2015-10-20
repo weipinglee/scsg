@@ -12,7 +12,7 @@
 	var logPath = '{url:/simple/login_act}';
 	var checkErrTimesUrl = '{url:/simple/checkErrTimes}';
 	var returnUrl = '{url:$callback}';
-	var servicePhone = '400-1234-1234567';
+	var servicePhone = '{$site_config["phone"]}';
 	
 	
 	var LOGIN_RESULT = {SUCCESS:0,FAIL:1};                  
@@ -26,31 +26,7 @@
 	var valid_code_service_flag="1"; 
 	var showValidCode = "0"; 
 	var mUrl = "#"; 
-	
-	var no3wUrl = "";
-	var imgPath = "#";
-	var fromDomain = "";         
-	var resetIframeUrl = fromDomain + "/login/callback.do";       
-	
-	var yhdUrl="#";
-    var yhdPassportUrl="#";
-	var ywPassportUrl="#";
-	//var pubkey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXQG8rnxhslm+2f7Epu3bB0inrnCaTHhUQCYE+2X+qWQgcpn+Hvwyks3A67mvkIcyvV0ED3HFDf+ANoMWV1Ex56dKqOmSUmjrk7s5cjQeiIsxX7Q3hSzO61/kLpKNH+NE6iAPpm96Fg15rCjbm+5rR96DhLNG7zt2JgOd2o1wXkQIDAQAB";
 </script>
-
-
-	<link rel="shortcut icon" href="#">
-	
-	<script type="text/javascript">
-		var no3wUrl="";
-		var currSiteId = 1;
-		var URLPrefix = {"mymall":"#","passport_statics":"#","yiwangauth":"#","yaowang":"#","tracker":"tracker.yhd.com","passport":"#","my":"#","central":"#","validCodeShowUrl":"#","mall":"#","passportother":"#"};
-		var yhdUrl="#";
-        var yhdPassportUrl="#";
-        var ywPassportUrl="#";
-        var loli = window['loli'] || {};
-        var valid_code_service_flag="1"; 
-	</script>
   
    
 	<input type="hidden" id="isAutoLogin" value="0">
@@ -91,7 +67,7 @@
 					        	<span class="code_right" id="code_right" style="display:none"></span>
                                 <span class="code_wrong" id="code_wrong"></span>
 					        </div>
-					    	<span class="verify_code_box" style="margin: 0px 15px 0px 15px;"><img src='{url:/simple/getCaptcha/w/122/h/55/s/15}' onclick="changeCaptcha('{url:/simple/getCaptcha/w/90/h/30/s/15}')" id='captchaImg' /></span>
+					    	<span class="verify_code_box" style="margin: 0px 15px 0px 15px;"><img src='{url:/simple/getCaptcha/w/122/h/55/s/15}' onclick="changeCaptcha('{url:/simple/getCaptcha/w/122/h/55/s/15}')" id='captchaImg' /></span>
 					    </div>
 					    
 					    <p id="autoLoginDiv" class="auto_login">
@@ -115,16 +91,7 @@
 							<li><a href="#" target="_blank" class="alipay" title="支付宝"></a></li>
 							<li><a href="#" target="_blank" class="weixin" title="微信"></a></li>
 						</ul>
-						<!--<div class="account_more">更多合作网站<a href="javascript:void(0);" class="unfold" title="展开"></a></div>
-						<ul class="account_list clearfix">
-							<li><a href="https://passport.yhd.com/netease/login.do" target="_blank" class="wangyi"><i></i>网易</a></li>
-							<li><a href="https://passport.yhd.com/baidu/login.do" target="_blank" class="baidu"><i></i>百度</a></li>
-							<li><a href="https://passport.yhd.com/139/login.do" target="_blank" class="yidong"><i></i>中国移动</a></li>
-							<li><a href="https://passport.yhd.com/kaixin/login.do" target="_blank" class="kaixin"><i></i>开心网</a></li>
-							<li><a href="https://passport.yhd.com/renren/login.do" target="_blank" class="renren"><i></i>人人网</a></li>
-							<li><a href="https://passport.yhd.com/wanlitong/login.do" target="_blank" class="pingan"><i></i>平安万里通</a></li>
-							<li><a href="https://passport.yhd.com/mogujie/login.do" target="_blank" class="mogujie"><i></i>蘑菇街</a></li>
-						</ul>	-->
+				
 					</div>
 					
 				

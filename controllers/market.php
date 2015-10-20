@@ -634,6 +634,7 @@ class Market extends IController
 		$this->redirect('pro_speed_list');
 	}
 
+	
 	//[限时抢购]删除
 	function pro_speed_del()
 	{

@@ -39,8 +39,9 @@ class IController extends IControllerBase
 	public function __construct($module,$controllerId)
 	{
 		$this->module = $module;
+		
 		$this->ctrlId = $controllerId;
-
+		
 		//初始化lang方案
 		$this->lang = $this->module->language;
 	}
@@ -134,7 +135,7 @@ class IController extends IControllerBase
 		IInterceptor::run("onCreateAction");
 		$actionObj->run();
 		IInterceptor::run("onFinishAction");
-
+		
 		//处理缓冲区
 		die(trim(ob_get_clean()));
 	}

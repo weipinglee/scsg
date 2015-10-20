@@ -363,6 +363,19 @@ margin-right: 10px;
 }
 
 .search .s-box .kw-suggest a:hover{color:#d6272d;}
+
+.search .s-box .words-give{
+	display:none;background-color:#fff;border:1px solid #aaa;width:402px;height:200px;position:absolute;
+	overflow:hidden;
+}
+.search .s-box .words-give p{
+	cursor:pointer;
+	line-height:25px;
+	padding-left:5px;
+}
+.search .s-box .words-give p:hover{
+	background-color:#e1e1e1;
+}
 .nav {
 position: relative;
 z-index: 60;
@@ -813,6 +826,7 @@ cursor: pointer;
 .btn-bbg {
 display: inline-block;
 height: 24px;
+line-height: 24px;
 text-align: center;
 background-color: #cc0033;
 vertical-align: middle;
@@ -843,16 +857,17 @@ margin:0 5px;
 
 /*按钮样式*/
 submit, .submit_buy, .submit_join, .submit_login, .submit_reg, .btn_red,  .submit_pay, .submit_cancel, a.reg_btn, .reply_btn, .btn_gray, .btn_brown,  a.comm_btn, a.btn_blue, .summary div.current input.disabled, .summary div.current  .shop_cart input.disabled, .next_step{*display:block;overflow:hidden;cursor:pointer;}
-.submit { font-size:20px;
-    border: none; 
+.submit { font-size:16px;
+    border: 1px solid #f30; 
     color:#FFF;
     border-radius:3px;
     overflow: hidden;font-family:微软雅黑;
     cursor: pointer;
-    width: 99px;
-    height: 38px;
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
     margin-top: -15px;
-    background-color: #f15a25;
+    background-color: #F60;
 	}
 
 a.btn_gray{
@@ -875,10 +890,10 @@ a.btn_brown{
           color: #fff;
 }
 a.btn_big{
-	  min-width: 110px;height: 37px;line-height: 37px; font-size: 18px;padding:1px 5px;
+	  min-width: 110px;height: 37px;line-height: 37px; font-size: 16px;padding:1px 5px;
 }
 a.btn_small{
-	font-size:16px;min-width: 80px; height: 26px; line-height: 26px; padding:1px 5px;
+	font-size:14px;min-width:108px; height:37px; line-height: 37px; padding:0px 5px;
 }
 input.btn_red{
 	font-family:微软雅黑;
@@ -900,9 +915,9 @@ input.btn_brown{
  background: #DF680A;
    color:#fff;
 }
-input.btn_mini{font-size:14px;min-width: 60px; height: 22px; border-radius:3px;padding:1px 4px;}
-input.btn_small{font-size:16px;min-width: 80px; height: 26px; border-radius:3px;padding:1px 5px;}
+input.btn_mini{font-size:14px;min-width: 60px;height:25px; border-radius:3px;padding:1px 4px;}
+input.btn_small{font-size:14px;min-width: 80px;height:26px; border-radius:3px;padding:1px 5px;}
 input.btn_order{
-	font-size: 18px;  width: 191px;height: 40px;
+	font-size: 16px;  width: 191px;height: 40px;line-height: 40px;
 }
 /*按钮结束*/

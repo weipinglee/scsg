@@ -7,6 +7,9 @@ function orderFormClass()
 	//是否为货到付款 0:否; 1:是;
 	this.paytype = 0;
 	this.freeFreight = 0;
+	
+	//是否是预售0:不是，1：是
+	this.presell = 0;
 
 	//视图状态模式 默认：edit
 	this.addressMod  = 'edit';
@@ -64,6 +67,11 @@ function orderFormClass()
 		$('#protect_price_value').text(this.protectPrice);
 		$('#payment_value').text(this.paymentPrice);
 		$('#tax_fee').text(this.taxPrice);
+		if(this.presell){//计算预售金额
+			var wei_sum = this.orderAmount - parseFloat($('#pre_sum').text());
+			$('#wei_sum').text(wei_sum.toFixed(2));
+		}
+		
 	}
 
 	/**

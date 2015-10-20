@@ -79,6 +79,7 @@ jQuery(function(){
 <script type="text/javascript">
 function dopay()
 {
-	confirm('支付是否成功',"window.location.href='{url:/ucenter/order_detail/id/$tmpId}';");
+	var url = '{url:/simple/payafter/order_id/$this->order_id/order_type/1}';
+	art.dialog.open(url);
 }
 </script>

@@ -221,5 +221,32 @@ class Common
     	);
     	return isset($data[$status]) ? $data[$status] : '未知状态';
     }
+    /**
+     * 判断活动是否可用代金券
+     * @param str $active_name 
+     */
+    public static function activeProp($active_name=''){
+    	if(!$active_name)return true;
+    	$config = new Config('site_config');
+    	switch($active_name){
+    		case 'time' : {
+    			return $config->shan_prop;
+    			break;
+    		}
+    		case 'groupon' : {
+    			return $config->tuan_prop;
+    			break;
+    		}
+    		case 'presell' : {
+    			return $config->presell_prop;
+    			break;
+    		}
+    		default:return true;
+    	}
+    }
+  
+    
+    
+    
     
 }

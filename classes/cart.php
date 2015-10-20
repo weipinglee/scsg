@@ -35,7 +35,7 @@ class Cart extends IInterceptorBase
 	private $error       = '';
 
 	//购物车的存储方式
-	private $saveType    = 'cookie';
+	private $saveType    = 'session';
 
 	//构造函数
 	function __construct()
@@ -158,6 +158,22 @@ class Cart extends IInterceptorBase
 			$this->error = '购物车中没有此商品';
 			return false;
 		}
+	}
+	/**
+	 * @brief
+	 * @ param $del_arr array 删除的数据array(0=>array('0'=>'goods','1'=>45),)
+	 * 
+	 */
+	public function del_many($del_arr){
+		if(!empty($del_arr)){
+			foreach($del_arr as $key=>$val){
+				$this->del($del_arr[$key][1],$del_arr[$key][0]);
+			}
+			return true;
+		}else{
+			return false;
+		}
+		
 	}
 
 	//根据 $gid 获取商品信息

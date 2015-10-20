@@ -85,11 +85,36 @@ class CountSum
 	}
 
 	/**
+	 * 预售计算
+	 */
+	public function presell_count($id,$type,$buy_num,$active_id)
+	{
+		$config = new Config('site_config');
+		$not_prom = $config->pesell_promotion;//是否支持优惠活动
+		$buyInfo = array(
+				$type => array('id' => array($id) , 'data' => array($id => array('count' => $buy_num)),'count' => $buy_num)
+		);
+		$priceInfo = $this->goodsCount($buyInfo,$not_prom);
+		$presell_db = new IModel('presell');
+		$priceInfo['pre_rate']=$presell_db->getField('id='.$active_id.' and TIMESTAMPDIFF(second,yu_end_time,NOW())<=0','money_rate');
+		if(!$priceInfo['pre_rate']){
+			return '该预售不存在';
+		}else{
+			$priceInfo['pre_sum'] = $priceInfo['final_sum']* $priceInfo['pre_rate'] /100;
+			$priceInfo['pre_sum'] = $priceInfo['pre_sum'] < 0.01 ? 0.01 : $priceInfo['pre_sum'];
+		}
+		
+		return $priceInfo;
+		
+		
+	}
+	/**
 	 * @brief 计算商品价格
 	 * @param Array $buyInfo ,购物车格式
+	 * @param bool $prom 是否允许优惠
 	 * @return array or bool
 	 */
-	public function goodsCount($buyInfo)
+	public function goodsCount($buyInfo,$prom=true)
 	{
 		$this->sum           = 0;       //原始总额(优惠前)
 		$this->final_sum     = 0;       //应付总额(优惠后)
@@ -131,13 +156,9 @@ class CountSum
     			{
     				return "商品：".$val['name']."购买数量超出库存，请重新调整购买数量";
     			}
-				$shanPrice                 = $this->getShanPrice($val['goods_id']);
+				
     			$groupPrice                = $this->getGroupPrice($val['goods_id'],'goods');
-    			if($shanPrice && $groupPrice){
-    				$minPrice = min($shanPrice,$groupPrice);
-    			}else if($shanPrice){
-    				$minPrice = $shanPrice;
-    			}else if($groupPrice){
+    			if($groupPrice){
     				$minPrice = $groupPrice;
     			}else{
     				$minPrice = $val['sell_price'];
@@ -178,15 +199,10 @@ class CountSum
     			{
     				return "货品：".$val['name']."购买数量超出库存，请重新调整购买数量";
     			}
-    			$shanPrice                 = $this->getShanPrice($val['goods_id'],$val['product_id']);
-    			if(!$shanPrice)
-    				$shanPrice             = $this->getShanPrice($val['goods_id']);
+    			
+    			
     			$groupPrice                  = $this->getGroupPrice($val['product_id'],'product');
-    			if($shanPrice && $groupPrice){
-    				$minPrice = min($shanPrice,$groupPrice);
-    			}else if($shanPrice){
-    				$minPrice = $shanPrice;
-    			}else if($groupPrice){
+    			if($groupPrice){
     				$minPrice = $groupPrice;
     			}else{
     				$minPrice = $val['sell_price'];
@@ -213,7 +229,7 @@ class CountSum
     	$final_sum = $this->sum - $this->reduce;
 
     	//总金额满足的促销规则
-    	if($user_id)
+    	if($user_id&&$prom)
     	{
 	    	$proObj = new ProRule($final_sum);
 	    	$proObj->setUserGroup($group_id);
@@ -230,13 +246,13 @@ class CountSum
     	$this->final_sum = $final_sum - $this->proReduce;
 
     	return array(
-    		'final_sum'  => $this->final_sum,
-    		'promotion'  => $this->promotion,
-    		'proReduce'  => $this->proReduce,
-    		'sum'        => $this->sum,
+    		'final_sum'  => $this->final_sum,//减去会员减价和促销减价后的总价
+    		'promotion'  => $this->promotion,//促销信息
+    		'proReduce'  => $this->proReduce,//促销规则减价
+    		'sum'        => $this->sum,//原总价
     		'goodsList'  => array_merge($goodsList,$productList),
     		'count'      => $this->count,
-    		'reduce'     => $this->reduce,
+    		'reduce'     => $this->reduce,//会员价和闪购价减价
     		'weight'     => $this->weight,
     		'freeFreight'=> $this->isFreeFreight,
     		'point'      => $this->point,
@@ -273,6 +289,7 @@ class CountSum
     //计算非购物车中的商品
     public function direct_count($id,$type,$buy_num = 1,$promo='',$active_id='')
     {
+    	
     	/*开启促销活动*/
     	if($promo && $active_id)
     	{

@@ -147,8 +147,41 @@ var countdown=function()
 		}
 	};
 };
-//时分秒倒计时
 
+//倒计时函数
+//min_id 小于min_id的不做处理
+var countDown = function(min_id){
+		$('.countdown').each(function(){
+			var id = $(this).attr('id').split('-')[1];
+			if(min_id && id<min_id)return true;
+			var temp;
+			var endTime = $(this).find('input[name=endTime]').val();
+			var now = Date.parse(new Date())/1000;
+			var count = endTime - now;
+			var day = parseInt(count/(24*3600));
+			count=count%(24*3600);
+			var hour = (temp = parseInt(count/3600))<10 ? '0'+temp : temp;
+			count = count%3600;
+			var min = (temp=parseInt(count/60))<10 ? '0'+temp :temp ;
+			var sec = (temp=count%60)<10 ? '0' + temp : temp;
+			if(day==0){
+				$('.day').remove();
+			}else{
+				$('#cd_day_'+id).text(day);
+			}
+			
+			$('#cd_hour_'+id).text(hour);
+			$('#cd_minute_'+id).text(min);
+			$('#cd_second_'+id).text(sec);
+			
+			var count = new countdown();
+			count.add(id);
+		})
+	};
+//时分秒倒计时
+$(function(){
+	countDown();
+})
 //切换验证码
 function changeCaptcha(urlVal)
 {
@@ -172,7 +205,9 @@ function mathAdd(arg1,arg2)
     try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
     try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
     m=Math.pow(10,Math.max(r1,r2));
-    return (arg1*m+arg2*m)/m;
+	n=(r1>=r2)?r1:r2;
+    var res=(arg1*m+arg2*m)/m;
+	return res.toFixed(n);
 }
 
 /*减法函数
@@ -195,7 +230,7 @@ function mathSub(arg2,arg1)
  */
 function mathMul(arg1,arg2)
 {
-    var m=0,s1=arg1.toString(),s2=arg2.toString();
+   var m=0,s1=arg1.toString(),s2=arg2.toString();
     try{m+=s1.split(".")[1].length}catch(e){}
     try{m+=s2.split(".")[1].length}catch(e){}
     return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m);
@@ -310,8 +345,9 @@ function showService(){
 }
 
 /*异步获取联想关键词*/
-function getKeywords(url,word){
-	var showDiv = $('.wordsLike');
+function getKeywords(url,_this){
+	var word = _this.val();
+	var showDiv = $('.words-give');
 	if (!word) {
 		showDiv.html('').css('display','none');
 		return false;
@@ -324,17 +360,21 @@ function getKeywords(url,word){
 		dataType:'json',
 		url:url,
 		success:function(data){
+			showDiv.html('');
 			if(data.length>0){
-				//window.realAlert(JSON.stringify(data));
 				var appendHtml = '';
 				for(var i in data){
-					window.realAlert(data[i].keyword);
-					var div = '<div><span>'+data[i].keyword+'</span></div>';
+					var div = '<p>'+data[i].keyword+'</p>';
 					appendHtml +=div;
 				}
 				showDiv.append(appendHtml);
-				
-				
+				showDiv.find('p').on('click',function(){
+					_this.val($(this).text());
+					showDiv.html('').css('display','none');
+					location.href = searchUrl+'/'+$(this).text();
+				})
+			}else{
+				showDiv.html('').css('display','none');
 			}
 			
 		},

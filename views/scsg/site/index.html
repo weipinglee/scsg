@@ -30,7 +30,6 @@ _mvq.push(['$logConversion']);
 </script>
 <!--流量统计代码-->
 
-{set:$recommend = Api::run('getCommendRecom')}
 <!--bn-->
 <div class="bn" style="height:490px;">
 		<!--轮播开始-->
@@ -142,13 +141,10 @@ _mvq.push(['$logConversion']);
 		        <div class="notice f-r">
 		        	  <!--tabs-->
 		        	<div class="tabs">
-		        			{set:$promotion=Api::run('getPromotionList')}
 							
 		    				<ul class="tab-title clearfix">
 		    					<li class="tab-title-hover"><h2 class="t14">商城公告</h2></li>
-								{if:count($promotion)!=0}
-		    					<li class=""><h2 class="t14">闪购</h2></li>
-								{/if}
+								
 		    				</ul>
 		    				<div class="tab-cnt">
 		                        <div class="tab-item tab-item-hover" style="display: block;">
@@ -160,58 +156,7 @@ _mvq.push(['$logConversion']);
 								</ul>
 								</div>
 							
-		                    <div class="tab-item tab-item-hover" style="display: none;">
-								<ul class="news-list">
-									{if:count($promotion)!=0}
-									{set:$end=strtotime($promotion[0]['end_time'])}
-									<li>
-										<!--limit-->
-										<div class="limit">
-											<!--limit-zero-->
-											<div class="limit-zero">
-												<!--limit-title-->
-												<div class="limit-title">
-													<!--limit-title-->
-													<div class="limit-title">
-														<h2 class="t16">限时抢购</h2>
-														<div class="limit-timeout">
-															<ul id='limit-2' class="time-format clearfix countdown">
-																<li>剩余 </li>
-																<li class="time-num day"><b id='cd_day_2'></b></li>
-																<li class="split day">天</li>
-																<li class="time-num"><b id='cd_hour_2'></b></li>
-																<li class="split">:</li>
-																<li class="time-num"><b id='cd_minute_2'></b></li>
-																<li class="split">: </li>
-																<li class="time-num"><b id='cd_second_2'></b></li>
-																<li>结束 </li>
-																<input name='endTime' type='hidden' value='{$end}' />
-															</ul>
-		
-															
-														</div>
-													</div>
-													<!--limit-title-->
-												</div>
-												<!--limit-title-->
-													<a title="速度抢购" href="{url:/site/shangou}" style="">
-														<img class="jImg" width="95%" height="100%" src="{webroot:$promotion[0]['img']}" >
-													</a>
-												</div>
-											<!--limit-zero-->
-			
-			
-											<!--limit-pro-->
-											<div class="limit-pro">
-															  				
-											</div>
-											<!--limit-pro-->
-										</div>
-										<!--limit-->
-									</li>
-									{/if}
-								</ul>
-		   						</div>
+		                  
 		    				</div>
 						</div>
 						  <!--tabs-->
@@ -230,25 +175,25 @@ _mvq.push(['$logConversion']);
 								<div class="tabcon" id="fadecon">
 									<div class="sublist">
 										<ul>
-											<li><a href="#" target="_blank">交话费</a></li>
+											<li><a href="#" target="_blank" class='red-a'>交话费</a></li>
 											
 										</ul>
 									</div><!--tabcon end-->
 									<div class="sublist">
 										<ul>
-											<li><a href="#" target="_blank">买彩票</a></li>
+											<li><a href="#" target="_blank" class='red-a'>买彩票</a></li>
 											
 										</ul>
 									</div><!--tabcon end-->
 									<div class="sublist">
 										<ul>
-											<li><a href="#" target="_blank">充点卡</a></li>
+											<li><a href="#" target="_blank" class='red-a'>充点卡</a></li>
 											
 										</ul>
 									</div><!--tabcon end-->
 									<div class="sublist">
 										<ul>
-											<li><a href="#" target="_blank">上保险</a></li>
+											<li><a href="#" target="_blank" class='red-a'>上保险</a></li>
 											
 										</ul>
 									</div><!--tabcon end-->
@@ -300,10 +245,10 @@ _mvq.push(['$logConversion']);
 				{foreach:items=$this->user_like_goods}
 				
 				<li class="xi">
-					 <a class="goods-img" href="{url:/site/products/id/$item['id']}">
+					 <a class="goods-img" href="{url:/site/products/id/$item['id']}" >
 						<img class="jImg" src="{url:/pic/thumb/img/$item[img]/w/170/h/170}"><div class="shine">&nbsp;</div>
 					</a>
-					<a class="goods-name" href="{url:/site/products/id/$item['id']}" title="{$item['name']}">
+					<a class="goods-name" href="{url:/site/products/id/$item['id']}" title="{$item['name']}" >
 						{$item['name']}<span class="txt-red"></span>
 					</a>
 					<div class="goods-price">
@@ -311,24 +256,6 @@ _mvq.push(['$logConversion']);
 						<span class="p-del">￥{$item['market_price']}</span>
 					</div>
 				</li>
-				{/foreach}
-				{set:$len=count($this->user_like_goods)}
-				{foreach:items=$recommend}
-					{set:$len=$len+1;}
-					{if:$len<7}
-						<li class="xi">
-						 <a class="goods-img" href="{url:/site/products/id/$item['id']}">
-							<img class="jImg" src="{url:/pic/thumb/img/$item[img]/w/170/h/170}"><div class="shine">&nbsp;</div>
-						</a>
-						<a class="goods-name" href="{url:/site/products/id/$item['id']}" title="{$item['name']}">
-							{$item['name']}<span class="txt-red"></span>
-						</a>
-						<div class="goods-price">
-							<span class="p-normal">￥{$item['sell_price']}</span>
-							<span class="p-del">￥{$item['market_price']}</span>
-						</div>
-					</li>
-					{/if}
 				{/foreach}
 					
 				
@@ -364,7 +291,7 @@ _mvq.push(['$logConversion']);
 	                         <a class="goods-img" target='blank' href="{url:/site/products/id/$item['id']}">
 	                            <img class="jImg" src="{url:/pic/thumb/img/$item[img]/w/170/h/170}"><div class="shine">&nbsp;</div>
 	                        </a>
-	                        <a class="goods-name" target='blank' href="{url:/site/products/id/$item['id']}" title=" {$item['name']}">
+	                        <a class="goods-name red-a" target='blank' href="{url:/site/products/id/$item['id']}" title=" {$item['name']}">
 	                            {$item['name']}<span class="txt-red"></span>
 	                        </a>
 	                        <div class="goods-price">
@@ -388,7 +315,7 @@ _mvq.push(['$logConversion']);
     </div>
 	<!--推荐商品-->
 	<!--通栏广告1-->
-	<div  class="big-pro">
+	<div  class="big-pro ad-shine">
 		{echo:Ad::show("首页推荐层通栏")}
 	</div>
 	<!--通栏广告1-->
@@ -409,7 +336,7 @@ _mvq.push(['$logConversion']);
 			</div>
 			<div class="fl-cnt clearfix">
 				<div class="fl-rcmd f-l">
-					<div class="fl-rcmd-bg">
+					<div class="fl-rcmd-bg ad-shine">
 						<div class="keyword">
 							{if:isset($hotCat[$base['id']])}
 							{foreach:items=$hotCat[$base['id']] item=$hot kHot=$key}
@@ -424,7 +351,7 @@ _mvq.push(['$logConversion']);
 				</div>
 				<!--分层轮播广告-->
 				<div class="fl-rcmd1 f-l" >
-					<div class="fl-rcmd-bg1" >
+					<div class="fl-rcmd-bg1 ad-shine" >
 									
 						{echo:Ad::show("首页楼层".$Kad."-大广告")}
 					</div>
@@ -439,8 +366,8 @@ _mvq.push(['$logConversion']);
 					            <img class="jImg" alt="{$goods['name']}" src="{url:/pic/thumb/img/$goods[img]/w/180/h/180}">
 								<div class="shine">&nbsp;</div>
 					        </a>
-					        <a class="goods-name" href="{url:/site/products/id/$goods['id']}" title="{$goods['name']}">
-					          {$goods['name']}<span class="txt-red"></span>
+					        <a class="goods-name red-a" href="{url:/site/products/id/$goods['id']}" title="{$goods['name']}">
+					         <span class="txt-red">{if:$goods['is_del']==4}[预售]{/if}</span> {$goods['name']}
 					        </a>
 					        <div class="goods-price">
 					            <span class="p-normal">￥{$goods['sell_price']}</span>
@@ -463,7 +390,7 @@ _mvq.push(['$logConversion']);
 		 <!--floor floor-1-->
 		 <div class="big-pro">
 		 	
-	        <div class="ad-pic" id="ad_pic_5713">
+	        <div class="ad-pic ad-shine" id="ad_pic_5713">
 	            	{echo:Ad::show("首页楼层".$Kad."-通栏")}		
 			</div>
 			

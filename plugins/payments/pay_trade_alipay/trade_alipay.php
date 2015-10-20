@@ -33,6 +33,12 @@ class trade_alipay extends paymentPlugin
 	}
 
 	/**
+	 * 退款借口
+	 */
+	public function refund($data){
+		return true;
+	}
+	/**
 	 * 获取退款提交地址
 	 */
 	public function getRefundUrl(){
@@ -62,6 +68,7 @@ class trade_alipay extends paymentPlugin
 			if($callbackData['trade_status'] == 'WAIT_SELLER_SEND_GOODS' && isset($callbackData['trade_no']))
 			{
 				$this->recordTradeNo($orderNo,$callbackData['trade_no']);
+				self::addTradeData($callbackData);
 			}
 
 			if($callbackData['trade_status'] == 'TRADE_FINISHED' || $callbackData['trade_status'] == 'WAIT_SELLER_SEND_GOODS')
@@ -81,9 +88,58 @@ class trade_alipay extends paymentPlugin
 	 */
 	public function serverCallback($callbackData,&$paymentId,&$money,&$message,&$orderNo)
 	{
-		return $this->callback($callbackData,$paymentId,$money,$message,$orderNo);
-	}
+		//除去待签名参数数组中的空值和签名参数
+		$para_filter = $this->paraFilter($callbackData);
 
+		//对待签名参数数组排序
+		$para_sort = $this->argSort($para_filter);
+
+		//生成签名结果
+		$mysign = $this->buildMysign($para_sort,Payment::getConfigParam($paymentId,'M_PartnerKey'));
+
+		if($callbackData['sign'] == $mysign)
+		{
+			//回传数据
+			$orderNo = $callbackData['out_trade_no'];
+			$money   = $callbackData['total_fee'];
+
+			//记录等待发货流水号
+			if($callbackData['trade_status'] == 'WAIT_SELLER_SEND_GOODS' && isset($callbackData['trade_no']))
+			{
+				$this->recordTradeNo($orderNo,$callbackData['trade_no']);
+				self::addTradeData($callbackData,1);
+			}
+
+			if($callbackData['trade_status'] == 'TRADE_FINISHED' || $callbackData['trade_status'] == 'WAIT_SELLER_SEND_GOODS')
+			{
+				return true;
+			}
+		}
+		else
+		{
+			$message = '签名不正确';
+		}
+		return false;
+	}
+	/**
+	 * 添加交易记录
+	 * @param array $tradeData  返回的报文
+	 * @param int   $asyn  0:同步处理 1：异步回调
+	 */
+	private static function addTradeData($tradeData,$asyn=0){
+		$resArr = array(
+				'trade_no' 	   => $tradeData['trade_no'],
+				'order_no'     => $tradeData['out_trade_no'],
+				'money'        => $tradeData['total_fee'],
+				'pay_type'     => 7,
+				'trade_type'   => self::getTradeType(7),
+		);
+		$resArr['time'] = isset($tradeData['gmt_payment'])&&$tradeData['gmt_payment'] ? $tradeData['gmt_payment'] :ITime::getDateTime();
+		$resArr['trade_status']=$asyn;
+		$resArr['orig_trade_no'] =  '';
+		self::addTrade($resArr);
+	
+	}
 	/**
 	 * @see paymentplugin::getSendData()
 	 */

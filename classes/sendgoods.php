@@ -17,15 +17,54 @@ class sendgoods
 	 * @brief 开始发货
 	 * @param $orderId int 订单ID号
 	 */
-	public static function run($orderId)
+	public static function run($paramArray)
 	{
-		$orderRow = self::getOrderInfo($orderId);
+		$orderRow = self::getOrderInfo($paramArray['order_id']);
+	
 		if($orderRow['trade_no'] && $sendObj = self::createObject($orderRow['class_name']))
 		{
+			$freight = new IModel('freight_company');
+			$orderRow['freight_type'] = $freight->getField('id='.$paramArray['freight_id'],'freight_type');
+			$orderRow = array_merge($orderRow,$paramArray);
 			$sendObj->send($orderRow);
 		}
 	}
-
+	
+	/**
+	 * 预付订单发货
+	 */
+	public static function run_presell($paramArray)
+	{
+		$orderRow = self::getOrderInfoPresell($paramArray['order_id']);
+		$sendRow = array();
+		foreach($orderRow as $key=>$val){
+			if($val['trade_no'] )
+			{
+				if(!isset($sendObj))
+					$sendObj = self::createObject($val['class_name']);
+				$freight = new IModel('freight_company');
+				$sendRow = array_merge($val,$paramArray);
+				$sendRow['freight_type'] = $freight->getField('id='.$paramArray['freight_id'],'freight_type');
+				$sendObj->send($sendRow);
+			}
+		}
+		
+	}
+	/**
+	 * @brief 获取订单信息
+	 * @param $orderId int 订单ID
+	 * @return array 订单信息
+	 */
+	private static function getOrderInfoPresell($orderId)
+	{
+		$orderDB         = new IQuery('order as o');
+		$orderDB->fields = 'p.class_name,o.pay_type,t.trade_no';
+		$orderDB->join   = 'left join trade_record as t on CONCAT("pre",o.order_no) = t.order_no OR CONCAT("wei",o.order_no) = t.order_no left join  payment as p on o.pay_type = p.id ';
+		$orderDB->where  = 'o.id = '.$orderId;
+		$result          = $orderDB->find();
+		
+		return $result;
+	}
 	/**
 	 * @brief 获取订单信息
 	 * @param $orderId int 订单ID
@@ -34,8 +73,8 @@ class sendgoods
 	private static function getOrderInfo($orderId)
 	{
 		$orderDB         = new IQuery('order as o');
-		$orderDB->fields = 'p.class_name,o.trade_no,dd.delivery_code,fc.freight_type,o.pay_type';
-		$orderDB->join   = 'left join payment as p on o.pay_type = p.id left join delivery_doc as dd on o.id = dd.order_id left join delivery as d on d.id = o.distribution left join freight_company as fc on fc.id = dd.freight_id';
+		$orderDB->fields = 'p.class_name,o.trade_no,o.pay_type';
+		$orderDB->join   = 'left join payment as p on o.pay_type = p.id ';
 		$orderDB->where  = 'o.id = '.$orderId;
 		$result          = $orderDB->find();
 		return current($result);

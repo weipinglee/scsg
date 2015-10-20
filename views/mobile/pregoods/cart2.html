@@ -1,0 +1,375 @@
+{foreach:items=$this->addressList}
+	{if:$item['id']==$this->defaultAddressId}
+	{set:$defaultAddress = $item;}
+	{/if}
+{/foreach}
+<!DOCTYPE html>
+<!-- saved from url=(0035)http://m.b5m.com/activelistings/198 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="http://static-web.b5m.com/wap/img/collect-logo/b5m-collect-logo.png">
+        <title>确认订单</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+         <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+         <link rel="stylesheet" href="{skin:css/order.css}" type="text/css">
+     	<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+     	<script src="{theme:javascript/order.js}"></script>
+		<script src="{theme:javascript/common.js}"></script>
+		{js:artTemplate}
+		{js:validate}
+		<script type='text/javascript' src='{theme:javascript/orderFormClass.js}'></script>
+     </head>
+<body style="background:#efefef;">
+<script type='text/html' id='takeselfRowTemplate'>
+	<option value="<%=id%>"><%=name%></option>
+</script>
+<script type='text/javascript'>
+//创建订单表单实例
+orderFormInstance = new orderFormClass();
+orderFormInstance.presell = 1;
+//DOM加载完毕
+jQuery(function(){
+	
+	//使用红包按钮
+	$('#ticket_a').click(function()
+	{
+		//第一次打开时生成缓存数据
+		if($.trim($('#ticket_show_box').text()) == '')
+		{
+			var ticketList = {echo:JSON::encode($this->prop)};
+			for(var index in ticketList)
+			{
+				var ticketHtml = template.render('ticketTrTemplate',{item:ticketList[index]});
+				$('#ticket_show_box').append(ticketHtml);
+			}
+			var ticketHtml = template.render('ticketInputTemplate',{});
+				$('#ticket_show_box').append(ticketHtml);
+		}
+
+	});
+	getTakeselfData('area','{$defaultAddress["area"]}');
+
+	//获取配送费用的url
+	orderFormInstance.delivery_fee_url = '{url:/block/order_delivery}';
+	//设置是否免运费
+	orderFormInstance.freeFreight = {echo:$this->freeFreight ? 1 : 0};
+	//商品价格
+	orderFormInstance.goodsSum = "{$this->final_sum}";
+	//初始化自提点数据(自添)
+	takeselfInit("{$this->custom['takeself']}");
+	$('select[name=payment]').val('-1');
+});
+
+/*
+ * 根据上次选择进行自提点初始化
+ */
+function takeselfInit(id){
+	 $('select[name=takeself]').val(id);
+}
+
+//添加代金券
+function add_ticket()
+{
+	var ticket_num = $('#ticket_num').val();
+	var ticket_pwd = $('#ticket_pwd').val();
+
+	if(ticket_num == '' || ticket_pwd == '')
+	{
+		alert('请填写卡号和密码');
+		return '';
+	}
+
+	$.getJSON('{url:/block/add_download_ticket}',{"ticket_num":ticket_num,"ticket_pwd":ticket_pwd},function(content){
+		if(content.isError == false)
+		{
+			is_success = true;
+			$('[name="ticket_id"]').each(
+				function()
+				{
+					if($(this).val() == content.data.id)
+					{
+						alert('代金券已经存在，不要重复添加');
+						is_success = false;
+					}
+				}
+			);
+
+			if(is_success)
+			{
+				var ticketHtml = template.render('ticketTrTemplate',{item:content.data});
+				$('#ticket_show_box').prepend(ticketHtml);
+				$('[name="ticket_id"]:first').trigger('click');
+			}
+			$('#ticket_num').val('');
+			$('#ticket_pwd').val('');
+		}
+		else
+		{
+			alert(content.message);
+		}
+	});
+}
+//表单提交验证
+function submit_check(){
+	if($('input[name=address_id]').val()=='-1'){
+		return false;
+	}
+	$('form[name=order_form]').submit();
+}
+
+//获取自提点数据
+//typeVal 区域类型
+//id  区域id
+function getTakeselfData(typeVal,id)
+{
+	var selectedVal = id;
+	$.ajax({
+		type:'post',
+		async:false,
+		data:{"id":selectedVal,"type":typeVal},
+		dataType:'json',
+		url:"{url:/block/getTakeselfList}",
+		beforeSend:function(){
+			
+		},
+		success:function(jsonData){
+			switch(typeVal)
+		{
+			case "province":
+			{
+				$('[name="city"] option:gt(0)').remove();
+				for(var index in jsonData)
+				{
+					var item = jsonData[index];
+					$('[name="city"]').append('<option value="'+item['city']+'">'+item['city_str']+'</option>');
+					
+				}
+			}
+			break;
+
+			case "city":
+			{
+				$('[name="area"] option:gt(0)').remove();
+				for(var index in jsonData)
+				{
+					var item = jsonData[index];
+					$('[name="area"]').append('<option value="'+item['area']+'">'+item['area_str']+'</option>');
+				}
+			}
+			break;
+			case "area":
+			{
+				for(var index in jsonData)
+				{
+					var item = jsonData[index];
+					var takeselfHtml = template.render('takeselfRowTemplate',item);
+					$('select[name=takeself]').append(takeselfHtml);
+				}
+			}
+			break;
+		}
+		},
+		timeout:1000,
+	})
+
+}
+//保价
+function selectProtect(obj)
+{
+	if($(obj).attr('checked') == 'checked')
+	{
+		orderFormInstance.protectPrice += parseFloat(obj.value);
+	}
+	else
+	{
+		orderFormInstance.protectPrice -= parseFloat(obj.value);
+	}
+	orderFormInstance.doAccount();
+}
+</script>
+     <div class="pages">
+         <header class="wap-header">
+	   		 <div class="wap-topbar">
+		        <div class="h-left"><a href="javascript:history.go(-1);" title="返回"></a></div>
+		        <div class="h-center">
+		            <h1>确认订单</h1>
+		        </div>
+	   		 </div>
+		</header>
+     	<div style=""> </div>
+		<form action='{url:/pregoods/cart3}' method='post' name='order_form' callback='orderFormInstance.isSubmit();'>
+			<input type='hidden' name='timeKey' value='{echo:time()}' />
+			<input type='hidden' name='direct_gid' value='{$this->gid}' />
+			<input type='hidden' name='direct_type' value='{$this->type}' />
+			<input type='hidden' name='direct_num' value='{$this->num}' />
+			<input type='hidden' name='direct_active_id' value='{$this->active_id}' />
+	     	<div class="qrdd">
+	     		<a class="dz" href="{url:simple/address}">
+	     			<input type='hidden' value='{$this->defaultAddressId}' name='address_id' pattern='int'/>
+					<input type='hidden' value='{$defaultAddress["province"]}' name='province'/>
+					<input type='hidden' value='{$defaultAddress["city"]}' name='city'/>
+					<input type='hidden' value='{$defaultAddress["area"]}' name='area'/>
+					<input type='hidden' value='{$defaultAddress["city"]}' name='city'/>
+					<input type='hidden' value='{$defaultAddress["address"]}' name='address'/>
+					<input type='hidden' value='{$defaultAddress["mobile"]}' name='mobile'/>
+					<input type='hidden' value='{$defaultAddress["zip"]}' name='zip'/>
+					{if:empty($defaultAddress)}
+					<span class="shname">请选择收货信息{$defaultAddress['accept_name']}</span>
+					{else:}
+						<span class="shname">收货人：{$defaultAddress['accept_name']}</span><span class="float_rt">{$defaultAddress['mobile']}</span>
+		     			<p><i></i>{$defaultAddress['province_val']} {$defaultAddress['city_val']} {$defaultAddress['area_val']} {$defaultAddress['address']}</p>
+					{/if}
+		     	</a>
+	     	</div>
+     
+     	<div class="qrdd qrdds">
+     		<!-- 商品详情-->
+			{foreach:items = $this->goodsList}
+		     		<div class="qr_xq">
+		     		<a href="{url:/site/products/id/$item[goods_id]}">
+		     			<div class="tjxq_img">
+		     				<img src="{url:/pic/thumb/img/$item[img]/w/66/h/66}"/>
+		     			</div>
+		     			<div class="tjxq_tit">
+			     			<p>{$item['name']}</p>
+			     			<p class="tjxq_ge">
+			     				{if:isset($item['spec_array'])}
+									{set:$spec_array=Block::show_spec($item['spec_array']);}
+									{foreach:items=$spec_array item=$specValue key=$specName}
+										{$specName}：{$specValue} &nbsp&nbsp
+									{/foreach}
+								{/if}
+							</p>
+			     		</div>
+			     		<div class="tjxq_sum">
+			     			<p class="sum">
+				     			单价：<span>￥{$item['sell_price']}</span>
+								优惠：<span>￥{$item['reduce']}</span>
+				     			数量：<span>x{$item['count']}</span>
+				     		</p>
+							<p class="sum" >
+				     			运费：<span id="deliveryFeeBox_{$item['goods_id']}_{$item['product_id']}_{$item['count']}"></span>
+				     		</p>
+							<p style='color:red;'>
+								小计：<b >￥{$item['sum']}</b>
+							</p>
+			     		</div>
+			     	</a>
+					</div>
+			{/foreach}
+     		<!-- 商品详情结束 -->
+     		
+     		<div class="qrdds_zf">
+     			<h4>代收点</h4>
+				<select name="takeself">
+     				<option>请选择代收点（可空）</option>
+     			</select>
+     			<h4>支付方式</h4>
+     			
+     			<select name="payment" onchange='orderFormInstance.paymentSave()' pattern='int'>
+     				<option value='-1'>请选择支付方式</option>
+					{set:$paymentList=Api::run('getPaymentList')}
+					{foreach:items = $paymentList}
+						{set:$paymentPrice = CountSum::getGoodsPaymentPrice($item['id'],$this->sum);}
+						{if:$item['id']!=0 || $this->freight_collect!=0}
+							<option value="{$item['id']}" price='{$paymentPrice}'>{$item['name']}</option>
+						{/if}
+					{/foreach}
+     			</select>
+     			<p style="height: 25px;">配送方式</p>
+     			<select name='delivery_id' onchange='orderFormInstance.deliverySave()' pattern='int'>
+     				<option value='-1'>请选配送方式</option>
+					{set:$deliveryData = $this->allDeliveryType}
+					{foreach:items = $deliveryData}
+     				<option value="{$item['id']}" >{$item['name']}</option>
+					{/foreach}
+     			</select>
+     			<input class="xt" type="text" name='message' placeholder="买家留言"/>
+     			
+     		</div>
+     	</div>
+		{if:!empty($this->promotion)}
+		<div class="qrdd qrdds">
+	     	<span class="yhj">满足的优惠活动</span>
+			{foreach:items = $this->promotion}
+	     	<div class="fapiao">
+	     		<span class="fa_tit">{$item['plan']}，{$item['info']}</span>
+	     	</div>		
+     		{/foreach}
+     	</div>
+		{/if}
+     	<div class="qrdd qrdds">
+	     	<span class="yhj">是否开发票</span><span>(税金:￥{$this->goodsTax})</span>
+			<input type='hidden' name='taxes' value='0'/>
+			<input type='hidden' name='istaxes' value='{$this->goodsTax}'/>
+	     	<span class="yhj_check"  name='taxes' onclick='orderFormInstance.tax(this)'></span>
+	     	<div class="fapiao hide">
+	     		<span class="fa_tit">发票抬头</span>
+	     		<input name='tax_title' class="xt" type="text" placeholder="个人"/>
+	     	</div>		
+     	
+     	</div>
+     	<div class="qrdd qrdds">
+     		<span class="yhj">代金券使用</span>
+     		<span id="ticket_a" class="yhj_check" onclick='orderFormInstance.ticket(this)'></span>
+			
+			<div class="fapiao hide" id='ticket_show_box'>
+	     	</div>	
+			<!--代金券模板-->
+			<script type='text/html' id='ticketTrTemplate'>
+			<div >
+				<label><input class="radio" name="ticket_id" onclick="orderFormInstance.doAccount();" type="radio" value="<%=item.id%>" alt="<%=item.value%>" /><%=item.name%></label>
+				编号：<%=item.card_name%>
+				优惠：<span class="red2">￥<b><%=item.value%></b></span>
+			</div>
+			</script>
+			<script type='text/html' id='ticketInputTemplate'>
+				<input type='text' class="xt" id='ticket_num' placeholder="输入实体代金券卡号" />
+				<input type='password' class='xt' id='ticket_pwd' placeholder="密码" />
+				<div class="anniu"><input type="button" class="" onclick="add_ticket();" value="添加" />
+				</div>
+			</script>
+     	</div>
+		<div class="qrdd qrdds">
+			<span class="yhj">结算信息</span>
+     		<div class="qrdds_sum">
+     			<p>{if:$this->final_sum != $this->sum}优惠后总金额{else:}商品总金额{/if}<b>￥{$this->final_sum}</b></p>
+				<p> - 代金券：<b name='ticket_value'>0</b></p>
+				<p> + 税金：<b id='tax_fee'>0</b></p>
+				<p> + 运费总计：<b id='delivery_fee_show'>0</b></p>
+				<p> + 保价：<b id='protect_price_value'>0</b></p>
+				<p> + 支付手续费：<b  id='payment_value'>0</b></p>
+				<p class='total'> 订单总金额：<b  id='final_sum'>{$this->final_sum}</b></p>
+     		</div>
+		</div>
+		<div class="qrdd qrdds">
+			<span class="yhj">预售阶段信息</span>
+     		<div class="qrdds_sum">
+				<p> 阶段   预付款1：<b id='pre_sum'>{$this->pre_sum}</b></p>
+				<p> 阶段   尾款支付2：<b id='wei_sum'>{echo:$this->final_sum-$this->pre_sum}</b></p>
+				<p class='total'> 应付金额：<b  id='final_sum'>{$this->pre_sum}</b></p>
+     		</div>
+		</div>
+     	<div style="height:55px;"></div>
+     	<div class="anniu">
+     		<input class="but" type="button" onclick='submit_check();' value="确定提交" />
+     	</div>
+     	</form>
+     </div>
+  </body>
+</html>

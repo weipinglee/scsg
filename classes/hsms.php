@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  * @brief 短信发送接口
@@ -67,16 +67,14 @@ class Hsms
 	public static function send($mobile,$content)
 	{
 		self::$smsInstance = self::getSmsInstance();
-		
 		if(IValidate::mobi($mobile) && $content)
 		{
-			$ip = IClient::getIp();return 1;
-			return self::$smsInstance->send($mobile,$content);
+			$ip = IClient::getIp();
 			if($ip)
 			{
 				$mobileKey = md5($mobile.$ip);
 				$sendTime  = ISession::get($mobileKey);
-				if($sendTime && (time() - $sendTime < 60))
+				if($sendTime && time() - $sendTime < 60)
 				{
 					return false;
 				}

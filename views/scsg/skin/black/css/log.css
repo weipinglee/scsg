@@ -25,6 +25,7 @@ a.more{color:#a2a2a2}a.zoom{padding-left:20px;background:url(../images/front/spr
 .close,.close_2{display:inline-block;width:13px;height:13px;line-height:100px;overflow:hidden;background:url(../images/front/ucenter/close.gif) no-repeat}
 .close_2{width:27px;height:21px;margin-right:8px;background:url(../images/front/sprites_2.gif) -24px -739px no-repeat}
 .countdown{margin:5px auto 5px;font:bold 12px "Microsoft YaHei",Arial, Tahoma;color:#999}
+.countdown span{color:red;}
 	.countdown b{margin:0 3px;font-size:20px;color:#c4000f}
 	.countdown li{display:inline;}
 /* grade style start */
@@ -117,7 +118,7 @@ body.index{ background:url(../images/front/sprites.gif) 0 -341px repeat-x}
 body.second .wrapper{border-top:2px solid #000}
 .main{width:750px}
 .sidebar{width:200px}
-	.wrapper .box{border:1px #e1e1e1 solid}
+	.wrapper .box{border:1px  solid #E1E1E1;margin-bottom: 10px; }
 		.wrapper .box .title{height:31px;border-bottom:1px #e1e1e1 solid;line-height:30px}
 		.wrapper .box .title2{height:36px;border-bottom:1px #e1e1e1 solid;line-height:36px}
 		.wrapper .box .title3{height:41px;margin-top:10px;border-bottom:0;overflow:hidden}
@@ -217,7 +218,8 @@ ul.logolist li{float:left;width:150px;height:40px;margin:7px;border:1px solid #c
 ul.logolist li.s{width:100px;height:35px;margin:5px 2px}
 /* logolist style start */
 /* form table style start */
-label input{cursor:pointer}
+label input{cursor:pointer height:30px;width:100px; background-color:#f60;border:solid 1px 
+#f30;color:#FFF; position:relative;top:0px;}
 .form_table label{margin-right:5px;vertical-align:middle;color:#a6a6a6}
 .form_table label.attr{color:#1d1d1d}
 
@@ -229,7 +231,7 @@ input.gray_s{width:97px}input.gray_t{width:38px;height:17px;padding:3px 3px 0}in
 input.current{border-color:#000}
 input.search{width:240px;height:23px;padding-left:27px;border:1px solid #d2d2d2;margin:0 5px;vertical-align:middle;background:url(../images/front/ucenter/search_bg.gif) no-repeat}
 input.radio{vertical-align:middle;margin-right:5px}
-input.sbtn{width:37px;height:19px;margin:0 5px;border:none;color:#666;background:url(../images/front/ucenter/sbtn_bg.gif) no-repeat}
+input.sbtn{width:37px;height:19px;margin:0 5px;border:none;color:#666;background:url(../images/front/ucenter/sbtn_bg.gif) no-repeat;padding-bottom: 1px;}
 input.sreset{border:none;background:none;color:#aaa}
 textarea{width:465px;height:65px;padding:0 0 0 5px;font-size:12px;color:#333;border:1px #7f9db9 solid;line-height:18px}
 .form_table{margin-bottom:20px;padding:20px 0 0;background-color:#fff}
@@ -243,7 +245,7 @@ textarea{width:465px;height:65px;padding:0 0 0 5px;font-size:12px;color:#333;bor
 .summary div.current .shop_cart input.disabled{background-position:0 -555px}
 /* form table style end */
 /* border table style start */
-.border_table {border-collapse:collapse;border:1px solid #ffc8a0}
+.border_table {border-collapse:collapse;border:1px solid #ffc8a0;margin-bottom:10px;}
 	.border_table th,.border_table td{padding:6px 15px 5px 15px;border:1px solid #e0e0e0}
 	.border_table th,.dotted_table th{color:#666;background:#f7f7f7}
 	.border_table thead td{border:none;background:#fef6e3;font-weight:bold;color:#4d4d4d}
@@ -295,7 +297,7 @@ textarea{width:465px;height:65px;padding:0 0 0 5px;font-size:12px;color:#333;bor
 .ucenter .main .box .cont{overflow:visible}
 	.ucenter .main .box p.text{margin:10px 30px}
 .ucenter .sidebar .box{margin-top:-1px}
-.ucenter .sidebar .box .title{height:34px;background:url(../images/front/ucenter/uc_title_bg.gif) repeat-x}
+.ucenter .sidebar .box .title{height:32px;background:url(../images/front/ucenter/uc_title_bg.gif) repeat-x}
 	.ucenter .sidebar .box .title h2{line-height:34px;padding-left:22px;background:url(../images/front/ucenter/h2_bg.gif) 2px 8px no-repeat}
 	.ucenter .sidebar .box .title h2.bg2{background-position:2px -18px}
 	.ucenter .sidebar .box .title h2.bg3{background-position:2px -44px}
@@ -343,7 +345,7 @@ textarea{width:465px;height:65px;padding:0 0 0 5px;font-size:12px;color:#333;bor
 .uc_title,.uc_title label,.uc_title label span{background:url(../images/front/ucenter/uc_titlebg.gif) no-repeat}
 .uc_title{height:32px;background-repeat:repeat-x}
 	.uc_title label{display:inline-block;float:left;margin:1px 3px 0 0;padding-left:15px;background-position:0 -88px;cursor:pointer}
-		.uc_title label span{display:inline-block;height:21px;padding:5px 10px 0 0;overflow:hidden;color:#4f4f4f;background-position:right -115px}
+		.uc_title label span{display:inline-block;height:21px;padding:5px 15px 0 0;overflow:hidden;color:#4f4f4f;background-position:right -115px}
 			.uc_title label span em{color:#c04e0b;font-style:normal;font-size:11px}
 			.uc_title label.current span em{color:#f77113}
 	.uc_title label.current{margin-top:1px;background-position:0 -32px}
@@ -654,7 +656,7 @@ strong.result{ display:block;margin:0 0 5px;font-size:16px;color:#666;text-align
 				.cart_box .prompt_4{padding:0 12px;border:1px solid #feddc6;background-color:#fffcf2;color:#595959}
 					.cart_box .prompt_4 strong{display:block;margin:10px 0 0;padding:0 0 3px 10px;border-bottom:1px solid #ffcaa5}
 				.addr_list li{height:20px;line-height:20px;margin:8px 0;padding-left:10px}
-				.cart_box table.form_table{margin:0}
+				.cart_box table.form_table{margin:0;margin-bottom: 10px;}
 					.cart_box table.form_table input.tiny{height:16px;width:78px;margin:0 5px;text-align:center;color:#5b5b5b}
 					.cart_box table.form_table th,.cart_box table.form_table td{padding:0 0;font-size:12px;vertical-align:middle}
 					.cart_box .box table.form_table th,.cart_box .box table.form_table td{padding:9px 0}
@@ -729,7 +731,7 @@ a.reg_btn{display:block;width:159px;margin:10px 0 0;background-position:0 -210px
 /* login_box style end */
 /* pages_bar style start */
 .pages_bar{text-align:right;color:#444}
-	.pages_bar a,.pages_bar span{display:inline-block;height:17px;border:1px solid #d5d5d5;margin-right:6px;padding:2px 7px 1px;text-align:center;color:#1a66b3;font-weight:bold;-moz-border-radius:3px;-khtml-border-radius:3px;-webkit-border-radius:3px;border-radius:3px}
+	.pages_bar a,.pages_bar span{display:inline-block;height:18px;line-height:18px;border:1px solid #d5d5d5;margin-right:6px;padding:2px 7px 1px;text-align:center;color:#1a66b3;font-weight:bold;-moz-border-radius:3px;-khtml-border-radius:3px;-webkit-border-radius:3px;border-radius:3px}
 	.pages_bar a.current_page{border:1px solid #c30;background-color:#c30;color:#fff}
 	.pages_bar span{color:#878787}
 .box .pages_bar{margin:5px 20px 25px}

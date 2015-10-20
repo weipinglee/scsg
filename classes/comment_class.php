@@ -82,4 +82,69 @@ class Comment_Class
 		}
 		return $data;
 	}
+	/**
+	 * 获取评论数据
+	 * 
+	 */
+	public static function get_comment_byid($id,$type,$controller=null){
+		
+		$type_config = array('bad'=>'1','middle'=>'2,3,4','good'=>'5');
+		
+		if(!isset($type_config[$type]))
+		{
+			$type = null;
+		}
+		else
+		{
+			$type=$type_config[$type];
+		}
+		
+		$data['comment_list']=array();
+		
+		$query = new IQuery("comment AS a");
+		$query->fields = "a.*,b.username,b.email,b.phone,b.head_ico";
+		$query->join = "left join user AS b ON a.user_id=b.id";
+		$query->where = " a.goods_id = {$id} ";
+		
+		if($type!==null)
+			$query->where = " a.goods_id={$id} AND a.status=1  AND a.point IN ($type)";
+		else
+			$query->where = "a.goods_id={$id} AND a.status=1 ";
+		
+		$query->order    = "a.id DESC";
+		$query->page     = IReq::get('page') ? intval(IReq::get('page')):1;
+		$query->pagesize = 10;
+		
+		$data['comment_list']= $query->find();
+		if($controller){
+			$controller->comment_query = $query;
+		}
+		
+		if($data['comment_list'])
+		{
+			$user_ids = array();
+			foreach($data['comment_list'] as $key=>$value)
+			{
+				$user_ids[]=$value['user_id'];
+				if($value['username']){
+					$data['comment_list'][$key]['user_show'] = $value['username'];
+				}else if($value['email']){
+					$data['comment_list'][$key]['user_show'] = user_like::getSecretEmail($value['email']);
+				}else 
+					$data['comment_list'][$key]['user_show'] = user_like::getSecretPhone($value['phone']);
+			}
+			$user_ids = implode(",", array_unique( $user_ids ) );
+			$query = new IQuery("member AS a");
+			$query->join = "left join user_group AS b ON a.user_id IN ({$user_ids}) AND a.group_id=b.id";
+			$query->fields="a.user_id,b.group_name";
+			$user_info = $query->find();
+			$user_info = Util::array_rekey($user_info,'user_id');
+		
+			foreach($data['comment_list'] as $key=>$value)
+			{
+				$data['comment_list'][$key]['user_group_name']=isset($user_info[$value['user_id']]['group_name']) ? $user_info[$value['user_id']]['group_name'] : '';
+			}
+		}
+		return array_merge($data, self::get_comment_info($id) );
+	}
 }

@@ -2,7 +2,7 @@
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,button{padding:0;margin:0;font-size:100%}
 label input{vertical-align:middle}
 a:link,a:visited{color:#333;text-decoration:none;}
-a:hover,a:active{text-decoration:underline}
+a:hover,a:active{text-decoration:none;}
 body{font:12px/1.5 "宋体", Arial, Helvetica, sans-serif;color:black;background-color:#fff;}
 img{border:0;vertical-align: middle;}
 table{border-collapse:collapse}
@@ -255,7 +255,7 @@ textarea{width:465px;height:65px;padding:0 0 0 5px;font-size:12px;color:#333;bor
 .submit_order{width:191px;background-position:0 -433px}
 .submit_pay{width:148px;background-position:0 -477px;margin:30px 0}
 .submit_cancel{width:107px;height:34px;background-position:0 -521px}
-.shop_cart .submit_join{width:182px;height:42px;background-position:0 -291px}
+.shop_cart .submit_join{width:169px;height:45px;background-position:0 -291px}
 .next_step{display:block;width:159px;background-position:0 -643px;}
 
 .reply_btn{display:inline-block;width:49px;height:24px;line-height:24px;color:#444;text-indent:0;text-align:center;background-position:-99px 0}
@@ -456,7 +456,7 @@ ul.ranklist{background:#fdfdfd}
 			.box_2 .content dl dd.current a{font-weight:bold}
 /* brand_list style end */
 /* sorting style end */
-dl.sorting{ position:relative;width:688px;border-bottom:1px solid #e5e5e5;padding:5px 60px 3px 0;text-align:left;overflow:hidden}
+dl.sorting{ position:relative;border-bottom:1px solid #e5e5e5;padding:5px 60px 3px 0;text-align:left;overflow:hidden}
 	dl.sorting dt{width:100px;float:left;text-align:right;color:#626262;font-weight:bold;line-height:25px;}
 		dl.sorting dd{padding-left:145px;}
 		dl.sorting dd a{display:inline-block;margin:2px 5px 0;padding:0 3px;_padding-top:2px}
@@ -754,7 +754,7 @@ a.reg_btn{display:block;width:159px;margin:10px 0 0;background-position:0 -210px
 /* login_box style end */
 /* pages_bar style start */
 .pages_bar{text-align:right;color:#444}
-	.pages_bar a,.pages_bar span{display:inline-block;height:17px;border:1px solid #d5d5d5;margin-right:6px;padding:2px 7px 1px;text-align:center;color:#1a66b3;font-weight:bold;-moz-border-radius:3px;-khtml-border-radius:3px;-webkit-border-radius:3px;border-radius:3px}
+	.pages_bar a,.pages_bar span{display:inline-block;height:17px;line-height:17px;border:1px solid #d5d5d5;margin-right:6px;padding:2px 7px 1px;text-align:center;color:#1a66b3;font-weight:bold;-moz-border-radius:3px;-khtml-border-radius:3px;-webkit-border-radius:3px;border-radius:3px}
 	.pages_bar a.current_page{border:1px solid #c30;background-color:#c30;color:#fff}
 	.pages_bar span{color:#878787}
 .box .pages_bar{margin:5px 20px 25px}

@@ -606,3 +606,139 @@ fieldset, img {
 	margin-left:120px;
 	color:#333;
 }
+
+/*预售板块*/
+
+.tbc-presale {
+    background: #fbf9f9 none repeat scroll 0 0;
+    color: #666;
+    line-height: 24px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+}
+.tbc-presale-title {
+    background-color: #f6f7f2;
+    clear: both;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 10px;
+}
+.tbc-presale .tb-property-type {
+    color: #6c6c6c;
+    display: inline;
+    float: left;
+    width: 60px;
+}
+.tbc-presale .tbc-presale-price-content {
+    height: 55px;
+    position: relative;
+}
+.tbc-presale .tbc-presale-content {
+    margin-left: 60px;
+}.tbc-presale-title {
+    line-height: 40px;
+}.tbc-presale-time {
+    color: #62880e;
+    font-size: 18px;
+}
+#detail .tbc-presale-rule-trigger {
+    color: #999;
+}
+#detail a {
+    color: #3c3c3c;
+}
+.tbc-presale-rule-trigger {
+    border-bottom: 1px dashed #dedede;
+    color: #999;
+    line-height: 18px;
+    position: absolute;
+    right: 4px;
+    top: 10px;
+    z-index: 99999;
+}.tbc-presale-rule-content {
+    display: none;
+}
+.tbc-presale .tbc-presale-line {
+    background-color: #fafafa;
+    clear: both;
+    padding: 10px;
+}
+.tbc-presale-step-tip2 {
+    margin-left: 110px;
+}
+.tbc-presale-step-tip {
+    display: inline-block;
+}
+.tbc-presale-step-tip2 p {
+    width: 115px;
+}
+.tbc-presale-step-tip p {
+    border: 1px solid #efedf0;
+    color: #61870e;
+    display: inline-block;
+    line-height: 16px;
+    padding: 2px 5px;
+    text-align: center;
+    width: 120px;
+}
+.tbc-presale-step-tip2 i {
+    left: 60px;
+}
+.tbc-presale-step-tip i {
+    border-color: #efedf0 transparent transparent;
+    border-style: solid;
+    border-width: 8px 5px 0;
+    display: block;
+    height: 0;
+    left: 45px;
+    position: relative;
+    top: -2px;
+    width: 0;
+}.tbc-presale-step-tip3 {
+    margin-left: 30px;
+}.tbc-presale-steps {
+    padding-left: 20px;
+}.tbc-presale-step-tag-active {
+    background-color: #afd367;
+}
+.tbc-presale-step-tag {
+    background-color: #bebebe;
+    border-radius: 10px;
+    color: #fff;
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    width: 20px;
+}
+.tbc-presale-step-line-active {
+    border-top: 3px solid #afd367;
+}
+.tbc-presale-step-line {
+    border-top: 3px solid #bebebe;
+    display: inline-block;
+    height: 3px;
+    width: 125px;
+}
+.tbc-presale-step1 {
+    margin-left: -20px;
+    padding-right: 45px;
+}
+.tbc-presale-step-price {
+    display: inline-block;
+    line-height: 16px;
+    text-align: center;
+    vertical-align: top;
+    width: 100px;
+}
+.tbc-presale-step-price .red {
+    color: red;
+}.tbc-presale-price {
+    font-family: Arial;
+}
+.tbc-presale-step2 {
+    padding-right: 35px;
+}
+#J_TbcPresale{
+	width:670px;
+}

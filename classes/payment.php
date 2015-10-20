@@ -121,6 +121,75 @@ class Payment
 		return $payment;
 	}
 	/**
+	 * @brief 预售订单的支付
+	 * @param $payment_id int 支付方式id
+	 * @param $order_id  int  预售订单id
+	 * @return array 支付提交信息
+	 */
+	public static function getPaymentInfoPresell($payment_id,$order_id)
+	{
+		$payment = self::getPaymentParam($payment_id);
+		$order_obj = new IQuery('order as o');
+		$order_obj->join = 'left join presell as p on o.active_id = p.id';
+		$order_obj->fields = 'o.id,o.order_no,o.status,o.pay_time,o.postscript,o.mobile,o.accept_name,o.postcode,
+				o.telphone,o.address,o.pay_status,o.pay_type,o.pre_amount,o.order_amount,o.create_time,
+				p.wei_type,p.wei_days,p.wei_start_time,p.wei_end_time';
+		$order_obj->where  = 'o.id='.$order_id.' and o.type=4';
+		$orderRow = $order_obj->getObj();
+	//	print_r($orderRow);exit();
+		if(empty($orderRow))
+		{
+			IError::show(403,'订单信息不正确，不能进行支付');
+		}
+		
+		$siteConfigObj = new Config('site_config');
+		$cancel_days = $siteConfigObj->preorder_cancel_days;
+		if($orderRow['status']==1 && order_class::is_overdue($orderRow['create_time'],$cancel_days)){
+			$payment['M_Amount']    = $orderRow['pre_amount'];
+			$payment['M_OrderNO']   = 'pre'.$orderRow['order_no'];
+		}elseif($orderRow['status']==4 ){
+			if($orderRow['wei_type']==1){
+				if(time()<strtotime($orderRow['wei_start_time']))
+					IError::show(403,'未到支付时间，不能支付');
+				if(time()>strtotime($orderRow['wei_end_time']))
+					IError::show(403,'超期未支付尾款，订单已作废');
+			}else{
+				if(!preorder_class::is_overdue($orderRow['pay_time'],$orderRow['wei_days']))
+					IError::show(403,'超期未支付尾款，订单已作废');
+			}
+			$payment['M_Amount']    = $orderRow['order_amount'] - $orderRow['pre_amount'];
+			$payment['M_OrderNO']   = 'wei'.$orderRow['order_no'];
+		}
+		else{
+			IError::show(403,'订单已过期，不能进行支付');
+		}
+		
+		$payment['M_Remark']    = $orderRow['postscript'];
+		$payment['M_OrderId']   = $orderRow['id'];
+		
+		//用户信息
+		$payment['P_Mobile']    = $orderRow['mobile'];
+		$payment['P_Name']      = $orderRow['accept_name'];
+		$payment['P_PostCode']  = $orderRow['postcode'];
+		$payment['P_Telephone'] = $orderRow['telphone'];
+		$payment['P_Address']   = $orderRow['address'];
+		
+		$site_config   = $siteConfigObj->getInfo();
+		
+		//交易信息
+		$payment['M_Time']      = time();
+		$payment['M_Paymentid'] = $payment_id;
+		
+		//店铺信息
+		$payment['R_Address']   = isset($site_config['address']) ? $site_config['address'] : '';
+		$payment['R_Name']      = isset($site_config['name'])    ? $site_config['name']    : '';
+		$payment['R_Mobile']    = isset($site_config['mobile'])  ? $site_config['mobile']  : '';
+		$payment['R_Telephone'] = isset($site_config['phone'])   ? $site_config['phone']   : '';
+		
+		return $payment;
+		
+	}
+	/**
 	 * @brief 获取订单中的支付信息 M:必要信息; R表示店铺; P表示用户;
 	 * @param $payment_id int    支付方式ID
 	 * @param $type       string 信息获取方式 order:订单支付;recharge:在线充值;
@@ -233,6 +302,73 @@ class Payment
 		$payment['M_Amount']    = $money;
 		return $payment;
 		
+	}
+	/**
+	 * @获取预售退款需要订单数据
+	 * @$payment_id int 支付方式id
+	 * @$order_id  int 订单id
+	 * @return array
+	 */
+	public static function getPaymentInfoForPresellRefund($payment_id,$refundId,$order_id,$money){
+		
+		$payment = array();
+		$orderObj = new IQuery('order as o');
+		$orderObj->join = 'left join trade_record as t on CONCAT("pre",o.order_no) = t.order_no OR CONCAT("wei",o.order_no) = t.order_no';
+		$orderObj->where = 'o.id='.$order_id;
+		$orderObj->fields = 'o.order_no,o.pre_amount,t.trade_no,t.money as trade_money,o.id';
+		$orderObj->limit = 2;
+		$orderObj->order = 't.id ASC';
+		$orderData = $orderObj->find();
+		
+		if(empty($orderData))
+		{
+			IError::show(403,'订单信息不正确，不能退款');
+		}
+		
+		
+		foreach($orderData as $key=>$v){
+			if($key==0){
+				$money1=0;
+				if($v['trade_no'])
+					$reMoney = $v['trade_money'] - self::getOrigReMoney($v['trade_no']);
+				else continue;
+				if($reMoney<=0){
+					continue;
+				}
+				$payment[$key]['M_OrderNO'] = 'pre'.md5($refundId);
+				$payment[$key]['M_Trade_NO'] = $v['trade_no'];
+				if($reMoney >= $money){
+					$payment[$key]['M_Amount']    = $money;
+					
+				}else{
+					$payment[$key]['M_Amount']    = $reMoney;
+				}
+				$money1 = $payment[$key]['M_Amount'];
+			}
+			if($key==1){
+				$reMoney = $v['trade_money'] - self::getOrigReMoney($v['trade_no']);
+				if($reMoney<=0){
+					continue;
+				}
+				$payment[$key]['M_OrderNO'] = 'wei'.md5($refundId);
+				$payment[$key]['M_Trade_NO'] = $v['trade_no'];
+				$payment[$key]['M_Amount']    = ($money - $money1) <=$reMoney ? $money - $money1 : $reMoney;
+			}
+			$payment[$key] = array_merge($payment[$key],self::getPaymentParam($payment_id));
+		}
+	
+		return $payment;
+	
+	}
+	//获取交易已经退款的金额
+	public static function getOrigReMoney($trade_no){
+		$trade_obj = new IModel('trade_record');
+		$orig_data = $trade_obj->query('orig_trade_no='.$trade_no,'money');
+		$orig_money = 0;//该交易的已退款金额
+		foreach($orig_data as $key=>$v){
+			$orig_money += $v['money'];
+		}
+		return $orig_money;
 	}
 	//更新在线充值
 	public static function updateRecharge($recharge_no)

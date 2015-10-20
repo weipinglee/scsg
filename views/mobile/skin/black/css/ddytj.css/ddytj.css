@@ -1,0 +1,122 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{ margin:0; padding:0;}
+ul, li, body, h2, h3, div, body, p{display: block;}
+a{ text-decoration:none;}
+ul{ list-style-type:none;}
+.jiben{ width:100%; height:auto; overflow:hidden; margin:0 auto; }
+.jiben .zhijia .ddtou h4 a{cursor:pointer}
+.jiben .zhijia{
+	height: 40px;
+	width: 100%;
+}
+.jiben .zhijia .ddtou {
+	height: 40px;
+	width: 100%;
+	background-color: #F30;
+	position: fixed;
+	top: 0px;
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: auto;
+}
+.jiben .zhijia .ddtou h4{
+	color: #FFF;
+	font-size: 14px;
+	font-family: "雅黑";
+	line-height: 40px;
+	height: 40px;
+	display: block;
+}
+.jiben .zhijia .ddtou h4 a{
+	color: #FFF;
+}
+.jiben .zhijia .ddtou h4 b{ font-weight:normal; font-size:13px; margin-left:8px;}
+.jiben .xinxi{
+	width: 100%;
+	height: auto;
+	overflow: hidden;
+	margin-top: 0px;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: auto;
+}
+.jiben .xinxi ul{ margin:0 auto; }
+.jiben .xinxi ul li{ height:23px; width:98%; line-height:23px; font-size:13px; color:#666; border-bottom:#f5f3f3 solid 1px; margin:0 auto;}
+.jiben .xinxi ul li a{margin-right: 10px;color: #333;float: right;}
+
+.jiben .xinxi ul .tupn .zuo{ float:left;cursor:pointer}
+.jiben .xinxi ul .huise{ background-color:#ede9e9; width:100%; padding-left:5px;}
+.jiben .xinxi ul .shouzhi{ height:auto; overflow:hidden; }
+.jiben .xinxi ul .shouzhi span { float:left;}
+.jiben .xinxi ul .shouzhi a{ margin-right:10px; color:#333; float:right;}
+.jiben .xinxi ul li a i{ font-style:normal; color:#F00;}
+
+.jiben .xinxi ul .annu.one .secsed{
+	display: block;
+	border-radius: 2px;
+	width: 96%;
+	background-color: #fc4303;
+	color: #FFF;
+	border: #C00 solid 1px;
+	margin-top: 5px;
+	margin-right: 2%;
+	margin-bottom: 5px;
+	margin-left: 2%;
+	height: 28px;
+	line-height: 28px;
+	font-size: 13px;
+	text-align: center;
+}
+	
+.jiben .xinxi ul .annu{ text-align:center; height:auto; overflow:hidden;}
+.jiben .xinxi ul li em{ color:#333; font-style:normal;}
+.jiben .xinxi ul .tupn img{ float:left;}
+.jiben .xinxi ul .tupn{ height:auto; overflow:hidden; margin:3px;}
+.jiben .xinxi ul .tupn .hogse{ color:#F00;}
+.jiben .xinxi ul .huise .hogse{ color:#F00; position:relative; right:10px;}
+.jiben .xinxi ul .huise.yifu{ background-color:#faf8f8;position:}
+.jiben .xinxi ul .huise .fapio{position:relative; right:10px; }
+.jiben .xinxi ul .annu.one{ border:none;     text-align: center;}
+.jiben .xinxi ul .annu.two{ border:none;     text-align: center;}
+.jiben .xinxi ul .one{border:none; }
+.jiben .bottom{
+	width: 100%;
+	height: auto;
+	overflow: hidden;
+	margin-top: 30px;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: auto;
+}
+.jiben .bottom .dibu{height: 30px;width: 100%; margin:0 auto; background-color:#f1efef; position:fixed;bottom:0px;  text-align:center;}
+.jiben .bottom .dibu button{
+	float: right;
+	height: 30px;
+	width: 75px;
+	background-color: #fd2603;
+	border: #F00 solid 1px;
+	color: #FFF;
+	font-size: 13px;
+}
+
+	.jiben .xinxi ul li .zhfu{
+	display: block;
+	border-radius: 2px;
+	
+	border: #C00 solid 1px;
+	margin-top: 5px;
+	margin-right: 2%;
+	margin-bottom: 5px;
+	background-color: #CCC;
+	border: #999 solid 1px;
+	color: #FFF;
+	width: 96%;
+	margin-left: 2%;
+	font-size: 13px;
+	line-height: 28px;
+	height: 28px;
+	text-align: center;
+}

@@ -97,8 +97,9 @@ class Menu
 
 	   '订单'=>array(
         	'订单管理'=>array(
-                '/order/order_list' => '订单列表',
-                '/order/order_edit' => '添加订单'
+                '/order/order_list' => '普通订单',
+                '/order/order_edit' => '添加订单',
+                 '/preorder/preorder_list' => '预售订单',
         	),
         	'单据管理'=>array(
              	'/order/order_collection_list'  => '收款单',
@@ -120,6 +121,7 @@ class Menu
         		'/market/pro_rule_list' => '促销活动列表'
         	),
         	'营销活动' => array(
+        		'/presell/presell_list' => '预售',
         		'/market/pro_speed_list' => '闪购',
         		'/market/regiment_list' => '团购',
         	),

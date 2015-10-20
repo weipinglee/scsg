@@ -580,11 +580,11 @@ function selectTakeself(deliveryId)
 				<strong>结算信息</strong>
 				<div class="pink_box">
 					<p class="f14 t_l">{if:$this->final_sum != $this->sum}优惠后总金额{else:}商品总金额{/if}：<b>{$this->final_sum}</b> - 代金券：<b name='ticket_value'>0</b> + 税金：<b id='tax_fee'>0</b> + 运费总计：<b id='delivery_fee_show'>0</b> + 保价：<b id='protect_price_value'>0</b> + 支付手续费：<b id='payment_value'>0</b></p>
-
+					{if:!isset($this->prop_not)}
 					<a href="javascript:void(0)" id="ticket_a" class="fold" hidefocus>
 						<b class="orange">使用代金券</b>
 					</a>
-
+					
 					<!--代金券列表-->
 					<div class="cart_box t_l gray" style='display:none' id='ticket_box'>
 						<div class="cont">
@@ -624,7 +624,7 @@ function selectTakeself(deliveryId)
 							<p class="t_r">使用了代金券 可以优惠 <b class="red2" name='ticket_value'>0</b> 元</p>
 						</div>
 					</div>
-
+					{/if}
 				</div>
 				<hr class="dashed" />
 				<div class="pink_box gray m_10">

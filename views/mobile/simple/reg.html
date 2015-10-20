@@ -21,11 +21,21 @@
         <meta name="description" content="山城速购">
         <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
 		<link rel="stylesheet" href="{skin:css/center.css}" type="text/css">       
-		<script src="{theme:javascript/js/jquery-1.9.1.min.js}"></script>
-		<script src="{theme:javascript/js/common.js}"></script>   
+		<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		<script src="{theme:javascript/common.js}"></script> 
+		<script src="{theme:javascript/reg/register.js}"></script>     
 		<link rel="stylesheet" href="{skin:css/csshide1.css}">
 <style>#sell-ad{display:none!important;}</style>
 <script type="text/javascript">window.onerror=function(){return true;}</script></head>
+<script type="text/javascript">
+var returnUrl = '{url:$callback}';
+var logPath = '{url:/simple/login}';
+var regPath = '{url:/simple/reg_act}';
+var checkPhoneIsOneUrl = '{url:/simple/checkPhoneIsOne}';
+var checkEmailIsOneUrl = '{url:/simple/checkEmailIsOne}';
+var getMobileCodeUrl = '{url:/simple/getMobileValidateCode}';
+
+</script>
     <body data-mps="PA4101">
         <div id="page">
             <header class="wap-header">
@@ -35,41 +45,7 @@
             <h1>注册</h1>
         </div>
     </div>
-    <!-- <nav class="nav_wrap_new">
-    <i class="top_nav_icon"></i>
-    <ul class="top_nav_ul clear-fix">
-       <a href="index.html">
-            <li class="top_nav_li top_nav_home fl">
-                <i class="nav_home_icon"></i>
-                <span class="top_nav_li_span">首页</span>
-            </li>
-        </a>
-        <a href="search/category.html">
-            <li class="top_nav_li top_nav_search fl">
-                <i class="nav_search_icon"></i>
-                <span class="top_nav_li_span">搜索</span>
-            </li>
-        </a>
-        <a href="cart.html">
-            <li class="top_nav_li top_nav_cart fl">
-                <i class="nav_cart_icon"></i>
-                <span class="top_nav_li_span">购物车</span>
-            </li>
-        </a>
-        <a href="huiyuan.html">
-            <li class="top_nav_li top_nav_order fl">
-                <i class="nav_order_icon"></i>
-                <span class="top_nav_li_span">订单</span>
-            </li>
-        </a>
-        <a href="huiyuan.html">
-            <li class="top_nav_li top_nav_user fl">
-                <i class="nav_user_icon"></i>
-                <span class="top_nav_li_span">我的</span>
-            </li>
-        </a>
-    </ul>
-</nav> --></header><link rel="stylesheet" href="{skin:css/loglist.css}">
+</header><link rel="stylesheet" href="{skin:css/loglist.css}">
 
 
   <div id="formbackground" style=" width:100%; height:100%; z-index:-1">  
@@ -79,26 +55,23 @@
 <section class="reg-main">  
 
     <form id="register-form" class="reg-form" method="post" novalidate>
-	
-  
-
-        <div class="reg-error-box"></div>
+		<div class="reg-error-box" id='errorInfo'></div>
         <div class="field username">
             <div class="field-relative">
-                <input id="mobile" class="reg-input icon-reg icon-reg-phone" type="text" name="mobile" placeholder="请输入手机号" value="" autocomplete="off">
+                <input id="mobile" class="reg-input icon-reg icon-reg-phone" type="text" name="mobile" onblur='showPhoneTipWhenBlur()' onfocus='hideErrInfo()' placeholder="请输入手机号" value="" autocomplete="off">
                 <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display:none;">清空</a>
             </div>
         </div>
         <div class="field code mt10">
             <div class="field-relative cf">
-                <input id="code" class="reg-input reg-disabled fl" type="text" name="code" placeholder="请输入验证码" value="" autocomplete="off" maxlength="6" disabled="disabled">
+                <input id="code" class="reg-input reg-disabled fl" type="text" name="code" placeholder="请输入验证码" value="" onfocus='hideErrInfo()' autocomplete="off" maxlength="6" >
                 <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display:none;">清空</a>
-                <input id="getCode" type="button" class="reg-btn dark-btn get-code get-code-register fr" value="获取验证码">
+                <a id="getCode" type="button" onclick='receiveCode()' class="receive_code  reg-btn dark-btn get-code get-code-register fr" >获取验证码</a>
             </div>
         </div>
         <div class="field psw mt10">
             <div class="field-relative">
-                <input class="reg-input reg-disabled icon-reg icon-reg-psw" type="password" name="password" placeholder="请输入密码" value="" autocomplete="off" onpaste="return false;" oncopy="return false;" oncut="return false;" disabled="disabled">
+                <input class="reg-input reg-disabled icon-reg icon-reg-psw" type="password" name="password" placeholder="请输入密码" onfocus='hideErrInfo()' value="" autocomplete="off" onpaste="return false;" oncopy="return false;" oncut="return false;" disabled="disabled">
                 <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display:none;">清空</a>
             </div>
         </div>
@@ -107,7 +80,7 @@
             <label for="protocol">我已阅读并同意<a id="toProtocol" href="javascript:void(0);">《用户注册协议》</a></label>
         </div>
         <div class="field submit-btn">
-            <input type="button" id="registerBtn" class="reg-btn dark-btn" value="注册">
+            <input type="button" id="registerBtn" class="reg-btn dark-btn" onclick='registerByPhoneSubmit()' value="注册">
         </div>
         <input type="hidden" id="relate" name="relate" value="">
     </form>
@@ -135,42 +108,3 @@
 		<script type="text/javascript" async src="{theme:javascript/js/h.js}"></script>
 		</div>
 		<img id="stat_image" src="{skin:images/files/__utm.gif}" style="display: none;">
-
-    
-
-<footer id="footer">
-	<div class="f-qk-tl">
-		<div class="f-login">
-<a href="{url:/simple/login?callback=}">登录</a><span>|</span>
-<a href="{url:/simple/reg?callback=}">注册</a>
-		</div>
-		<div class="f-go-top" id="goTop"></div>
-	</div>
-	<div class="f-ch-cp">
-		<div class="item"><a href="{url:/site/index?callback=}">触屏版</a><a href="http://www.yqtvt.com/index.html">电脑版</a></div>
-		<div class="item"><span class="copyright_1">Copyright</span> <span class="copyright_2">2012-2015</span><span class="copyright_3">NAI.COM</span><span class="copyright_4">版权所有</span></div></div>
-</footer>
-
-<!--底部浮动-->
-		<script type="text/javascript" src="{theme:javascript/js/search_list.js}" charset="UTF-8"></script>
-		<link rel="stylesheet" href="{skin:css/bottom_nav.css}" type="text/css"/> 
-
-     <section class="sr-s">
-            <div class="s-btn" data="sales">
-				<a href="{url:/site/index?callback=}">
-              <img  src="{skin:images/m_xiabiao/img1.png}" width="50" height="50" alt="首页"></a>
-            </div>
-            <div class="s-btn" data="price">
-				<a href="{url:/site/category?}"><img src="{skin:images/m_xiabiao/img2.png}" width="50" height="50" alt="分类"></a>
-            </div>
-            <div class="s-btn" data="hot">
-				<a href="{url:/site/tuangou}"><img src="{skin:images/m_xiabiao/img3.png}" width="50" height="50" alt="团购"></a>
-            </div>
-            <div class="s-btn" data="default">
-				<a href="{url:/simple/cart?callback=}"><img src="{skin:images/m_xiabiao/img4.png}" width="50" height="50" alt="购物车"></a>
-            </div>
-            <div class="s-btn" data="default">
-				<a href="{url:/site/huiyuan}"><img src="{skin:images/m_xiabiao/img5.png}" width="50" height="50" alt="我的山城"></a>
-            </div>
-        </section>
-</body></html>

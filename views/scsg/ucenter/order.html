@@ -28,7 +28,7 @@
                 <td>
                 	<b class="orange">{echo:Order_Class::orderStatusText(Order_Class::getOrderStatus($item))}</b>
                 </td>
-            {/query}
+            {/foreach}
             </tr>
             <tfoot><tr><td colspan="6" class="t_l">{$queryOrderList->getPageBar()}</td></tr></tfoot>
         </table>

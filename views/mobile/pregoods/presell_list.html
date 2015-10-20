@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)http://m.b5m.com/activelistings/198 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="http://static-web.b5m.com/wap/img/collect-logo/b5m-collect-logo.png">
+        <title>山城预售</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+        <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+		<link rel="stylesheet" href="{skin:css/hd_com.css}" type="text/css">     
+		<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		{js:artTemplate}
+		<script src="{theme:javascript/common.js}"></script>
+		<script src="{theme:javascript/hd_com.js}"></script>
+		<script src="{theme:javascript/scrollTop.js}"></script>         
+		</head>
+
+    <body>
+        <div id="page">
+            <header class="wap-header">
+    <div class="wap-topbar">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回"></a></div>
+        <div class="h-center">
+            <h1>山城速购预售</h1>
+        </div>
+            <a href="{url:/site/mail}" class="search_nav_icon_none"><img src="{skin:css/wap/app_mail_nav.png}" style="width:35px;height:35px;"><i class="num">2</i></a>
+
+    </div>
+</header><div class="inner-section">
+<input type='hidden' name='start' value='{$this->count}'/>
+    <section class="modle_section">
+        <div class="ban_section">
+            <ul class="tiems" id="hd_ban_mode2">
+                <li>
+                    <img src="{skin:images/files/fe6e17298b08a32cc7c7b253faaa4ed6.jpg}">
+                </li>
+            </ul>
+        </div>
+         <div class="modle_items2" id='presell_box'>
+            <ul class="items cf">
+            	{foreach:items=$this->pre_list}
+                    <li>
+                        <a href="{url:/pregoods/products/id/$item['goods_id']}" class="img"><img src="{url:$item['presell_img']}"></a>
+                        <a href="{url:/pregoods/products/id/$item['goods_id']}" class="tit">{$item['name']}</a>
+                        <span class="price"><a href="{url:/pregoods/products/id/$item['goods_id']}" class="ms_btn">抢先订</a> <span class="n_price"><i>￥</i>{$item['price']}</span> </span>
+                    </li>
+                {/foreach}
+            </ul>
+        </div>
+    </section>
+	<div class="loading-ctn loading-imgS" style='border-bottom:0px;'>
+        <p >下拉查看更多</p>
+        <img alt="" src="{skin:images/files/loading.gif}">
+	 </div>
+	<script type='text/javascript'>
+		function loadPresell(toUrl){
+			$('.loading-imgS img').show();
+			$('.loading-imgS p').hide();
+			var start = parseInt($('input[name=start]').val());
+			var getUrl = toUrl;
+			$.ajax({
+				type:'post',
+				async:false,
+				data:{start:start},
+				dataType:'json',
+				url:getUrl,
+				beforeSend:function(){
+					
+				},
+				success:function(data){
+					if(data==0){
+						$('.loading-imgS p').text('没有更多数据');
+					}
+					else{
+						for(var i in data){
+							var newProm = template.render('presell_template',data[i]);
+							$('#presell_box ul').append(newProm);
+						}
+						$('input[name=start]').val(start+parseInt(i)+1);
+					}
+					
+					
+				},
+				complete:function(){
+					$('.loading-imgS img').hide();
+					$('.loading-imgS p').show();
+				},
+				timeout:1000,
+			})
+		}
+	
+		window.onscroll = function(){
+				 if ($(document).scrollTop() >= $(document).height() - $(window).height()){
+				 	loadPresell('{url:/pregoods/getMorePresell}');
+				 }
+			}
+	</script>
+	<script type='text/html' id='presell_template'>
+		 <li>
+            <a href="{url:/pregoods/products/id}/<%=goods_id%>" class="img"><img src="{url:<%=presell_img%>}"></a>
+            <a href="{url:/pregoods/products/id/}/<%=goods_id%>" class="tit"><%=name%></a>
+            <span class="price"><a href="{url:/pregoods/products/id/}/<%=goods_id%>" class="ms_btn">抢先订</a> <span class="n_price"><i>￥</i><%=price%></span> </span>
+        </li>
+	</script>
+{include:layouts/footer.html}

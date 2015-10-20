@@ -111,7 +111,49 @@ class Ucenter extends IController
         }
         $this->redirect('order_detail',false);
     }
-
+	
+    /**
+     * @brief 订单详情
+     * @return String
+     */
+    public function preorder_detail()
+    {
+    	$id = IFilter::act(IReq::get('id'),'int');
+    	$presell_db = new IModel('presell');
+    	$wei_status = 0;
+    	$orderObj = new preorder_class();
+    	$this->order_info = $orderObj->getOrderShow($id,$this->user['user_id']);
+    	$presellData = $presell_db->getObj('id='.$this->order_info['active_id']);
+    	$now = time();
+    	
+    	if($presellData['wei_type']==1)
+    	{
+    		$start = strtotime($presellData['wei_start_time']);
+    		$end   = strtotime($presellData['wei_end_time']);
+    		if($now<$start)
+    			$this->wei_status = 0;//不可支付
+    		else if($now>=$start&&$now<=$end){
+    			$this->wei_status = 1;//可以支付
+    		}
+    		else{
+    			$this->wei_status = 2;//已过期
+    		}
+    		$this->start = $start;
+    		$this->end   = $end;
+    	}
+    	else {
+    		$this->end = strtotime($this->order_info['pay_time']) + $presellData['wei_days']*24*3600;
+    		$this->wei_status = $now>$this->end ? 2 : 1;
+    	}
+    	
+    	if(!$this->order_info)
+    	{
+    		IError::show(403,'订单信息不存在');
+    	}
+    	$this->setRenderData($presellData);
+    	$this->redirect('preorder_detail');
+    }
+    
     //操作订单状态
 	public function order_status()
 	{
@@ -254,6 +296,23 @@ class Ucenter extends IController
         $model->setData(array('default'=>$default));
         $model->update("id = ".$id." and user_id = ".$this->user['user_id']);
         $this->redirect('address');
+    }
+    /**
+     * @brief 设置默认的收货地址(异步获取）
+     */
+    public function address_default_ajax()
+    {
+    	$id = IFilter::act( IReq::get('id'),'int' );
+    	$model = new IModel('address');
+    	
+    	$model->setData(array('default'=>0));
+    	$model->update("user_id = ".$this->user['user_id']);
+    	
+    	$model->setData(array('default'=>1));
+    	if($model->update("id = ".$id." and user_id = ".$this->user['user_id']))
+    		echo 1;
+    	else echo 0;
+    	
     }
     /**
      * @brief 退款申请页面,（包括换货）
@@ -840,7 +899,29 @@ class Ucenter extends IController
 		}
 		return $items;
     }
-
+    //[收藏夹]获取收藏夹数据
+    function get_favorite_ajax()
+    {
+    	//获取收藏夹信息
+    	$page = IReq::get('page') ? intval(IReq::get('page')) : 1;
+  
+    	$favoriteObj = new IQuery("favorite as f");
+    	$favoriteObj->join = 'left join goods as g on f.rid = g.id';
+    	$favoriteObj->fields = 'g.id,g.name,g.img,g.sell_price,f.id as fid';
+    	$cat_id = intval(IReq::get('cat_id'));
+    	$where = '';
+    	if($cat_id != 0)
+    	{
+    		$where = ' and f.cat_id = '.$cat_id;
+    	}
+    	
+    	$favoriteObj->where = "f.user_id = ".$this->user['user_id'].' and (g.is_del = 0 or g.is_del = 4 )'.$where;
+    	$favoriteObj->page  = $page;
+    	$items = $favoriteObj->find();
+ 
+    	if($favoriteObj->page==0){echo 0;exit;}
+    	echo JSON::encode($items);
+    }
     //[收藏夹]删除
     function favorite_del()
     {
@@ -1081,7 +1162,9 @@ class Ucenter extends IController
 		    	else
 		    	{
 		    		$orderObj = new IModel('order');
-		    		$orderRow = $orderObj->getObj('order_no  = "'.IFilter::act($return['order_no']).'" and pay_status = 0 and user_id = '.$user_id);
+		    		$trueOrderNo   = Preorder_Class::getTrueOrderNo($return['order_no']);
+		    		$orderRow = $orderObj->getObj('order_no  = "'.IFilter::act($trueOrderNo).'" and (pay_status = 0 and type!=4 || pay_status in (0,1) and type=4) and user_id = '.$user_id);
+		    		
 		    		if(empty($orderRow))
 		    		{
 		    			IError::show(403,'订单已经被处理过，请查看订单状态');
@@ -1467,4 +1550,56 @@ class Ucenter extends IController
     	$this->redirect('fapiao');
     	
     }
+    public function preorder(){
+    
+        $this->initPayment();
+        $this->redirect('preorder');
+
+    }
+    //操作预售订单状态
+    public function preorder_status()
+    {
+    	$op    = IFilter::act(IReq::get('op'));
+    	$id    = IFilter::act( IReq::get('order_id'),'int' );
+    	$model = new IModel('order');
+    
+    	switch($op)
+    	{
+    		case "cancel":
+    			{
+    				$model->setData(array('status' => 2));
+    				if($model->update("id = ".$id." and status = 1 and user_id = ".$this->user['user_id']))
+    				{
+    					//修改红包状态
+    					$prop_obj = $model->getObj('id='.$id,'prop');
+    					$prop_id = isset($prop_obj['prop'])?$prop_obj['prop']:'';
+    					if($prop_id != '')
+    					{
+    						$prop = new IModel('prop');
+    						$prop->setData(array('is_close'=>0));
+    						$prop->update('id='.$prop_id);
+    					}
+    				}
+    			}
+    			break;
+    
+    		case "confirm":
+    			{
+    				$model->setData(array('status' => 11,'completion_time' => date('Y-m-d h:i:s')));
+    				if($model->update("id = ".$id." and status = 9 and user_id = ".$this->user['user_id']))
+    				{
+    					$orderRow = $model->getObj('id = '.$id);
+    					
+    					//增加用户评论商品机会
+    					Preorder_Class::addGoodsCommentChange($id);
+    
+    					//确认收货以后直接跳转到评论页面
+    					$this->redirect('evaluation');
+    				}
+    			}
+    			break;
+    	}
+    	$this->redirect("preorder_detail/id/$id");
+    }
+ 
 }

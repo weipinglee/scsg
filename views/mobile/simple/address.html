@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<!-- saved from url=(0035)http://m.b5m.com/activelistings/198 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="http://static-web.b5m.com/wap/img/collect-logo/b5m-collect-logo.png">
+        <title>收货地址</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+        <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+		<link rel="stylesheet" href="{skin:css/hd_com.css}" type="text/css">       
+		<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		{js:artTemplate}
+		<script type='text/javascript' src='{theme:javascript/artTemplate/area_select.js}'></script>
+		<script src="{theme:javascript/common.js}"></script>
+		<script src="{theme:javascript/order.js}"></script>
+		<script src="{theme:javascript/scrollTop.js}"></script>     
+		</head>
+		
+    <body>
+        <div id="page">
+            <header class="wap-header">
+			<div class="wap-topbar">
+			<div class="h-left"><a href="javascript:history.go(-1);" title="返回"></a></div>
+			<div class="h-center">
+				<h1>收货地址</h1>
+			</div>
+            <a href="{url:/site/mail}" class="search_nav_icon_none"><img src="{skin:css/wap/app_mail_nav.png}" style="width:35px;height:35px;"><i class="num">2</i></a>
+    </div>
+  </header><div class="inner-section">
+  	
+                  <!--第三种模块开始-->
+    <section class="modle_section">
+	
+			<div class="modle_items3">
+				<p class="bcdz">请选择收货地址</p>
+				<table width="100%" border="0">
+					  <tr>
+						<th class="wid">收货人</th>
+						<th>详细地址</th>
+						<th class="wid">手机</th>
+					  </tr>
+					  {foreach:items=$this->addressList}
+					  <tr onclick='address_select(this);'>
+					  	<input type='hidden' name='{$item["id"]}' value='{$item["id"]}' />
+						<td>{$item['accept_name']}</td>
+						<td>{$item['province_val']} {$item['city_val']} {$item['area_val']} {$item['address']}</td>
+						<td>{$item['mobile']}</td>
+					  </tr>
+					  {/foreach}
+				</table>
+
+			</div>
+		<form action="{url:/simple/address_add}" method="post">
+			<div  class="mod_dres">
+				<div class="dres">
+					<div style="margin:0 5px;border-bottom: 1px solid #ABADB3; padding-bottom:10px;">
+						<a href=""><span>+新增收货地址：</span></a>
+					</div>
+				</div>
+				<div class='dres'>
+					<span>
+						<select name="province" child="city,area" style='width:97%;height:30px;' onchange="areaChangeCallback(this);">
+						<option>请选择省份</option>
+						</select>
+					</span>					
+				</div>
+				<div class='dres'>
+					<span>
+						<select name="city" child="area" style='width:97%;height:30px;' parent="province" onchange="areaChangeCallback(this);">
+						<option>请选择城市</option>
+						</select>
+					</span>					
+				</div>
+				<div class='dres'>
+					<span>
+						<select name="area" parent="city" style='width:97%;height:30px;' pattern="required" alt="请选择收货地区">
+						<option>请选择地区</option>
+						</select>
+					</span>					
+				</div>
+				<div class="dres">
+			
+					<span><input class="texts tex2" placeholder="收货人姓名" type="text" name='accept_name'/></span>
+				</div>
+				<div class="dres">
+					<span>
+						<input class="texts tex2" placeholder="详细地址" type="text" name='address'/>
+					</span>
+				</div>
+				<div class="dres">
+					<span><input class="texts tex2" name='zip' placeholder="邮政编码" type="text"/></span>
+				</div>
+				
+				<div class="dres">
+					<span><input class="texts tex2" placeholder="手机号" type="text" name='mobile' /></span>
+				</div>
+				<div class="dres">
+					<span><input class="chbox" type="checkbox" name='default' value='1'/></span>
+					<span>设置为默认收货地址</span>
+				</div>
+				<div class="dres">
+					<span class="wb"></span>
+					<div><span style="margin: 0 auto;display: block;width: 90%;">
+					<input class="butt" type="button" value="保 存" name='address_add'/></span></div>
+				</div>
+			</div>
+		</form>
+    </section>
+<!--第三种模块结束-->                              
+ </div>       
+ </div>
+   <script type='text/javascript'>
+   	var address_default_url = '{url:ucenter/address_default_ajax}';
+	var address_url = "{url:/block/area_child}";
+   	</script>
+ 

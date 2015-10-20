@@ -698,7 +698,7 @@ class Order extends IController
 		$orderHandle->order  = "o.id desc";
 		$orderHandle->fields = "o.*,d.name as distribute_name,u.username,p.name as payment_name";
 		$orderHandle->page   = $page;
-		$orderHandle->where  = $where;
+		$orderHandle->where  = $where.' and o.type !=4';
 		$orderHandle->join   = $join;
 
 		$this->search      = $search;
@@ -706,6 +706,7 @@ class Order extends IController
 
 		$this->redirect("order_list");
     }
+   
     /**
      * @brief 订单删除功能_删除到回收站
      */
@@ -713,7 +714,7 @@ class Order extends IController
     {
     	//post数据
     	$id = IFilter::act(IReq::get('id'),'int');
-
+	
     	//生成order对象
     	$tb_order = new IModel('order');
     	$tb_order->setData(array('if_del'=>1));
@@ -1075,9 +1076,11 @@ class Order extends IController
 		$this->layout='print';
 		$order_id = IFilter::act( IReq::get('id'),'int' );
 		$seller_id= IFilter::act( IReq::get('seller_id'),'int' );
+		$type     = IFilter::act(IReq::get('type'));
 
-		$tb_order = new IModel('order');
-		$data     = $tb_order->getObj('id='.$order_id);
+		$tb_order =  new IModel('order');
+		$where = $type ? ' and type=4' : ' and type !=4';
+		$data     = $tb_order->getObj('id='.$order_id.$where);
 
 		if($seller_id)
 		{
@@ -1112,8 +1115,11 @@ class Order extends IController
 		$order_id = IFilter::act( IReq::get('id'),'int' );
 		$seller_id= IFilter::act( IReq::get('seller_id'),'int' );
 
-		$tb_order = new IModel('order');
-		$data     = $tb_order->getObj('id='.$order_id);
+		$type     = IFilter::act(IReq::get('type'));
+
+		$tb_order =  new IModel('order');
+		$where = $type ? ' and type=4' : ' and type !=4';
+		$data     = $tb_order->getObj('id='.$order_id.$where);
 
  		//获取地区
  		$data['address'] = join('&nbsp;',area::name($data['province'],$data['city'],$data['area']))."&nbsp;".$data['address'];
@@ -1129,8 +1135,10 @@ class Order extends IController
 		$order_id = IFilter::act(IReq::get('id'),'int');
 		$seller_id= IFilter::act( IReq::get('seller_id'),'int' );
 
-		$tb_order = new IModel('order');
-		$data     = $tb_order->getObj('id='.$order_id);
+		$type     = IFilter::act(IReq::get('type'));
+		$tb_order =  new IModel('order');
+		$where = $type ? ' and type=4' : ' and type !=4';
+		$data     = $tb_order->getObj('id='.$order_id.$where);
 
 		if($seller_id)
 		{
@@ -1416,7 +1424,7 @@ class Order extends IController
 	{
 		$this->layout = 'print';
     	$data = array();
-
+		$type = IFilter::act(IReq::get('type'));
     	//获得order_id的值
 		$order_id = IFilter::act(IReq::get('id'),'int');
 		$order_id = is_array($order_id) ? join(',',$order_id) : $order_id;
@@ -1428,7 +1436,7 @@ class Order extends IController
 		}
 
 		$ord_class       = new Order_Class();
- 		$this->orderInfo = $ord_class->getOrderInfo($order_id);
+ 		$this->orderInfo = $ord_class->getOrderInfo($order_id,$type);
 
 		$this->redirect('expresswaybill_template');
 	}

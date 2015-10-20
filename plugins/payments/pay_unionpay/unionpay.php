@@ -161,8 +161,9 @@ class unionpay extends paymentPlugin
 		Common::sign ( $return );
 		$result = sendHttpRequest ( $return, SDK_BACK_TRANS_URL );
 		$result_arr = Common::coverStringToArray ( $result );
+		
 		//print_r($result_arr);exit();
-		if(Common::verify ( $result_arr )){//
+		if(Common::verify ( $result_arr )&&$result_arr['respCode']=='00'){//
 			
 			self::addTradeData($result_arr);
 			return true;
@@ -178,7 +179,7 @@ class unionpay extends paymentPlugin
 		$resArr = array(
 				'trade_no' 	   => $tradeData['queryId'],
 				'order_no'     => $tradeData['orderId'],
-				'money'        => $tradeData['txnAmt'],
+				'money'        => $tradeData['txnAmt']/100,
 				'pay_type'     => 3,
 				'trade_type'   => self::getTradeType(3,$tradeData['txnType']),
 				'time'         => $tradeData['txnTime'],

@@ -1,0 +1,130 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{ margin:0; padding:0;}
+ul, li, body, h2, h3, h6, div, body, p{display: block;}
+a{ text-decoration:none;}
+ul{ list-style-type:none;}
+.wrapper .main #con .on li a{cursor:pointer}
+.jiben{ width:100%; height:auto; overflow:hidden; margin:0 auto; }
+.jiben .zhijia{
+	height: 38px;
+	width: 100%;
+}
+.jiben .zhijia .ddtou {
+	height: 38px;
+	width: 100%;
+	margin: 0 auto;
+	background-color: #999;
+	position: fixed;
+	top: 0px;
+}
+.jiben .zhijia .ddtou h4 {
+	color: #FFF;
+	font-size: 14px;
+	float: left;
+	font-family: "雅黑";
+	line-height: 38px;
+}
+.jiben .zhijia .ddtou h4 a{
+	color: #FFF;
+}
+.jiben .zhijia .ddtou span i{
+	font-style: normal;
+	font-weight: bold;
+	color: #F00;
+}
+.jiben .zhijia .ddtou span{
+	float: right;
+	margin-right: 12px;
+	font-weight: normal;
+	font-weight: normal;
+	font-size: 13px;
+	line-height: 38px;
+	color: #240C00;
+}
+.jiben .zhijia .ddtou h4 b{
+	font-weight: normal;
+	font-size: 13px;
+	margin-left: 8px;
+	line-height: 2.2em;
+}
+/*.jiben .xinxi{ width:100%; height:auto; overflow:hidden; margin:0 auto; margin-top:25px;}
+.jiben .xinxi ul{ margin:0 auto; }
+.jiben .xinxi ul li{ height:23px; width:98%; line-height:23px; font-size:13px; color:#666; border-bottom:#f5f3f3 solid 1px; margin:0 auto;}
+.jiben .xinxi ul li a{ margin-right:10px; color:#333; float:right;}
+.jiben .xinxi ul .huise{ background-color:#ede9e9; width:100%; padding-left:5px;}
+.jiben .xinxi ul .shouzhi{ height:auto; overflow:hidden; }
+.jiben .xinxi ul .shouzhi span { float:left;}
+.jiben .xinxi ul .shouzhi a{ margin-right:10px; color:#333; float:right;}
+.jiben .xinxi ul li a i{ font-style:normal; color:#F00;}
+.jiben .xinxi ul li button{ width:85%; background-color:#F30; color:#FFF; border:#C00 solid 1px; margin:5px auto; }
+.jiben .xinxi ul .annu{ text-align:center; height:auto; overflow:hidden;}
+.jiben .xinxi ul li em{ color:#333; font-style:normal;}
+.jiben .xinxi ul .tupn img{ float:left;}
+.jiben .xinxi ul .tupn{ height:auto; overflow:hidden; margin:3px;}
+.jiben .xinxi ul .tupn .hogse{ color:#F00;}
+.jiben .xinxi ul .huise .hogse{ color:#F00; position:relative; right:10px;}
+.jiben .xinxi ul .huise.yifu{ background-color:#faf8f8;position:}
+.jiben .xinxi ul .huise .fapio{position:relative; right:10px; }
+.jiben .xinxi ul .annu.one{ border:none;}
+.jiben .xinxi ul .one{border:none;}
+.jiben .bottom{width:100%; height:auto; overflow:hidden; margin:0 auto; margin-top:26px;}
+.jiben .bottom .dibu{height: 25px;width: 100%; margin:0 auto; background-color:#f1efef; position:fixed;bottom:0px;  text-align:center;}
+.jiben .bottom .dibu button{ float:right; margin-right:10px; height:23px; width:70px; background-color:#F30; border:#F00 solid 1px; color:#FFF; font-size:13px;}*/
+
+
+.wrapper .main{
+	width: 100%;
+	height: auto;
+	overflow: hidden;
+	background-color: #f1eeee;
+	margin-top: 0;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: auto;
+}
+			#title {
+	height: 26px;
+	line-height: 26px;
+	position: fixed;
+	top: 38px;
+	width: 100%;
+	float: left;
+	text-align: center;
+	
+	border-bottom: 1px solid #f9550d;
+	background-color: #f1efef;
+}
+			#title span {float:left; width:31%; height:26px; margin:0 1%; color:#333; text-align:center; cursor:pointer; font-weight:bold; font-weight:normal; color:#333; font-size:14px; }
+			#title span.on { color:#F00;}
+			#con {
+	background: #fafafa;
+	height: auto;
+	overflow: hidden;
+	margin-top: 27px;
+}
+			#con ul {display:none; padding:10px;}
+			#con ul.on {display:block;}			
+		    #con ul li {height:3.6em; line-height:1.2em;  border-bottom:1px dotted #ccc;font-size:13px; padding:7px 0;}
+
+   .wrapper .main #con .on li img{ float:left; width:45px; height:45px; margin-right:5px;}
+   .wrapper .main #con .on li font{ width:62%;  color:#666; float:left; }
+   .wrapper .main #con .on li h5{ float:right; color:#333; line-height:2.0em;}
+   .wrapper .main #con .on li h5 p a{ color:#333;}
+   .wrapper .main #con .on li font p{ line-height:1.2em}
+   .wrapper .main #con .on li font .geki{ line-height:1.8em;}
+   
+  .wrapper .main #con ul li img{ float:left; width:45px; height:45px; margin-right:5px;}
+   .wrapper .main #con ul li font{ width:62%;  color:#666; float:left; }
+   .wrapper .main #con ul li h5{ float:right; color:#333; line-height:2.0em;}
+   .wrapper .main #con ul li h5 p a{ color:#333;}
+   .wrapper .main #con ul li font p{ line-height:1.2em}
+   .wrapper .main #con ul li font .geki{ line-height:1.8em;}.wrapper .main #con .on li font p a {
+	color: #666;
+}
+.loading-imgS{background:#fff;text-align:center;padding:10px 0;width:100%}
+
+.loading-imgS p{font-size:16px;color:#9A9A9A;text-align:center}
+
+.loading-imgS img{width:32px!important;height:32px!important;display:none}

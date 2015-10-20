@@ -385,10 +385,10 @@
 		{if:isset($buyer_id) && $buyer_id}
 				<div class="box m_10">
 			<div class="title">购买本商品的用户还购买过</div>
-			<div class="content" style='width:95%;'>
+			<div class="content" style='width:100%;'>
 				<ul class="ranklist">
 					{foreach:items=Api::run('getOrderGoodsByBuyerid',array('#buyer_id#',$buyer_id))}
-										<li class="current">
+					<li class="current">
 						<a href="{url:/site/products/id/$item[id]}"><img width="58px" height="58px" src="{url:/pic/thumb/img/$item[img]/w/58/h/58}"></a>
 						<a title="{$item['name']}" class="p_name" href="{url:/site/products/id/$item[id]}">{$item['name']}</a>
 						<b>￥{$item['price']}</b>
@@ -403,7 +403,7 @@
 		<!--热卖商品-->
 		<div class="box m_10">
 			<div class="title">热卖商品</div>
-			<div class="content" style='width:95%;'>
+			<div class="content" style='width:100%;'>
 				<ul class="ranklist">
 					{foreach:items=Api::run('getCommendHot')}
 									<li class="current">
@@ -493,7 +493,7 @@
 						<span class="blue"><%=username%></span>
 					</div>
 					<dl class="desc">
-						<%var widthPoint = 14 * point;%>
+						<% var widthPoint = 14 * point;%>
 						<p class="clearfix">
 							<b>评分：</b>
 							<span class="grade"><i style="width:<%=widthPoint%>px"></i></span>
@@ -649,7 +649,7 @@ $('.area_box').hover(
 getAddress();
 
 //生成商品价格
-var priceHtml = template.render('priceTemplate',{"shan_price":"{$shan['award_value']}","group_price":"{$group_price}","minSellPrice":"{$minSellPrice}","maxSellPrice":"{$maxSellPrice}","sell_price":"{$sell_price}"});
+var priceHtml = template.render('priceTemplate',{"group_price":"{$group_price}","minSellPrice":"{$minSellPrice}","maxSellPrice":"{$maxSellPrice}","sell_price":"{$sell_price}"});
 $('#price_panel').html(priceHtml);
 
 

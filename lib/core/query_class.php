@@ -137,7 +137,9 @@ class IQuery
             $pagelength   = isset($this->pagelength)?intval($this->pagelength):10;
 			$this->paging = new IPaging($sql,$pagesize,$pagelength);
 			$this->paging->cache = $this->cache;
-            return $this->paging->getPage($this->page);
+            $res = $this->paging->getPage($this->page,$p);
+            if($p==1)$this->page = 0;
+            return $res;
 		}
 		else
         {

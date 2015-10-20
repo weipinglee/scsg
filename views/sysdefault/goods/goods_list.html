@@ -38,11 +38,12 @@
 				<option value="=0">平台商品</option>
 				<option value="!=0">商户商品</option>
 			</select>
-			<select class="auto" name="search[is_del]">
+			<select class="auto" name="search[is_del]" >
 				<option value="">选择上下架</option>
 				<option value="0">上架</option>
 				<option value="2">下架</option>
 				<option value="3">待审</option>
+				<option value="4">预售中</option>
 			</select>
 			<select class="auto" name="search[store_nums]">
 				<option value="">选择库存</option>
@@ -130,10 +131,11 @@
 					<td><a href="javascript:quickEdit({$item['id']},'price');" class="orange" title="点击更新价格" id="priceText{$item['id']}">{$item['sell_price']}</a></td>
 					<td><a href="javascript:quickEdit({$item['id']},'store');" class="orange" title="点击更新库存" id="storeText{$item['id']}">{$item['store_nums']}</a></td>
 					<td>
-						<select onchange="changeIsDel({$item['id']},this)">
+						<select onchange="changeIsDel({$item['id']},this)" disabled>
 							<option value="up" {echo:$item['is_del']==0 ? 'selected':''}>上架</option>
 							<option value="down" {echo:$item['is_del']==2 ? 'selected':''}>下架</option>
 							<option value="check" {echo:$item['is_del']==3 ? 'selected':''}>待审</option>
+							<option value="presell" {echo:$item['is_del']==4 ? 'selected':''}>预售中</option>
 						</select>
 					</td>
 					<td><input type="text" class="tiny" value="{$item['sort']}" onchange="changeSort({$item['id']},this);" /></td>

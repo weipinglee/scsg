@@ -1,3 +1,10 @@
+{set:
+	$seo_data    = array();
+	$site_config = new Config('site_config');
+	$site_config = $site_config->getInfo();
+	$seo_data['title'] = "用户登录_".$site_config['name'];
+	seo::set($seo_data);
+}
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">        
@@ -21,8 +28,9 @@
         <meta name="description" content="山城速购">
         <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
 		<link rel="stylesheet" href="{skin:css/center.css}" type="text/css">            
-		<script src="{theme:javascript/js/jquery-1.9.1.min.js}"></script>
-		<script src="{theme:javascript/js/common.js}"></script>       
+		<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		<script src="{theme:javascript/common.js}"></script>     
+		<script src="{theme:javascript/reg/register.js}"></script>    
 		<link rel="stylesheet" href="{skin:css/csshide1.css}">
 		<style>#sell-ad{display:none!important;}</style>
 		<script type="text/javascript">window.onerror=function(){return true;}</script></head>
@@ -36,47 +44,32 @@
             <h1>登录</h1>
         </div>
     </div>
-    <!-- <nav class="nav_wrap_new">
-    <i class="top_nav_icon"></i>
-    <ul class="top_nav_ul clear-fix">
-        <a href="index.html">
-            <li class="top_nav_li top_nav_home fl">
-                <i class="nav_home_icon"></i>
-                <span class="top_nav_li_span">首页</span>
-            </li>
-        </a>
-        <a href="search/category.html">
-            <li class="top_nav_li top_nav_search fl">
-                <i class="nav_search_icon"></i>
-                <span class="top_nav_li_span">搜索</span>
-            </li>
-        </a>
-        <a href="cart.html">
-            <li class="top_nav_li top_nav_cart fl">
-                <i class="nav_cart_icon"></i>
-                <span class="top_nav_li_span">购物车</span>
-            </li>
-        </a>
-        <a href="huiyuan.html">
-            <li class="top_nav_li top_nav_order fl">
-                <i class="nav_order_icon"></i>
-                <span class="top_nav_li_span">订单</span>
-            </li>
-        </a>
-        <a href="huiyuan.html">
-            <li class="top_nav_li top_nav_user fl">
-                <i class="nav_user_icon"></i>
-                <span class="top_nav_li_span">我的</span>
-            </li>
-        </a>
-    </ul>
-</nav> --></header>
+</header>
 <link rel="stylesheet" href="{skin:css/loglist.css}">
+<script>
+	var logPath = '{url:/simple/login_act}';
+	var checkErrTimesUrl = '{url:/simple/checkErrTimes}';
+	var returnUrl = '{url:$callback}';
+	var servicePhone = '{$site_config["phone"]}';
+	
+	
+	var LOGIN_RESULT = {SUCCESS:0,FAIL:1};                  
+	var REGISTER_RESULT = {SUCCESS:10,FAIL:11};             
+	var DOMAIN_TYPE = {YHD:1,MALL:2,YW_111:3};              
+	var LOGIN_SOURCE={NORMAL:1,FRAME:2};  
+	var URLPrefix = {"mymall":"#","passport_statics":"#","yiwangauth":"#","yaowang":"#","tracker":"","passport":"#","my":"#","central":"#","validCodeShowUrl":"#","mall":"#","passportother":"#"}; 
+	var currSiteId = 1;                         
+	           
+	var autoLoginFlag= "1";        
+	var valid_code_service_flag="1"; 
+	var showValidCode = "0"; 
+	var mUrl = "#"; 
+</script>
 <section class="reg-main">
     <form id="login-form" class="reg-form" method="post" novalidate>
         <div class="field username  field-login field-login-username">
             <div class="field-relative">
-                <input class="reg-input" type="text" name="userName" placeholder="请输入手机号/邮箱" value="" autocomplete="off"> 
+                <input class="reg-input" type="text" name="username"  placeholder="请输入手机号/邮箱/用户名" value="" autocomplete="off"> 
                 <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display: none;">清空</a>
             </div>
         </div>
@@ -86,13 +79,21 @@
                 <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display: none;">清空</a>
             </div>
         </div>
-                    <div class="field forget">
-                <div class="reg-error-box"></div>
+		 <div class="field valid_code_box  field-login" style='display:none;'>
+            <div class="field-relative">
+                <input class="reg-input" type="text" name="validCode" placeholder="请输入验证码" value="" autocomplete="off"> 
+            </div>
+				<span class="verify_code_box" style="margin: 0px 15px 0px 15px;"><img src='{url:/simple/getCaptcha/w/122/h/55/s/15}' onclick="changeCaptcha('{url:/simple/getCaptcha/w/122/h/55/s/15}')" id='captchaImg' /></span>
+			
+        </div>
+		 		   
+            <div class="field forget">
+                <div class="reg-error-box" id='errorInfo'></div>
                 <a href="{url:/simple/find_password?tp=}" id="toForget">忘记密码？</a>
             </div>
                 <div class="field submit-btn">
-                    <input type="button" id="loginBtn" class="reg-btn dark-btn" value="登录">
-                    <input type="button" id="regLink" class="reg-btn light-btn mt10" value="注册">                    
+                    <input type="button" id="loginBtn" onclick='loginSubmit()' class="reg-btn dark-btn" value="登录">
+                   <a href='{url:simple/reg}'> <input type="button" id="regLink" class="reg-btn light-btn mt10" value="注册">  </a>                  
 				</div>
     </form>
     
@@ -112,62 +113,17 @@
 </section>
 <input type="hidden" id="sendRedirect" name="sendRedirect" value="#">
 <input type="hidden" id="referer" name="referer" value="">
-<script src="{theme:javascript/js/validate.min.js}"></script>
-<script src="{theme:javascript/js/user.js}"></script>
-<script>
-    $(function() {
-        window.B5M_UC = {
-            rootPath : '#'
-        };
-        wapReg.loginFun();
-    });
-    //Cookies.set('login',true);Cookies.set('showname','stageRahxephon');Cookies.set('token','b6c9696bc52a4e26b0019a37bd0e856d');
-</script>
+<script src="{theme:javascript/validate.min.js}"></script>
+<script src="{theme:javascript/user.js}"></script>
+
         </div>
         <input type="hidden" id="is_login" name="is_login" value="">
         <input type="hidden" id="show_nav" value="1">
         <input type="hidden" data-isnew="" data-isold="" id="is_app" value="">
         <img src="{skin:images/log_files/hm.gif}" width="0" height="0">
-        <script type="text/javascript" src="{theme:javascript/js/stat3.min.js}"></script><div style="display: none;"><script type="text/javascript" async src="{theme:javascript/js/h.js}"></script></div><img id="stat_image" src="log_files/__utm.gif" style="display: none;">
+        <script type="text/javascript" src="{theme:javascript/stat3.min.js}"></script>
+		<div style="display: none;">
+		<script type="text/javascript" async src="{theme:javascript/h.js}"></script>
+		</div><img id="stat_image" src="log_files/__utm.gif" style="display: none;">
 
-    
-
-<footer id="footer">
-	<div class="f-qk-tl">
-		<div class="f-login">
-<a href="{url:/simple/login?callback=}">登录</a>
-<span>|</span>
-<a href="{url:/simple/reg?callback=}">注册</a>
-		</div>
-		<div class="f-go-top" id="goTop"></div>
-	</div>
-	<div class="f-ch-cp">
-		<div class="item"><a href="{url:/site/index?callback=}">触屏版</a><a href="http://www.yqtvt.com/index.html">电脑版</a></div>
-		<div class="item"><span class="copyright_1">Copyright</span> <span class="copyright_2">2012-2015</span><span class="copyright_3">NAI.COM</span><span class="copyright_4">版权所有</span></div></div>
-</footer>
-
-<!--底部浮动-->
-		<script type="text/javascript" src="{theme:javascript/js/search_list.js}" charset="UTF-8"></script>
-		<link rel="stylesheet" href="{skin:css/bottom_nav.css}" type="text/css"/> 
-
-     <section class="sr-s">
-            <div class="s-btn" data="sales">
-				<a href="{url:/site/index?callback=}">
-              <img  src="{skin:images/m_xiabiao/img1.png}" width="50" height="50" alt="首页"></a>
-            </div>
-            <div class="s-btn" data="price">
-				<a href="{url:/site/category?}"><img src="{skin:images/m_xiabiao/img2.png}" width="50" height="50" alt="分类"></a>
-            </div>
-            <div class="s-btn" data="hot">
-				<a href="{url:/site/tuangou}"><img src="{skin:images/m_xiabiao/img3.png}" width="50" height="50" alt="团购"></a>
-            </div>
-            <div class="s-btn" data="default">
-				<a href="{url:/simple/cart?callback=}"><img src="{skin:images/m_xiabiao/img4.png}" width="50" height="50" alt="购物车"></a>
-            </div>
-            <div class="s-btn" data="default">
-				<a href="{url:/site/huiyuan}"><img src="{skin:images/m_xiabiao/img5.png}" width="50" height="50" alt="我的山城"></a>
-            </div>
-        </section>
-   
-
-</body></html>
+ 
