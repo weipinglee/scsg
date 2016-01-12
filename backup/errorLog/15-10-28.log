@@ -1,0 +1,73 @@
+<ERROR_INFO>
+Mess: SELECT *,IF(DATEDIFF(now(),sign_date)>=1,0,1) as sign FROM shop_member WHERE user_id=98 limit 1
+ -- Unknown column 'sign_date' in 'field list'
+Line: 66
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:228  	File:IWEB_PATH/web\model\model_class.php
+	Func:query          	Class:IModel         	Type:->   	Line:176  	File:IWEB_PATH/web\model\model_class.php
+	Func:getObj         	Class:IModel         	Type:->   	Line:59   	File:D:\wamp\www\xinde\scsg\classes\api\ucenter.php
+	Func:getMemberInfo  	Class:APIUcenter     	Type:->   	Line:     	File:
+	Func:call_user_func_array	Class:               	Type:     	Line:87   	File:D:\wamp\www\xinde\scsg\classes\api.php
+	Func:run            	Class:Api            	Type:::   	Line:453  	File:D:\wamp\www\xinde\scsg\runtime\scsg\ucenter\index.php
+	Func:require        	Class:               	Type:     	Line:115  	File:IWEB_PATH/web\controller\controllerbase_class.php
+	Func:requireFile    	Class:IControllerBase	Type:->   	Line:81   	File:IWEB_PATH/web\controller\controllerbase_class.php
+	Func:renderView     	Class:IControllerBase	Type:->   	Line:200  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:render         	Class:IController    	Type:->   	Line:34   	File:IWEB_PATH/web\action\view_action.php
+	Func:run            	Class:IViewAction    	Type:->   	Line:369  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:redirect       	Class:IController    	Type:->   	Line:23   	File:D:\wamp\www\xinde\scsg\controllers\ucenter.php
+	Func:index          	Class:Ucenter        	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\system\default.php
+errLine:182
+errTime:15-10-28 10:43:21
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\order\order_show.php
+errLine:708
+errTime:15-10-28 10:43:28
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\order\order_list.php
+errLine:265
+errTime:15-10-28 10:43:28
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\order\order_list.php
+errLine:265
+errTime:15-10-28 10:43:28
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\order\order_list.php
+errLine:265
+errTime:15-10-28 10:43:29
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\order\order_show.php
+errLine:708
+errTime:15-10-28 10:43:48
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\tools\db_bak.php
+errLine:148
+errTime:15-10-28 11:45:45
+<\ERROR_INFO>

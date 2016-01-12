@@ -1,0 +1,548 @@
+<ERROR_INFO>
+errID:2
+errStr:session_start(): open(D:/wamp/www/xinde/scsg\backup\\sess_sk7275j97guuolqi3u0vi9amp7, O_RDWR) failed: No such file or directory (2)
+errFile:IWEB_PATH/core\util\session_class.php
+errLine:17
+errTime:15-10-27 16:57:40
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\system\default.php
+errLine:182
+errTime:15-10-27 17:07:37
+<\ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:15:19' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:15:21' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:15:21' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:49:47' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:49:58' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:06' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:07' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:27' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:28' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:29' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:29' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:29' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:29' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:29' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:29' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:32' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:32' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:33' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:33' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:34' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:34' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:52' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:54' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:54' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:54' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:54' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:54' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:54' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:55' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:57' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:50:57' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: UPDATE shop_member SET `sign_date` = '2015-10-27 17:51:01' WHERE user_id=98 and (sign_date is NULL  or DATEDIFF(now(),sign_date)>=1)
+ -- Unknown column 'sign_date' in 'where clause'
+Line: 96
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:128  	File:IWEB_PATH/web\model\model_class.php
+	Func:update         	Class:IModel         	Type:->   	Line:128  	File:D:\wamp\www\xinde\scsg\controllers\Ucenter_ajax.php
+	Func:sign_add_point 	Class:Ucenter_ajax   	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\system\default.php
+errLine:182
+errTime:15-10-27 17:55:43
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\tools\db_bak.php
+errLine:148
+errTime:15-10-27 17:57:56
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\tools\ad_position_list.php
+errLine:133
+errTime:15-10-27 17:58:00
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\tools\ad_position_edit.php
+errLine:142
+errTime:15-10-27 17:58:06
+<\ERROR_INFO>
+<ERROR_INFO>
+Mess: SELECT * FROM shop_ad_position WHERE id = favicon.ico limit 1
+ -- Unknown column 'favicon.ico' in 'where clause'
+Line: 66
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:228  	File:IWEB_PATH/web\model\model_class.php
+	Func:query          	Class:IModel         	Type:->   	Line:176  	File:IWEB_PATH/web\model\model_class.php
+	Func:getObj         	Class:IModel         	Type:->   	Line:618  	File:D:\wamp\www\xinde\scsg\controllers\tools.php
+	Func:ad_position_edit	Class:Tools          	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+Mess: SELECT * FROM shop_ad_position WHERE id = favicon.ico limit 1
+ -- Unknown column 'favicon.ico' in 'where clause'
+Line: 66
+File: IWEB_PATH/db\db_class.php
+##Debug_backtrace:##
+	Func:query          	Class:IDB            	Type:->   	Line:228  	File:IWEB_PATH/web\model\model_class.php
+	Func:query          	Class:IModel         	Type:->   	Line:176  	File:IWEB_PATH/web\model\model_class.php
+	Func:getObj         	Class:IModel         	Type:->   	Line:618  	File:D:\wamp\www\xinde\scsg\controllers\tools.php
+	Func:ad_position_edit	Class:Tools          	Type:->   	Line:22   	File:IWEB_PATH/web\action\inline_action.php
+	Func:run            	Class:IInlineAction  	Type:->   	Line:136  	File:IWEB_PATH/web\controller\controller_class.php
+	Func:run            	Class:IController    	Type:->   	Line:27   	File:IWEB_PATH/core\webapplication_class.php
+	Func:execRequest    	Class:IWebApplication	Type:->   	Line:105  	File:IWEB_PATH/core\application_class.php
+	Func:run            	Class:IApplication   	Type:->   	Line:6    	File:D:\wamp\www\xinde\scsg\index.php
+</ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\system\default.php
+errLine:182
+errTime:15-10-27 18:20:27
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\tools\db_bak.php
+errLine:148
+errTime:15-10-27 18:20:34
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\tools\ad_position_list.php
+errLine:133
+errTime:15-10-27 18:20:36
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: search
+errFile:D:\wamp\www\xinde\scsg\runtime\sysdefault\tools\ad_position_edit.php
+errLine:142
+errTime:15-10-27 18:20:41
+<\ERROR_INFO>
