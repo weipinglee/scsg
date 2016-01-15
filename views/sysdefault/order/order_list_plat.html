@@ -1,3 +1,4 @@
+{js:my97date}
 <div class="headbar">
 	<div class="position">订单<span>></span><span>订单管理</span><span>></span><span>订单列表</span></div>
 	<div class="operating">
@@ -44,6 +45,8 @@
 				<option value="seller_name">商户真实名称</option>
 			</select>
 			<input class="small" name="search[keywords]" type="text" value="" />
+			开始时间：<input class="small" type="text" name="beginTime" onfocus="WdatePicker()"  value='{$beginTime}'/>
+			截止时间：<input class="small" type="text" name="endTime" onfocus="WdatePicker()" value='{$endTime}'/>
 			<button class="btn" type="submit"  onclick='changeAction(false)'><span class="sel">筛 选</span></button>
 			<button class="btn" onclick='changeAction(true)'><span class="sel">导出Excel</span></button>
 		</form>

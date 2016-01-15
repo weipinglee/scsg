@@ -1,3 +1,4 @@
+{js:my97date}
 {set:$where = $this->where;}
 <div class="headbar">
 	<div class="position">
@@ -34,6 +35,8 @@
 				<option value="">选择会员</option>
 				<option value="1">推荐商户</option>
 			</select>
+			开始时间：<input class="small" type="text" name="beginTime" onfocus="WdatePicker()"  value='{$beginTime}'/>
+			截止时间：<input class="small" type="text" name="endTime" onfocus="WdatePicker()" value='{$endTime}'/>
 			<button class="btn" type="submit"  ><span class="sel">筛 选</span></button>
 		</form>
 	</div>
