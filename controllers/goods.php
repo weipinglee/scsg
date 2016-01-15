@@ -424,6 +424,58 @@ class Goods extends IController
 		$this->redirect("goods_list");
 	}
 
+	/**
+	 * @brief 平台商品列表
+	 */
+	function goods_list_plat()
+	{
+		//搜索条件
+		$search = IFilter::act(IReq::get('search'),'strict');
+		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+
+		//条件筛选处理
+		list($join,$where) = goods_class::getSearchCondition($search);
+
+		//拼接sql
+		$goodsHandle = new IQuery('goods as go');
+		$goodsHandle->order    = "go.sort asc,go.id desc";
+		$goodsHandle->distinct = "go.id";
+		$goodsHandle->fields   = "go.*,seller.true_name";
+		$goodsHandle->page     = $page;
+		$goodsHandle->where    = $where . " and seller_id = 0";
+		$goodsHandle->join     = $join;
+
+		$this->search      = $search;
+		$this->goodsHandle = $goodsHandle;
+		$this->redirect("goods_list_plat");
+	}
+
+	/**
+	 * @brief 商户商品列表
+	 */
+	function goods_list_client()
+	{
+		//搜索条件
+		$search = IFilter::act(IReq::get('search'),'strict');
+		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+
+		//条件筛选处理
+		list($join,$where) = goods_class::getSearchCondition($search);
+
+		//拼接sql
+		$goodsHandle = new IQuery('goods as go');
+		$goodsHandle->order    = "go.sort asc,go.id desc";
+		$goodsHandle->distinct = "go.id";
+		$goodsHandle->fields   = "go.*,seller.true_name";
+		$goodsHandle->page     = $page;
+		$goodsHandle->where    = $where . " and seller_id != 0";
+		$goodsHandle->join     = $join;
+
+		$this->search      = $search;
+		$this->goodsHandle = $goodsHandle;
+		$this->redirect("goods_list_client");
+	}
+
 	//商品导出 Excel
 	public function goods_report()
 	{

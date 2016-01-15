@@ -12,10 +12,11 @@ class Order extends IController
 	{
 		IInterceptor::reg('CheckRights@onCreateAction');
 	}
+	
 	/**
-	 * @brief查看订单
+	 * @brief查看平台订单
 	 */
-	public function order_show()
+	public function order_show_plat()
 	{
 		//获得post传来的值
 		$order_id = IFilter::act(IReq::get('id'),'int');
@@ -35,18 +36,79 @@ class Order extends IController
 		 		$data['area_addr'] = join('&nbsp;',area::name($data['province'],$data['city'],$data['area']));
 
 			 	$this->setRenderData($data);
-				$this->redirect('order_show',false);
+				$this->redirect('order_show_plat',false);
 			}
 		}
 		if(!$data)
 		{
-			$this->redirect('order_list');
+			$this->redirect('order_list_plat');
+		}
+	}
+
+	/**
+	 * @brief查看商户订单
+	 */
+	public function order_show_client()
+	{
+		//获得post传来的值
+		$order_id = IFilter::act(IReq::get('id'),'int');
+		$data = array();
+		if($order_id)
+		{
+			$order_show = new Order_Class();
+			$data = $order_show->getOrderShow($order_id);
+		
+			if($data)
+			{
+				//获得折扣前的价格
+			 	$rule = new ProRule($data['real_amount']+$data['pro_reduce']);
+			 	$this->result = $rule->getInfo();
+
+		 		//获取地区
+		 		$data['area_addr'] = join('&nbsp;',area::name($data['province'],$data['city'],$data['area']));
+
+			 	$this->setRenderData($data);
+				$this->redirect('order_show_client',false);
+			}
+		}
+		if(!$data)
+		{
+			$this->redirect('order_list_client');
 		}
 	}
 	/**
-	 * @brief查看收款单
+	 * @brief查看平台收款单
 	 */
-	public function collection_show()
+	public function collection_show_plat()
+	{
+		//获得post传来的收款单id值
+		$collection_id = IFilter::act(IReq::get('id'),'int');
+		$data = array();
+		if($collection_id)
+		{
+			$tb_collection = new IQuery('collection_doc as c ');
+			$tb_collection->join=' left join order as o on c.order_id=o.id left join payment as p on c.payment_id = p.id left join user as u on u.id = c.user_id left join order_goods as org on org.order_id = o.id';
+			$tb_collection->fields = 'o.order_no,p.name as pname,o.create_time,p.type,u.username,c.amount,o.pay_time,c.admin_id,c.note';
+			$tb_collection->where = 'org.seller_id =0 and c.id='.$collection_id;
+			$collection_info = $tb_collection->find();
+			if($collection_info)
+			{
+				$data = $collection_info[0];
+
+				$this->setRenderData($data);
+				$this->redirect('collection_show_plat',false);
+			}
+		}
+		if(count($data)==0)
+		{
+			$this->redirect('order_collection_list_plat');
+		}
+	}
+
+	/**
+	 * @brief查看商户收款单
+	 */
+	public function collection_show_client()
 	{
 		//获得post传来的收款单id值
 		$collection_id = IFilter::act(IReq::get('id'),'int');
@@ -63,20 +125,48 @@ class Order extends IController
 				$data = $collection_info[0];
 
 				$this->setRenderData($data);
-				$this->redirect('collection_show',false);
+				$this->redirect('collection_show_client',false);
 			}
 		}
 		if(count($data)==0)
 		{
-			$this->redirect('order_collection_list');
+			$this->redirect('order_collection_list_client');
 		}
 	}
 
+	/**
+	 * @brief查看平台退款单
+	 */
+	public function refundment_show_plat()
+	{
+	 	//获得post传来的退款单id值
+	 	$refundment_id = IFilter::act(IReq::get('id'),'int');
+	 	$data = array();
+	 	if($refundment_id)
+	 	{
+	 		$tb_refundment = new IQuery('refundment_doc as c');
+	 		$tb_refundment->join=' left join order as o on c.order_id=o.id left join user as u on u.id = c.user_id';
+	 		$tb_refundment->fields = 'o.order_no,o.create_time,u.username,c.*';
+	 		$tb_refundment->where = 'c.seller_id = 0  and c.id='.$refundment_id;
+	 		$refundment_info = $tb_refundment->find();
+	 		if($refundment_info)
+	 		{
+	 			$data = current($refundment_info);
+	 			$this->setRenderData($data);
+	 			$this->redirect('refundment_show_plat',false);
+	 		}
+	 	}
+
+	 	if(!$data)
+		{
+			$this->redirect('order_refundment_list_plat');
+		}
+	}
 
 	/**
-	 * @brief查看退款单
+	 * @brief查看商户退款单
 	 */
-	public function refundment_show()
+	public function refundment_show_client()
 	{
 	 	//获得post传来的退款单id值
 	 	$refundment_id = IFilter::act(IReq::get('id'),'int');
@@ -92,16 +182,16 @@ class Order extends IController
 	 		{
 	 			$data = current($refundment_info);
 	 			$this->setRenderData($data);
-	 			$this->redirect('refundment_show',false);
+	 			$this->redirect('refundment_show_client',false);
 	 		}
 	 	}
 
 	 	if(!$data)
 		{
-			$this->redirect('order_refundment_list');
+			$this->redirect('order_refundment_list_client');
 		}
 	}
-	public function refundment_list(){
+	public function refundment_list_plat(){
 		$where = ' and  1 ';
 		$order_no = IFilter::act(IReq::get('order_no'));
 		//筛选、
@@ -124,9 +214,37 @@ class Order extends IController
 		}
 		$this->setRenderData($data);
 		$this->where = $where;
-		$this->redirect('refundment_list');
+		$this->redirect('refundment_list_plat');
 	}
-	public function refundment_chg_list(){
+
+	public function refundment_list_client(){
+		$where = ' and  1 ';
+		$order_no = IFilter::act(IReq::get('order_no'));
+		//筛选、
+		$beginTime = IFilter::act(IReq::get('beginTime'));
+		$endTime = IFilter::act(IReq::get('endTime'));
+		$data['beginTime'] = $beginTime;
+		$data['endTime'] = $endTime;
+		$data['order_no'] = $order_no;
+		
+		if($beginTime)
+		{
+			$where .= ' and rd.time > "'.$beginTime.'"';
+		}
+		if($endTime)
+		{
+			$where .= ' and rd.time < "'.$endTime.'"';
+		}
+		if($order_no){
+			$where .= ' and rd.order_no = "'.$order_no.'"';
+		}
+		$this->setRenderData($data);
+		$this->where = $where;
+		$this->redirect('refundment_list_client');
+	}
+	
+
+	public function refundment_chg_list_plat(){
 		$where = ' and  1 ';
 		$order_no = IFilter::act(IReq::get('order_no'));
 		//筛选、
@@ -149,9 +267,36 @@ class Order extends IController
 		}
 		$this->setRenderData($data);
 		$this->where = $where;
-		$this->redirect('refundment_chg_list');
+		$this->redirect('refundment_chg_list_plat');
 	}
-	public function fapiao_list(){
+
+	public function refundment_chg_list_client(){
+		$where = ' and  1 ';
+		$order_no = IFilter::act(IReq::get('order_no'));
+		//筛选、
+		$beginTime = IFilter::act(IReq::get('beginTime'));
+		$endTime = IFilter::act(IReq::get('endTime'));
+		$data['beginTime'] = $beginTime;
+		$data['endTime'] = $endTime;
+		$data['order_no'] = $order_no;
+	
+		if($beginTime)
+		{
+			$where .= ' and rd.time > "'.$beginTime.'"';
+		}
+		if($endTime)
+		{
+			$where .= ' and rd.time < "'.$endTime.'"';
+		}
+		if($order_no){
+			$where .= ' and rd.order_no = "'.$order_no.'"';
+		}
+		$this->setRenderData($data);
+		$this->where = $where;
+		$this->redirect('refundment_chg_list_client');
+	}
+
+	public function fapiao_list_plat(){
 		$where = ' and  1 ';
 		$order_no = IFilter::act(IReq::get('order_no'));
 		$data['order_no'] = $order_no;
@@ -161,9 +306,9 @@ class Order extends IController
 		}
 		$this->setRenderData($data);
 		$this->where = $where;
-		$this->redirect('fapiao_list');
+		$this->redirect('fapiao_list_plat');
 	}
-	public function fapiao(){
+	public function fapiao_list_client(){
 		$where = ' and  1 ';
 		$order_no = IFilter::act(IReq::get('order_no'));
 		$data['order_no'] = $order_no;
@@ -173,12 +318,39 @@ class Order extends IController
 		}
 		$this->setRenderData($data);
 		$this->where = $where;
-		$this->redirect('fapiao');
+		$this->redirect('fapiao_list_client');
 	}
+	
+	public function fapiao_plat(){
+		$where = ' and  1 ';
+		$order_no = IFilter::act(IReq::get('order_no'));
+		$data['order_no'] = $order_no;
+		
+		if($order_no){
+			$where .= ' and o.order_no = "'.$order_no.'"';
+		}
+		$this->setRenderData($data);
+		$this->where = $where;
+		$this->redirect('fapiao_plat');
+	}
+
+	public function fapiao_client(){
+		$where = ' and  1 ';
+		$order_no = IFilter::act(IReq::get('order_no'));
+		$data['order_no'] = $order_no;
+		
+		if($order_no){
+			$where .= ' and o.order_no = "'.$order_no.'"';
+		}
+		$this->setRenderData($data);
+		$this->where = $where;
+		$this->redirect('fapiao_client');
+	}
+	
 	/**
-	 * @brief查看申请退款单
+	 * @brief查看平台申请退款单
 	 */
-	public function refundment_doc_show()
+	public function refundment_doc_show_plat()
 	{
 	 	//获得post传来的申请退款单id值
 	 	$refundment_id = IFilter::act(IReq::get('id'),'int');
@@ -189,18 +361,40 @@ class Order extends IController
 	 		if($data)
 	 		{
 	 			$this->setRenderData($data);
-	 			$this->redirect('refundment_doc_show',false);
+	 			$this->redirect('refundment_doc_show_plat',false);
 	 			exit;
 	 		}
 	 	}
 
-	 	$this->redirect('refundment_list');
+	 	$this->redirect('refundment_list_plat');
+	}
+
+	/**
+	 * @brief查看商户申请退款单
+	 */
+	public function refundment_doc_show_client()
+	{
+	 	//获得post传来的申请退款单id值
+	 	$refundment_id = IFilter::act(IReq::get('id'),'int');
+	 	if($refundment_id)
+	 	{
+	 		$refundsDB = new IModel('refundment_doc');
+	 		$data = $refundsDB->getObj('id = '.$refundment_id);
+	 		if($data)
+	 		{
+	 			$this->setRenderData($data);
+	 			$this->redirect('refundment_doc_show_client',false);
+	 			exit;
+	 		}
+	 	}
+
+	 	$this->redirect('refundment_list_client');
 	}
 	
 	/**
-	 * @brief查看换货单
+	 * @brief查看平台换货单
 	 */
-	public function refundment_chged_show()
+	public function refundment_chged_show_plat()
 	{
 		//获得post传来的申请退款单id值
 		$refundment_id = IFilter::act(IReq::get('id'),'int');
@@ -211,17 +405,18 @@ class Order extends IController
 			if($data)
 			{
 				$this->setRenderData($data);
-				$this->redirect('refundment_chged_show',false);
+				$this->redirect('refundment_chged_show_plat',false);
 				exit;
 			}
 		}
 	
-		$this->redirect('refundment_list');
+		$this->redirect('refundment_list_plat');
 	}
+
 	/**
-	 * @brief查看换货单
+	 * @brief查看商户换货单
 	 */
-	public function refundment_apply_show()
+	public function refundment_chged_show_client()
 	{
 		//获得post传来的申请退款单id值
 		$refundment_id = IFilter::act(IReq::get('id'),'int');
@@ -232,17 +427,18 @@ class Order extends IController
 			if($data)
 			{
 				$this->setRenderData($data);
-				$this->redirect('refundment_apply_show',false);
+				$this->redirect('refundment_chged_show_client',false);
 				exit;
 			}
 		}
 	
-		$this->redirect('refundment_list');
+		$this->redirect('refundment_list_client');
 	}
+	
 	/**
-	 * @brief查看申请换货单
+	 * @brief查看平台换货单
 	 */
-	public function refundment_chg_show()
+	public function refundment_apply_show_plat()
 	{
 		//获得post传来的申请退款单id值
 		$refundment_id = IFilter::act(IReq::get('id'),'int');
@@ -253,12 +449,78 @@ class Order extends IController
 			if($data)
 			{
 				$this->setRenderData($data);
-				$this->redirect('refundment_chg_show',false);
+				$this->redirect('refundment_apply_show_plat',false);
 				exit;
 			}
 		}
 	
-		$this->redirect('refundment_list');
+		$this->redirect('refundment_list_plat');
+	}
+
+	/**
+	 * @brief查看商户换货单
+	 */
+	public function refundment_apply_show_client()
+	{
+		//获得post传来的申请退款单id值
+		$refundment_id = IFilter::act(IReq::get('id'),'int');
+		if($refundment_id)
+		{
+			$refundsDB = new IModel('refundment_doc');
+			$data = $refundsDB->getObj('id = '.$refundment_id);
+			if($data)
+			{
+				$this->setRenderData($data);
+				$this->redirect('refundment_apply_show_client',false);
+				exit;
+			}
+		}
+	
+		$this->redirect('refundment_list_client');
+	}
+	
+	/**
+	 * @brief查看平台申请换货单
+	 */
+	public function refundment_chg_show_plat()
+	{
+		//获得post传来的申请退款单id值
+		$refundment_id = IFilter::act(IReq::get('id'),'int');
+		if($refundment_id)
+		{
+			$refundsDB = new IModel('refundment_doc');
+			$data = $refundsDB->getObj('id = '.$refundment_id);
+			if($data)
+			{
+				$this->setRenderData($data);
+				$this->redirect('refundment_chg_show_plat',false);
+				exit;
+			}
+		}
+	
+		$this->redirect('refundment_list_plat');
+	}
+
+	/**
+	 * @brief查看商户申请换货单
+	 */
+	public function refundment_chg_show_client()
+	{
+		//获得post传来的申请退款单id值
+		$refundment_id = IFilter::act(IReq::get('id'),'int');
+		if($refundment_id)
+		{
+			$refundsDB = new IModel('refundment_doc');
+			$data = $refundsDB->getObj('id = '.$refundment_id);
+			if($data)
+			{
+				$this->setRenderData($data);
+				$this->redirect('refundment_chg_show_client',false);
+				exit;
+			}
+		}
+	
+		$this->redirect('refundment_list_client');
 	}
 	//删除申请退款单
 	public function refundment_doc_del()
@@ -374,10 +636,11 @@ class Order extends IController
 		$this->redirect('refundment_list');
 		
 	}
+	
 	/**
-	 * @brief查看发货单
+	 * @brief查看平台发货单
 	 */
-	public function delivery_show()
+	public function delivery_show_plat()
 	{
 	 	//获得post传来的发货单id值
 	 	$delivery_id = IFilter::act(IReq::get('id'),'int');
@@ -395,13 +658,44 @@ class Order extends IController
 	 			$data['country'] = join("-",area::name($data['province'],$data['city'],$data['area']));
 
 	 			$this->setRenderData($data);
-	 			$this->redirect('delivery_show',false);
+	 			$this->redirect('delivery_show_plat',false);
 	 		}
 	 	}
 
 	 	if(!$data)
 		{
-			$this->redirect('order_delivery_list');
+			$this->redirect('order_delivery_list_plat');
+		}
+	}
+
+	/**
+	 * @brief查看商户发货单
+	 */
+	public function delivery_show_client()
+	{
+	 	//获得post传来的发货单id值
+	 	$delivery_id = IFilter::act(IReq::get('id'),'int');
+	 	$data = array();
+	 	if($delivery_id)
+	 	{
+	 		$tb_delivery = new IQuery('delivery_doc as c ');
+	 		$tb_delivery->join=' left join order as o on c.order_id=o.id left join delivery as p on c.delivery_type = p.id left join user as u on u.id = c.user_id';
+	 		$tb_delivery->fields = 'c.id as id,o.order_no,c.order_id,p.name as pname,o.create_time,u.username,c.name,c.province,c.city,c.area,c.address,c.mobile,c.telphone,c.postcode,c.freight,c.delivery_code,c.time,c.note ';
+	 		$tb_delivery->where = 'c.id='.$delivery_id;
+	 		$delivery_info = $tb_delivery->find();
+	 		if($delivery_info)
+	 		{
+	 			$data = current($delivery_info);
+	 			$data['country'] = join("-",area::name($data['province'],$data['city'],$data['area']));
+
+	 			$this->setRenderData($data);
+	 			$this->redirect('delivery_show_client',false);
+	 		}
+	 	}
+
+	 	if(!$data)
+		{
+			$this->redirect('order_delivery_list_client');
 		}
 	}
 	/**
@@ -584,7 +878,7 @@ class Order extends IController
 	 	));
 	 	$tb_order->update('id='.$order_id);
 	 	IReq::set('id',$order_id);
-	 	$this->order_show();
+	 	$this->redirect('order_show/id/'.$order_id);
 
 	}
 	/**
@@ -883,7 +1177,8 @@ class Order extends IController
 		$orderHandle->order  = "o.id desc";
 		$orderHandle->fields = "o.*,d.name as distribute_name,u.username,p.name as payment_name";
 		$orderHandle->page   = $page;
-		$orderHandle->where  = $where.' and o.type !=4 ';
+		//$orderHandle->where  = $where.' and o.type !=4 ';
+		$orderHandle->where  = $where;
 		$orderHandle->join   = $join;
 		$orderHandle->group = 'o.id';
 		$this->search      = $search;
@@ -902,7 +1197,6 @@ class Order extends IController
 		if($order_ids!='')
 		$refund_data = $refundment_doc_db->query('order_id in ('.$order_ids.')','id,pay_status,type,order_id');
 		else $refund_data = array();
-		//print_r($refund_data);exit;
 		$order_refund = array();
 		if(!empty($refund_data)){
 			foreach($refund_data as $k=>$v){
@@ -918,7 +1212,120 @@ class Order extends IController
 	
 		$this->redirect("order_list");
     }
-   
+
+    /**
+     * @brief 平台订单列表
+     */
+    public function order_list_plat()
+    {
+    	//搜索条件
+		$search 	= IFilter::act(IReq::get('search'),'strict');
+		$page   	= IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+		$status   	= IReq::get('distribution_status') ? IFilter::act(IReq::get('distribution_status'),'int') : 0;
+		//条件筛选处理
+		list($join,$where) = order_class::getSearchCondition($search);
+		//$join = $join.' left join refundment_doc as r on r.order_id=o.id and r.if_del=0 ';
+		//$join2 = $join.' left join refundment_doc as r on r.order_id=o.id and r.if_del=0 and r.pay_status in (0,3,4,7)';
+		//拼接sql
+		$where .= ' and distribution_status ='. $status .' ';
+		
+		$orderHandle = new IQuery('order as o');
+		$orderHandle->order  = "o.id desc";
+		$orderHandle->fields = "o.*, org.seller_id , d.name as distribute_name,u.username,p.name as payment_name";
+		$orderHandle->page   = $page;
+		$orderHandle->where  = $where.'   and org.seller_id = 0 ';
+		$orderHandle->join   = $join;
+		$orderHandle->group = 'o.id';
+		$this->search      = $search;
+		$this->orderHandle = $orderHandle;
+		
+		$order_list = $orderHandle->find();
+		$this->order_list = $order_list;
+		$order_list_new = array();
+		$order_ids = '';
+		foreach($order_list as $k=>$v){
+			$order_ids .= $v['id'].',';
+		}
+		$order_ids = $order_ids=='' ? '' : substr($order_ids,0,-1);
+		
+		$refundment_doc_db = new IModel('refundment_doc');
+		if($order_ids!='')
+		$refund_data = $refundment_doc_db->query('order_id in ('.$order_ids.')','id,pay_status,type,order_id');
+		else $refund_data = array();
+		$order_refund = array();
+		if(!empty($refund_data)){
+			foreach($refund_data as $k=>$v){
+				if(in_array($v['pay_status'],array(0,3,4,7)))
+					$order_refund[$v['order_id']][$v['type']]['refunding'] = $v['id'];
+				else{
+					$order_refund[$v['order_id']][$v['type']]['refunded'] = $v['id'];
+				}
+			}
+		}
+		
+		$this->order_refund = $order_refund;
+	
+		$this->redirect("order_list_plat");
+    }
+
+
+    /**
+     * @brief 商户订单列表
+     */
+    public function order_list_client()
+    {
+		//搜索条件
+		$search = IFilter::act(IReq::get('search'),'strict');
+		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+		//条件筛选处理
+		list($join,$where) = order_class::getSearchCondition($search);
+		//$join = $join.' left join refundment_doc as r on r.order_id=o.id and r.if_del=0 ';
+		//$join2 = $join.' left join refundment_doc as r on r.order_id=o.id and r.if_del=0 and r.pay_status in (0,3,4,7)';
+		//拼接sql
+		
+		$orderHandle = new IQuery('order as o');
+		$orderHandle->order  = "o.id desc";
+		$orderHandle->fields = "o.*, org.seller_id, d.name as distribute_name,u.username,p.name as payment_name";
+		$orderHandle->page   = $page;
+		$orderHandle->where  = $where.' and org.seller_id != 0 ';
+		$orderHandle->join   = $join;
+		$orderHandle->group = 'o.id';
+		$this->search      = $search;
+		$this->orderHandle = $orderHandle;
+		
+		$order_list = $orderHandle->find();
+		$this->order_list = $order_list;
+		$order_list_new = array();
+		$order_ids = '';
+		foreach($order_list as $k=>$v){
+			$order_ids .= $v['id'].',';
+		}
+		$order_ids = $order_ids=='' ? '' : substr($order_ids,0,-1);
+		
+		$refundment_doc_db = new IModel('refundment_doc');
+		if($order_ids!='')
+		$refund_data = $refundment_doc_db->query('order_id in ('.$order_ids.')','id,pay_status,type,order_id');
+		else $refund_data = array();
+		$order_refund = array();
+		if(!empty($refund_data)){
+			foreach($refund_data as $k=>$v){
+				if(in_array($v['pay_status'],array(0,3,4,7)))
+					$order_refund[$v['order_id']][$v['type']]['refunding'] = $v['id'];
+				else{
+					$order_refund[$v['order_id']][$v['type']]['refunded'] = $v['id'];
+				}
+			}
+		}
+		
+		$this->order_refund = $order_refund;
+	
+		$this->redirect("order_list_client");
+    }
+
+
+
+
+    
     /**
      * @brief 订单删除功能_删除到回收站
      */
@@ -1012,6 +1419,78 @@ class Order extends IController
     	$this->setRenderData($data);
     	$this->where = $where;
     	$this->redirect('order_collection_list');
+    } 
+
+    /**
+     * 平台收款单列表
+     */
+    public function order_collection_list_plat(){
+    	$where = ' and  1 ';
+    	$order_no = IFilter::act(IReq::get('order_no'));
+    	$username = IFilter::act(IReq::get('username'));
+    
+    	
+    	//筛选、
+    	$beginTime = IFilter::act(IReq::get('beginTime'));
+    	$endTime = IFilter::act(IReq::get('endTime'));
+    	$data['beginTime'] = $beginTime;
+    	$data['endTime'] = $endTime;
+    	$data['order_no'] = $order_no;
+    	$data['username'] = $username;
+    	
+    	if($beginTime)
+    	{
+    		$where .= ' and c.time > "'.$beginTime.'"';
+    	}
+    	if($endTime)
+    	{
+    		$where .= ' and c.time < "'.$endTime.'"';
+    	}
+    	if($order_no){
+    		$where .= ' and o.order_no = "'.$order_no.'"';
+    	}
+    	if($username){
+    		$where .= ' and u.username = "'.$username.'"';
+    	}
+    	$this->setRenderData($data);
+    	$this->where = $where;
+    	$this->redirect('order_collection_list_plat');
+    } 
+
+    /**
+     * 商户收款单列表
+     */
+    public function order_collection_list_client(){
+    	$where = ' and  1 ';
+    	$order_no = IFilter::act(IReq::get('order_no'));
+    	$username = IFilter::act(IReq::get('username'));
+    
+    	
+    	//筛选、
+    	$beginTime = IFilter::act(IReq::get('beginTime'));
+    	$endTime = IFilter::act(IReq::get('endTime'));
+    	$data['beginTime'] = $beginTime;
+    	$data['endTime'] = $endTime;
+    	$data['order_no'] = $order_no;
+    	$data['username'] = $username;
+    	
+    	if($beginTime)
+    	{
+    		$where .= ' and c.time > "'.$beginTime.'"';
+    	}
+    	if($endTime)
+    	{
+    		$where .= ' and c.time < "'.$endTime.'"';
+    	}
+    	if($order_no){
+    		$where .= ' and o.order_no = "'.$order_no.'"';
+    	}
+    	if($username){
+    		$where .= ' and u.username = "'.$username.'"';
+    	}
+    	$this->setRenderData($data);
+    	$this->where = $where;
+    	$this->redirect('order_collection_list_client');
     } 
 	/**
      * @brief 收款单删除功能_删除回收站中的数据，彻底删除
@@ -1255,6 +1734,68 @@ class Order extends IController
     	$this->setRenderData($data);
     	$this->where = $where;
     	$this->redirect('order_delivery_list');
+    }
+
+    public function order_delivery_list_plat(){
+    	$where = ' and  1 ';
+    	$order_no = IFilter::act(IReq::get('order_no'));
+    	$username = IFilter::act(IReq::get('username'));
+    	//筛选、
+    	$beginTime = IFilter::act(IReq::get('beginTime'));
+    	$endTime = IFilter::act(IReq::get('endTime'));
+    	$data['beginTime'] = $beginTime;
+    	$data['endTime'] = $endTime;
+    	$data['order_no'] = $order_no;
+    	$data['username'] = $username;
+    	
+    	if($beginTime)
+    	{
+    		$where .= ' and c.time > "'.$beginTime.'"';
+    	}
+    	if($endTime)
+    	{
+    		$where .= ' and c.time < "'.$endTime.'"';
+    	}
+    	if($order_no){
+    		$where .= ' and o.order_no = "'.$order_no.'"';
+    	}
+    	if($username){
+    		$where .= ' and m.username = "'.$username.'"';
+    	}
+    	$this->setRenderData($data);
+    	$this->where = $where;
+    	$this->redirect('order_delivery_list_plat');
+    }
+
+    public function order_delivery_client(){
+    	$where = ' and  1 ';
+    	$order_no = IFilter::act(IReq::get('order_no'));
+    	$username = IFilter::act(IReq::get('username'));
+    	//筛选、
+    	$beginTime = IFilter::act(IReq::get('beginTime'));
+    	$endTime = IFilter::act(IReq::get('endTime'));
+    	$data['beginTime'] = $beginTime;
+    	$data['endTime'] = $endTime;
+    	$data['order_no'] = $order_no;
+    	$data['username'] = $username;
+    	
+    	if($beginTime)
+    	{
+    		$where .= ' and c.time > "'.$beginTime.'"';
+    	}
+    	if($endTime)
+    	{
+    		$where .= ' and c.time < "'.$endTime.'"';
+    	}
+    	if($order_no){
+    		$where .= ' and o.order_no = "'.$order_no.'"';
+    	}
+    	if($username){
+    		$where .= ' and m.username = "'.$username.'"';
+    	}
+    	$this->setRenderData($data);
+    	$this->where = $where;
+    	$this->redirect('order_delivery_client');
     }
 	/**
      * @brief 发货单删除功能_删除回收站中的数据，彻底删除

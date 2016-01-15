@@ -1,0 +1,191 @@
+<div class="headbar clearfix">
+	<div class="position"><span>订单</span><span>></span><span>单据管理</span><span>></span><span>换货单申请信息</span></div>
+</div>
+
+<div class="content">
+	<form method="post" action="{url:/order/refundment_chg_show_save}">
+		<input type="hidden" name="id" value="{$id}"/>
+		<table class="border_table" width="100%" style="margin:10px auto">
+			<colgroup>
+				<col width="200px" />
+				<col />
+			</colgroup>
+
+			<tbody>
+				<tr><th>当前状态：</th><td  align="left"><span class='red'>{echo:Order_Class::refundmentText($pay_status,$type)}</span></td></tr>
+				<tr>
+					<th>换货单号：</th>
+					<td align="left">{$refunds_no}</td>
+				</tr>
+				
+				<tr>
+					<th>订单号：</th><td align="left">{$order_no}</td>
+				</tr>
+				<tr>
+					<th>更换商品：</th>
+					<td align="left">
+						{query:name=order_goods where=order_id eq $order_id and goods_id eq $goods_id and product_id eq $product_id}
+						{set:$goods = JSON::decode($item['goods_array'])}
+						{$goods['name']} X {$item['goods_nums']}件
+						【{echo:Order_Class::goodsSendStatus($item['is_send'])}】
+						{set:$is_send = $item['is_send'];}
+						{/query}
+						{if:$seller_id}
+						<a href="{url:/site/home/id/$seller_id}" target="_blank"><img src="{skin:images/admin/seller_ico.png}" /></a>
+						{/if}
+					</td>
+				</tr>
+				<tr>
+					<th>用户名：</th><td align="left">{query:name=user fields=username where=id eq $user_id}{$item['username']}{/query}</td>
+				</tr>
+				<tr>
+					<th>联系方式：</th><td align="left">{query:name=member fields=mobile where=user_id eq $user_id}{$item['mobile']}{/query}</td>
+				</tr>
+				<tr>
+					<th>申请时间：</th><td align="left">{$time}</td>
+				</tr>
+				<tr>
+					<th>换货原因：</th><td align="left">{$content}</td>
+				</tr>
+				{if:$delivery_code && $delivery_com}
+					<tr>
+						<th>退货快递单：</th><td align="left">{$delivery_com} | {$delivery_code}</td>
+					</tr>
+				{/if}
+				{if:$dispose_time!=NULL}
+					<tr>
+						<th>处理时间：</th><td align="left">{$dispose_time}</td>
+					</tr>
+					<tr>
+						<th>处理意见：</th><td align="left">{$dispose_idea}</td>
+					</tr>
+				{/if}
+				
+
+				{if:$pay_status==4}
+					<tr>
+						<th>处理：</th>
+						<td align="left">
+							<label><input type="radio" name="pay_status" value="2" checked='checked' />同意</label>&nbsp;&nbsp;
+							<label><input type="radio" name="pay_status" value="5" />拒绝</label>
+							<span class='red'></span>
+						</td>
+						
+					</tr>
+					<tr>
+						<th>处理意见：</th>
+						<td align="left">
+							<textarea name="dispose_idea" class="normal"></textarea>
+						</td>
+					</tr>
+						<tr>
+								<th>设置更换商品：</th>
+							<td>
+								<table class='border_table' style='width:90%'>
+									<col width="150px" />
+									<col width="250px" />
+									<col width="200px"/>
+									<col width="160px"/>
+									<col />
+									<input type='hidden' name='condition' />
+									<thead>
+										<tr>
+											<th>图片</th>
+											<th>名称</th>
+											<th>货号</th>
+											<th>规格</th>
+											<th>价格</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr id='chg_good' class='td_c'></tr>
+										<tr>
+											<td colspan='5'>
+												<button type='button' onclick="searchGoods('{url:/block/search_goods/type/radio/is_products/1/seller_id/0}',searchGoodsCallback);" class='btn'><span>选择商品</span></button>
+												<label>* 设置要更换的商品</label>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+							</tr>
+						<tr>
+
+					<td colspan="2"><button type="submit" class="submit" ><span>确 定</span></button></td>
+				</tr>
+				{/if}
+				
+			</tbody>
+		</table>
+	</form>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$('input[name=pay_status]').change(function(){
+			var pay_status = $('input[name=pay_status]:checked').val();
+			var select = $('select[name=delivery_add]');
+			if(pay_status==3){
+				select.parents('tr').removeClass('hide');
+			}else{
+				select.val(0).parents('tr').addClass('hide');
+			}
+		})
+	})
+
+//执行回调处理
+function actionCallback(msg)
+{
+	if(msg)
+	{
+		alert(msg);
+		return;
+	}
+	document.forms[0].submit();
+}
+
+
+
+//输入筛选商品的条件
+	function searchGoodsCallback(goodsList)
+	{
+		goodsList.each(function()
+		{
+			var temp = $.parseJSON($(this).attr('data'));
+			if(!temp.product_id)temp.product_id = 0;
+			temp.spec = getSpec(temp.spec_array);
+			var content = {
+				"data":
+				{
+					"goods_id":temp.goods_id,
+					"name":temp.name,
+					"goods_no":temp.goods_no,
+					"product_id":temp.product_id,
+					"img":temp.img,
+					"sell_price":temp.sell_price,
+					"spec":temp.spec,
+				}
+			};
+			relationCallBack(content);
+		});
+	}
+
+	//关联商品回调处理函数
+	function relationCallBack(content)
+	{
+		if(content)
+		{
+			var imgUrl = "{webroot:@url@}";
+			imgUrl     = imgUrl.replace("@url@",content['data']['img']);
+
+			var html =   '<td><img src="'+imgUrl+'" title="'+content['data']['name']+'" style="max-width:140px;max-height:40px;" /></td>'
+						+'<td>'+content['data']['name']+'</td>'
+						+'<td>'+content['data']['goods_no']+'</td>'
+						+'<td>'+content['data']['spec']+'</td>'
+						+'<td>'+content['data']['sell_price']+'</td>'
+						+'<input type="hidden" name="goods_id" value="'+content['data']['goods_id']+'"/>'
+						+'<input type="hidden" name="product_id" value="'+content['data']['product_id']+'"/>'
+						
+			$('#chg_good').html(html);
+		}
+	}
+</script>

@@ -518,7 +518,6 @@ a.articles header h4 { float: left; width: 75%; vertical-align: top; color: #1e1
 }
 	
 .qijiandian ul .chanpin {
-	 margin-bottom: 5px;
 	width: 100%;
 	overflow: hidden;
 	background-color: #f6f3f3;
@@ -529,7 +528,7 @@ a.articles header h4 { float: left; width: 75%; vertical-align: top; color: #1e1
 	margin-left: auto;
 	height: auto;
 	padding-top: 8px;
-	margin-bottom:5px;
+	padding-bottom: 10px;
 }
 .qijiandian ul .chanpin .tupian {
 	height: 75px;
@@ -601,7 +600,7 @@ a.articles header h4 { float: left; width: 75%; vertical-align: top; color: #1e1
 }
 .qijiandian ul li a {
 	border: 1px solid #999;
-	font-size: 14px;
+	font-size: 16px;
 	color: #333;
 	background-color: #FFF;
 	float: right;
@@ -611,12 +610,10 @@ a.articles header h4 { float: left; width: 75%; vertical-align: top; color: #1e1
 	margin-left: 5px;
 	margin-bottom: 2px;
 	text-align: left;
-	border-radius: 2px;
 }
 .qijiandian ul li .hongzi {
-    font-size: 12px;
-    padding: 0 14px; 
-    line-height:25px;
+   
+    line-height:24px;
 	color: #F00;
 	border-top-color: #F00;
 	border-right-color: #F00;
@@ -891,7 +888,7 @@ a.articles header h4 { float: left; width: 75%; vertical-align: top; color: #1e1
 }
 
 
-.qijiandian ul li .qd-popup-trigger.xio{ height:27px;line-height:25px;padding: 0 10px;    font-size: 12px; }
+.qijiandian ul li .qd-popup-trigger.xio{ height:30px;line-height:23px; }
 
 
 

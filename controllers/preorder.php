@@ -39,6 +39,25 @@ class Preorder extends IController
 		}
 	}
 	/**
+	 * @brief 保存订单备注
+	 */
+	public function order_note()
+	{
+	 	//获得post数据
+	 	$order_id = IFilter::act(IReq::get('order_id'),'int');
+	 	$note = IFilter::act(IReq::get('note'),'text');
+
+	 	//获得order的表对象
+	 	$tb_order =  new IModel('order');
+	 	$tb_order->setData(array(
+	 		'note'=>$note
+	 	));
+	 	$tb_order->update('id='.$order_id);
+	 	IReq::set('id',$order_id);
+	 	$this->redirect('preorder_show/id/'.$order_id);
+
+	}
+	/**
 	 * @brief 支付订单页面collection_doc
 	 */
 	public function order_collection()

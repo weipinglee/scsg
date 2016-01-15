@@ -128,6 +128,53 @@ class Comment extends IController
 	}
 
 	/**
+	 * @brief 平台商品评论信息列表
+	 */
+	function comment_list_plat()
+	{
+		$search     = IFilter::act(IReq::get('search'),'strict');
+		//$retime 指的是回复状态
+		$retime   	= IReq::get('recomment_time') ? IFilter::act(IReq::get('recomment_time'),'int') : '';
+
+
+		$where      = 'c.status = 1 and c.sellerid = 0  ';
+        $where .= " and c.recomment_time<=0 and c.contents is not null ";
+        //var_dump($where);exit;
+
+		if($search && $appendString = Util::search($search))
+		{
+			$where .= "  and ".$appendString;
+		}
+
+		$this->data['where'] = $where;
+		$this->data['search']= $search;
+		$this->setRenderData($this->data);
+		$this->redirect('comment_list_plat',false);
+	}
+
+	/**
+	 * @brief 商户商品评论信息列表
+	 */
+	function comment_list_client()
+	{
+		$search = IFilter::act(IReq::get('search'),'strict');
+		$retime   	= IReq::get('recomment_time') ? IFilter::act(IReq::get('recomment_time'),'int') : '';
+		$where      = 'c.status = 1 and c.sellerid != 0  ';
+        $where .= ' and c.recomment_time<=0';
+
+		$where  = 'c.status = 1 and seller_id != 0';
+		if($search && $appendString = Util::search($search))
+		{
+			$where .= " and  ".$appendString;
+		}
+
+		$this->data['where'] = $where;
+		$this->data['search']= $search;
+		$this->setRenderData($this->data);
+		$this->redirect('comment_list_client',false);
+	}
+
+	/**
 	 * @brief 显示评论信息
 	 */
 	function comment_edit()
@@ -341,6 +388,108 @@ class Comment extends IController
 		$this->data['where'] = $where;
 		$this->setRenderData($this->data);
 		$this->redirect('refer_list',false);
+	}
+
+	/**
+	 * @brief 咨询信息列表(平台)
+	 */
+	function refer_list_plat()
+	{
+		$search   = IFilter::act(IReq::get('search'),'strict');
+		$keywords = IFilter::act(IReq::get('keywords'),'text');
+		$status   = IFilter::act(IReq::get('status'),'int');
+		$where = ' 1 ';
+		if($search && $keywords)
+		{
+			$where .= " and $search like '%{$keywords}%' ";
+		}
+
+		$where .= ' and status = ' . $status;
+		$this->data['search'] = $search;
+		$this->data['keywords'] = $keywords;
+		//筛选
+		$username = IFilter::act(IReq::get('username'));
+		$goodsname = IFilter::act(IReq::get('goodsname'));
+		$beginTime = IFilter::act(IReq::get('beginTime'));
+		$endTime = IFilter::act(IReq::get('endTime'));
+		$this->data['username'] = $username;
+		$this->data['goodsname'] = $goodsname;
+		$this->data['beginTime'] = $beginTime;
+		$this->data['endTime'] = $endTime;
+		if($username)
+		{
+			$where .= ' and u.username like "%'.$username.'%"';
+		}
+		if($goodsname)
+		{
+			$where .= ' and goods.name like "%'.$goodsname.'%"';
+		}
+		if($beginTime)
+		{
+			$where .= ' and r.time > "'.$beginTime.'"';
+		}
+		if($endTime)
+		{
+			$where .= ' and r.time < "'.$endTime.'"';
+		}
+		if($status=='0')
+		{
+			$where .= ' and r.status = 0';
+		}
+		$this->data['where'] = $where;
+		$this->setRenderData($this->data);
+		$this->redirect('refer_list_plat',false);
+	}
+
+	/**
+	 * @brief 咨询信息列表(商户)
+	 */
+	function refer_list_client()
+	{
+		$search   = IFilter::act(IReq::get('search'),'strict');
+		$keywords = IFilter::act(IReq::get('keywords'),'text');
+		$status   = IFilter::act(IReq::get('status'),'int');
+		$where = ' 1 ';
+		if($search && $keywords)
+		{
+			$where .= " and $search like '%{$keywords}%' ";
+		}
+
+		$where .= ' and status = ' . $status;
+		$this->data['search'] = $search;
+		$this->data['keywords'] = $keywords;
+		//筛选
+		$username = IFilter::act(IReq::get('username'));
+		$goodsname = IFilter::act(IReq::get('goodsname'));
+		$beginTime = IFilter::act(IReq::get('beginTime'));
+		$endTime = IFilter::act(IReq::get('endTime'));
+		$this->data['username'] = $username;
+		$this->data['goodsname'] = $goodsname;
+		$this->data['beginTime'] = $beginTime;
+		$this->data['endTime'] = $endTime;
+		if($username)
+		{
+			$where .= ' and u.username like "%'.$username.'%"';
+		}
+		if($goodsname)
+		{
+			$where .= ' and goods.name like "%'.$goodsname.'%"';
+		}
+		if($beginTime)
+		{
+			$where .= ' and r.time > "'.$beginTime.'"';
+		}
+		if($endTime)
+		{
+			$where .= ' and r.time < "'.$endTime.'"';
+		}
+		if($status=='0')
+		{
+			$where .= ' and r.status = 0';
+		}
+		$this->data['where'] = $where;
+		$this->setRenderData($this->data);
+		$this->redirect('refer_list_client',false);
 	}
 
 	/**

@@ -26,7 +26,7 @@
 			<div id="BDBridgeFixedWrap"></div>
 			</div>
 		{/if}
-            <div class="s-btn s-cd" data="price" style="top:7px;"{if:$width==1}style="top:7px;"{/if}>
+            <div class="s-btn s-cd" data="price" style="top:7px;"{if:$width==1}style="width:25%;top:7px;"{/if}>
 				<a href="javascript:void(0);" onclick='favorite_add(this)'>
 					{if:isset($favorite_id_arr)&&in_array($id,$favorite_id_arr)}
 					<p><img src="{skin:images/detail_img/ygz.png}"  /></p>
@@ -47,7 +47,7 @@
             </div>
             
 			{else:}
-			<div class="s-btn s-an s-colos" data="default" style="width:60%;">
+			<div class="s-btn s-an s-colos" data="default" style="width:50%;">
 				<a class="ljgm" name='buyNow' onClick="toshop(buy_now)"">立即购买</a>
             </div>
          	{/if}

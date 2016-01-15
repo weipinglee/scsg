@@ -468,7 +468,6 @@ class Ucenter extends IController
         	'user_id'     => $user_id,
         	'accept_name' => $accept_name,
         	'zip'         => $zip,
-        	'telphone'    => $telphone,
         	'province'    => $province,
         	'city'        => $city,
         	'area'        => $area,

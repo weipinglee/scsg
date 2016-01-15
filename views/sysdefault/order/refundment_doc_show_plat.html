@@ -1,0 +1,198 @@
+<div class="headbar clearfix">
+	<div class="position"><span>订单</span><span>></span><span>单据管理</span><span>></span><span>退款单申请信息</span></div>
+</div>
+
+<div class="content">
+	<form method="post" action="{url:/order/refundment_doc_show_save}">
+		<input type="hidden" name="id" value="{$id}"/>
+		<input type="hidden" name="type" value="{$type}"/>
+		<table class="border_table" width="100%" style="margin:10px auto">
+			<colgroup>
+				<col width="200px" />
+				<col />
+			</colgroup>
+
+			<tbody>
+				<tr><th>当前状态：</th><td  align="left"><span class='red'>{echo:Order_Class::refundmentText($pay_status,$type)}</span></td></tr>
+				<tr>
+					<th>订单号：</th><td align="left">{$order_no}</td>
+				</tr>
+				<tr>
+					<th>退款商品：</th>
+					<td align="left">
+						{query:name=order_goods where=order_id eq $order_id and goods_id eq $goods_id and product_id eq $product_id}
+						{set:$goods = JSON::decode($item['goods_array'])}
+						{$goods['name']} X {$item['goods_nums']}件
+						【{echo:Order_Class::goodsSendStatus($item['is_send'])}】
+						{set:$is_send = $item['is_send'];}
+						{/query}
+						{if:$seller_id}
+						<a href="{url:/site/home/id/$seller_id}" target="_blank"><img src="{skin:images/admin/seller_ico.png}" /></a>
+						{/if}
+					</td>
+				</tr>
+				<tr>
+					<th>用户名：</th><td align="left">{query:name=user fields=username where=id eq $user_id}{$item['username']}{/query}</td>
+				</tr>
+				<tr>
+					<th>联系方式：</th><td align="left">{query:name=member fields=mobile where=user_id eq $user_id}{$item['mobile']}{/query}</td>
+				</tr>
+				<tr>
+					<th>退款金额：</th><td align="left">{$amount}</td>
+				</tr>
+				<tr>
+					<th>申请时间：</th><td align="left">{$time}</td>
+				</tr>
+				<tr>
+					<th>退款原因：</th><td align="left">{$content}</td>
+				</tr>
+				{if:$dispose_time!=NULL}
+					{set:$h=$pay_status==1?'驳回':'核准'}
+					<tr>
+						<th>{$h}时间：</th><td align="left">{$dispose_time}</td>
+					</tr>
+					<tr>
+						<th>处理意见：</th><td align="left">{$dispose_idea}</td>
+					</tr>
+				{/if}
+				{if:$delivery_code && $delivery_com}
+					<tr>
+						<th>退货快递单：</th><td align="left">{$delivery_com} | {$delivery_code}</td>
+					</tr>
+				{/if}
+				{if:$dispose_time2!=NULL}
+					{set:$h=$pay_status==5?'驳回':'核准'}
+					<tr>
+						<th>{$h}时间：</th><td align="left">{$dispose_time2}</td>
+					</tr>
+					<tr>
+						<th>处理意见：</th><td align="left">{$dispose_idea2}</td>
+					</tr>
+				{/if}
+				{if:$pay_status==0}
+					
+					<tr>
+						<th>处理：</th>
+						<td align="left">
+							{set:$agree_status=$is_send==1 ? 3:7}
+							<label><input type="radio" name="pay_status" value="{$agree_status}" checked='checked' />同意</label>&nbsp;&nbsp;
+							<label><input type="radio" name="pay_status" value="1" />拒绝</label>
+							{if:$is_send==0 && $type==0}
+								<span class='red'></span>
+							{elseif:$is_send==0 && $type==1}
+								<span class='red'></span>
+							{elseif:$is_send==1}
+								<span class='red'>该商品已发货，同意后等待用户上传物流单据</span>
+							{/if}
+						</td>
+						
+					</tr>
+					
+					{if:$is_send==1}
+					<tr>
+						<th>退货地址：</th>
+						<td align='left'>
+							<select name="delivery_add" pattern="required" alt="请选择收货地址方式" class="normal">
+								<option value='0'>请选择收货地址方式</option>
+								{query:name=merch_ship_info where=is_del eq 1 and seller_id eq 0}
+								<option value="{$item['id']}">{$item['ship_name']}</option>
+								{/query}
+							</select>
+						</td>
+					</tr>
+					{/if}
+					<tr>
+						<th>处理意见：</th>
+						<td align="left">
+							<textarea name="dispose_idea" class="normal"></textarea>
+						</td>
+					</tr>
+					
+				<tr>
+					<td colspan="2"><button type="submit" class="submit" ><span>确 定</span></button></td>
+				</tr>
+				{/if}
+				{if:$pay_status==4}
+					<tr>
+						<th>处理：</th>
+						<td align="left">
+							<label><input type="radio" name="pay_status" value="7" checked='checked' />同意</label>&nbsp;&nbsp;
+							<label><input type="radio" name="pay_status" value="5" />拒绝</label>
+							<span class='red'></span>
+						</td>
+						
+					</tr>
+					<tr>
+					<th>处理意见：</th>
+					<td align="left">
+						<textarea name="dispose_idea" class="normal"></textarea>
+					</td>
+				</tr>
+				
+					<td colspan="2"><button type="submit" class="submit" ><span>确 定</span></button></td>
+				</tr>
+				{/if}
+				<input type='hidden' name='status' value='{$pay_status}' />
+				
+			</tbody>
+		</table>
+	</form>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$('input[name=pay_status]').change(function(){
+			var pay_status = $('input[name=pay_status]:checked').val();
+			var select = $('select[name=delivery_add]');
+			if(pay_status==3){
+				select.parents('tr').removeClass('hide');
+			}else{
+				select.val(0).parents('tr').addClass('hide');
+			}
+		})
+	})
+//退款
+function refundment(id,refundsId)
+{
+	var tempUrl = '{url:/order/order_refundment/id/@id@/refunds_id/@refunds_id@}';
+	tempUrl     = tempUrl.replace('@id@',id).replace('@refunds_id@',refundsId);
+	art.dialog.open(tempUrl,{
+		id:'refundment',
+		cancelVal:'关闭',
+		okVal:'退款',
+	    title: '订单号:{$order_no}【退款到余额账户】',
+	    ok:function(iframeWin, topWin){
+	    	iframeWin.document.forms[0].submit();
+	    	return false;
+	    },
+	    cancel:function(){
+	    	return true;
+		}
+	});
+}
+
+//执行回调处理
+function actionCallback(msg)
+{
+	if(msg)
+	{
+		alert(msg);
+		return;
+	}
+	document.forms[0].submit();
+}
+
+//表单提交
+function checkForm(is_send,type)
+{
+	if(is_send==2)return false;
+	var payValue = $('[name="pay_status"]:checked').val();
+	if(payValue == 2 && type==0)//已付款退货
+	{
+		refundment({$order_id},{$id});
+		return false;
+	}
+	
+	return true;
+}
+
+</script>

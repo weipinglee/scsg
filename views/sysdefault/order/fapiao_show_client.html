@@ -1,0 +1,106 @@
+{set:$fapiao = $this->fapiao;}
+
+}
+<div class="headbar clearfix">
+	<div class="position"><span>订单</span><span>></span><span>单据管理</span><span>></span><span>补开发票信息</span></div>
+</div>
+
+<div class="content">
+	<form method="post" action="{url:/order/fapiao_show_save}">
+		<input type="hidden" name="id" value="{$fapiao['id']}"/>
+		<table class="border_table" width="100%" style="margin:10px auto">
+			<colgroup>
+				<col width="200px" />
+				<col />
+			</colgroup>
+
+			<tbody>
+				<tr><th>当前状态：</th><td  align="left">{echo:Order_Class::getFapiaoStatus($fapiao['status'])}<span class='red'></span></td></tr>
+				<tr>
+					<th>订单号：</th><td align="left">{$fapiao['order_no']}<a class='blue' style='margin-left:5px;' href="{url:/order/order_show/id/$fapiao['order_id']}">查看订单</a></td>
+				</tr>
+				<tr>
+					<th>开票商家：</th><td align="left">
+						<a style='margin-right:10px;' class='blue'>{$fapiao['true_name']}</a>
+					</td>
+				</tr>
+				<tr>
+					<th>发票类型：</th>
+					<td align="left">
+						<label><input type="radio" name="type" value="0" disabled {if:$fapiao['type']==0}checked='checked'{/if} />普通</label>&nbsp;&nbsp;
+						<label><input type="radio" name="type" value="1" disabled {if:$fapiao['type']==1}checked='checked'{/if} />增值税</label>
+					</td>
+				</tr>
+				{if:$fapiao['type']==0}
+				<tr>
+					<th>发票抬头：</th>
+					<td align="left">
+						{$fapiao['taitou']}
+					</td>
+				</tr>
+				{else:}
+				<tr>
+					<th>单位名称：</th>
+					<td align="left">
+						{$fapiao['com']}
+					</td>
+				</tr>
+				<tr>
+					<th>纳税人识别号：</th>
+					<td align="left">
+						{$fapiao['tax_no']}
+					</td>
+				</tr>
+				<tr>
+					<th>注册地址：</th>
+					<td align="left">
+						{$fapiao['address']}
+					</td>
+				</tr>
+				<tr>
+					<th>联系电话：</th>
+					<td align="left">
+						{$fapiao['telphone']}
+					</td>
+				</tr>
+				<tr>
+					<th>开户行：</th>
+					<td align="left">
+						{$fapiao['bank']}
+					</td>
+				</tr>
+				<tr>
+					<th>银行账户：</th>
+					<td align="left">
+						{$fapiao['account']}
+					</td>
+				</tr>
+				{/if}
+				<tr>
+					<th>申请人：</th>
+					<td align="left">
+						{$fapiao['username']}
+					</td>
+				</tr>
+				<tr>
+					<th>开票金额：</th>
+					<td align="left">
+						<input type='text' {if:$fapiao['status']==1}disabled{/if} max-value="{$fapiao['money']}" value="{$fapiao['money']}" pattern='^[0-9]+.?[0-9]{0,2}$' name='money' alt='请正确填写金额'/>
+					</td>
+				</tr>
+		
+				<tr>
+					<td colspan="2"><button type="submit" class="submit" onclick='return checkForm()'><span>开票</span></button></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+<script type='text/javascript' >
+	function checkForm(){
+		var money = $('input[name=money]').val();
+		var max = parseFloat($('input[name=money]').attr('max-value'));
+		if(money>max){alert('开票金额不得大于订单商品总金额');return false;}
+		else return true;
+	}
+</script>

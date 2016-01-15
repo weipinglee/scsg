@@ -18,7 +18,7 @@ $(function(){
 			},
 			success:function(data){
 				if(data.errCode==0){
-					history.back();
+					location.href=last_url+'?'+Math.random();
 				}
 				else if(data.errCode==2){
 					realAlert('请先登录');
@@ -54,8 +54,3 @@ function address_edit(_this){
 	$('input[name=zip]').val(json.zip);
 	$('input[name=mobile]').val(json.mobile);
 }
-
-
-/*收货地址确认框*/
-
-

@@ -79,36 +79,54 @@ class Menu
 	    		'/member/member_list' => '会员列表',
 	     		'/member/group_list' => '会员组列表',
 	     		'/member/withdraw_list'=>'会员提现管理',
+				'/comment/message_list'		=> '站内消息',
 			),
 			'商户管理' => array(
 				'/member/seller_list' => '商户列表',
 				'/member/seller_edit' => '添加商户',
 			),
-			'信息处理' => array(
-				'/comment/suggestion_list'  => '建议管理',
-				'/comment/refer_list'		=> '咨询管理',
-				'/comment/discussion_list'	=> '讨论管理',
-				'/comment/comment_list'		=> '评价管理',
-				'/comment/message_list'		=> '站内消息',
-				'/message/notify_list'      => '到货通知',
+			'平台信息处理' => array(
+				'/comment/suggestion_list_plat'  => '建议管理',
+				'/comment/refer_list_plat'		=> '咨询管理',
+				'/comment/discussion_list_plat'	=> '讨论管理',
+				'/comment/comment_list_plat'		=> '评价管理',
+				'/message/notify_list_plat'      => '到货通知',
+			),
+			'商户信息处理' => array(
+				'/comment/suggestion_list_client'  => '建议管理',
+				'/comment/refer_list_client'		=> '咨询管理',
+				'/comment/discussion_list_client'	=> '讨论管理',
+				'/comment/comment_list_client'		=> '评价管理',
+				'/message/notify_list_client'      => '到货通知',
 			),
 		),
 
 	   '订单'=>array(
         	'订单管理'=>array(
-                '/order/order_list' => '普通订单',
+        		'/order/order_list_plat' => '平台订单',
+                '/order/order_list_client' => '商户订单',
                 '/order/order_edit' => '添加订单',
                  '/preorder/preorder_list' => '预售订单',
         	),
-        	'单据管理'=>array(
-             	'/order/order_collection_list'  => '收款单',
-             	'/order/order_refundment_list'  => '退货单',
-             	'/order/order_refundment_chg_list'=>'换货单',
-        		'/order/order_delivery_list'    => '发货单',
-        		'/order/refundment_list'        => '退货申请',
-        		'/order/refundment_chg_list'    => '换货申请',
-        		'/order/fapiao_list'            => '已开发票',
-        		'/order/fapiao'                 => '发票申请'
+        	'平台单据管理'=>array(
+             	'/order/order_collection_list_plat'  => '收款单',
+             	'/order/order_refundment_list_plat'  => '退货单',
+             	'/order/order_refundment_chg_list_plat'=>'换货单',
+        		'/order/order_delivery_list_plat'    => '发货单',
+        		'/order/refundment_list_plat'        => '退货申请',
+        		'/order/refundment_chg_list_plat'    => '换货申请',
+        		'/order/fapiao_list_plat'            => '已开发票',
+        		'/order/fapiao_plat'                 => '发票申请'
+        	),
+        	'商户单据管理'=>array(
+             	'/order/order_collection_list_client'  => '收款单',
+             	'/order/order_refundment_list_client'  => '退货单',
+             	'/order/order_refundment_chg_list_client'=>'换货单',
+        		'/order/order_delivery_list_client'    => '发货单',
+        		'/order/refundment_list_client'        => '退货申请',
+        		'/order/refundment_chg_list_client'    => '换货申请',
+        		'/order/fapiao_list_client'            => '已开发票',
+        		'/order/fapiao_client'                 => '发票申请'
         	),
         	'发货地址'=>array(
         		'/order/ship_info_list'         => '发货地址管理',

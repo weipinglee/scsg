@@ -68,7 +68,7 @@ $favorite_ids = implode(',',$favorite_id_arr);}
 			success:function(data){
 				if(data.point){
 					$(_this).attr('src','{skin:images/yqiandao.gif}');
-					$('#head_point').text(data.point+parseInt($('#head_point').text()));
+					$('#head_point').text(parseInt(data.point)+parseInt($('#head_point').text()));
 				}
 			},
 			error:function(){

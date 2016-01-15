@@ -184,7 +184,7 @@ class statistics
 	}
 
 	/**
-	 * @brief 获取商品统计数据
+	 * @brief 获取商品统计数据(总的)
 	 * @param int $seller_id 商家ID
 	 * @return int
 	 */
@@ -202,7 +202,33 @@ class statistics
 	}
 
 	/**
-	 * @brief 等待商品咨询回复数量
+	 * @brief 获取平台商品统计数据(新)
+	 * @param int $seller_id 商家ID
+	 * @return int
+	 */
+	public static function goodsPlatCount($seller_id = '')
+	{
+		$where = "is_del != 1 and seller_id = 0";
+		$goodsDB = new IModel('goods');
+		$data = $goodsDB->getObj($where,'count(*) as num');
+		return isset($data['num']) ? $data['num'] : 0;
+	}
+
+	/**
+	 * @brief 获取商户商品统计数据(新)
+	 * @param int $seller_id 商家ID
+	 * @return int
+	 */
+	public static function goodsClientCount($seller_id = '')
+	{
+		$where = "is_del != 1 and seller_id != 0";
+		$goodsDB = new IModel('goods');
+		$data = $goodsDB->getObj($where,'count(*) as num');
+		return isset($data['num']) ? $data['num'] : 0;
+	}
+
+	/**
+	 * @brief 等待商品咨询回复数量(总的)
 	 * @param int $seller_id 商家ID
 	 * @return int
 	 */
@@ -218,8 +244,37 @@ class statistics
 		return isset($data['num']) ? $data['num'] : 0;
 	}
 
+
+    /**
+	 * @brief 等待商品咨询回复数量(平台)
+	 * @param int $seller_id 商家ID
+	 * @return int
+	 */
+	public static function referWaitCountPlat($seller_id = '')
+	{
+		$where = "re.goods_id = go.id and re.status = 0 and re.seller_id = 0";
+		$goodsDB = new IModel('refer as re,goods as go');
+		$data = $goodsDB->getObj($where,'count(*) as num');
+		return isset($data['num']) ? $data['num'] : 0;
+	}
+
 	/**
-	 * @brief 等待商品评论回复数量
+	 * @brief 等待商品咨询回复数量(商户)
+	 * @param int $seller_id 商家ID
+	 * @return int
+	 */
+	public static function referWaitCountClient($seller_id = '')
+	{
+		$where = "re.goods_id = go.id and re.status = 0 and re.seller_id != 0";
+		$goodsDB = new IModel('refer as re,goods as go');
+		$data = $goodsDB->getObj($where,'count(*) as num');
+		return isset($data['num']) ? $data['num'] : 0;
+	}
+
+
+
+	/**
+	 * @brief 等待商品评论回复数量(总)
 	 * @param int $seller_id 商家ID
 	 * @return int
 	 */
@@ -234,6 +289,35 @@ class statistics
 		$data = $goodsDB->getObj($where,'count(*) as num');
 		return isset($data['num']) ? $data['num'] : 0;
 	}
+
+	/**
+	 * @brief 等待商品评论回复数量(新增--平台)
+	 * @param int $seller_id 商家ID
+	 * @return int
+	 */
+	public static function commentCountPlat($seller_id = '')
+	{
+		$where = "co.status = 1 and co.goods_id = go.id and co.recomment_time=0 and co.sellerid = 0";
+		//var_dump($where);exit;
+		$goodsDB = new IModel('comment as co,goods as go');
+		$data = $goodsDB->getObj($where,'count(*) as num');
+		return isset($data['num']) ? $data['num'] : 0;
+	}
+
+	/**
+	 * @brief 等待商品评论回复数量(新增--商户)
+	 * @param int $seller_id 商家ID
+	 * @return int
+	 */
+	public static function commentCountClient($seller_id = '')
+	{
+		$where = "co.status = 1 and co.goods_id = go.id and co.recomment_time<=0 and co.sellerid != 0";
+		$goodsDB = new IModel('comment as co,goods as go');
+		$data = $goodsDB->getObj($where,'count(*) as num');
+		return isset($data['num']) ? $data['num'] : 0; 
+	}
+
+
 
 	/**
 	 * @brief 商户的商品销售量
@@ -307,7 +391,7 @@ class statistics
 	}
 
 	/**
-	 * @brief 统计退款申请的数量
+	 * @brief 统计退款申请的数量(总的)
 	 * @param int $seller_id
 	 */
 	public static function refundsCount($seller_id = '')
@@ -322,5 +406,28 @@ class statistics
 		$refundDB->fields = 'count(*) as num';
 		$data = $refundDB->find();
 		return $data[0]['num'];
+	}
+
+	/**
+	 * @brief 统计退款申请的数量(平台)
+	 * @param int $seller_id
+	 */
+	public static function refundsCountPlat($seller_id = '')
+	{
+		$refundDB = new IQuery('refundment_doc');
+		$where = 'pay_status = 0 and if_del = 0 and seller_id = 0';
+		$refundDB->where  = $where;
+		$refundDB->fields = 'count(*) as num';
+		$data = $refundDB->find();
+		return $data[0]['num'];
+	}
+
+	/**
+	 * @brief 统计退款申请的数量(商户)
+	 * @param int $seller_id
+	 */
+	public static function refundsCountClient($seller_id = '')
+	{
+		return statistics::refundsCount() - statistics::refundsCountPlat();
 	}
 }
