@@ -173,13 +173,28 @@ class Member extends IController
 		$search = IFilter::act(IReq::get('search'),'strict');
 		$keywords = IFilter::act(IReq::get('keywords'));
 		$where = ' 1 ';
+		//筛选、
+    	$beginTime = IFilter::act(IReq::get('beginTime'));
+    	$endTime = IFilter::act(IReq::get('endTime'));
+    	$data['beginTime'] = $beginTime;
+    	$data['endTime'] = $endTime;
+
 		if($search && $keywords)
 		{
 			$where .= " and $search like '%{$keywords}%' ";
 		}
+		if($beginTime)
+    	{
+    		$where .= ' and m.time > "'.$beginTime.'"';
+    	}
+    	if($endTime)
+    	{
+    		$where .= ' and m.time < "'.$endTime.'"';
+    	}
 		$this->data['search'] = $search;
 		$this->data['keywords'] = $keywords;
 		$this->data['where'] = $where;
+		//var_dump($where);exit;
 		$tb_user_group = new IModel('user_group');
 		$data_group = $tb_user_group->query();
 		$group      = array();

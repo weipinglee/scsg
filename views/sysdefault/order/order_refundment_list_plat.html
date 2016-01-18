@@ -8,7 +8,7 @@
 	</div>
 	<form name="filter_form" method="get" action="{url:/}">
 		<input type='hidden' name='controller' value='order' />
-		<input type='hidden' name='action' value='order_refundment_list' />
+		<input type='hidden' name='action' value='order_refundment_list_plat' />
 		<div class="searchbar">
 			订单号：<input class="small" type="text" name="order_no"  value='{$order_no}'/>
 			用户名：<input class="small" type="text" name="username"  value='{$username}'/>
@@ -39,7 +39,7 @@
 		</table>
 	</div>
 </div>
-<form name="orderForm" action="{url:/order/refundment_del}" method="post">
+<form name="orderForm" action="{url:/order/refundment_del_plat}" method="post">
 <div class="content">
 	<table class="list_table">
 		<col width="30px" />

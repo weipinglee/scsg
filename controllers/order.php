@@ -191,6 +191,9 @@ class Order extends IController
 			$this->redirect('order_refundment_list_client');
 		}
 	}
+	/**
+	* @brief 平台退货申请
+	*/
 	public function refundment_list_plat(){
 		$where = ' and  1 ';
 		$order_no = IFilter::act(IReq::get('order_no'));
@@ -217,6 +220,10 @@ class Order extends IController
 		$this->redirect('refundment_list_plat');
 	}
 
+	/**
+	* @brief 商户退货申请
+	*/
+
 	public function refundment_list_client(){
 		$where = ' and  1 ';
 		$order_no = IFilter::act(IReq::get('order_no'));
@@ -242,7 +249,10 @@ class Order extends IController
 		$this->where = $where;
 		$this->redirect('refundment_list_client');
 	}
-	
+	/**
+	* @brief 平台换货申请
+	*/
+
 
 	public function refundment_chg_list_plat(){
 		$where = ' and  1 ';
@@ -269,6 +279,10 @@ class Order extends IController
 		$this->where = $where;
 		$this->redirect('refundment_chg_list_plat');
 	}
+
+	/**
+	* @brief 商户换货申请
+	*/
 
 	public function refundment_chg_list_client(){
 		$where = ' and  1 ';
@@ -522,8 +536,8 @@ class Order extends IController
 	
 		$this->redirect('refundment_list_client');
 	}
-	//删除申请退款单
-	public function refundment_doc_del()
+	//删除平台申请退款单
+	public function refundment_doc_del_plat()
 	{
 		//获得post传来的申请退款单id值
 		$refundment_id = IFilter::act(IReq::get('id'),'int');
@@ -541,7 +555,29 @@ class Order extends IController
 		$logObj = new log('db');
 		$logObj->write('operation',array("管理员:".ISafe::get('admin_name'),"退款单移除到回收站",'移除的ID：'.$refundment_id));
 
-		$this->redirect('refundment_list');
+		$this->redirect('refundment_list_plat');
+	}
+
+	//删除商户申请退款单
+	public function refundment_doc_del_client()
+	{
+		//获得post传来的申请退款单id值
+		$refundment_id = IFilter::act(IReq::get('id'),'int');
+		if(is_array($refundment_id))
+		{
+			$refundment_id = implode(",",$refundment_id);
+		}
+		if($refundment_id)
+		{
+			$tb_refundment_doc = new IModel('refundment_doc');
+			$tb_refundment_doc->setData(array('if_del' => 1));
+			$tb_refundment_doc->update("id IN ($refundment_id)");
+		}
+
+		$logObj = new log('db');
+		$logObj->write('operation',array("管理员:".ISafe::get('admin_name'),"退款单移除到回收站",'移除的ID：'.$refundment_id));
+
+		$this->redirect('refundment_list_client');
 	}
 
 	/**
@@ -1226,6 +1262,8 @@ class Order extends IController
 		list($join,$where) = order_class::getSearchCondition($search);
 		//$join = $join.' left join refundment_doc as r on r.order_id=o.id and r.if_del=0 ';
 		//$join2 = $join.' left join refundment_doc as r on r.order_id=o.id and r.if_del=0 and r.pay_status in (0,3,4,7)';
+		
+		
 		//拼接sql
 		$where .= ' and distribution_status ='. $status .' ';
 		
@@ -1262,7 +1300,7 @@ class Order extends IController
 				}
 			}
 		}
-		
+
 		$this->order_refund = $order_refund;
 	
 		$this->redirect("order_list_plat");
@@ -1274,20 +1312,24 @@ class Order extends IController
      */
     public function order_list_client()
     {
-		//搜索条件
-		$search = IFilter::act(IReq::get('search'),'strict');
-		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+    	//搜索条件
+		$search 	= IFilter::act(IReq::get('search'),'strict');
+		$page   	= IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
+		$status   	= IReq::get('distribution_status') ? IFilter::act(IReq::get('distribution_status'),'int') : 0;
 		//条件筛选处理
 		list($join,$where) = order_class::getSearchCondition($search);
 		//$join = $join.' left join refundment_doc as r on r.order_id=o.id and r.if_del=0 ';
 		//$join2 = $join.' left join refundment_doc as r on r.order_id=o.id and r.if_del=0 and r.pay_status in (0,3,4,7)';
+		
+		
 		//拼接sql
+		$where .= ' and distribution_status ='. $status .' ';
 		
 		$orderHandle = new IQuery('order as o');
 		$orderHandle->order  = "o.id desc";
-		$orderHandle->fields = "o.*, org.seller_id, d.name as distribute_name,u.username,p.name as payment_name";
+		$orderHandle->fields = "o.*, org.seller_id , d.name as distribute_name,u.username,p.name as payment_name";
 		$orderHandle->page   = $page;
-		$orderHandle->where  = $where.' and org.seller_id != 0 ';
+		$orderHandle->where  = $where.'   and org.seller_id != 0 ';
 		$orderHandle->join   = $join;
 		$orderHandle->group = 'o.id';
 		$this->search      = $search;
@@ -1316,12 +1358,11 @@ class Order extends IController
 				}
 			}
 		}
-		
 		$this->order_refund = $order_refund;
+
 	
 		$this->redirect("order_list_client");
     }
-
 
 
 
@@ -1361,9 +1402,9 @@ class Order extends IController
 		}
     }
 	/**
-     * @brief 收款单删除功能_删除到回收站
+     * @brief 平台收款单删除功能_删除到回收站
      */
-    public function collection_del()
+    public function collection_del_plat()
     {
     	//post数据
     	$id = IFilter::act(IReq::get('id'),'int');
@@ -1377,50 +1418,41 @@ class Order extends IController
 			$logObj = new log('db');
 			$logObj->write('operation',array("管理员:".ISafe::get('admin_name'),"收款单移除到回收站内",'收款单ID：'.join(',',$id)));
 
-			$this->redirect('order_collection_list');
+			$this->redirect('order_collection_list_plat');
 		}
 		else
 		{
-			$this->redirect('order_collection_list',false);
+			$this->redirect('order_collection_list_plat',false);
 			Util::showMessage('请选择要删除的数据');
 		}
     }
-    /**
-     * 收款单列表
-     */
-    public function order_collection_list(){
-    	$where = ' and  1 ';
-    	$order_no = IFilter::act(IReq::get('order_no'));
-    	$username = IFilter::act(IReq::get('username'));
-    
-    	
-    	//筛选、
-    	$beginTime = IFilter::act(IReq::get('beginTime'));
-    	$endTime = IFilter::act(IReq::get('endTime'));
-    	$data['beginTime'] = $beginTime;
-    	$data['endTime'] = $endTime;
-    	$data['order_no'] = $order_no;
-    	$data['username'] = $username;
-    	
-    	if($beginTime)
-    	{
-    		$where .= ' and c.time > "'.$beginTime.'"';
-    	}
-    	if($endTime)
-    	{
-    		$where .= ' and c.time < "'.$endTime.'"';
-    	}
-    	if($order_no){
-    		$where .= ' and o.order_no = "'.$order_no.'"';
-    	}
-    	if($username){
-    		$where .= ' and u.username = "'.$username.'"';
-    	}
-    	$this->setRenderData($data);
-    	$this->where = $where;
-    	$this->redirect('order_collection_list');
-    } 
 
+    /**
+     * @brief 商户收款单删除功能_删除到回收站
+     */
+    public function collection_del_client()
+    {
+    	//post数据
+    	$id = IFilter::act(IReq::get('id'),'int');
+    	//生成order对象
+    	$tb_order = new IModel('collection_doc');
+    	$tb_order->setData(array('if_del'=>1));
+    	if($id)
+		{
+			$tb_order->update(Util::joinStr($id));
+
+			$logObj = new log('db');
+			$logObj->write('operation',array("管理员:".ISafe::get('admin_name'),"收款单移除到回收站内",'收款单ID：'.join(',',$id)));
+
+			$this->redirect('order_collection_list_client');
+		}
+		else
+		{
+			$this->redirect('order_collection_list_client',false);
+			Util::showMessage('请选择要删除的数据');
+		}
+    }
+    
     /**
      * 平台收款单列表
      */
@@ -1453,6 +1485,7 @@ class Order extends IController
     		$where .= ' and u.username = "'.$username.'"';
     	}
     	$this->setRenderData($data);
+    	//var_dump($where);exit;
     	$this->where = $where;
     	$this->redirect('order_collection_list_plat');
     } 
@@ -1541,7 +1574,10 @@ class Order extends IController
 			Util::showMessage('请选择要还原的数据');
 		}
     }
-    public function order_refundment_list(){
+    /**
+	 * @brief 平台退货单列表
+	 */
+    public function order_refundment_list_plat(){
     	$where = ' and  1 ';
     	$order_no = IFilter::act(IReq::get('order_no'));
     	$username = IFilter::act(IReq::get('username'));
@@ -1571,12 +1607,48 @@ class Order extends IController
     	}
     	$this->setRenderData($data);
     	$this->where = $where;
-    	$this->redirect('order_refundment_list');
+    	$this->redirect('order_refundment_list_plat');
+    }
+
+    /**
+	 * @brief 商户退货单列表
+	 */
+    public function order_refundment_list_client(){
+    	$where = ' and  1 ';
+    	$order_no = IFilter::act(IReq::get('order_no'));
+    	$username = IFilter::act(IReq::get('username'));
+    	
+    	 
+    	//筛选、
+    	$beginTime = IFilter::act(IReq::get('beginTime'));
+    	$endTime = IFilter::act(IReq::get('endTime'));
+    	$data['beginTime'] = $beginTime;
+    	$data['endTime'] = $endTime;
+    	$data['order_no'] = $order_no;
+    	$data['username'] = $username;
+    	 
+    	if($beginTime)
+    	{
+    		$where .= ' and c.dispose_time > "'.$beginTime.'"';
+    	}
+    	if($endTime)
+    	{
+    		$where .= ' and c.dispose_time < "'.$endTime.'"';
+    	}
+    	if($order_no){
+    		$where .= ' and c.order_no = "'.$order_no.'"';
+    	}
+    	if($username){
+    		$where .= ' and u.username = "'.$username.'"';
+    	}
+    	$this->setRenderData($data);
+    	$this->where = $where;
+    	$this->redirect('order_refundment_list_client');
     }
     /**
-     * 换货单列表
+     * 平台换货单列表
      */
-    public function order_refundment_chg_list(){
+    public function order_refundment_chg_list_plat(){
     	$where = ' and  1 ';
     	$order_no = IFilter::act(IReq::get('order_no'));
     	$username = IFilter::act(IReq::get('username'));
@@ -1604,12 +1676,46 @@ class Order extends IController
     	}
     	$this->setRenderData($data);
     	$this->where = $where;
-    	$this->redirect('order_refundment_chg_list');
+    	$this->redirect('order_refundment_chg_list_plat');
+    }
+
+    /**
+     * 商户换货单列表
+     */
+    public function order_refundment_chg_list_client(){
+    	$where = ' and  1 ';
+    	$order_no = IFilter::act(IReq::get('order_no'));
+    	$username = IFilter::act(IReq::get('username'));
+    	 //筛选、
+    	$beginTime = IFilter::act(IReq::get('beginTime'));
+    	$endTime = IFilter::act(IReq::get('endTime'));
+    	$data['beginTime'] = $beginTime;
+    	$data['endTime'] = $endTime;
+    	$data['order_no'] = $order_no;
+    	$data['username'] = $username;
+    
+    	if($beginTime)
+    	{
+    		$where .= ' and c.dispose_time > "'.$beginTime.'"';
+    	}
+    	if($endTime)
+    	{
+    		$where .= ' and c.dispose_time < "'.$endTime.'"';
+    	}
+    	if($order_no){
+    		$where .= ' and c.order_no = "'.$order_no.'"';
+    	}
+    	if($username){
+    		$where .= ' and u.username = "'.$username.'"';
+    	}
+    	$this->setRenderData($data);
+    	$this->where = $where;
+    	$this->redirect('order_refundment_chg_list_client');
     }
 	/**
-	 * @brief 退款单删除功能_删除到回收站
+	 * @brief 平台退款单删除功能_删除到回收站
 	 */
-    public function refundment_del()
+    public function refundment_del_plat()
     {
     	//post数据
     	$id = IFilter::act(IReq::get('id'),'int');
@@ -1623,11 +1729,37 @@ class Order extends IController
 			$logObj = new log('db');
 			$logObj->write('operation',array("管理员:".ISafe::get('admin_name'),"退款单移除到回收站内",'退款单ID：'.join(',',$id)));
 
-			$this->redirect('order_refundment_list');
+			$this->redirect('order_refundment_list_plat');
 		}
 		else
 		{
-			$this->redirect('order_refundment_list',false);
+			$this->redirect('order_refundment_list_plat',false);
+			Util::showMessage('请选择要删除的数据');
+		}
+    }
+
+    /**
+	 * @brief 商户退款单删除功能_删除到回收站
+	 */
+    public function refundment_del_client()
+    {
+    	//post数据
+    	$id = IFilter::act(IReq::get('id'),'int');
+    	//生成order对象
+    	$tb_order = new IModel('refundment_doc');
+    	$tb_order->setData(array('if_del'=>1));
+    	if(!empty($id))
+		{
+			$tb_order->update(Util::joinStr($id));
+
+			$logObj = new log('db');
+			$logObj->write('operation',array("管理员:".ISafe::get('admin_name'),"退款单移除到回收站内",'退款单ID：'.join(',',$id)));
+
+			$this->redirect('order_refundment_list_client');
+		}
+		else
+		{
+			$this->redirect('order_refundment_list_client',false);
 			Util::showMessage('请选择要删除的数据');
 		}
     }
@@ -1681,9 +1813,9 @@ class Order extends IController
 		}
     }
     /**
-     * @brief 发货单删除功能_删除到回收站
+     * @brief 平台发货单删除功能_删除到回收站
      */
-    public function delivery_del()
+    public function delivery_del_plat()
     {
     	//post数据
     	$id = IFilter::act(IReq::get('id'),'int');
@@ -1697,44 +1829,43 @@ class Order extends IController
 			$logObj = new log('db');
 			$logObj->write('operation',array("管理员:".ISafe::get('admin_name'),"发货单移除到回收站内",'发货单ID：'.join(',',$id)));
 
-			$this->redirect('order_delivery_list');
+			$this->redirect('order_delivery_list_plat');
 		}
 		else
 		{
-			$this->redirect('order_delivery_list',false);
+			$this->redirect('order_delivery_list_plat',false);
 			Util::showMessage('请选择要删除的数据');
 		}
     }
-    public function order_delivery_list(){
-    	$where = ' and  1 ';
-    	$order_no = IFilter::act(IReq::get('order_no'));
-    	$username = IFilter::act(IReq::get('username'));
-    	//筛选、
-    	$beginTime = IFilter::act(IReq::get('beginTime'));
-    	$endTime = IFilter::act(IReq::get('endTime'));
-    	$data['beginTime'] = $beginTime;
-    	$data['endTime'] = $endTime;
-    	$data['order_no'] = $order_no;
-    	$data['username'] = $username;
-    	
-    	if($beginTime)
-    	{
-    		$where .= ' and c.time > "'.$beginTime.'"';
-    	}
-    	if($endTime)
-    	{
-    		$where .= ' and c.time < "'.$endTime.'"';
-    	}
-    	if($order_no){
-    		$where .= ' and o.order_no = "'.$order_no.'"';
-    	}
-    	if($username){
-    		$where .= ' and m.username = "'.$username.'"';
-    	}
-    	$this->setRenderData($data);
-    	$this->where = $where;
-    	$this->redirect('order_delivery_list');
+
+     /**
+     * @brief 商户发货单删除功能_删除到回收站
+     */
+    public function delivery_del_client()
+    {
+    	//post数据
+    	$id = IFilter::act(IReq::get('id'),'int');
+    	//生成order对象
+    	$tb_order = new IModel('delivery_doc');
+    	$tb_order->setData(array('if_del'=>1));
+    	if(!empty($id))
+		{
+			$tb_order->update(Util::joinStr($id));
+
+			$logObj = new log('db');
+			$logObj->write('operation',array("管理员:".ISafe::get('admin_name'),"发货单移除到回收站内",'发货单ID：'.join(',',$id)));
+
+			$this->redirect('order_delivery_list_client');
+		}
+		else
+		{
+			$this->redirect('order_delivery_list_client',false);
+			Util::showMessage('请选择要删除的数据');
+		}
     }
+   /**
+   * @brief 平台发货单
+   */
 
     public function order_delivery_list_plat(){
     	$where = ' and  1 ';
@@ -1767,7 +1898,11 @@ class Order extends IController
     	$this->redirect('order_delivery_list_plat');
     }
 
-    public function order_delivery_client(){
+    /**
+   * @brief 商户发货单
+   */
+
+    public function order_delivery_list_client(){
     	$where = ' and  1 ';
     	$order_no = IFilter::act(IReq::get('order_no'));
     	$username = IFilter::act(IReq::get('username'));
@@ -1795,8 +1930,9 @@ class Order extends IController
     	}
     	$this->setRenderData($data);
     	$this->where = $where;
-    	$this->redirect('order_delivery_client');
+    	$this->redirect('order_delivery_list_client');
     }
+
 	/**
      * @brief 发货单删除功能_删除回收站中的数据，彻底删除
      */
@@ -2469,8 +2605,18 @@ class Order extends IController
 		$this->redirect('ship_info_list');
 	}
 	
-	//发票删除
-	public function fapiao_del(){
+	//平台发票删除
+	public function fapiao_del_plat(){
+		$id = IFilter::act(IReq::get('id'),'int');
+		$action = IFilter::act(IReq::get('toaction'));
+		if(is_array($id) && !empty($id)){
+			$fapiao_db = new IModel('order_fapiao');
+			$fapiao_db ->del('id in ('.implode(',',$id).')');
+		}
+		$this->redirect($action);
+	}
+	//商户发票删除
+	public function fapiao_del_client(){
 		$id = IFilter::act(IReq::get('id'),'int');
 		$action = IFilter::act(IReq::get('toaction'));
 		if(is_array($id) && !empty($id)){

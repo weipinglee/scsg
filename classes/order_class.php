@@ -1030,8 +1030,22 @@ class Order_Class
 	public static function getSearchCondition($search=false)
 	{
 		//$join  = "left join delivery as d on o.distribution = d.id left join payment as p on o.pay_type = p.id left join user as u on u.id = o.user_id";
+		//筛选、
+    	$beginTime = IFilter::act(IReq::get('beginTime'));
+    	$endTime = IFilter::act(IReq::get('endTime'));
+    	$data['beginTime'] = $beginTime;
+    	$data['endTime'] = $endTime;
 		$join  = "left join delivery as d on o.distribution = d.id left join payment as p on o.pay_type = p.id left join user as u on u.id = o.user_id left join order_goods as org on org.order_id = o.id";
 		$where = "o.if_del = 0";
+        if($beginTime)
+    	{
+    		$where .= ' and o.create_time > "'.$beginTime.'"';
+    	}
+    	if($endTime)
+    	{
+    		$where .= ' and o.create_time < "'.$endTime.'"';
+    	}
+
 		//查询检索过滤
 		if($search)
 		{

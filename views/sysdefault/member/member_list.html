@@ -16,6 +16,9 @@
 				</select>
 				<input class="small" name="keywords" type="text" value="{$keywords}" />
 				<button class="btn" type="submit"><span class="sch">搜 索</span></button>
+				开始时间：<input class="small" type="text" name="beginTime" onfocus="WdatePicker()"  value='{$beginTime}'/>
+				截止时间：<input class="small" type="text" name="endTime" onfocus="WdatePicker()" value='{$endTime}'/>
+				<button class="btn" type="submit"><span class="sel">筛 选</span></button>
 			</form>
 		</div>
 
@@ -25,9 +28,7 @@
 		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="window.location='{url:/member/recycling}'"><span class="recycle">回收站</span></button></a>
 		<a href="javascript:void(0);" onclick="balance_add()"><button class="operating_btn" type="button"><span class="recharge">预付款管理</span></button></a>
 		<a href="{url:/member/bad_member_list}" ><button class="operating_btn" type="button"><span class="delete">恶意会员</span></button></a>
-		开始时间：<input class="small" type="text" name="beginTime" onfocus="WdatePicker()"  value='{$beginTime}'/>
-		截止时间：<input class="small" type="text" name="endTime" onfocus="WdatePicker()" value='{$endTime}'/>
-		<button class="btn" type="submit"><span class="sel">筛 选</span></button>
+		
 		
 	</div>
 	

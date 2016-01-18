@@ -44,10 +44,11 @@
 				<option value="order_no">订单号</option>
 				<option value="seller_name">商户真实名称</option>
 			</select>
-			开始时间：<input class="small" type="text" name="search[beginTime]" onfocus="WdatePicker()"  value='{$beginTime}'/>
-			截止时间：<input class="small" type="text" name="search[endTime]" onfocus="WdatePicker()" value='{$endTime}'/>
-			<input class="small" name="search[keywords]" type="text" value="" />
-			<button class="btn" type="submit"  onclick='changeAction(false)'><span class="sel">筛 选</span></button>
+			开始时间：<input class="small" type="text" name="beginTime" onfocus="WdatePicker()"  value='{$beginTime}'/>
+			截止时间：<input class="small" type="text" name="endTime" onfocus="WdatePicker()" value='{$endTime}'/>
+			<!-- <input class="small" name="search[keywords]" type="text" value="" /> -->
+			<!-- <button class="btn" type="submit"  onclick='changeAction(false)'><span class="sel">筛 选</span></button> -->
+			<button class="btn" type="submit" ><span class="sel">筛 选</span></button>
 			<button class="btn" onclick='changeAction(true)'><span class="sel">导出Excel</span></button>
 		</form>
 	</div>
@@ -83,7 +84,7 @@
 	</div>
 </div>
 
-<form name="orderForm" id="orderForm" action="{url:/order/order_del}" method="post">
+<form name="orderForm" id="orderForm" action="{url:/order/order_del_client}" method="post">
 	<div class="content">
 		<table class="list_table">
 			<col width="30px" />
