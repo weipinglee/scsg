@@ -124,7 +124,7 @@ $seller_arr[0]='平台自营';
 				{set:$next = search_goods::getOrderValue($key)}
 				<li class="{echo:search_goods::isOrderCurrent($key) ? 'current':''}">
 					<span class="l"></span><span class="r"></span>
-					<a href="{echo:search_goods::searchUrl('order',$next)}">{$item}<span class="{echo:search_goods::isOrderDesc() ? '':'desc'} xia">&nbsp;</span></a>
+					<a href="{echo:search_goods::searchUrl('order',$next)}">{$item}<span class="{echo:search_goods::isOrderDesc() ? 'desc':''} xia">&nbsp;</span></a>
 				</li>
 				{/foreach}
 			</ul>
