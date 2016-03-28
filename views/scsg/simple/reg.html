@@ -40,6 +40,13 @@
                             <div class="tips_box regist_tips_error" id="phone_error"></div>
                             <div class="tips_box username_ok" id="phone_desc"></div>
                         </li>
+                        <li>
+                            <div class="form_item" style="height: 56px;">
+                                <label>验证码：</label>
+                                <input type="text" class="ipt gay_text" name="captcha" value="填写下面图片所示的字符" id="validCaptcha" onclick="if(this.value == '填写下面图片所示的字符')this.value='';">
+                                <img src='{url:/site/getCaptcha}' id='captchaImgPhone' /><span class="light_gray">看不清？<a class="link" href="javascript:changeCaptcha('{url:/site/getCaptcha}', 'captchaImgPhone');">换一张</a></span>
+                            </div>
+                        </li>
                         <li class="clearfix recv_mobile_code">
                         	<div class="code_wrap">
 	                        	<div class="mb_code_box">
@@ -169,6 +176,13 @@
 	                        <span class="verify_code_box" tabindex="-1"><img name="valid_code_pic" tabindex="-1" src="reg/getjpg.do"></span>
 	                        <i class="change_code" tabindex="-1">换一张</i>
 	                    </li>
+                        <li>
+                            <div class="form_item" style="height: 56px;">
+                                <label>验证码：</label>
+                                <input type="text" class="ipt gay_text validCaptcha" name="captcha" value="填写下面图片所示的字符" onclick="if(this.value == '填写下面图片所示的字符')this.value='';">
+                                <img src='{url:/site/getCaptcha}' id='captchaImgEmail' /><span class="light_gray">看不清？<a class="link" href="javascript:changeCaptcha('{url:/site/getCaptcha}', 'captchaImgEmail');">换一张</a></span>
+                            </div>
+                        </li>
 	                    <!--手机验证码 begin -->
 	                    <li class="verify_code phone_code clearfix" style="display: list-item;">
 	                        <div class="form_item">

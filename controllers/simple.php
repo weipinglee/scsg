@@ -53,6 +53,11 @@ class Simple extends IController
 		$res = array('errorCode'=>0);
 		if($phone=='')$res['errorCode']==1;
 		if(!$phone)$res['errorCode']==15;
+        $captcha = IFilter::act(IReq::get('captcha'));
+        if($captcha != ISafe::get('captcha'))
+        {
+            $res['errorCode']=100001;
+        }
 		if($res['errorCode']==0){
 			$text = rand(100000,999999);
 			ISafe::set('mobileValidate',array('num'=>$text,'time'=>time()));

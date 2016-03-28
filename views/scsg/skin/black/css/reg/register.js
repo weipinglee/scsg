@@ -3992,7 +3992,8 @@ var jsRegistFed = {
 			dataType:'json',
             async: true,
             data: {
-                phone: encrypt.encrypt($("#phone").val())
+                phone: encrypt.encrypt($("#phone").val()),
+                captcha: encrypt.encrypt($("#validCaptcha").val())
               //  validCode: $("#validCodeMobile").val(),
                // sig: $("#validateSig").val()
             },
@@ -4037,7 +4038,17 @@ var jsRegistFed = {
                                     if (c.errorCode == -1) {
                                         alert("系统繁忙，请稍后再试")
                                     } else {
-                                        a = true
+                                        if(c.errorCode == 100001)
+                                        {
+                                            var b = $(".tips");
+                                            var a = new Tips(b, "请输入上面正确的验证码");
+                                            a.show();
+                                            return;
+                                        }
+                                        else
+                                        {
+                                            a = true
+                                        }
                                     }
                                 }
                             }
@@ -4459,6 +4470,16 @@ on_send_mobile_captcha_fail = function(c) {
                             refresh_valid_code(window, email_captcha_callback)
                         }
                         return
+                    }
+                    else
+                    {
+                        if(c == 100001)
+                        {
+                            var b = $(".tips");
+                            var a = new Tips(b, "请输入上面正确的验证码");
+                            a.show();
+                            return;
+                        }
                     }
                 }
             }
@@ -5234,7 +5255,8 @@ function bindEvent() {
                 Captcha.sendMobileCaptchaWithParam(getMobileCodeUrl, {
                     //validCode: $(".email_register_form .img_code .ipt_code").val(),
                   //  sig: $("#emailValidateSig").val(),
-                    phone: encrypt.encrypt($(".phone_num").val())
+                    phone: encrypt.encrypt($(".phone_num").val()),
+                    captcha: encrypt.encrypt($(".validCaptcha").val())
                 },
                 on_send_mobile_captcha_success, on_send_mobile_captcha_fail)
 

@@ -63,6 +63,15 @@ var getMobileCodeUrl = '{url:/simple/getMobileValidateCode}';
                 <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display:none;">清空</a>
             </div>
         </div>
+        <div class="field captcha code mt10">
+            <div class="field-relative">
+                <input type="text" style="float: left" class="reg-input icon-reg icon-reg-captcha" name="captcha" placeholder="填写图片所示的字符" id="validCaptcha">
+                <div style="width: 30%;float: left;">
+                <img src='{url:/site/getCaptcha}' id='captchaImg' /><span class="light_gray">看不清？<a class="link" href="javascript:changeCaptcha('{url:/site/getCaptcha}');">换一张</a></span>
+                </div>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
         <div class="field code mt10">
             <div class="field-relative cf">
                 <input id="code" class="reg-input reg-disabled fl" type="text" name="code" placeholder="请输入验证码" value="" onfocus='hideErrInfo()' autocomplete="off" maxlength="6" >
