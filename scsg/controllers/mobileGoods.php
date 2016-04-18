@@ -1,4 +1,7 @@
 <?php 
+/*
+首页数据
+ */
 class mobileGoods extends IController{
 
 	//获取分类列表
@@ -48,52 +51,36 @@ class mobileGoods extends IController{
 
 
 	}
+		//获取顶级分类
+	public function getCatList(){
+		$m_category=new IQuery('category');
+		$m_category->where='parent_id=0';
+		//$m_category->where='id=2';
+		$m_category->order='sort asc';
+		
+		$cateList=$m_category->find();
+		echo JSON::encode($cateList);
+		
+
+	}
 
 	//获取所有品牌
 	public function getBrandList(){
-		$m_brand=new IModel('brand_category');
+		$m_brand=new IModel('brand');
 		$b_list=$m_brand->query();
 		echo JSON::encode($b_list);
 
 
 	}
-	//获得所有商品品牌
+	//获得某个分类下的商品品牌
 	public function getGoodsBrand(){
 		//取得品牌id
-		$id=IFilter::act(IReq::get('id'));
+		$id=IFilter::act(IReq::get('cat_id'),'int');
 		$m_brand=new IModel('brand');
 		$result=$m_brand->query('category_ids like "%'.$id.'%"');
 		
 		echo JSON::encode($result);
 		
-	}
-	//获取最新，最热，商品
-	public function getHotGoods(){
-		$type=IFilter::act(IReq::get('type'));
-		//var_dump($type);
-		$m_goods=new IModel('goods');
-		$where='is_del=3';
-		$cols='*';
-		switch($type){
-			case "hot":
-			$order="sale";
-			break;
-			case "new":
-			$order="up_time";
-			break;
-			default :
-			$order="";
-
-		}
-		
-		$desc='DESC';
-		$limit=5;
-		$hotList=$m_goods->query($where,$cols,$order,$desc,$limit);
-		/*foreach($hotList as $k=>$v){
-			$v['content']=IFilter::string($v['content']);
-
-		}*/
-		echo JSON::encode($hotList);
 	}
 
 	//团购数据
@@ -104,43 +91,27 @@ class mobileGoods extends IController{
 			'is_close'=>0
 		);*/
 		$where= 'is_close = 0 and NOW() between start_time and end_time';
-		$order= 'id';
+		$order= 'id desc';
 		//排序
 		//$order='sort';
 		//字段
 		$cols='*';
-
+		
 		$re_list=$m_regiment->query($where,$cols,$order);
 		
 		//$result=$this->getTreeList($c_list);
 		echo JSON::encode($re_list);
 	}
-
+	//获得推荐商品
 	public function getTuijian(){
-		$commend_id=IFilter::act(IReq::get('commend_id'))?IFilter::act(IReq::get('commend_id')):'';
-		$page=IFilter::act(IReq::get('page')) ? IFilter::act(IReq::get('page')):1;
-
+		$commend_id=IFilter::act(IReq::get('commend_id'),'int')?IFilter::act(IReq::get('commend_id'),'int'):'';
+		var_dump($commend_id);
+		$page=IFilter::act(IReq::get('page'),'int') ? IFilter::act(IReq::get('page'),'int'):1;
 		$m_goods=new IQuery('goods as go');
-		//默认为2是特价的
+		//默认是特价商品
 		$where='c.commend_id=2';
-		$m_goods->where=$where;
 		if($commend_id!=''){
-			switch ($commend_id) {
-				case '3':
-					$where='c.commend_id=3';
-					break;
-				
-				case '1':
-					$where='c.commend_id=1';
-					break;
-				case '2':
-					$where='c.commend_id=2';
-					break;
-				case '4':
-					$where='c.commend_id=4';
-					break;	
-			}
-			
+			$where='c.commend_id='.$commend_id;
 		}
 		$where.=' and go.is_del=0';
 		$m_goods->where=$where;
@@ -151,7 +122,7 @@ class mobileGoods extends IController{
 		$m_goods->pagesize=4;
 		$result=$m_goods->find();
 		echo JSON::encode($result);
-		
+		//var_dump($result);
 	}
 	//每个分类下面的商品
 	public function getCatGoods(){
@@ -182,6 +153,13 @@ class mobileGoods extends IController{
 		$index_slide = isset($site_config['index_slide'])? unserialize($site_config['index_slide']) :array();
 		echo JSON::encode($index_slide);
 
+	}
+	//获取猜你喜欢的商品信息
+	public function getUserLike(){
+		$user_id=IFilter::act(IReq::get('user_id'),'int')?IFilter::act(IReq::get('user_id'),'int'):0;
+		$likeList=user_like::get_like_cate($user_id,6);
+		echo JSON::encode($likeList);
+		
 	}
 
 
