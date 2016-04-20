@@ -79,7 +79,12 @@ function Spec_show(){
 	
 		
 		$.each(spec_show_now,function(i,v){
-			$('[name=specCols] a[value='+_this.spec_escape(v)+']').removeClass('not-allowed').addClass('allowed');
+			$('[name=specCols]').find('a').each(function(){
+                if(_this.spec_escape($(this).attr('value')) == _this.spec_escape(v))
+                {
+                    $(this).removeClass('not-allowed').addClass('allowed');;
+                }
+            })
 		})
 	
 	}
