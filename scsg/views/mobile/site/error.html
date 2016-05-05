@@ -1,0 +1,43 @@
+{set:$msg = IReq::get('msg') ? IReq::get('msg') : '发生错误'}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0, maximum-scale=1.0">
+<title>报错</title>
+</head>
+<style>
+	
+*{ margin:0; padding:0;}
+ul, li, body, h2, h3, div, body, p{display: block;font-size:14px;}
+a{ text-decoration:none;}
+.error{ height:auto; width:100%; overflow:hidden; text-align:center;}
+.error img{ width:80%; height:25%; margin-top:50px;}
+.error p{ font-size:14px; margin-bottom:10px;}
+</style>
+<body> 
+
+	<div class="error">
+		<img src="{skin:images/error.jpg}" width="450" height="150" alt="图片">
+		 <p>{echo:htmlspecialchars($msg,ENT_QUOTES)}</p>
+		 <div id="ShowDiv"  >
+		</div>
+	</div>
+
+ <script type='text/javascript'>
+		var secs = 3; //倒计时的秒数
+		var URL=location.referer?location.referer : '{url:/site/}' ;
+		(function(){
+			for(var i=secs;i>=0;i--)
+			{
+			   window.setTimeout('doUpdate(' + i + ')', (secs-i) * 1000);
+			}
+		})()
+		function doUpdate(num)
+		{
+		document.getElementById('ShowDiv').innerHTML = '将在'+num+'秒后自动跳转到主页' ;
+		if(num == 0) { window.location = URL; }
+		}
+</script>
+</body>
+</html>

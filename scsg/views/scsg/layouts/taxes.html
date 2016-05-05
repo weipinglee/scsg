@@ -1,0 +1,48 @@
+<div id="tax_title"  style='display:none' class="attr contfp">
+						
+								<div class="tylx">
+									<span class="titles">发票类型：</span>
+									<span>
+										<input class="ptfps" type="radio" name="type" value="0"/>普通发票
+										<input class="zzsfp" type="radio" name="type" value="1"/>增值税发票
+									</span>
+								</div>
+								
+								<!--普通发票-->
+								<!--<div class="tylx">
+									发票抬头：<input class="tex" type="text"/>
+								</div>-->
+								<div class="anniu show1">
+										<ul>
+											<li><i>&nbsp;</i><p style="width:85px;">发票抬头：</p><input class="tex" name="taitou" type="text"></li>
+										</ul>
+								</div>
+								<!--普通发票结束-->
+								<!--增值税发票-->
+									<div class="anniu show2" style="display:none;">
+										<ul>
+											<li><i>*</i><p>单位名称：</p><input class="tex" name="tax_com" type="text"></li>
+											<li><i>*</i><p class="shibh">纳税人识别号：</p><input class="tex" name="tax_no" type="text"></li>
+											<li><i>*</i><p>注册地址：</p><input class="tex" name="tax_address" type="text"></li>
+											<li><i>*</i><p>注册电话：</p><input class="tex" name="tax_telphone" type="text"></li>
+											<li><i>*</i><p>开户银行：</p><input class="tex" name="tax_bank" type="text"></li>
+											<li><i>*</i><p>银行账户：</p><input class="tex" name="tax_account" type="text"></li>
+										</ul>
+									</div>
+								
+								<!--增值税发票结束-->
+								<div class="tylx">
+									<span><span class="titles">发票内容:</span>商品明细</span>
+								</div>
+								<div class="tylx">
+									<p class="zy">
+										注：购物车中"某商品标题"为合作伙伴提供的商品，不提供发票，敬请谅解！
+									</p>
+								</div>
+								<div class="tylx">
+									<input class="qx" type="button" value="取消" onclick="$('[name=taxes]').trigger('click')"/>
+								</div>
+	
+							</div>
+					
+				</div>

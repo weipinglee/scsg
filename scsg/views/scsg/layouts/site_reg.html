@@ -1,0 +1,84 @@
+{set:
+	$siteConfig = new Config("site_config");
+	$callback = IReq::get('callback')?IReq::get('callback') :'/' 
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="tp_page" content="3.0">
+<title>{echo:$siteConfig->name}</title>
+{js:jquery}
+<script type="text/javascript" src="{skin:css/reg/jquery.cookie.js}"></script>
+<script type="text/javascript" async="" src="{skin:css/reg/captcha.js}"></script>
+<link type="text/css" rel="stylesheet" href="{skin:css/reg/layer.css}" id="skinlayercss"></head>
+<link type="text/css" rel="stylesheet" href="{skin:css/log.css}">
+<body style="text-align:left;">
+	    <link rel="shortcut icon" href="#">
+	
+  <div class="regist_header clearfix">
+	<div class="wrap">
+        <a href="{url:/}" class="logo"><img src="{skin:css/reg/loginlogo.png}" height="55" alt=""></a>
+        <div class="regist_header_right clearfix">
+        	<!--<a href="#" class="english_edition" id="edition" style="display:none">English</a>-->
+            <div class="help_wrap">
+                <a class="hd_menu" href="#" target="_blank"><s class="help_ico"></s>帮助中心</a>
+                <div class="hd_menu_list">
+                    <ul>
+                        <li><a href="{url:/site/help_list/id/9}" target="_blank">常见问题</a></li>
+                        <li><a href="{url:/site/help_list/id/4}" target="_blank">支付帮助</a></li>
+                        <li><a href="{url:/site/help_list/id/6}" target="_blank">配送范围</a></li>
+                    </ul>
+                </div>
+            </div>
+            <span class="fr">您好，欢迎光临山城速购！ <a href="{url:/simple/login}" class="blue_link">请登录</a></span>
+        </div>
+    </div>
+  </div>
+
+   {viewcontent}
+<div  class="copyright">
+			<div class="footer" style="text-align:center">
+				<p class="links">
+					<a href="{url:/site/help/id/69}" target="_blank">关于我们</a>|
+					<a href="{url:/site/help_list/id/9}" target="_blank">常见问题</a>|
+					<a href="{url:/site/help_list}" target="_blank">安全交易</a>|
+					<a href="{url:/site/help/id/54}" target="_blank">购买流程</a>|
+					<a href="{url:/site/help_list/id/4}" target="_blank">如何付款</a>|
+					<a href="{url:/site/help/id/70}" target="_blank">联系我们</a>|
+					<a href="{url:/site/help_list/id/9}" target="_blank">合作提案</a>
+				</p>
+				<p class="copyright">Powered by 
+					<a href="http://www.nainaiwang.com/" target="_blank">耐耐云商科技</a>
+				</p>Copyright © 2005-2014 
+				<a class="copyys" target="_blank" href="http://www.miibeian.gov.cn/" target="_blank">晋ICP备01000010号</a>
+			</div>
+		</div>
+		
+
+<script type="text/javascript" src="{skin:css/reg/global_tracker.js}"></script>
+
+	<script type="text/javascript" src="{skin:css/reg/api.js}"></script>
+
+<script type='text/javascript' >
+//切换验证码
+function changeCaptcha(urlVal)
+{
+	var radom = Math.random();
+	if( urlVal.indexOf("?") == -1 )
+	{
+		urlVal = urlVal+'/'+radom;
+	}
+	else
+	{
+		urlVal = urlVal + '&random'+radom;
+	}
+	$('#captchaImg').attr('src',urlVal);
+}
+</script>
+
+<script src="{skin:css/reg/layer-lib.js}" type="text/javascript"></script>
+
+<script src="{skin:css/reg/layer.min.js}" type="text/javascript"></script>
+
+<div id="__yct_container__" style="display: none; visibility: hidden;"><script src=""></script></div><input type="hidden" id="__yct_str__" name="__yct_str__" value="wqksbzsJsKu7rAvKpSMPiW2It8ZaDTmKFsyUCJjPwLBzt2ZdRAU3fnEWnzwvR8nBT9ncxud0jKf4sv9ZSOb3xdT0i9EUbvDG6A5g9f2gVdyLeNUCep3l43%2F2F13Kwzp%2BmBbfGXYXRsWrMgCZMNBkMyCLpzpRo5pyul78xR8n2tHRIwK3IFYfvIVA4IVmLpom8XXSQjhU%2FTQkBwus%2FQlVqgreEQ2vTBRMej0y69BX48KvDGVuVLTUYL5A94U4zcFztsZFA1bGELRnDWesFasQF2SNOyheJnP2x%2FSfULH53AxUI1Hwl%2FLnqMh%2BnLLPrX36Nt7rtv7ClY7Re2UFiFKiIfWnw8kx2pJf8g8unNjAveU6DrH1zQ2aiw%3D%3D">
+</body></html>

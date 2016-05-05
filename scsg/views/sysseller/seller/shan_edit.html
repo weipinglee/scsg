@@ -1,0 +1,195 @@
+{js:my97date}
+{set:$seller_id = $this->seller['seller_id']}
+
+<article class="module width_full">
+	<header>
+		<h3 class="tabs_involved">闪购编辑</h3>
+	</header>
+
+	<form action="{url:/seller/shan_edit_act}"  method="post" name='shan_edit' enctype='multipart/form-data'>
+		<input type='hidden' name='id' />
+		<div class="module_content">
+			<fieldset>
+				<label>闪购名称：</label>
+				<div class="box">
+					<input type='text' name='name' pattern='required' alt='请填写闪购名称' />
+					<label class="tip">* 填写闪购名称</label>
+				</div>
+			</fieldset>
+
+			<fieldset>
+				<label>闪购时间：</label>
+				<div class="box">
+					<input type='text' class="normal" name='start_time' pattern='datetime' onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' />
+					<input type='text' class="normal" name='end_time' pattern='datetime' onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' />
+				</div>
+				<label class="tip">* 此闪购的时间段</label>
+			</fieldset>
+			<fieldset>
+				<label>是否开启</label>
+				<div class="box">
+					<label class='attr' ><input type='radio' name='is_close' value='0' checked="checked" />开启</label>
+					<label class='attr' ><input type='radio' name='is_close' value='1' />关闭</label>
+				</div>
+			</fieldset>
+			<fieldset>
+				<label>是否区分规格</label>
+				<div class="box">
+					<label class='attr' name='spec_diff'><input type='radio' name='spec' value='0' />是</label>
+					<label class='attr' name='spec_diff'><input type='radio' name='spec' value='1' checked="checked" />否</label>
+				</div>
+			</fieldset>
+			<fieldset>
+				<label>选择商品</label>
+				<table class="tablesorter" cellspacing="0">
+					<colgroup>
+						<col width="100px" />
+						<col width="80px" />
+						<col width="150px" />
+						<col width="100px" />
+						<col width="100px" />
+					</colgroup>
+			
+					<thead>
+						<tr>
+							<th class="header">图片</th>
+							<th class="header">名称</th>
+							<th class="header">规格</th>
+							<th class="header">原价格</th>
+							<th class="header">闪购价格</th>
+						</tr>
+					</thead>
+					<tbody id='speed_goods'>
+								
+					</tbody>
+				</table>
+					<button type='button'  class='btn'><span>选择商品</span></button>
+			</fieldset>
+			<fieldset>
+				<label>展示图片：</label>
+				<input name="shan_img" type="file"  />
+				<div class="box ">
+					{if:$this->promotionRow['shan_img']}
+					<img src='{webroot:}{$this->promotionRow['shan_img']}' style='width:320px;border:1px solid #ccc;' />
+					{/if}
+				</div>
+			</fieldset>
+			<fieldset>
+				<label>介绍：</label>
+				<div class="box">
+					{
+					<textarea class='textarea' name='intro'>{$this->regimentRow['intro']}</textarea>
+				</div>
+			</fieldset>
+		</div>
+		<footer>
+			<div class="submit_link">
+				<input type="submit" class="alt_btn" value="确 定" />
+				<input type="reset" value="重 置" />
+			</div>
+		</footer>
+	</form>
+	
+</article>
+			
+
+<script type='text/javascript'>
+	//输入筛选商品的条件
+	function searchGoodsCallback(goodsList)
+	{
+		goodsList.each(function()
+		{
+			var temp = $.parseJSON($(this).attr('data'));
+			
+			if(!temp.product_id){
+				temp.product_id = 0;
+				var spec_str = '所有';
+			}else{
+				var spec_str = getSpec(temp.spec_array);
+			}
+			
+			var content = {
+				"data":
+				{
+					"goods_id":temp.goods_id,
+					"product_id":temp.product_id,
+					"name":temp.name,
+					"img":temp.img,
+					"spec":spec_str,
+					"sell_price":temp.sell_price
+				}
+			};
+			relationCallBack(content);
+		});
+	}
+
+	//关联商品回调处理函数
+	function relationCallBack(content)
+	{
+		if(content)
+		{
+			var imgUrl = "{webroot:@url@}";
+			imgUrl     = imgUrl.replace("@url@",content['data']['img']);
+
+			var html =   '<tr  class="td_c">'+
+						'<td><img src="'+imgUrl+'" title="'+content['data']['name']+'" style="max-width:140px;" /></td>'
+						+'<td>'+content['data']['name']+'</td>'
+						+'<td>'+content['data']['spec']+'</td>'
+						+'<td>'+content['data']['sell_price']+'</td>'
+						+'<td><input type="hidden" name="goods_id" value="'+content['data']['goods_id']+'"/>'+
+							'<input type="hidden" name="product_id" value="'+content['data']['product_id']+'"/>'+
+						'<input text="text" class="small" style="width:100px;" name="award_value" pattern="float" alt="请填写一个数字" />元 </td>'+
+						'</tr>';
+
+			$('#speed_goods').html(html);
+		}
+	}
+
+	
+
+	
+	//预定义商品绑定
+	{if:isset($this->promotionRow['goodsRow'])}
+		var goodsData = {$this->promotionRow['goodsRow']};
+		goodsData['data']['spec'] = getSpec(goodsData['data']['spec_array']);
+		relationCallBack(goodsData);
+		//表单回填
+		var formObj = new Form('shan_edit');
+		formObj.init
+		({
+			'id':'{$this->promotionRow['id']}',
+			'name':'{$this->promotionRow['name']}',
+			'start_time':'{$this->promotionRow['start_time']}',
+			'end_time':'{$this->promotionRow['end_time']}',
+			'group_all':"{$this->promotionRow['user_group']}",
+			'is_close':'{$this->promotionRow['is_close']}',
+			'condition':'{$this->promotionRow['condition']}',
+			'award_value':'{$this->promotionRow['award_value']}'
+		});
+		
+	{/if}
+	
+	//
+	$(function(){
+		$('label[name=spec_diff]').click(function(){
+			var is_spec = $(this).find('input[type=radio]').val();
+			$('button.btn').off('click');
+			if(is_spec==0){
+				$('button.btn').on('click',function(){searchGoods('{url:/block/search_goods/type/radio/is_products/1/seller_id/$seller_id}',searchGoodsCallback);})
+			}else{
+				$('button.btn').on('click',function(){searchGoods('{url:/block/search_goods/type/radio/seller_id/$seller_id}',searchGoodsCallback);})
+			}
+			
+		})
+		{if:isset($this->promotionRow['product_id'])&&$this->promotionRow['product_id']>0}
+			$('label[name=spec_diff]').eq(0).trigger('click');
+		{else:}
+			$('label[name=spec_diff]').eq(1).trigger('click');
+		{/if}
+		
+	})
+		
+				
+	
+	
+</script>

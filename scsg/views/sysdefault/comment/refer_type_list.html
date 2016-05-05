@@ -1,0 +1,57 @@
+<div class="headbar">
+	<div class="position">
+		<span>会员</span><span>></span><span>咨询管理</span><span>></span><span>咨询类型列表</span>
+	</div>
+	<div class="operating">
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="window.location='{url:/comment/refer_type_edit}'"><span class="addition">添加咨询类型</span></button></a>
+		<a href="javascript:void(0);" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0);" onclick="delModel({form:'refer_type_list',msg:'确定要删除所选中的数据吗？'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+				<col width="240px" />
+				<col width="150px"/>
+				<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>分类名称</th>
+					<th>是否开启</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<form action="{url:/comment/refer_type_del}" method="post" name="refer_type_list" onsubmit="return checkboxCheck('id[]','尚未选中任何记录！')">
+	<div class="content">
+		<table class="list_table">
+			<colgroup>
+				<col width="40px" />
+				<col width="240px" />
+				<col width="150px"/>
+				<col />
+			</colgroup>
+			<tbody>
+				{set:$page=(isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query:name=refer_type where=1 order=sort desc page=$page pagesize=20}
+				<tr>
+					<td class="t_c"><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+					<td title="{$item['name']}">{$item['name']}</td>
+					<td>{if:$item['is_open']==1}
+						<a class='red2' href='javascript:void(0);' onclick='set_type("{$item['id']}","is_open","refer_type",this);'>是</a>
+						{else:}
+						<a class='blue' href='javascript:void(0);' onclick='set_type("{$item['id']}","is_open","refer_type",this);'>否</a>
+						{/if}
+					</td>
+					<td>
+						<a href="{url:/comment/refer_type_edit/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a>
+						<a href="javascript:void(0)" onclick="delModel({link:'{url:/comment/refer_type_del/id/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</div>
+	{$query->getPageBar()}
+</form>

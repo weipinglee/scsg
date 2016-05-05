@@ -1,0 +1,143 @@
+{js:my97date}
+<div class="main f_r">
+    <div class="uc_title m_10">
+        <label class="current"><span>预售订单</span></label>
+    </div>
+	<!--新增搜索-->
+	<div class="sstj">
+	<form action='{url:/ucenter/preorder}' method='get' name='search_order'>
+		<input type="text" placeholder="输入订单号进行搜索" class="ddss" name='order_no' ><input class="dstxt" value='订单搜索'  type='submit'>
+		<span class="showst">精简筛选条件</span>
+		<div class="jsx">
+			<table>
+				<tr>
+					
+					<td><span>成交时间</span>
+					<input class="order_time" type="text" name="beginTime" onfocus="WdatePicker()"  />到
+					<input class="order_time" type="text" name="endTime" onfocus="WdatePicker()" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<span>商户状态</span>
+						<select name='seller_id' >
+							<option  >全部</option>
+							<option value='2'>平台</option>
+							<option value='1'>商户</option>
+						</select>
+						<span>订单状态</span>
+						
+						<select name='status' >
+							<option value='0'>全部</option>
+							<option value='1'>等待支付预付款</option>
+							<option value='3'>等待后台确认</option>
+							<option value='4'>等待支付尾款</option>
+							<option value='7'>等待发货</option>
+							<option value='9'>已发货</option>
+							<option value='11'>已完成</option>
+							<option value='10'>已退款</option>
+							<option value='12'>已作废</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+		
+	</form>
+	</div>
+	<form action='{url:/block/dopaymerge}' method='post' name='merge_pay'>
+	<div class='m_5' id='merge_pay'>
+		<input type="button" class='btn_gray btn_small' value="合并付款" name='merge_show' onclick='merge_pay_toggle()'/>
+		<select style='height:25px;' name='payment' class='hide'>
+			<option>请选择支付方式</option>
+			{set:$paymentList=Api::run('getPaymentList')}
+			{foreach:items = $paymentList}
+			{if:$item['id']!=0 || $this->freight_collect!=0}
+			<option value='{$item["id"]}'>{$item['name']}</option>
+			{/if}
+			{/foreach}
+		</select>
+		<input type="button" class='btn_gray btn_small hide' value="确认支付" name='to_pay' onclick='merge_pay_submit()'/>
+	</div>
+    <div class="box m_10">
+        <table class="list_table" width="100%" cellpadding="0" cellspacing="0">
+        	<col width="200px" />
+            <tr>
+                <th><span class="checktet"><input id="ckAll" class="checks" type="checkbox"/>全部</span>订单编号</th>
+                <th>下单日期</th>
+                <th width='50px'>收货人</th>
+                <th>支付方式</th>
+                <th>总金额</th>
+                <th>订单状态</th>
+            </tr>
+			{foreach:items = $this->preorder_list}
+			{set:$status=Preorder_Class::getOrderStatus($item)}
+            <tr>
+                <td>
+                	{if:$item['can_pay']}
+                	<input  name="sub[]" class="checks" type="checkbox" value='{$item["id"]}'/>
+					{/if}
+                	<a href="{url:/ucenter/preorder_detail/id/$item[id]}" class="orange">{$item['order_no']}</a>
+                </td>
+                <td>{$item['create_time']}</td>
+                <td>{$item['accept_name']}</td>
+                <td>{$this->payments[$item['pay_type']]['name']}</td>
+                <td>￥{echo:$item['order_amount']}</td>
+                <td>
+                	{if:$item['status']==1}
+					<a href="{url:/ucenter/preorder_status/op/cancel/order_id/$item['id']}"><input type="button" class='btn_gray btn_small' value="取消订单" /></a>
+					<a topay="{url:/block/doPayPresell/order_id/$item['id']}" href='javascript:void(0)' money='{$item["pre_amount"]}' onclick='pay_confirm(this,1)'><input type="button" class='btn_gray btn_small' value="支付预付款" /></a>
+					
+					{elseif:$item['status']==4 && $item['can_pay']}
+					<a topay="{url:/block/doPayPresell/order_id/$item['id']}"  onclick='pay_confirm(this,2)'  money='{echo:number_format($item["order_amount"] - $item["pre_amount"],2)}'><input type="button" class='btn_gray btn_small' value="支付尾款" /></a>
+					{elseif:$item['status']==9}
+					<a href="{url:/ucenter/preorder_status/op/confirm/order_id/$item['id']}"><input type="button" class='btn_gray btn_small' value="确认收货" /></a>
+					{elseif:$item['status']==11}
+					{if:$item['comment_status']==1}
+					<b class="orange">已评价</b>
+					{else:}
+					<a href="{url:/site/comments/goods_id/$item['goods_id']/order_id/$item['id']}}"><input type="button" class='btn_gray btn_small' value="评价" /></a>
+					
+					{/if}
+					
+					{else:}
+                	<b class="orange">{$status}</b>
+					{/if}
+                </td>
+            {/foreach}
+            </tr>
+            <tfoot><tr><td colspan="6" class="t_l">{$this->order_db->getPageBar()}</td></tr></tfoot>
+        </table>
+    </div>
+</div>
+<script type='text/javascript'>
+	//表单回填
+var formObj = new Form('search_order');
+formObj.init({
+	'order_no':'{$s_order_no}',
+	'beginTime':'{$s_beginTime}',
+	'endTime':'{$s_endTime}',
+	'status':'{$s_status}',
+	'seller_id':'{$s_seller_id}',
+});
+{if:$s_beginTime||$s_endTime||$s_status||$s_seller_id}
+$('.jsx').show();
+{/if}
+//确认收货弹出框
+function ok_confirm(_this){
+	var to_url = $(_this).attr('tourl');
+	confirm('由于商品的特殊性，该订单确认收货后将不可进行退款操作，请在确认订单前，仔细检查商品后确认收货',"location.href='"+to_url+"'",1);
+}
+
+function pay_confirm(_this,type){
+	var to_pay = $(_this).attr('topay');
+	var pay_money = $(_this).attr('money');
+	if(type==1){//预付款
+		confirm('该订单需支付预付款￥'+pay_money+'，确认支付吗',"location.href='"+to_pay+"'",1);
+	}else{
+		confirm('该订单需支付尾款￥'+pay_money+'，确认支付吗',"location.href='"+to_pay+"'",1);
+	}
+	
+}
+</script>

@@ -1,0 +1,95 @@
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>会员管理</span><span>></span><span>恶意会员列表</span></div>
+	
+	<div class="operating">
+		<a href="javascript:void(0);" onclick="selectAll('check[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0);" onclick="delModel({form:'member_list',msg:'确定要删除所选中的会员吗？<br />删除的会员可以从回收站找回。'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	
+	</div>
+	
+	<div class="field">
+		<table class="list_table">
+			<colgroup>
+				<col width="30px" />
+				<col width="120px" />
+				<col width="80px" />
+				<col width="80px" />
+				<col width="50px" />
+				<col width="140px"/>
+				<col width="80px" />
+				<col width="80px" />
+				<col width="50px" />
+				<col width="125px" />
+				<col width="120px" />
+				<col width="80px" />
+				<col />
+			</colgroup>
+
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>用户名</th>
+					<th>会员等级</th>
+					<th>姓名</th>
+					<th>性别</th>
+					<th>Email</th>
+					<th>余额</th>
+					<th>积分</th>
+					<th>状态</th>
+					<th>注册日期</th>
+					<th>手机</th>
+					<th>退换货次数</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<form a method="post" name="member_list">
+	<div class="content">
+		<table id="list_table" class="list_table">
+			<colgroup>
+				<col width="30px" />
+				<col width="120px" />
+				<col width="80px" />
+				<col width="80px" />
+				<col width="50px" />
+				<col width="140px"/>
+				<col width="80px" />
+				<col width="80px" />
+				<col width="50px" />
+				<col width="125px" />
+				<col width="120px" />
+				<col width="80px" />
+				<col />
+			</colgroup>
+
+			<tbody>
+				{foreach:items=$this->member_list}
+				<tr>
+					<td class="t_c"><input name="check[]" type="checkbox" value="{$item['user_id']}" /></td>
+					<td title="{$item['username']}">{$item['username']}</td>
+					<td title="{$this->group[$item['group_id']]}">{$this->group[$item['group_id']]}</td>
+					<td title="{$item['true_name']}">{$item['true_name']}</td>
+					<td>{if:$item['sex']=='1'}男{else:}女{/if}</td>
+					<td title="{$item['email']}">{$item['email']}</td>
+					<td title="{$item['balance']}">{$item['balance']}</td>
+					<td title="{$item['point']}">{$item['point']}</td>
+					<td title="{echo:Common::userStatusText($item['status'])}">{echo:Common::userStatusText($item['status'])}</td>
+					<td title="{$item['time']}">{$item['time']}</td>
+					<td title="{$item['phone']}">{$item['phone']}</td>
+					<td title="{$item['times']}">{$item['times']}</td>
+					<td>
+						<a href="{url:/member/member_edit/uid/$item[user_id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a>
+						<a href="javascript:void(0)" onclick="delModel({link:'{url:/member/member_reclaim/check/$item[user_id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+					</td>
+				</tr>
+				{/foreach}
+			</tbody>
+		</table>
+	</div>
+	{$this->member_db->getPageBar()}
+</form>
+
+

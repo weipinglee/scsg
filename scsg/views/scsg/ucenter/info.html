@@ -1,0 +1,244 @@
+{js:artTemplate}
+<script type='text/javascript' src='{theme:javascript/artTemplate/area_select.js}'></script>
+{js:my97date}
+
+<div class="main f_r">
+	<div class="uc_title m_10">
+		<label class="current"><span>个人资料</span></label>
+	</div>
+
+	<div class="form_content m_10">
+		<div class="uc_title2 m_10"><strong>会员信息</strong></div>
+		<dl class="userinfo_box clearfix">
+			<dt>
+				{set:$user_ico = $this->userRow['head_ico']}
+				<a class="ico" href="javascript:void(0);"><img src="{webroot:$user_ico}" id="user_ico_img" onerror="this.src='{skin:images/front/user_ico.gif}'" width="96" height="96" alt="个人头像" /></a>
+				<a class="blue" href="javascript:select_ico();">修改头像</a>
+			</dt>
+			<dd>
+				<table class="form_table" width="100%" cellpadding="0" cellspacing="0">
+					<col width="120px" />
+					<col />
+					{if:$this->userRow['username']}
+					<tr>
+						<th>用户名：</th>
+						<td>
+								{$this->userRow['username']}
+						</td>
+					</tr>
+						{/if}
+					<tr>
+						<th>邮箱：</th>
+						<td>{if:$this->userRow['email']}
+								{$this->userRow['email']}
+								<a class="blue" href="{url:/ucenter/toChgEmail1}">[修改]</a>
+							{else:}
+								<a class="blue" href="{url:/ucenter/toChgEmail1}">[绑定邮箱]</a>
+							{/if}
+							
+						</td>
+					</tr>
+					<tr>
+						<th>手机：</th>
+						<td>
+							{if:$this->userRow['phone']}
+								{$this->userRow['phone']}
+								<a class="blue" href="{url:/ucenter/toChgPhone1}">[修改]</a>
+							{else:}
+								<a class="blue" href="{url:/ucenter/phone_bind}">[绑定手机]</a>
+							{/if}
+						</td>
+					</tr>
+					
+				</table>
+			</dd>
+		</dl>
+	</div>
+
+	<div class="form_content m_10">
+		<div class="uc_title2 m_10"><strong>个人信息</strong></div>
+		<form action='{url:/ucenter/info_edit_act}' method='post' name='user_info'>
+			<table class="form_table" width="100%" cellpadding="0" cellspacing="0">
+				<col width="120px" />
+				<col />
+				<tr>
+						<th>会员等级：</th><td>{$this->userGroupRow['group_name']}</td>
+				</tr>
+				{if:!$this->userRow['username']}
+				<tr>
+					<th><span class="red">*</span> 用户名：</th><td><input class="normal" type="text" name="username"  alt='请填写用户名' /><label>（注册后可用户登陆，注册后不可修改）</label></td>
+				</tr>
+				{/if}
+				<tr>
+					<th><span class="red">*</span> 姓名：</th><td><input class="normal" type="text" name="true_name" pattern='required' alt='请填写真实姓名' /></td>
+				</tr>
+				<tr>
+					<th><span class="red"></span> 性别：</th>
+					<td>
+						<label class='attr'><input type='radio' name='sex' value='1' />男</label>
+						<label class='attr'><input type='radio' name='sex' value='2' checked=checked />女</label>
+					</td>
+				</tr>
+				<tr>
+					<th><span class="red"></span>出生日期：</th>
+					<td>
+						<input type="text" name="birthday" class="Wdate"  onFocus="WdatePicker()" />
+					</td>
+				</tr>
+				<tr>
+					<th><span class="red"></span> 所在地区：</th>
+					<td>
+						<select name="province" child="city,area" onchange="areaChangeCallback(this);"></select>
+						<select name="city" child="area" parent="province" onchange="areaChangeCallback(this);"></select>
+						<select name="area" parent="city" ></select>
+					</td>
+				</tr>
+				<tr>
+					<th><span class="red"></span> 联系地址：</th>
+					<td><input type='text' class='normal' name='contact_addr' alt='请填写联系地址' /></td>
+				</tr>
+				<tr>
+					<th>邮编：</th>
+					<td><input type='text' class='normal' name='zip' pattern='zip' empty alt='请填写正确的邮政编码' /></td>
+				</tr>
+				<tr>
+					<th>固定电话：</th>
+					<td><input class="normal" type="text" name='telephone' pattern='phone' empty alt='请填写正确的固定电话' /></td>
+				</tr>
+				<tr>
+					<th>QQ：</th>
+					<td><input class="normal" type="text" name='qq' pattern='qq' empty alt='请填写正确的QQ号' /></td>
+				</tr>
+				<tr><th></th><td><label class="btn"><input type="submit"  class='btn_gray btn_small' value="保存基本信息" /></label></td></tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+//DOM加载完毕
+$(function(){
+	//初始化地域联动
+	template.compile("areaTemplate",areaTemplate);
+
+	{if:isset($this->memberRow['area']) && $this->memberRow['area']}
+	{set:$area = explode(',',trim($this->memberRow['area'],','))}
+	{/if}
+
+	{if:isset($area[0]) && isset($area[1]) && isset($area[2])}
+	createAreaSelect('province',0,{$area[0]});
+	createAreaSelect('city',{$area[0]},{$area[1]});
+	createAreaSelect('area',{$area[1]},{$area[2]});
+	{else:}
+	createAreaSelect('province',0,"");
+	{/if}
+	
+	//验证用户名
+	$('input[name=username]').on('blur',function(){
+		var value = $.trim($(this).val());
+		//window.realAlert(value);
+		if(value.length<2 || value.length>20){
+			$(this).next('label').removeClass('valid-msg').addClass('invalid-msg').text('用户名长度须在2-20位之间');
+			return false;
+		}
+		if(checkUsername(value)){
+			$(this).next('label').removeClass('valid-msg').addClass('invalid-msg').text('用户名已注册');
+			return false;
+		}
+			$(this).next('label').removeClass('invalid-msg').addClass('valid-msg').text('');
+			return false;
+		
+	})
+	$('input[type=submit]').on('click',function(){
+		var userSel = $('input[name=username]');
+		var username = $.trim($('input[name=username]').val());
+		if(username){
+			if(checkUsername(username)){
+				userSel.next('label').removeClass('valid-msg').addClass('invalid-msg').text('用户名已注册');
+				return false;
+			}
+		}
+		
+	})
+});
+/**
+ * 验证用户名唯一性
+ */
+function checkUsername(username){
+	var url = '{url:/ucenter/checkUserIsOne}';
+	var res = 0;//未占用
+	$.ajax({
+		type:'post',
+		async:false,
+		data:{username:username},
+		url:url,
+		success:function(data){
+			res = data==1?1:0;
+		},
+		timeout:1000,
+	})
+	return res;
+} 
+/**
+ * 生成地域js联动下拉框
+ * @param name
+ * @param parent_id
+ * @param select_id
+ */
+function createAreaSelect(name,parent_id,select_id)
+{
+	//生成地区
+	$.getJSON("{url:/block/area_child}",{"aid":parent_id,"random":Math.random()},function(json)
+	{
+		$('[name="'+name+'"]').html(template.render('areaTemplate',{"select_id":select_id,"data":json}));
+	});
+}
+
+//修改头像
+function select_ico()
+{
+	{set:$callback = urlencode(IUrl::creatUrl('/ucenter/user_ico_upload'))}
+	art.dialog.open('{url:/block/photo_upload?callback=$callback}',
+	{
+		'id':'user_ico',
+		'title':'设置头像',
+		'ok':function(iframeWin, topWin)
+		{
+			iframeWin.document.forms[0].submit();
+			return false;
+		}
+	});
+}
+
+//头像上传回调函数
+function callback_user_ico(content)
+{
+	var content = eval(content);
+	if(content.isError == true)
+	{
+		alert(content.message);
+	}
+	else
+	{
+		$('#user_ico_img').attr('src',content.data);
+	}
+	art.dialog({id:'user_ico'}).close();
+}
+
+//表单回填
+var formObj = new Form('user_info');
+formObj.init({
+	'id':'{$this->memberRow['id']}',
+	'true_name':'{$this->memberRow['true_name']}',
+	'telephone':'{$this->memberRow['telephone']}',
+	'mobile':'{$this->memberRow['mobile']}',
+	'contact_addr':'{$this->memberRow['contact_addr']}',
+	'qq':'{$this->memberRow['qq']}',
+	'msn':'{$this->memberRow['msn']}',
+	'sex':'{$this->memberRow['sex']}',
+	'zip':'{$this->memberRow['zip']}',
+	'birthday':'{$this->memberRow['birthday']}',
+});
+
+
+</script>

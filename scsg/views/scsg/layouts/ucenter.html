@@ -1,0 +1,141 @@
+{include:layouts/head.html}
+<link rel="stylesheet" href="{skin:css/log.css}">
+<div class="ucenter container">
+
+	<div class="position">
+		您当前的位置： <a href="{url:}">首页</a> » <a href="{url:/ucenter/index}">我的账户</a>
+	</div>
+	<div class="wrapper clearfix">
+		<div class="sidebar f_l">
+			<a href='{url:ucenter/index}'><img src="{skin:images/front/ucenter/ucenter.jpg}" width="180" height="40" /></a>
+			<div class="box">
+				<div class="title"><h2>交易记录</h2></div>
+				<div class="cont">
+					<ul class="list">
+						<li><a href="{url:/ucenter/order}">我的订单</a></li>
+						<li><a href="{url:/ucenter/preorder}">预售订单</a></li>
+						<li><a href="{url:/ucenter/integral}">我的积分</a></li>
+						<li><a href="{url:/ucenter/redpacket}">我的代金券</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="box">
+				<div class="title"><h2 class='bg2'>服务中心</h2></div>
+				<div class="cont">
+					<ul class="list">
+						<li><a href="{url:/ucenter/refunds}">退换货申请</a></li>
+						<li><a href="{url:/ucenter/consult}">商品咨询</a></li>
+						<li><a href="{url:/ucenter/evaluation}">商品评价</a></li>
+						<li><a href="{url:/ucenter/favorite}">我的关注</a></li>
+						<li><a href="{url:/ucenter/history}">我的足迹</a></li>
+						<li><a href="{url:/ucenter/fapiao}">补开发票</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="box">
+				<div class="title"><h2 class='bg3'>应用</h2></div>
+				<div class="cont">
+					<ul class="list">
+						<li><a href="{url:/ucenter/message}">短信息</a></li>
+						<li><a href="javascript:showService()">在线服务</a></li>
+						<li><a href="{url:/ucenter/complain}">意见反馈</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="box">
+				<div class="title"><h2 class='bg4'>账户资金</h2></div>
+				<div class="cont">
+					<ul class="list">
+						<li><a href="{url:/ucenter/account_log}">帐户余额</a></li>
+						<li><a href="{url:/ucenter/online_recharge}">在线充值</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="box">
+				<div class="title"><h2 class='bg5'>个人设置</h2></div>
+				<div class="cont">
+					<ul class="list">
+						<li><a href="{url:/ucenter/address}">地址管理</a></li>
+						<li><a href="{url:/ucenter/info}">个人资料</a></li>
+						<li><a href="{url:/ucenter/password}">修改密码</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		{viewcontent}
+	</div>
+
+	
+	
+</div>
+{include:layouts/footer.html}
+
+<script type='text/javascript'>
+//合并付款提交
+function merge_pay_submit(){
+		if($('[name^=sub]:checked').length==0 || $('[name=payment]').val()==''){
+			return false;
+		}
+		$('form[name=merge_pay]').submit();
+}
+//展开收起合并付款
+function merge_pay_toggle(){
+	var select = $('#merge_pay').find('select');
+	var but    = $('#merge_pay').find('input[name=to_pay]');
+	var but_show = $('#merge_pay').find('input[name=merge_show]');
+	if(select.hasClass('hide')){
+		select.removeClass('hide');
+		but.removeClass('hide');
+		but_show.val('收起');
+	}else{
+		select.addClass('hide');
+		but.addClass('hide');
+		but_show.val('合并支付');
+	}
+}
+//DOM加载完毕后运行
+$(function()
+{
+	$(".tabs").each(function(i){
+	    var parrent = $(this);
+		$('.tabs_menu .node',this).each(function(j){
+			var current=".node:eq("+j+")";
+			$(this).bind('click',function(event){
+				$('.tabs_menu .node',parrent).removeClass('current');
+				$(this).addClass('current');
+				$('.tabs_content>.node',parrent).css('display','none');
+				$('.tabs_content>.node:eq('+j+')',parrent).css('display','block');
+			});
+		});
+	});
+
+
+
+	menu_current();
+
+	$('input:text[name="word"]').bind({
+		keyup:function(){autoComplete('{url:/site/autoComplete}','{url:/site/search_list/word/@word@}','{$siteConfig->auto_finish}');}
+	});
+
+	{set:$word = IReq::get('word') ? IFilter::act(IReq::get('word'),'text') : '输入关键字...'}
+	$('input:text[name="word"]').val("{$word}");
+
+	//购物车div层
+	$('.mycart').hover(
+		function(){
+			showCart('{url:/simple/showCart}');
+		},
+		function(){
+			$('#div_mycart').hide('slow');
+		}
+	);
+
+
+});
+function ok_confirm(_this){
+	var to_url = $(_this).attr('tourl');
+	confirm('由于商品的特殊性，该订单确认收货后将不可进行退款操作，请在确认订单前，仔细检查商品后确认收货',"location.href='"+to_url+"'",1);
+}
+</script>
+</body>
+</html>

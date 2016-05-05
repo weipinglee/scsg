@@ -1,0 +1,235 @@
+﻿<input type='hidden' name='min_num' value='{$this->tuanData["limit_min_count"]}'/>
+<input type='hidden' name='max_num' value='{$this->tuanData["limit_max_count"]}'/>
+<input type='hidden' id='product_id' alt='货品ID' value='{$product_id}' />
+<input type='hidden' name='promo_name' value="groupon"/>
+<input type='hidden' name='active_id' value="{$active_id}"/><!--活动id-->
+<div id='det1' >
+<article class="cat_item"> 
+    <div class="pic_detail">
+        <div class="picture">
+            <ul>
+            	 <div id="slides">
+                        <div class="common-slide" id="wrapper">
+                            <div class="list" id="scroller">
+                                <ul class="wrap" id="thelist">
+                                	{if:count($photo)!=0}
+                                	{foreach:items=$photo}
+                                    <li class="one-img"><a href="javascript:viewBigPicOn()"><img src="{url:/pic/thumb/img/$item[img]/w/200/h/200}" alt=" "></a></li>                             
+									{/foreach}
+									{else:}
+										<li class="one-img">
+											<a href="#" onclick='javascript:void(0)'>
+												<img src="{skin:images/front/nopic_435_435.gif}">
+											</a>
+										</li>
+									{/if}
+								</ul>
+                            </div>
+
+                        </div>
+
+                  </div>
+                <div class="mtbslide-pagination">
+                   
+                </div>
+
+
+                
+            </ul>
+        </div>
+    </div>
+				<div style="width:99%;margin:0 auto;">
+				<span class="name" style=" display:block; width:75%; margin-left:8px; float:left; line-height:20px;"><a href="" >{$name}{if:$short_desc}（{$short_desc}）{/if}</a></span>
+							
+				
+				<span onClick="toshare()" style="display:block;width:19%;text-align:center;float:right;margin-right:10px;cursor:pointer;height:60px;">
+                <img style="height:40px; width:40px;" src="{skin:images/detail_img/share.png}" width="459" height="459" alt="tupian" /><br />分享</span>
+
+				<div class="am-share">
+				  <h3 class="am-share-title">分享到</h3>
+				  <ul class="am-share-sns">
+					<li><a href="http://v.t.sina.com.cn/share/share.php?title={echo:$site_config->name}_{$name}http://www.yqtvt.com/site/tuan_product/active/{$active_id}" target=_blank> <i class="share-icon-weibo share-sina"></i> <span>新浪微博</span> </a> </li>
+					<li>
+						<a href="javascript:void(0);" onclick="window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url='+encodeURIComponent(document.location.href));return false;" title="分享到QQ空间"  target=_blank><i class="share-icon-dou"></i> <span>QQ空间</span> </a>
+					</li>
+					<li><a href="http://v.t.qq.com/share/share.php?title={echo:$site_config->name}_{$name}http://www.yqtvt.com/site/tuan_product/active/{$active_id}" target=_blank> <i class="share-icon-tweibo"></i> <span>腾讯微博</span> </a> </li>
+					<li><a href="javascript:window.open('http://share.renren.com/share/buttonshare.do?link='+encodeURIComponent(document.location.href)+'&title='+encodeURIComponent(document.title));void(0)" target=_blank> <i class="share-icon-renren"></i> <span>人人网</span> </a> </li>
+				  </ul>
+				  <div class="am-share-footer"><button class="share_btn">取消</button></div>	
+
+				</div>
+	</div>
+	</section>
+	<!-- item_pic begin -->
+
+	<!-- infor beigin -->
+	<section class="infor book_infor"  style=" clear:both;">
+			{if:isset($seller)}
+				<p class="shop"><span class="bg_shop">商家</span>{$seller['true_name']}</p>
+			{/if}
+			<p>
+				<span class="label">团&nbsp;购&nbsp;价:</span>
+				<span class="d_price">￥{$this->tuanData['regiment_price']}</span>
+			</p>
+			<p>
+				购买送积分:<span class="jifen">{$point}</span>
+			</p>   
+			<p>
+				<span class="label">山&nbsp;城&nbsp;价:</span>
+				<span class="m_price">￥{$sell_price}</span>
+			</p>
+			<p>
+					<span class="label">市&nbsp;场&nbsp;价:</span>
+					<span class="m_price">￥{$market_price}</span>
+				</p>
+			<p>
+				<span class="label">顾客评分:</span>
+				<span class="starlevel star_4">{$grade}</span>(共有<a href="javascript:void(0)" onclick='show_comments()' class="all">{$comments}</a>次评分)
+			</p>
+			{set:$end = strtotime($this->tuanData['end_time']) - time()}
+			<p><span class="label">剩余时间:</span>
+				<span class=" countdown" id="timeRemaining-1" style=''>
+								<span id='cd_day_1' style='color:red;'></span>天
+								<span id='cd_hour_1' style='color:red;'></span>小时
+								<span id='cd_minute_1' style='color:red;'></span>分
+								<span id='cd_second_1' style='color:red;'></span>秒	
+								<input name='endTime' type='hidden' value='{$end}' />
+								
+								<span class='sell_sum'>已团购(<span >{$this->tuanData['sum_count']}/{$this->tuanData['store_nums']}</span>)</span>
+								
+				</span>
+			</p>
+		
+	</section>	
+
+
+
+	<!-- infor end -->
+
+  
+</article>
+<!-- recommend end 后台上传的图片要统一尺寸 -->
+<div class="viewbig hidden">
+    <div class="btn">
+        <a href="javascript:viewBigPicOff()">返回</a>
+    </div>
+    <div id="slides1" class="slides1">
+        <div class="common-slide1" id="wrapper1">
+            <div class="list1" id="scroller1">
+                <ul class="wrap">
+                	{if:count($photo)>0}
+                	{foreach:items=$photo}
+					    <li id="bigpic" class="one-img1"><img height="100%" width="100%" data-src="{url:/pic/thumb/img/$item[img]/w/300/h/300}" alt=" "></li>
+					{/foreach}
+					{else:}
+						<li id="bigpic" class="one-img1">
+								<img data-src="{skin:images/front/nopic_435_435.gif}" height="200px" width="200px">
+						</li>
+					{/if}
+                </ul>
+            </div>
+			<div class="mtbslide-pagination">
+                <div id="picnum" class="picnum">
+                    <span class="pic_num" style ="bottom: 13px;"><span  id="indicatorBig">1</span>/{echo:count($photo)}</span>
+                </div>
+           </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 商品介绍-->
+<div class="history">
+	<h3 class="tit">商品介绍</h3>
+	<!--介绍内容-->
+	<div id="topPriceHistroyDiv">
+		<table id="table" cellpadding="0" cellspacing="0" >
+			<tr>
+				<td colspan="2">规格参数</td>
+			</tr>
+			{if:isset($brand) && $brand}
+			<tr>
+				<td width="20%">品牌</td>
+				<td>{$brand}</td>
+			</tr>
+			{/if}
+			{if:isset($weight) && $weight}
+			<tr>
+				<td width="20%">商品毛重</td>
+				<td>{$weight}</td>
+			</tr>
+			{/if}
+			{if:isset($unit) && $unit}
+			<tr>
+				<td width="20%">单位</td>
+				<td>{$unit}</td>
+			</tr>
+			{/if}
+			{if:($attribute)}
+				{foreach:items=$attribute}
+			<tr>
+				<td width="20%">{$item['name']}</td>
+				<td>{$item['attribute_value']}</td>
+			</tr>
+				{/foreach}
+			{/if}
+		</table>
+	</div>
+</div>
+
+<!-- 促销 -->
+<div class="history">
+	<h3 class="tit">促销</h3>
+	<div id="topPriceHistroyDiv">
+		<div class="cx">
+			{foreach:items=$promotion}
+			<span>{$item['plan']}</span><p>{$item['info']}</p>
+			{/foreach}
+		</div>
+	</div>
+	<!--<p><img src="images/li10.jpg" alt=""></p> -->
+</div>
+
+<!-- 评价晒单-->
+<div class="history">
+	<h3 class="tit">商品评价</h3>
+	<!--介绍内容-->
+	<div id="commentBox" style="margin: 6px 0px;">
+		<div style="text-align:center;">
+			<a  href="javascript:void(0)"style="border: 2px solid #845959;padding: 2px 10px;color: #000;" onclick="show_comments_list($('[name=pingjia]'))">查看更多</a>
+		</div>
+	</div>
+
+</div>
+<!-- 服务-->
+<div class="history">
+	<h3 class="tit">服务</h3>
+	<!--介绍内容-->
+	<div id="topPriceHistroyDiv">
+		<div class="fw">
+
+
+		<div class="qq-login">
+            <a href="" class="fw"><i>服务承诺</i><p>服务承诺</p>
+            </a>
+			<a  href="" class="fh"><i>按时发货</i><p>按时发货</p>
+            </a>
+            <a  href="" class="th"><i>七天无理由退还</i><p>七天无理由退还</p>
+            </a>
+			  <a  href="" class="pz"><i>品质保障</i><p>品质保障</p>
+            </a>
+        </div>        
+	</div>
+	<div style="clear: both;"></div>
+	<!--<p><img src="images/li10.jpg" alt=""></p> -->
+</div>
+</div>
+</div>
+<script type='text/javascript' >
+$(function(){
+	var max_num = '{$this->tuanData["limit_max_count"]}';
+	var min_num = '{$this->tuanData["limit_min_count"]}';
+	$('#buyNums').val(min_num);
+})
+</script>

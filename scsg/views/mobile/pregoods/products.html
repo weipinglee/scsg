@@ -1,0 +1,60 @@
+{include:include/detail/det_head.html}
+{set:
+	$seo_data=array();
+	$site_config=new Config('site_config');
+	$seo_data['title']=$name."_".$site_config->name;
+	$seo_data['keywords']=$keywords;
+	$seo_data['description']=$description;
+	seo::set($seo_data);
+	$promotion=Api::run('getProrule');
+	$show_cart = 0;
+}
+
+<!-- article begin -->
+<script type="text/javascript" src="{theme:javascript/iscroll.js}"></script>
+{include:include/detail/presell_det1.html}
+{include:include/detail/det2.html}
+{include:include/detail/comments_list.html}
+
+<div class="det baby" id='det_tuijian' style="margin-bottom:260px;">
+		{if:isset($buyer_id) && $buyer_id}
+		<h3 class="tit">购买本商品的用户还购买过<span class="showHide"><font><!-- 关闭 --></font><span class="hideSpan"></span></span></h3>
+		
+		<ul>
+			{foreach:items=Api::run('getOrderGoodsByBuyerid',array('#buyer_id#',$buyer_id))}
+				<li>
+					<a href="{url:/site/products/id/$item[id]}" title=""><img src="{url:/pic/thumb/img/$item[img]/w/200/h/200}" alt=""></a>
+				</li>
+			{/foreach}
+		</ul>
+		{/if}
+	
+</div>
+
+
+<div class="cl"></div>
+<!-- article end -->
+<script type='text/javascript'>
+//添加收藏夹
+function favorite_add(obj)
+{
+	{if:isset($this->user['user_id'])}
+		$.getJSON('{url:/simple/favorite_add}',{'goods_id':{$id},'random':Math.random},function(content)
+		{
+			if(content.isError == false)
+			{
+				$(obj).text(content.message);
+			}
+			else
+			{
+				$(obj).find('img').attr('src','{skin:images/detail_img/ygz.png}');
+				$(obj).find('p').eq(1).text('已关注');
+				alert(content.message);
+			}
+		});
+	{else:}
+		window.location.href="{url:/simple/login/?callback=/site/products/id/$id}";
+	{/if}
+}
+</script>
+{include: include/detail/det_foot.html}

@@ -1,0 +1,559 @@
+clear{clear:both;height:0px;font-size:0px;line-height:0}
+
+.w210{width:210px ! important}
+
+.mb10{margin-bottom:10px ! important}
+
+#page{background:url('http://imgtp.etuan.com/topheader_bg.png') repeat scroll 0% 0% transparent;width:100%;height:29px;border-bottom:1px solid rgb(216,216,216)}
+
+.warp-all{margin:0px
+auto;line-height:18px}
+
+#topNav{height:29px;position:relative;z-index:998}
+
+#topNav
+a{color:rgb(102, 102, 102)}
+
+#topNav a:hover{color:rgb(255, 51, 0);text-decoration:underline}
+
+#topNav .user-entry{line-height:20px;display:block;width:550px;height:20px;float:left;padding:4px
+0px 5px;margin:0px;overflow:hidden}
+
+.user-entry
+dt{color:rgb(85, 85, 85);display:block;float:left;padding:0px
+5px}
+
+.user-entry
+dd{color:rgb(153, 153, 153);display:block;float:left;padding:0px
+4px}
+
+.user-entry dd
+a{color:rgb(153, 153, 153);padding:0px
+2px}
+
+#topNav .quick-menu{position:absolute;top:4px;right:0px}
+
+.quick-menu
+li{background:url(/templates/etuan/images/nc_topbar.gif) no-repeat 100% -26px;float:left;margin-left:-1px;position:relative;z-index:auto}
+
+.quick-menu
+li.last{background:none transparent scroll repeat 0% 0%}
+
+.quick-menu li
+a{line-height:18px;background-color:transparent;padding:2px
+10px 0 10px;display:block;float:left}
+
+.quick-menu
+.menu{}
+
+.quick-menu .menu-hd{line-height:22px;display:block;height:22px;padding:0px
+22px 2px 10px;margin:1px
+1px 0 1px;position:relative;z-index:10002;cursor:pointer}
+
+.quick-menu .menu-hd
+i{font-size:0px;line-height:0;width:0px;height:0px;border-width:4px;border-color:#333 transparent transparent transparent;border-style:solid dashed dashed dashed;position:absolute;top:9px;right:10px;-webkit-transition: .2s ease-in;-moz-transition:-webkit-transform .2s ease-in;-o-transition:-webkit-transform .2s ease-in;transition: .2s ease-in}
+
+.quick-menu .menu:hover .menu-hd{background:#FFF;margin:0px;border:#CCC 1px solid;border-bottom-style:none}
+
+.quick-menu .menu:hover .menu-hd
+i{top:7px;FILTER:progid:DXImageTransform.Microsoft.BasicImage(rotation=2);-moz-transform:rotate(180deg);-moz-transform-origin:50% 30%;-webkit-transform:rotate(180deg);-webkit-transform-origin:50% 30%;-o-transform:rotate(180deg);-o-transform-origin:50% 30%;transform:rotate(180deg);transform-origin:50% 30%}
+
+.quick-menu .menu-bd{background:#fff;display:none;border:#CCC 1px solid;position:absolute;z-index:10001;top:25px;overflow:hidden;zoom:1}
+
+.quick-menu .menu-bd
+.loading{margin:10px
+auto 10px 48%}
+
+.quick-menu .menu:hover .menu-bd{display:block}
+
+.quick-menu .user-center .menu-hd{width:48px;padding-top:1px;_padding-top:1px}
+
+.quick-menu .user-center .menu-bd{width:92px;right:0px}
+
+.quick-menu .user-center
+ul{padding:8px;float:left}
+
+.quick-menu .user-center ul
+li{background-image:none}
+
+.quick-menu .user-center ul li
+a{background-image:none;line-height:20px;width:76px;height:20px;float:left;clear:both;padding:0
+0 2px 0;margin:0}
+
+.quick-menu .seller-center .menu-hd{width:48px;padding-top:1px;_padding-top:1px}
+
+.quick-menu .seller-center .menu-bd{width:92px;right:0px}
+
+.quick-menu .seller-center
+ul{padding:8px;float:left}
+
+.quick-menu .seller-center ul
+li{background-image:none}
+
+.quick-menu .seller-center ul li
+a{line-height:20px;background-image:none;width:76px;height:20px;float:left;clear:both;padding:0
+0 2px 0;margin:0}
+
+.quick-menu .cart .menu-hd{color:#60332c;width:90px;padding-top:1px;_padding-top:1px;padding-left:25px}
+
+.quick-menu .cart .menu-hd
+s{background:url(/templates/etuan/images/nc_topbar.gif) no-repeat scroll 0px 0px;width:12px;height:12px;position:absolute;top:5px;*top:4px;left:7px}
+
+.quick-menu .cart .menu-hd
+strong{font-weight:600;color:#F60;padding:0
+3px}
+
+.quick-menu .cart .menu:hover .menu-hd{color:#F30;text-decoration:underline}
+
+.quick-menu .cart .menu-bd{width:370px;right:0px}
+
+.quick-menu .cart .order
+a{padding:0}
+
+.quick-menu .cart .order
+table{width:354px;padding:0;margin:0}
+
+.quick-menu .cart .order
+td{padding:5px;border-bottom:solid 1px #F1F1F1}
+
+.quick-menu .cart .order
+td.picture{height:40px;width:40px;float:left}
+
+.quick-menu .cart .order
+td.name{line-height:18px;width:200px;height:36;padding:5px
+5px 9px 5px}
+
+.quick-menu .cart .order
+td.price{height:40px;width:84px}
+
+.quick-menu .cart .order td.price
+p{line-height:20px;color:#F30;height:20px;text-align:right}
+
+.quick-menu .cart .order td.no-border{border:none}
+
+.quick-menu .cart .order td
+span.all{width:200px;float:left}
+
+.quick-menu .cart .order td span.all
+strong{font-weight:600;padding:0
+4px;color:#F30}
+
+.quick-menu .cart .order td span.button a, .quick-menu .cart .no-order
+.button{line-height:24px;color:#FFF;background-color:#FE8502;text-align:center;display:block;float:right;padding:0
+10px;margin:0px;border:solid 1px #ED6002;border-radius:4px}
+
+.quick-menu .cart .no-order , .quick-menu .cart
+.order{padding:8px;float:left}
+
+.quick-menu .cart .no-order
+span{line-height:24px;color:#999;display:block;height:24px;float:left}
+
+.quick-menu .favorite .menu-hd{width:48px;padding-top:1px;_padding-top:1px}
+
+.quick-menu .favorite .menu-bd{width:80px;left:0px}
+
+.quick-menu .favorite
+ul{padding:8px;float:left}
+
+.quick-menu .favorite ul
+li{background-image:none}
+
+.quick-menu .favorite ul li
+a{background-image:none;line-height:20px;width:60px;height:20px;float:left;clear:both;padding:0
+0 2px 0;margin:0}
+
+.quick-menu
+li.links{background:url(/templates/etuan/images/hbg.png) no-repeat -119px 6px}
+
+.quick-menu .links .menu-hd{width:48px;padding-top:1px;_padding-top:1px}
+
+.quick-menu .links .menu-db{display:block}
+
+.quick-menu .links .menu-bd{float:left;right:0px}
+
+.quick-menu .links .menu-bd
+ul{padding:8px;float:left}
+
+.quick-menu .links .menu-bd ul
+li{background-image:none}
+
+.quick-menu .links .menu-bd ul li
+a{line-height:20px;background:url(/templates/etuan/images/hbg.png) no-repeat 0px -530px;white-space:nowrap;width:64px;height:20px;clear:left;padding:0
+0 2px 12px;margin:0;overflow:hidden}
+
+#footer{line-height:20px;color:rgb(170, 170, 170);text-align:center;display:block;clear:both;margin:12px
+auto 0px;padding-bottom:0px;border-top:1px solid rgb(233, 236, 239);overflow:hidden}
+
+#footer
+p{color:rgb(102, 102, 102);word-spacing:5px;padding:5px
+0px}
+
+a{color:rgb(85,85,85);text-decoration:none}
+
+a:hover{color:rgb(204,0,0)}
+
+.mt{border-bottom:2px solid rgb(170, 170, 170);height:21px;line-height:21px;padding:7px
+0px;width:100%}
+
+.mt
+h2{float:left}
+
+.mt h2, .smt
+h3{font-family:"microsoft yahei";font-weight:bold}
+
+.mt
+.extra{float:right}
+
+.mt .extra a:link, .mt .extra a:visited{color:rgb(0,94,167)}
+
+.backToTop{font-size:12px;line-height:1.2;color:rgb(255, 255, 255);background-color:rgb(0, 0, 0);text-align:center;display:none;width:18px;padding:5px
+0px;position:fixed;right:10px;bottom:100px;cursor:pointer;opacity:0.6}
+
+#topHeader{height:84px;margin:0px
+auto;position:relative;z-index:99}
+
+#topHeader .site-logo{position:absolute;top:5px;left:0px}
+
+#navBar{background-color:rgb(255, 150, 0);height:41px;padding:0px;margin:0px
+auto}
+
+#navBar ul.nc-nav-menu{height:41px;overflow:hidden;margin-left:210px;position:relative}
+
+#navBar ul.nc-nav-menu
+li{float:left}
+
+#navBar ul.nc-nav-menu
+.ass{background:url('http://imgtp.etuan.com/hot.gif') no-repeat scroll 0px 0px transparent;height:19px;left:155px;position:absolute;width:25px;z-index:999}
+
+#navBar ul.nc-nav-menu
+.bss{background:url('http://imgtp.etuan.com/new.gif') no-repeat scroll 0px 0px transparent;height:19px;left:345px;position:absolute;width:25px;z-index:999}
+
+@media not
+all{#navBar ul.nc-nav-menu
+.bss{left:355px}
+
+}
+
+#navBar ul.nc-nav-menu li.link a, #navBar ul li.link a span, #navBar ul li.current a, #navBar ul li.current a
+span{float:left;background-color:rgb(255, 150, 0);position:relative;cursor:pointer}
+
+#navBar ul.nc-nav-menu li.link
+a{color:rgb(255, 255, 204);height:41px;margin-left:-2px;z-index:1}
+
+#navBar ul.nc-nav-menu li.link a
+span{font-size:14px;font-weight:600;line-height:20px;color:rgb(255, 255, 204);display:block;height:20px;padding:8px
+24px 8px 18px;margin-left:6px;overflow:hidden}
+
+#navBar ul.nc-nav-menu li.link a:hover, #navBar ul.nc-nav-menu li.current a, #navBar ul.nc-nav-menu li.current a:hover{color:rgb(255, 255, 255);background-color:rgb(242, 124, 0);height:41px;float:left;margin-left:-2px;z-index:9}
+
+#navBar ul.nc-nav-menu li.link a:hover span, #navBar ul.nc-nav-menu li.current a span, #navBar ul.nc-nav-menu li.current a:hover
+span{background-color:rgb(242, 124, 0)}
+
+#navBar ul.nc-nav-menu li.link a:hover span, #navBar ul.nc-nav-menu li.current a span, #navBar ul.nc-nav-menu li.current a:hover
+span{font-size:14px;font-weight:600;line-height:20px;color:rgb(255, 255, 255);text-align:center;white-space:nowrap;display:block;height:20px;padding:8px
+24px 8px 18px;margin-left:6px;cursor:pointer}
+
+ul.shop_ul
+li{height:78px;position:relative;z-index:10000}
+
+.d_out
+.li_mide{display:none}
+
+ul.shop_ul
+.li_show{height:80px;overflow:hidden;position:absolute;width:207px}
+
+.d_out
+.li_show_tit{background:url('http://imgtp.etuan.com/ii.png') no-repeat scroll 192px 16px rgb(238, 238, 238)}
+
+ul.shop_ul
+.li_mide{background:none repeat scroll 0px 0px rgb(255, 255, 255);border:2px
+solid rgb(254,133,2);left:206px;position:absolute;width:320px;z-index:1000}
+
+.li_show_tit{cursor:pointer;height:28px;line-height:28px;overflow:hidden;padding:3px
+6px;width:193px;background:none 0px 0px repeat scroll rgb(238, 238, 238)}
+
+.li_show_tit
+img{display:block;float:left}
+
+.li_show_tit
+h2{left:10px;top:5px;position:relative;font:14px "Microsoft YaHei";font-weight:bold}
+
+.li_show_con{display:inline-block;padding-top:4px;text-align:center;width:196px}
+
+.li_show_con
+p{width:180px}
+
+.li_show_con
+a{display:inline-block;height:auto;margin-right:6px;width:80px;line-height:18px;margin-bottom:2px;background:none 0px 0px repeat scroll transparent}
+
+.dl_mide{float:left;left:0px;padding:10px;position:relative;width:310px}
+
+.dl_mide
+dl{display:inline-block;padding-bottom:6px;width:310px}
+
+.dl_mide
+dt{float:left;font-weight:bold;line-height:24px;width:74px}
+
+.dl_mide
+dd{float:left;width:306px}
+
+.dl_mide dd
+a{border-bottom-width:1px;border-bottom-style:dashed;border-bottom-color:rgb(221,221,221);display:inline-block;line-height:24px;padding-right:14px;width:135px}
+
+#all-category{width:210px;position:relative;z-index:1001}
+
+#all-category
+.title{background:none repeat scroll 0% 0% rgb(254, 133, 2);width:210px;height:41px;position:absolute;overflow:hidden;top:0px;left:0px}
+
+#all-category .title
+h2{font-size:14px;font-weight:600;line-height:41px;display:block;width:120px;height:41px;float:left;margin-left:41px;text-shadow:1px 1px 0px rgb(209, 86, 13)}
+
+#all-category .title h2
+a{color:rgb(255, 255, 255);cursor:default}
+
+#all-category .title h2 a:hover{text-decoration:none}
+
+#all-category .title
+i{display:block;background:url('http://imgtp.etuan.com/nc_nav.png') no-repeat scroll 0px -200px transparent;float:right;width:16px;height:16px;margin:10px}
+
+#all-category .title:hover
+i{background-position:-20px -200px}
+
+#all-category
+.category{background:url('http://imgtp.etuan.com/nc_nav_shadow.png') no-repeat scroll right bottom transparent;display:none;width:210px;padding-right:4px;padding-bottom:4px;position:absolute;top:41px;left:0px;z-index:11;overflow:visible}
+
+#all-category:hover
+.category{display:block}
+
+.category
+ul.menu{-moz-border-bottom-colors:none;-moz-border-left-colors:none;-moz-border-right-colors:none;-moz-border-top-colors:none;background-color:#FEFCF6;border-color:#FE8502;border-image:none;border-style:none solid solid;border-width:medium 2px 2px;overflow:visible;width:206px !important}
+
+.category
+li{position:relative;z-index:1;margin:0px;padding:0px}
+
+.module-sidebar-style1,.module-sidebar-style3{clear:both;border:1px
+solid rgb(231,231,231);overflow:hidden}
+
+.group:after,.clear:after{clear:both;content:" ";display:block;height:0px}
+
+#ajaxwaitid{display:none;position:absolute;right:0px;top:0px;z-index:1;padding:0px
+5px;background:none repeat scroll 0% 0% rgb(221,0,0);color:rgb(255,255,255)}
+
+.warp-all,#footer,#navBar,.keyword,#banner_box,#topHeader,.full_module,.nc-home-pattern{width:1190px}
+
+.top_qq{float:right;background:url('http://imgtp.etuan.com/kefu2.jpg') repeat scroll 0% 0% transparent;width:168px;height:60px;position:relative;margin-top:10px}
+
+#slideshow .twopics li, #slideshow .twopics li
+img{width:300px}
+
+#slideshow .fourpics li, #slideshow .fourpics li
+img{width:150px}
+
+.top_qq
+span{position:relative;left:50px;top:32px;font-weight:bold;font-size:16px}
+
+.top_mobile{float:right;background:url('http://imgtp.etuan.com/kefu1.jpg') repeat scroll 0% 0% transparent;width:222px;height:60px;position:relative;margin-top:10px}
+
+.top_mobile
+span{position:relative;left:60px;top:32px;color:rgb(255,110,61);font-weight:bold;font-size:16px}
+
+.nc-nav-menu{width:990px}
+
+.adv_13,#mallRecommend,#slideshow{width:670px}
+
+.warp-right,.shop_text_list{width:990px}
+
+#slideshow
+ul{width:612px}
+
+.warp_rr{width:300px}
+
+.nc-home-news{height:80px}
+
+.r-list{position:relative}
+
+.xian{position:absolute;height:120px;border-right:1px solid #ccc;left:135px}
+
+.r-list
+img{display:block;width:63px;height:49px}
+
+.r-list
+a{display:block;margin-left:10px;line-height:18px;word-wrap:break-word}
+
+.r-list
+li{height:14px;padding:5px;width:130px;float:left;display:block;overflow:hidden}
+
+.r-list
+li.end{border-bottom:medium none}
+
+.r-list
+span{display:block;margin-left:10px}
+
+.goods_pic{width:70px}
+
+.goods_title{width:200px;height:18px;overflow:hidden}
+
+.goods_buys{width:200px;height:18px;overflow:hidden;padding-top:5px}
+
+#search{left:370px}
+
+#search, #search
+.details{width:448px;margin-top:5px;position:absolute}
+
+#search
+.tag{padding:10px}
+
+.search_from,.customer-service{position:relative}
+
+.form-hover .search-input{border-color:#FF6E3D}
+
+.search-tips{background:url("http://imgtp.etuan.com/s_fdj.gif") no-repeat scroll 0 0 transparent;color:#CCC;font-size:14px;height:20px;line-height:20px;left:5px;padding-left:23px;position:absolute;top:8px;width:100px;cursor:text}
+
+.search-input{width:440px;border:2px
+solid #CCC;color:#333;display:inline-block;font-size:14px;height:16px;line-height:16px;padding:8px
+0;text-indent:3px;vertical-align:middle}
+
+.search-button{*top:1px;cursor:pointer;height:36px;line-height:36px;position:absolute;text-align:center;vertical-align:middle;visibility:hidden;width:50px}
+
+.form-hover .search-input, .form-focus .search-input{border-color:#FF6E3D}
+
+.form-focus .search-tips{visibility:hidden}
+
+.form-focus .search-button{visibility:visible}
+
+.searchtb{background:url("http://imgtp.etuan.com/s_btn.png") no-repeat scroll 0 0 transparent;color:#FFF;right:5px}
+
+.searchtb:hover{background:url("http://imgtp.etuan.com/s_btn.png") no-repeat scroll 0 -50px transparent}
+
+.dark
+input.rsstxt{background:none repeat scroll 0 0 #EEE}
+
+.shell{width:300px}
+
+#ad1{height:36px;overflow:hidden}
+
+#ad1
+li{width:300px;margin:12px
+0px;height:12px;overflow:hidden}
+
+#ad1
+.group_fuwu
+li{float:left;width:350px;padding:20px;position:relative}
+
+.group_fuwu
+.fuwu_1{background:url("/templates/etuan/images/index/qg.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);width:82px;height:82px;float:left;_background:url("http://www.etuan.com/images/group1.png")}
+
+.group_fuwu
+.fuwu_2{background:url("/templates/etuan/images/index/qg.png") no-repeat scroll 0 center rgba(0, 0, 0, 0);width:82px;height:82px;float:left;_background:url("http://www.etuan.com/images/group2.png")}
+
+.group_fuwu
+.fuwu_3{background:url("/templates/etuan/images/index/qg.png") no-repeat scroll 0 bottom rgba(0, 0, 0, 0);width:82px;height:82px;float:left;_background:url("http://www.etuan.com/images/group3.png")}
+
+.group_fuwu
+.fuwu_title{font-size:16px;font-weight:bold;left:140px;position:absolute;top:40px}
+
+.group_fuwu
+.fuwu_desc{font-size:14px;left:140px;position:absolute;top:56px}
+
+.left_group{width:860px;float:left}
+
+.right_group{width:300px;float:right;min-height:500px;background-color:#fff}
+
+.right_group img{margin-bottom:20px;}
+
+.today-deals-con{background:none repeat scroll 0 0 #fff;margin-bottom:20px;overflow:hidden;padding:10px;width:840px;border:1px solid #fff;}
+
+.today_end_time{background:url("/templates/etuan/images/index/timeion_bg.png") no-repeat scroll 9px center #fff2f2;color:#333;display:block;font-family:Arial;font-size:24px;font-weight:700;height:62px;line-height:62px;margin:18px
+18px 0 28px;text-indent:34px}
+
+.today_end_time.qg{font-size:14px}
+
+.today_end_time
+.icon{font-family:Tahoma,Geneva,sans-serif;font-size:14px;font-weight:400}
+
+.time_end_style{font-size:14px;font-weight:400}
+
+.deal-img-wrap{display:inline;float:left;height:350px;position:relative;width:350px}
+
+.deal-img-wrap .deal-img-link{display:block;height:350px;overflow:hidden;position:relative;text-align:center;width:350px}
+
+.deal-img-wrap .deal-img-link.lottery_custom{margin-top:35px}
+
+.deal-img-link
+.img_pos_110{left:-110px;position:relative}
+
+.deal-img-wrap
+.desc{background:none repeat scroll 0 0 #000;opacity:0.3}
+
+.deal-img-wrap .info-bar{background:none repeat scroll 0 0 rgba(0, 0, 0, 0.6) !important;bottom:0;color:#fff;height:30px;left:0;line-height:30px;overflow:hidden;position:absolute;width:350px}
+
+.deal-img-wrap .info-bar
+.text{display:inline;float:left;margin-left:20px}
+
+.deal-img-wrap .info-bar .bk-timeleft{display:inline;float:right;margin-right:20px}
+
+.today-deals .info-bar .bk-timeleft{}
+
+.deal-img-wrap
+.buhuo_tip{background:none repeat scroll 0 0 rgba(3, 172, 179, 0.6) !important;color:#fff;font-size:14px;height:30px;line-height:30px;overflow:hidden;text-align:center;width:350px}
+
+.deal-summary{display:inline;float:right;height:348px;overflow:hidden;position:relative;width:411px}
+
+.deal-summary a:hover{text-decoration:none}
+
+.deal-summary
+.tit{color:#2b2b2b;font-family:"微软雅黑";font-size:16px;height:156px;line-height:26px;overflow:hidden;text-align:left}
+
+.deal-summary .tit
+em{color:#FF9600}
+
+.deal-summary .price-wrap{padding-top:15px;text-align:left}
+
+.deal-summary
+.price{color:#FF9600;font-family:arial;font-size:42px}
+
+.deal-summary .price
+em{font-size:20px;margin-right:2px}
+
+.deal-summary
+.dis{color:#727272;margin:5px}
+
+.deal-summary
+.other{color:#1c1c1c;height:40px;line-height:28px;padding-top:10px}
+
+.deal-summary .other
+.hw_info{color:#888;float:left;height:28px;padding-top:10px}
+
+.deal-summary .other .hw_info
+span{border:1px
+solid #eee;display:inline-block;height:16px;line-height:16px;margin-right:8px;padding:6px
+8px}
+
+.deal-summary
+.flag{bottom:0;height:45px;position:absolute;right:0;width:134px}
+
+.deal-summary .flag
+img{height:45px;width:134px}
+
+.deal-btn{background:url("/templates/etuan/images/index/btnbg_v2.jpg") no-repeat scroll 0 0 rgba(0, 0, 0, 0);bottom:100px;color:#fff;display:block;font-size:16px;height:37px;left:50%;line-height:38px;margin:0
+auto 0 80px;position:absolute;text-align:center;width:109px;bottom:70px}
+
+.koubei-rating
+.rating{background-position:0 0;display:block;height:13px;left:0;position:absolute;top:0}
+
+.buy_num_con{color:#959595;float:right}
+
+.buy_num_xinyuan{color:#1c1c1c}
+
+.buy_number{color:#b9966a;font-size:18px}
+
+.em_last{margin-left:-13px}
+
+.hid_hashid{display:none}
+
+.today-deals-con:hover,.group-list
+.hover{border:1px solid #f15a24}
+
+.deal-summary
+.other{color:#1c1c1c;height:40px;line-height:28px;padding-top:10px;width:100%}
+

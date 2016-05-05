@@ -1,0 +1,926 @@
+
+{set:
+	$seo_data=array();
+	$site_config=new Config('site_config');
+	$seo_data['title']=$name."_".$site_config->name;
+	$seo_data['keywords']=$keywords;
+	$seo_data['description']=$description;
+	seo::set($seo_data);
+	
+}
+
+{js:cookie}
+{set:$breadGuide = goods_class::catRecursion($category);$promotion=Api::run('getProrule');}
+{foreach:items=$promotion}
+	{if:$item['type']==6}<!--获取免配送费的信息-->
+	{set:$freightInfo=$item['info']}
+	{/if}
+{/foreach}
+<link rel="stylesheet" type='text/css' href="{skin:css/detail.css}"/>
+<link rel="stylesheet" type="text/css" href="{theme:javascript/jquery.bxSlider/jquery.bxslider.css}" />
+<script type="text/javascript" src="{theme:javascript/jquery.bxSlider/jquery.bxSlider.min.js}"></script>
+<script type='text/javascript' src="{theme:javascript/piczoom.js}"></script>
+<script type='text/javascript' >
+	var goods_id = {$id};
+	
+	//获取地区
+	var area_url = '{url:/block/area_child}';
+	var delivery_fee_url = '{url:/block/order_delivery}';
+</script>
+<div class="position"><span>您当前的位置：</span><a href="{url:}">首页</a>{foreach:items=$breadGuide} » <a href="{url:/site/pro_list/cat/$item[id]}">{$item['name']}</a>{/foreach} » {$name}</div>
+<div class="wrapper clearfix">
+	
+	<div class="summary" style='margin-right:15px;'>
+
+		<input type='hidden' id='goods_id' alt='商品ID' value='{$id}' />
+		<!--货品ID，当为商品时值为空-->
+		<input type='hidden' id='product_id' alt='货品ID' value='' />
+		<input type='hidden' name='promo_name' value="presell"/>
+		<input type='hidden' name='active_id' value="{$preData['id']}"/>
+		<!--基本信息区域-->
+		<div id='detail'>
+			<div id="J_DetailMeta" class="tm-detail-meta tm-clear">
+			<div class="tb-wrap">
+				<div class="tb-detail-hd">
+					<h1 >	{$name} </h1>
+					<h2  style="color:#e05757;">	{$short_desc} </h2>
+					<p> </p>
+				</div>
+				<div class="tm-fcs-panel" id='price_panel'>
+					
+				</div>
+				<script  type='text/html' id='priceTemplate'>
+					<%if(group_price){%>
+						<dl id="J_PromoPrice" class="tm-promo-panel"  >
+							<dt class="tb-metatit">原价格</dt>
+							<dd>
+								
+								
+								<em class="tm-yen">¥</em>
+								<span class="tm-price" style='text-decoration:line-through;'><%=sell_price%></span>
+								<div class="staticPromoTip"> </div>
+							</dd>
+						</dl>
+						<dl id="J_StrPriceModBox" class="tm-price-panel tm-price-cur">
+							<dt class="tb-metatit">会员价</dt>
+							<dd>
+								<em class="tm-yen">¥</em>
+								<span class="tm-price" id='real_price'><%=group_price%></span>
+								<div class="staticPromoTip"> </div>
+							</dd>
+						</dl>
+						
+						
+					<%}else{%>
+						
+						<dl id="J_StrPriceModBox" class="tm-price-panel tm-price-cur">
+							<dt class="tb-metatit">销售价</dt>
+							<dd>
+								<%if(maxSellPrice !=minSellPrice){%>
+								<em class="tm-yen">¥</em>
+								<span class="tm-price" id='real_price'><%=minSellPrice%>---</span>
+								<em class="tm-yen">¥</em>
+								<span class="tm-price" id='real_price'><%=maxSellPrice%>
+								<% }else{%>
+								<em class="tm-yen">¥</em>
+								<span class="tm-price" id='real_price'><%=sell_price%></span>
+								<div class="staticPromoTip"> </div>
+								<% }%>
+							</dd>
+						</dl>
+						
+						
+					<%}%>
+				</script>
+			<div id="J_TbcPresale">
+				<div class="tbc-presale ">
+					<div class="tbc-presale-title">
+						<span class="tb-name tb-property-type">预售中</span>
+						<div class="tbc-presale-content tbc-presale-price-content">
+							<sapn class='countdown det_tuan' id="timeRemaining-1" style='line-height:40px;'>
+							{if:$preData["end_time"]>0}
+									还有
+										<span id='cd_day_1'></span>天
+										<span id='cd_hour_1'></span>小时
+										<span id='cd_minute_1'></span>分
+										<span id='cd_second_1'></span>秒	  结束
+										<input name='endTime' type='hidden' value='{$preData["end_time"]}' />
+							{else:}
+								预售已结束
+							{/if}
+							</sapn>
+							<!-- <a class="tbc-presale-rule-trigger J_TbcPresaleRuleTrigger" target="_blank" href="">规则</a> -->
+							<div class="tbc-presale-rule-content J_TbcPresaleRule">
+							</div>
+						</div>
+						</div>
+						<div class="tbc-presale-line">
+							<span class="tb-name tb-property-type">预售流程</span>
+							<div class="tbc-presale-content">
+								<div>
+									<div class="tbc-presale-step-tip tbc-presale-step-tip2" >
+										<p>
+											{$preData['wei_text']}
+										</p>
+										<i></i>
+									</div>
+									<div class="tbc-presale-step-tip tbc-presale-step-tip3">
+										<p>
+											尾款支付后{$preData['send_days']}天内发货
+										</p>
+										<i></i>
+									</div>
+								</div>
+								<div class="tbc-presale-steps">
+									<span class="tbc-presale-step-tag tbc-presale-step-tag-active">1</span>
+									<span class="tbc-presale-step-line tbc-presale-step-line-active"></span>
+									<span class="tbc-presale-step-tag">2</span>
+									<span class="tbc-presale-step-line"></span>
+									<span class="tbc-presale-step-tag">3</span>
+								</div>
+								<div>
+									<div class="tbc-presale-step-price tbc-presale-step1">
+										<p>
+											预付款:{$preData['money_rate']}%
+										</p>
+										<p class="tbc-presale-price red" id='premoney'>
+											¥
+											{if:$maxSellPrice!=$minSellPrice}
+											<strong>{$minPresellPrice}-{$maxPresellPrice}</strong>
+											{else:}
+											<strong>{$presellPrice}</strong>
+											{/if}
+										</p>
+									</div>
+									<div class="tbc-presale-step-price tbc-presale-step2">
+										<p>
+											尾款:{echo:100-$preData['money_rate']}%
+										</p>
+										<p class="tbc-presale-price" id='weimoney'>
+											¥
+											{if:$maxSellPrice!=$minSellPrice}
+											<strong>{echo: number_format($minSellPrice - $minPresellPrice,2)}-{echo:number_format($maxSellPrice-$maxPresellPrice,2)}</strong>
+											{else:}
+											<strong>{echo:number_format($sell_price - $presellPrice,2)}</strong>
+											{/if}
+										</p>
+									</div>
+									<div class="tbc-presale-step-price tbc-presale-step3">
+										<p>
+											发货
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+				<div class="tb-meta">
+					<dl id="J_RSPostageCont" class="tm-delivery-panel">
+						<dt class="tb-metatit">配送至</dt>
+						<dd>
+							<div class="tb-postAge" style='color:#666;padding-top:0px;'>
+								<!-- 配送地址开始 -->
+								<ul id="list1">
+									<li id="summary-stock">
+										<div class="dd">
+											<div id="store-selector" >
+											</div><!--store-selector end-->
+											<div id="store-prompt"><strong></strong></div><!--store-prompt end--->
+										</div>
+									</li>
+								</ul>
+
+								<!-- 配送地址结束 -->
+
+
+								{$freightInfo}
+								<a href="{url:/site/help/id/73}" style='color:red;display:inline-block;' target="_blank">配送说明</a>
+							</div>
+						</dd>
+					</dl>
+				</div>
+				<div class="tb-meta">
+					<dl id="J_RSPostageCont" class="tm-delivery-panel">
+						<dt class="tb-metatit">服务</dt>
+						<dd>
+							<div class="tb-postAge">
+							由{if:isset($seller)}
+							{$seller['true_name']}
+							{else:}
+							山城速购
+							{/if}
+							配送,并提供售后服务
+							</div>
+						</dd>
+					</dl>
+				</div>
+				<div style='clear:both;'></div>
+					<ul class="tm-ind-panel">
+						<li class="tm-ind-item tm-ind-sellCount canClick" >
+							<div class="tm-indcon" onclick="jumpTo('buyHistory')">
+									<span class="tm-label">销售记录</span>
+								<span class="tm-count">{$buy_num}</span>
+							</div>
+						</li>
+						<li id="J_ItemRates" class="tm-ind-item tm-ind-reviewCount canClick tm-line3">
+							<div class="tm-indcon"  onclick="jumpTo('point')">
+								<span class="tm-label">累计评价</span>
+								<span class="tm-count">{$comments}</span>
+							</div>
+						</li>
+						<li class="tm-ind-item tm-ind-emPointCount" >
+							<div class="tm-indcon">
+								<a target="_blank" href="#">
+									<span class="tm-label">送积分</span>
+									<span class="tm-count">{$point}</span>
+								</a>
+							</div>
+						</li>
+					</ul>
+					<div class="tb-key">
+						<div class="tb-skin">
+							<div class="tb-sku">
+								
+								{if:$spec_array}
+								{set:$specArray = JSON::decode($spec_array);}
+								{foreach:items=$specArray}
+								<dl class="m_10 clearfix" name="specCols">
+									<dt>{$item['name']}</dt>
+									<dd class="w_45" style="margin-left:67px;" id="specList{$item['id']}">
+										{set:$specVal=explode(',',trim($item['value'],','))}
+										{foreach:items=$specVal item=$spec_value}
+										{if:$item['type'] == 1}
+										<div class="item w_27"><a href="javascript:void(0);" onclick="sele_spec(this);" value='{"id":"{$item['id']}","type":"{$item['type']}","value":"{$spec_value}","name":"{$item['name']}"}' >{$spec_value}<span></span></a></div>
+										{else:}
+										<div class="item"><a href="javascript:void(0);" onclick="sele_spec(this);" value='{"id":"{$item['id']}","type":"{$item['type']}","value":"{$spec_value}","name":"{$item['name']}"}' ><img src="{webroot:$spec_value}" width='30px' height='30px' /><span></span></a></div>
+										{/if}
+										{/foreach}
+									</dd>
+								</dl>
+								{/foreach}
+								{/if}
+																								
+								<dl class="tb-amount tm-clear">
+									<dt class="tb-metatit">数量</dt>
+									<dd id="J_Amount">
+										<input class="gray_t f_l" type="text" id="buyNums" onblur="checkBuyNums();get_delivery_fee()" value="1" maxlength="5" />
+											<div class="resize">
+												<a class="add" href="javascript:modified(1);get_delivery_fee()"></a>
+												<a class="reduce" href="javascript:modified(-1);get_delivery_fee()"></a>
+											</div>
+											<span class="mui-amount-unit">&nbsp;件</span>
+										<em id="J_EmStock" class="tb-hidden" style="display: inline;">库存<label id="data_storeNums">{$store_nums}</label>件</em>
+										<span id="J_StockTips"> </span>
+									</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+					
+					
+				</div>
+			</div>
+
+		<!--购买区域-->
+		<div class="current">
+			{if:$store_nums <= 0}
+				该商品已售完，不能购买，您可以看看其它商品！(<a href="{url:/simple/arrival/goods_id/$id}" class="orange" style="color:#F15A24">到货通知</a>)
+			{else:}
+
+			<input class="submit_buy" type="button" id="buyNowButton" onclick="buy_now();" value="立即购买" />
+
+				
+			{/if}
+		</div>
+		
+		<div class="tm-ser tm-clear">
+			<dl class="tm-clear">
+				<dt class="tb-metatit">服务承诺</dt>
+				<dd class="tm-laysku-dd">
+				<ul class="tb-serPromise">
+					{set:$config = new Config('site_config');}
+					{set:$server_product = unserialize(IFilter::stripSlash($config->product_page))}
+					{if:!empty($server_product)}
+					{foreach:items=$server_product}
+					<li>
+						<a target="_blank"  href="{$item['link']}"> {$item['server_name']} </a>
+					</li>
+					{/foreach}
+					{/if}
+				</ul>
+			</dl>
+		</div>
+
+	</div>
+		<!--图片放大器-->
+		<div class="tb-gallery">
+		<div class="tb-booth" id='bigPic'>
+			{if:$tag_data}
+				{foreach:items=$tag_data}
+				{set:$right=$key*60}
+			 		<img src="{webroot:$item['img']}" style='right:{$right}px' class="mark">
+				{/foreach}
+			{/if}
+				
+			<a target="_blank" rel="nofollow" href="" >
+			<span class="ks-imagezoom-wrap">		
+			
+				<img id="J_ImgBooth"  name="bigpro"  src="" style='cursor:crosshair;'>
+				<span class="ks-imagezoom-lens" style="position: absolute; border:1px solid blue;left:1px;"></span>
+			</span>
+			</a>
+		</div>
+		<div id='detShow' class="ks-overlay ks-imagezoom-viewer" style="width: 435px; height: 435px; left: 480px; top: 20px;display:none;">
+			<div id="detPic" class="ks-overlay-content">
+				<img style="position: absolute; top: 0px; left: 0px;" src="">
+			</div>
+		</div>
+		<ul id="J_UlThumb" class="tb-thumb tm-clear">
+			{if:count($photo)!=0}
+			{foreach:items=$photo}
+			<li class="">
+				<a href="#" onmouseover='showBig("{url:/pic/thumb/img/$item[img]/w/435/h/435}","{webroot:$item[img]}")'>
+					<img src="{url:/pic/thumb/img/$item[img]/w/60/h/60}">
+				</a>
+			</li>
+			{/foreach}
+			{else:}
+				<li class="">
+					<a href="#" onclick='javascript:void(0)'>
+						<img src="{skin:images/front/nopic_435_435.gif}">
+					</a>
+				</li>
+			{/if}
+		</ul>
+		<div style="margin-top:10px;margin-left:50px;">			
+			<!-- JiaThis Button BEGIN -->
+				<style>
+					.bdshare_popup_box{z-index:100000000;}
+					.bdshare_dialog_box{z-index:100000000;}
+					.bd_weixin_popup_bg{z-index:100000000;}
+					.bd_weixin_popup{z-index:100000000;}
+				</style>
+
+				
+			<div class="bdsharebuttonbox">
+				<a href="#" class="bds_more" data-cmd="more">分享到：</a>
+				<a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+			</div>
+			<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- JiaThis Button END -->
+			{set:$cls=isset($favorite_id_arr)&&in_array($id,$favorite_id_arr) ? 'guanzhu' : 'quguan'}
+				<div class='{$cls}'  onclick='favorite_add(this)' style="line-height:26px;position:absolute; left:300px;bottom:1px; padding-left:17px; " id="gz"><a href='javascript:void(0)' onclick='favorite_add(this)'>我的关注：({$favorite}人气)</a></div>
+		</div>
+	</div>
+
+</div>
+	
+<script type='text/javascript'>
+	$("#gz").click(function(){$(this).removeClass('quguan').addClass('guanzhu');});
+</script>
+
+
+<div class="wrapper clearfix container_2">
+
+	<!--左边栏-->
+	<div class="sidebar f_l">
+		{if:isset($seller)}
+		<!--商家-->
+		<div class="box m_10">
+			<div class="title"><a target='blank' href='{url:/site/home/id/$seller[id]}'>{$seller['true_name']}</a></div>
+			<div class="cont">
+				<ul class="list">
+					{set:$ave = statistics::getSellerGrade($seller['id']);$ave = $ave*70/5;}
+					<li style='background:none;'>评分：<span class="grade"><i style="width:{$ave}px"></i></span></li>
+					<li style='background:none;'>客服QQ:
+						<a target="_blank" href="{echo:Sonline::getChatUrl($seller['server_num'])}"  target="_blank">
+							<img border="0"  src="{skin:images/qq.jpg}"/>
+						</a>
+					</li>
+					<li style='background:none;'>
+					<a class="btn_blue bold" href="{url:/site/home/id/$seller[id]}" target="_blank">进入店铺</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		{/if}
+					<!--促销规则-->
+		<div class="box m_10">
+			<div class="title">促销活动</div>
+			<div class="cont">
+				<ul class="list">
+				{foreach:items=$promotion}
+					<li>{$item['info']}</li>
+				{/foreach}
+				</ul>
+			</div>
+		</div>
+	
+
+		<!--热卖商品-->
+		<div class="box m_10">
+			<div class="title">热卖商品</div>
+			<div class="content" style='width:100%;'>
+				<ul class="ranklist">
+					{foreach:items=Api::run('getCommendHot')}
+									<li class="current">
+						<a href="{url:/site/products/id/$item[id]}" target="_blank"><img width="58px" height="58px" alt="苹果" src="{url:/pic/thumb/img/$item[img]/w/58/h/58}" /></a>
+						<a title="{$item['name']}" class="p_name" href="{url:/site/products/id/$item[id]}" target="_blank">{$item['name']}</a>
+						<b>￥{$item['sell_price']}</b>
+					</li>
+					{/foreach}
+				</ul>
+			</div>
+		</div>
+		<!--热卖商品-->
+	</div>
+
+	{include:layouts/goods_det.html}
+</div>
+<script type='text/javascript' src='{theme:javascript/area_show.js}'></script>
+<script type="text/javascript">
+$(function(){
+
+//图片初始化
+var goodsSmallPic = "{skin:images/front/nopic_435_435.gif}";
+var goodsBigPic   = "{skin:images/front/nopic_435_435.gif}";
+
+//存在图片数据时候
+{if:isset($photo) && $photo}
+goodsSmallPic = "{webroot:}{echo:Thumb::get($photo[0]['img'],435,435)}";
+goodsBigPic   = "{webroot:}{$photo[0]['img']}";
+{/if}
+$('#J_ImgBooth').attr('src',goodsSmallPic);
+$('#detShow img').attr('src',goodsBigPic);
+
+
+
+
+//开启倒计时功能
+var cd_timer = new countdown();
+
+
+//城市地域选择按钮事件
+$('.sel_area').hover(
+	function(){
+		$('.area_box').show();
+	},function(){
+		$('.area_box').hide();
+	}
+);
+$('.area_box').hover(
+	function(){
+		$('.area_box').show();
+	},function(){
+		$('.area_box').hide();
+	}
+);
+
+//获取地址的ip地址
+getAddress();
+
+//生成商品价格
+var priceHtml = template.render('priceTemplate',{"group_price":"{$group_price}","sell_price":"{$sell_price}","maxSellPrice":"{$maxSellPrice}","minSellPrice":"{$minSellPrice}"});
+$('#price_panel').html(priceHtml);
+
+
+//按钮绑定
+$('[name="showButton"]>label').click(function(){
+	$(this).siblings().removeClass('current');
+	if($(this).hasClass('current') == false)
+	{
+		$(this).addClass('current');
+	}
+	$('[name="showBox"]>div').addClass('hidden');
+	$('[name="showBox"]>div:eq('+$(this).index()+')').removeClass('hidden');
+	var add = $('[name="showButton"]').find('.spec').length>0 ? 1 : 0;
+	
+			switch($(this).index())
+			{
+				case (1+add):
+				{
+					comment_ajax();
+				}
+				break;
+		
+				case (2+add):
+				{
+					history_ajax();
+				}
+				break;
+		
+				case (3+add):
+				{
+					refer_ajax();
+				}
+				break;
+		
+			}
+
+
+});
+
+});
+
+//禁止购买
+function closeBuy()
+{
+	if($('#buyNowButton').length > 0)
+	{
+		$('#buyNowButton').attr('disabled','disabled');
+		$('#buyNowButton').addClass('disabled');
+	}
+
+	if($('#joinCarButton').length > 0)
+	{
+		$('#joinCarButton').attr('disabled','disabled');
+		$('#joinCarButton').addClass('disabled');
+	}
+}
+
+//开放购买
+function openBuy()
+{
+	if($('#buyNowButton').length > 0)
+	{
+		$('#buyNowButton').removeAttr('disabled');
+		$('#buyNowButton').removeClass('disabled');
+	}
+
+	if($('#joinCarButton').length > 0)
+	{
+		$('#joinCarButton').removeAttr('disabled');
+		$('#joinCarButton').removeClass('disabled');
+	}
+}
+
+//加载根据地域获取城市
+function getAddress()
+{
+	//根据IP查询所在地
+	var ipAddress = $.cookie('ipAddress');
+	if(ipAddress)
+	{
+		searchDelivery(ipAddress);
+	}
+	else
+	{
+		$.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js',function(){
+			ipAddress = remote_ip_info['province'];
+			$.cookie('ipAddress',ipAddress);
+			searchDelivery(ipAddress);
+		});
+	}
+}
+
+
+
+/**
+ * 根据省份获取运费信息
+ * @param province 省份名称
+ */
+function searchDelivery(province)
+{
+	var url = '{url:/block/searchPrivice/random/@random@}';
+	url = url.replace("@random@",Math.random);
+
+	$.getJSON(url,{'province':province},function(json)
+	{
+		if(json.flag == 'success')
+		{
+			delivery(json.area_id,province);
+		}
+	});
+}
+
+/**
+ * 计算运费
+ * @param provinceId
+ * @param provinceName
+ */
+function delivery(provinceId,provinceName)
+{
+	$('.sel_area').text(provinceName);
+
+	var buyNums = $('#buyNums').val();
+	var productId = $('#product_id').val();
+	var goodsId = "{$id}";
+
+	//通过省份id查询出配送方式，并且传送总重量计算出运费,然后显示配送方式
+	var url = '{url:/block/order_delivery}';
+	$.getJSON(url,{'province':provinceId,'goodsId':goodsId,'productId':productId,'num':buyNums,'random':Math.random},function(json)
+	{
+		//清空配送信息
+		$('#deliveInfo').empty();
+
+		for(var item in json)
+		{
+			var deliveRowHtml = template.render('deliveInfoTemplate',json[item]);
+			$('#deliveInfo').append(deliveRowHtml);
+		}
+	});
+}
+
+/**
+ * 获取评论数据
+ * @page 分页数
+ */
+function comment_ajax(page)
+{
+	if(!page && $.trim($('#commentBox').text()))
+	{
+		return;
+	}
+	page = page ? page : 1;
+	var url = '{url:/site/comment_ajax/page/@page@/goods_id/$id}';
+	url = url.replace("@page@",page);
+	$.getJSON(url,function(json)
+	{
+		//清空评论数据
+		$('#commentBox').empty();
+
+		for(var item in json.data)
+		{
+			var commentHtml = template.render('commentRowTemplate',json.data[item]);
+			$('#commentBox').append(commentHtml);
+		}
+		$('#commentBox').append(json.pageHtml);
+	});
+}
+
+/**
+ * 获取购买记录数据
+ * @page 分页数
+ */
+function history_ajax(page)
+{
+	if(!page && $.trim($('#historyBox').text()))
+	{
+		return;
+	}
+	page = page ? page : 1;
+	var url = '{url:/site/history_ajax/page/@page@/goods_id/$id}';
+	url = url.replace("@page@",page);
+	$.getJSON(url,function(json)
+	{
+		//清空购买历史记录
+		$('#historyBox').empty();
+		$('#historyBox').parent().parent().find('.pages_bar').remove();
+
+		for(var item in json.data)
+		{
+			var historyHtml = template.render('historyRowTemplate',json.data[item]);
+			$('#historyBox').append(historyHtml);
+		}
+		$('#historyBox').parent().after(json.pageHtml);
+	});
+}
+
+/**
+ * 获取购买记录数据
+ * @page 分页数
+ */
+function refer_ajax(page)
+{
+	if(!page && $.trim($('#referBox').text()))
+	{
+		return;
+	}
+	page = page ? page : 1;
+	var url = '{url:/site/refer_ajax/page/@page@/goods_id/$id}';
+	url = url.replace("@page@",page);
+	$.getJSON(url,function(json)
+	{
+		//清空评论数据
+		$('#referBox').empty();
+
+		for(var item in json.data)
+		{
+			var commentHtml = template.render('referRowTemplate',json.data[item]);
+			$('#referBox').append(commentHtml);
+		}
+		$('#referBox').append(json.pageHtml);
+	});
+}
+
+/**
+ * 获取购买记录数据
+ * @page 分页数
+ */
+function discuss_ajax(page)
+{
+	if(!page && $.trim($('#discussBox').text()))
+	{
+		return;
+	}
+	page = page ? page : 1;
+	var url = '{url:/site/discuss_ajax/page/@page@/goods_id/$id}';
+	url = url.replace("@page@",page);
+	$.getJSON(url,function(json)
+	{
+		//清空购买历史记录
+		$('#discussBox').empty();
+		$('#discussBox').parent().parent().find('.pages_bar').remove();
+
+		for(var item in json.data)
+		{
+			var historyHtml = template.render('discussRowTemplate',json.data[item]);
+			$('#discussBox').append(historyHtml);
+		}
+		$('#discussBox').parent().after(json.pageHtml);
+	});
+}
+
+
+
+/**
+ * 规格的选择
+ * @param _self 规格本身
+ */
+function sele_spec(_self)
+{
+	var rate = {$preData['money_rate']};
+	var specObj = $.parseJSON($(_self).attr('value'));
+
+	
+
+	//已经为选中状态时
+	if($(_self).attr('class') == 'current')
+	{
+		$(_self).removeClass('current');
+	}
+	else
+	{
+		//清除同行中其余规格选中状态
+		$('#specList'+specObj.id).find('a.current').removeClass('current');
+
+		$(_self).addClass('current');
+	}
+
+	//检查规格是否选择符合标准
+	if(checkSpecSelected())
+	{
+		//整理规格值
+		var specArray = [];
+		$('[name="specCols"]').each(function(){
+			specArray.push($(this).find('a.current').attr('value'));
+		});
+		var specJSON = '['+specArray.join(",")+']';
+
+		//获取货品数据并进行渲染
+		$.getJSON('{url:/pregoods/getProduct}',{"goods_id":"{$id}","rate":rate,"specJSON":specJSON,"random":Math.random},function(json){
+			//window.realAlert(JSON.stringify(json));
+			
+			if(json.flag == 'success')
+			{
+				var priceHtml = template.render('priceTemplate',json.data);
+				$('#price_panel').html(priceHtml);
+				$('#premoney').find('strong').html(json.data.prePrice);
+				$('#weimoney').find('strong').html(json.data.weiPrice);
+				//普通货品数据渲染
+				$('#data_goodsNo').text(json.data.products_no);
+				$('#data_storeNums').text(json.data.store_nums);
+				$('#product_id').val(json.data.id);
+				get_delivery_fee();
+				//库存监测
+				checkStoreNums();
+			}
+			else
+			{
+				alert(json.message);
+				closeBuy();
+			}
+		});
+	}
+}
+
+/**
+ * 监测库存操作
+ */
+function checkStoreNums()
+{
+	var storeNums = parseInt($.trim($('#data_storeNums').text()));
+	if(storeNums > 0)
+	{
+		openBuy();
+	}
+	else
+	{
+		closeBuy();
+	}
+}
+
+/**
+ * 检查规格选择是否符合标准
+ * @return boolen
+ */
+function checkSpecSelected()
+{
+	if($('[name="specCols"]').length === $('[name="specCols"] .current').length)
+	{
+		return true;
+	}
+	return false;
+}
+
+//检查购买数量是否合法
+function checkBuyNums()
+{
+	//购买数量小于0
+	var buyNums = parseInt($.trim($('#buyNums').val()));
+	if(buyNums <= 0)
+	{
+		$('#buyNums').val(1);
+		return;
+	}
+
+	//购买数量大于库存
+	var storeNums = parseInt($.trim($('#data_storeNums').text()));
+	if(buyNums >= storeNums)
+	{
+		$('#buyNums').val(storeNums);
+		return;
+	}
+}
+
+/**
+ * 购物车数量的加减
+ * @param code 增加或者减少购买的商品数量
+ */
+function modified(code)
+{
+	var buyNums = parseInt($.trim($('#buyNums').val()));
+	switch(code)
+	{
+		case 1:
+		{
+			buyNums++;
+		}
+		break;
+
+		case -1:
+		{
+			buyNums--;
+		}
+		break;
+	}
+
+	$('#buyNums').val(buyNums);
+	checkBuyNums();
+}
+
+//添加收藏夹
+function favorite_add(obj)
+{
+	{if:isset($this->user['user_id'])}
+		$.getJSON('{url:/simple/favorite_add}',{'goods_id':{$id},'random':Math.random},function(content)
+		{
+			if(content.isError == false)
+			{
+				$(obj).text(content.message);
+			}
+			else
+			{
+				alert(content.message);
+			}
+		});
+	{else:}
+		window.location.href="{url:/simple/login/?callback=/site/products/id/$id}";
+	{/if}
+}
+
+//立即购买按钮
+function buy_now()
+{
+	//对规格的检查
+	if(!checkSpecSelected())
+	{
+		tips('请选择商品的规格');
+		return;
+	}
+
+	//设置必要参数
+	var buyNums  = parseFloat($.trim($('#buyNums').val()));
+	var id = $('#goods_id').val();
+	var type = 'goods';
+
+	if($('#product_id').val())
+	{
+		id = $('#product_id').val();
+		type = 'product';
+	}
+	var active_id = $('input[name=active_id]').val();
+	var url = '{url:/pregoods/cart2/id/@id@/num/@buyNums@/type/@type@/active_id/@active_id@}';
+	url = url.replace('@id@',id).replace('@buyNums@',buyNums).replace('@type@',type).replace('@active_id@',active_id);
+
+
+	//页面跳转
+	window.location.href = url;
+}
+</script>
+</div>
+
+	

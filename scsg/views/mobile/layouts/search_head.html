@@ -1,0 +1,11 @@
+
+<div class="h-center">
+    <form method="get" action="{url:/}">
+		<input type="hidden" name="controller" value="site">
+		<input type="hidden" name="action" value="search_list">
+        <input type="text" name="word" id="keyword" value="" oninput="getKeywords('{url:/block/getLikeWords}',$(this))" class="h-search J-search-trigger" placeholder="输入关键词进行搜索">
+        <input type="submit" class="header-search-btn" value="">
+		<div class='words-give' ></div>
+    </form>
+</div>
+	        

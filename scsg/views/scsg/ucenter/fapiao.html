@@ -1,0 +1,60 @@
+<script type='text/javascript' src='{theme:javascript/fp.js}'></script>
+<link rel="stylesheet" type="text/css" href="{skin:/fap/css/fp.css}">
+<div class="main f_r">
+	<div class="uc_title m_10">
+		<label class="current"><span>在线补开发票</span></label>
+	</div>
+<div class="page">
+			<div class="topu">
+				<ul>
+					<li id="bkfps" class="fis dj_fis"><a class="bkfp" href="{url:/ucenter/fapiao}">补开发票</a></li>
+					<li id="ptfps"><a class="ptfp" href="{url:/ucenter/fapiao_his}">发票记录</a></li>
+				</ul>
+			</div>
+			<!--补开发票-->
+			<div class="content">
+				{if:$this->num==0}
+				<!--无补开发票订单-->
+				<div class="no_fap" >
+					<div class="tip_one clearfix">
+						<i class="icon_laba"></i>
+						<p>
+							• 商品的发票均由所属商家负责提供，所有发票合法有效。<br>
+							• 补开发票只能针对1月内订单。<br>
+						</p>
+					</div>
+					<div class="ts">您没有可以补开发票的订单噢。</div> 
+				</div>
+				{else:}
+				<!--无补开发票订单结束-->
+				
+				<div id="bk_cont" class="cz_fap">
+					<div class="" style="margin:0 0 10px 0;  font-size:13px;">
+						<p>
+							可补开发票记录<span style="font-size:20px;color:red;padding:0 5px;">{$this->num}</span>条
+						</p>
+					</div>
+					<table border="1" cellpadding="0" cellspacing="0">
+						<tr class="first_tr">
+							<td width="350px">订单号</td>
+							<td>订单日期</td>
+							<td>操作</td>
+						</tr>
+						{foreach:items=$this->orderFapiao}
+						<tr>
+							<td class="cotn">
+								<a  href="{url:/ucenter/order_detail/id/$item['id']}">{$item['order_no']}</a>
+							</td>
+							<td class="cotn">{$item['create_time']}</td>
+							<td class="cotn"><a href='{url:/ucenter/piao_ask/order_id/$item['id']}'> <input class="btn_gray btn_small" type="button" value="补开发票"/></a></td>
+						</tr>
+						{/foreach}
+					</table>
+				</div>
+				<div class="pages_bar f_r mt_10">{$this->db_order->getPageBar()}</div>
+				{/if}
+			</div>
+			<!--补开发票结束-->
+
+		</div>
+	</div>

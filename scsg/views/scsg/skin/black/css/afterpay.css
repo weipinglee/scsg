@@ -1,0 +1,24 @@
+@charset "utf-8";
+/*
+ * artDialog skin
+ * http://code.google.com/p/artdialog/
+ * (c) 2009-2011 TangBin, http://www.planeArt.cn
+ *
+ * This is licensed under the GNU LGPL, version 2.1 or later.
+ * For details, see: http://creativecommons.org/licenses/LGPL/2.1/
+ */
+ 
+/* common start */
+body { _margin:0; _height:100%; /*IE6 BUG*/ }
+	
+	p{text-align:left;}a{text-decoration:none;color:#333;}
+	.tanchu{width:400px;height:300px;margin:0 auto;}
+	.dialog{width:400px;height:350px;margin:auto auto;}
+	.dialog .con{font-size:16px;line-height:55px;color:#333;}
+	.dialog .con span{color:#f15a24;}
+	.dialog .pay{font-size:16px;line-height:70px;color:#666;}
+	.dialog .pay a{display:inline-block;border:1px solid #f15a33;width:120px;height:40px;line-height:40px;text-align:center;}
+	.dialog .pay a.pay_error{background:#f15a33;color:#fff;}
+	.dialog .pay i{display:inline-block;position:relative;top:20px;left:5px;width:60px;height:48px;}
+	.dialog .pay .succeed{background:url(icons/succeed.png) no-repeat;}
+	.dialog .pay .warning{background:url(icons/warning.png) no-repeat;}

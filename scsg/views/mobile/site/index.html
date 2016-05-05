@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<!-- saved from url=(0017)http://m.#.com/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="http://static-web.#.com/wap/img/collect-logo/#-collect-logo.png">
+        <title>山城速购</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+		<meta property="qc:admins" content="365014653761146463757" />
+        <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+		<link rel="stylesheet" href="{skin:css/index.css}" type="text/css">
+		<link rel="stylesheet" href="{skin:css/dialog.css}" type="text/css">
+		<script src='{theme:javascript/jquery-1.9.1.min.js}'></script>
+		<script src='{theme:javascript/touchslider.min.js}'></script>
+		<script src='{theme:javascript/index.js}'></script>
+		<script src='{theme:javascript/imglazyload.js}'></script>
+		<script src='{theme:javascript/common.js}'></script>
+		<script src='{theme:javascript/scrollTop.js}'></script>
+		<script src='{theme:javascript/dialog.js}'></script>  
+        <link rel="stylesheet" href="{skin:css/guess.css}" type="text/css">
+        <script src="{theme:javascript/cart.js}"></script>
+		<link rel="stylesheet" href="{skin:css/cart.css}" type="text/css">
+        <link rel="stylesheet" href="{skin:css/swiper.min.css}" type="text/css">
+		<script src="{theme:javascript/filter.js}"></script>
+		<script src="{theme:javascript/swiper.jquery.min.js}"></script>
+		</head>
+
+		
+    <body data-mps="PA4101">
+	
+        
+        <script type='text/javascript'>
+		        var join_cart_url = '{url:/simple/joinCart}';
+		        var cart_url = '{url:/simple/cart}';
+		        var promotion_url = '{url:/simple/promotionRuleAjax/random/@random@}';
+		        var del_cart_url = '{url:/simple/removeCartMany/link/cart}';
+		        
+		        function to_buy(){
+			        window.location.href='{url:/simple/cart2}';
+		        }
+		        (function(){
+			        var final_sum = {$this->final_sum};
+			        var tmpUrl = promotion_url;
+			        tmpUrl = tmpUrl.replace("@random@",Math.random());
+			        $.getJSON( tmpUrl ,{final_sum:final_sum},function(content){
+				        if(content.promotion.length > 0)
+				        {
+					        $('#cart_prompt .indent').remove();
+					        for(var i = 0;i < content.promotion.length; i++)
+					        {
+						        $('#cart_prompt').append('<p class="indent blue">'+content.promotion[i].plan+'，'+content.promotion[i].info+'</p>');
+					        }
+					        $('#cart_prompt').show();
+				        }
+				        else
+				        {
+					        $('#cart_prompt .indent').remove();
+					        $('#cart_prompt').hide();
+				        }
+				        /*开始更新数据 (2)*/
+	        
+				        //促销活动
+				        $('#promotion_price').html(content.proReduce);
+			        })
+	        })()
+	        </script>
+        <div id="page">
+      <section class="search_wrap ">
+        <div class="search_title">
+            <div class="logo">
+                <a href="{url:/site/category?}">
+				<img src="{skin:css/wap/top_nav_order_icon.png}" style="width:25px;height:25px;"></a>
+            </div>
+            <div class="search_input_wrap">
+			<a href="{url:/site/search}"class="search_input_wrap_a">
+                <form id="sForm" action="list.html" method="get">
+                    <input type="text" name="keyword" id="keyword" class="search_input" value="" placeholder="你要的，就在这里~">
+                    <input type="submit" class="search_icon" value="">
+                </form>
+			</a>
+            </div>
+            <a href="{url:/site/mail}" class="search_nav_icon_none">
+			<img src="{skin:css/wap/app_mail_nav.png}" style="width:35px;height:35px;"></a>
+
+        </div>
+        <style>
+        	
+        </style>
+  
+    </section>
+    <div class="search_placeholder"></div>
+    <div class="search_placeholder"></div>
+    <div style="height:60px;"></div>
+    
+<!--banner-->
+<section class="banner" style="overflow: hidden; visibility: visible; list-style: none; position: relative;">
+     
+
+		<ul class="homebanner" id="pro-banner" style="position: relative; overflow: hidden; -webkit-transition: left 600ms ease; transition: left 600ms ease; width: 7420px; left: 0px;">
+               {foreach:items=$this->index_slide}
+			   {set:$num=$key;}
+			    <li style="float: left; display: block; width: 1855px;">
+                    <a href="{webroot:$item['url']}">
+                        <img src="{webroot:$item['img']}">
+                    </a>
+                </li>
+				{/foreach}
+         </ul>
+
+        <div class="slider-page">
+                <span class="cur"></span>
+				{for:from=1 upto=$num}
+                <span class=""></span>
+				{/for}
+        </div>
+</section>
+<section class="top_menu">
+    <ul class="clear-fix">
+
+        <li class="fl">
+            <a href="{url:/simple/reg?callback=}">
+                <i class="icon_0_reg"></i>
+                <span>注册有礼</span>
+            </a>
+        </li>
+
+        <li class="fl">
+            <a href="{url:/ucenter}">
+                <i class="icon_2_wd"></i>
+                <span>我的山城</span>
+            </a>
+        </li>
+
+        <li class="fl">
+            <a href="{url:/ucenter/order}">
+                <i class="icon_3"></i>
+                <span>我的订单</span>
+            </a>
+        </li>
+
+
+        <li class="fl">
+            <a href="{url:/ucenter/favorite}">
+                <i class="icon_7"></i>
+                <span>我的关注</span>
+            </a>
+        </li>
+
+         <li class="fl">
+            <a href="{url:/site/tuangou}">
+                <i class="icon_4_qwds"></i>
+                <span>山城团购</span>
+            </a>
+        </li>
+
+         <li class="fl">
+            <a href="{url:/pregoods/presell_list}">
+                <i class="icon_5"></i>
+                <span>山城预售</span>
+            </a>
+        </li>
+
+         <li class="fl">
+            <a href="{url:/simple/cart?}">
+                <i class="icon_1"></i>
+                <span>购物车</span>
+            </a>
+        </li>
+
+         <li class="fl">
+            <a href="{url:/site/category}">
+                <i class="icon_6"></i>
+                <span>分类查询</span>
+            </a>
+        </li>
+
+    </ul>
+</section>
+	<section class="activity_floor">
+		<div><img src="{skin:images/ad2.jpg}" ></div>
+	</section>
+    <section class="suggestion">
+        <header class="title clear-fix">
+            <h2 class="fl">掌上团购</h2>
+
+            <a href="{url:/site/tuangou}">
+            <img src="{skin:css/wap/saojiao.png}" style="float:right;height: 15px; width: 15px;margin-top:12px;margin-left:2px;"> 
+
+
+          <p style=" float:right; font-size:14px;">更多</p>
+
+          </a>  
+            
+          <span class="fl"></span>
+        </header>
+        
+        
+        
+        <div class="content">
+            <ul class="clear-fix">
+            	{foreach:items=$this->tuanList}
+                     <li class="fl">
+                        <a href="{url:/site/tuan_product/active/$item['id']}}">
+
+                            <div class="img_wrap" style="width:80px;height:90px;">
+                                <img src="{url:$item['img']}">
+                            </div>
+                            <div class="price_wrap">
+                                <strong>￥{$item['regiment_price']}</strong>
+                                <del>￥{$item['sell_price']}</del>
+                            </div>
+                        </a>
+                    </li>
+				{/foreach}
+             </ul>
+        </div>
+        
+        
+        
+        
+    </section>
+
+    <section class="activity_floor">
+                       
+        
+        
+        <header class="title clear-fix">
+           <h2 class="fl">特价商品</h2>
+
+            <a href="{url:/site/tejia}">
+            <img src="{skin:css/wap/saojiao.png}" style="float:right;height: 15px; width: 15px;margin-top:12px;margin-left:2px;"> 
+
+          <p style=" float:right; font-size:14px;">更多</p>
+
+          </a> 
+          <span class="fl"></span>    
+        </header> 
+                                  
+                   
+  <section id="wrap" style="height:160px;">    
+                    <div class="brand_wrap swiper-container swiper-container-horizontal" >
+				        <div class="brand_swiper_wrap swiper-wrapper " style="height:146px;">
+					        <ul class="swiper-slide clear-fix fl swiper-slide-active" style="width: 640px;">
+						        {foreach:items=Api::run('getCommendHot',5)}
+							        <li class="fl">
+								        <div class="brand_one_box" style="height:140px;" >
+									        <a href="{url:/site/products/id/$item[id]}"><img src="{url:/pic/thumb/img/$item[img]/w/98/h/106}" onerror='this.src="{skin:images/front/nopic_435_435.gif}"' /></a>
+								        <a href="{url:/site/products/id/$item[id]}"><span class="title">{$item['name']}</span><span class="price" >￥{$item['sell_price']}</span></a></div>
+							        </li>  
+						        {/foreach}
+					        </ul>  
+				        </div>
+			        </div>
+                  <!--下双线-->
+              <div style="width:100%; height:12px; border-top:solid #EEE 1px; background:#e6e6e6;
+	border-bottom:solid #EEE 1px;">
+			</div> 
+		<script type="text/javascript">
+		   
+			window.WapFilter.init();
+			$('#submit-btn').on('click', function(){
+				$('#frms').submit();
+			});
+			//]]>
+		</script>                        
+        </section>
+        
+        
+
+
+ 
+         
+         
+         
+         
+                
+        
+        
+        
+
+
+    <!-- Swiper JS -->
+	<link rel="stylesheet" href="{skin:css/Swiper demo_files/swiper.min.css}">
+	<link rel="stylesheet" href="{skin:css/Swiper demo_files/fenlei.css}">
+	<script src="{theme:javascript/Swiper demo_files/zepto.min.js}"></script>
+	<script src="{theme:javascript/Swiper demo_files/touch.js}"></script>
+    <script src="{theme:javascript/Swiper demo_files/swiper.min.js}"></script>
+	 <script src="{theme:javascript/Swiper demo_files/hd.js}"></script>
+    <!-- Initialize Swiper -->
+
+		<!--分类产品嵌套-->
+	<div style="margin-top:10px;">
+	    <div class="swiper-container swiper-container-horizontal head" id="box1" >
+	        <div class="swiper-wrapper swiper_height">
+                {foreach:items=$this->categoryList}
+	            <div class="swiper-slide swiper_bg {if:$key==0} active {/if}">
+					<div class="swiper_tit">
+						<span class="ls"></span>
+						<span>{$item['name']}</span>
+					</div>
+				</div>
+                {/foreach}
+	        </div>
+	    </div>
+		<div>
+		<div class="swiper-container panel section_bg">
+			<section class="swiper-wrapper" style="background:#fff;margin-bottom:5px;">
+                {foreach:items=$this->categoryList item=$goods}
+				<div class="swiper-slide" {if:$key==0} style="width:100%;" {/if}>
+					<ul class="ul_conter">
+                        {foreach:items=$goods['goods']}
+						<li><a href="{url:/site/products/id/$item['id']}">
+								<div><img src="{url:/pic/thumb/img/$item[img]/w/170/h/170}"/></div>
+								<p class="fl_title">{$item['name']}</p>
+								<p><span class="ul_sell">月销售<b>{$item['sale']}</b>件</span></p>
+								<p><span class="ul_price">￥{$item['sell_price']}</span>				
+								</p>
+
+							</a>
+						</li>
+                        {/foreach}
+					</ul>
+				</div>
+                {/foreach}
+			</section>
+		</div>
+		</div>
+	</div>
+		<!--分类产品嵌套-->
+		<!--更换商品分类内容结束-->
+    </section>
+    <section class="guess_u_like">
+        <header class="title clear-fix" id="like_top" >
+            <h2 class="fl">猜你喜欢</h2>
+            <span class="fr"></span>
+        </header>
+        <div class="content">
+            <ul class="clear-fix">
+            	{foreach:items=$this->user_like_goods}
+              <li class="fl">
+               			 <a href="{url:/site/products/id/$item['id']}" class="goods-one">
+                   			 <div class="li-wrap">
+								<div class="img_wrap">
+                         		   <img src="{url:/pic/thumb/img/$item[img]/w/170/h/170}">
+                       			 </div>
+                       			  <p>{$item['name']}</p>
+                              		  <div class="price_wrap clear-fix">
+                                 		   <strong>￥{$item['sell_price']}</strong>
+                                       </div>
+                           	 </div>
+                        </a>
+
+                 </li>
+				 {/foreach}
+             </ul>
+
+        </div>
+        <div class="loading-ctn loading-imgS">
+            <p>查看更多</p>
+            <img alt="" src="files/loading.gif">
+        </div>
+    </section>
+    <!-- <input type="hidden" id="count" name="count" value="26"> -->
+
+        </div>
+        <input type="hidden" id="is_login" name="is_login" value="">
+        <input type="hidden" data-isnew="" data-isold="" id="is_app" value="">
+                <img src="{skin:images/files/hm.gif}" width="0" height="0">
+        <script type="text/javascript" src="{theme:javascript/jsstat3.min.js}"></script>
+		<div style="display: none;">
+		<script type="text/javascript" async src="{theme:javascript/h.js}"></script>
+		</div>
+		<img id="stat_image" src="{skin:images/files/__utm.gif}" style="display: none;">
+
+   {include:layouts/footer.html} 

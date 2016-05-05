@@ -1,0 +1,64 @@
+{set:$seo_data=array();$site_config=new Config('site_config');}
+{set:$seo_data['title']=$this->help_row['name'].'_'.$site_config->name;}
+{set:seo::set($seo_data);}
+
+{set:$cat_id=$this->cat_row['id'];}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0, maximum-scale=1.0">
+<meta content="telephone=no" name="format-detection" />
+<title>消息</title>
+
+<link rel="stylesheet" href="{skin:css/wap/index.css}" type="text/css" />
+<script type="text/javascript" src="{theme:javascript/js/jquery-1.9.1.min.js}"></script>
+<link rel="stylesheet" href="{skin:css/common.css}" type="text/css">               
+<script src="{theme:javascript/js/common.js}"></script>
+<link rel="stylesheet" href="{skin:css/wap/details.css}" type="text/css" />
+<link rel="stylesheet" href="{skin:css/search_list.css}" type="text/css">  
+<script src="{theme:javascript/js/scrollTop.js}"></script>
+
+</head>
+<body>
+	<style>
+		.sortSub ul {
+			background: none;
+			padding: 0 0 10px 10px;
+			box-shadow: none;
+		}
+		.sortSub ul li {
+			text-indent:2em;} 
+		
+		.sortSubs img{width: 100%;}	
+	</style>
+
+
+         <header class="wap-header">
+    <div class="wap-topbar" style="">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
+        <div class="h-center">
+            <h1>{$this->help_row['name']}</h1>
+        </div>
+            <a href="{url:site/mail}" class="search_nav_icon_none"><img src="{skin:css/wap/app_mail_nav.png}" style="width:35px;height:35px;"></a>
+    </div>
+    </header>
+
+	
+
+		<ul class="sortSubs" id="sortSub" style="width:100%;">
+			
+				<li style="width:100%;">
+					<ul style="width:100%;">
+						
+							<li style="width:100%;">{$this->help_row['content']}</li>
+					  
+                 
+                    </ul>
+                   
+				</li>
+		</ul>
+
+					<div style="height:70px;color:#fff">1!@#</div>
+
+{include:layouts/footer_1.html}

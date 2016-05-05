@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://m.#.com/s/search?keyword=%E8%A1%A3%E6%9C%8D -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="http://static-web.#.com/wap/img/collect-logo/#-collect-logo.png">
+        <title>山城速购</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+        <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+		<link rel="stylesheet" href="{skin:css/search.css}" type="text/css">        
+        <script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		<script src="{theme:javascript/common.js}"></script>    
+		</head>
+
+<body data-mps="PA4101">
+   <div id="page">
+      <header class="wap-header">
+    	<div class="wap-topbar" style="">
+	        <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
+	        <div class="h-center">
+	            {include:layouts/search_head.html}
+			</div>
+	        <a href="{url:/site/mail}" class="search_nav_icon_none"><img src="{skin:css/wap/app_mail_nav.png}" style="width:35px;height:35px;"><!-- <i class="num">2</i> --></a>
+   		 </div>
+	</header>
+	<section id="contents">
+	         <section class="s-list cf" id="dataList">
+						
+						<div class="search-conts">
+							<h5><i><img src="{skin:css/wap/hot-line.png}"></i>&nbsp;热门搜索></h5>
+							<ul>
+								{foreach:items=Api::run('getKeywordList')}
+								<li><a href="{url:/site/search_list/word/$item['word']}">{$item['word']}</a></li>
+								{/foreach}
+							</ul>
+						</div>
+													   
+				</section>
+	</section>
+  </div>
+
+
+<script language='javascript'>
+    $(function(){
+    $('#keyword').click(function(){
+    $div1=$('.words-give');
+    $div2=$('#dataList');
+    if($div1.is(':hidden')){
+    $div2.show();
+    }else if($div1.is(':visible')){
+    $div2.hide();
+    }
+    });
+    });
+</script>
+</body>
+</html>

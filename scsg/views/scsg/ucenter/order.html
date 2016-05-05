@@ -1,0 +1,206 @@
+{js:my97date}
+<div class="main f_r">
+    <div class="uc_title m_10">
+        <label class="current"><span>我的订单</span></label>
+    </div>
+	<!--新增搜索-->
+	<div class="sstj">
+	<form name='search_order' >
+		<input type="text" placeholder="输入订单号进行搜索" class="ddss" name='order_no' ><input class="dstxt" name='find_order' value='订单搜索'  type='button'>
+		<span class="showst">精简筛选条件</span>
+		<div class="jsx">
+			<table>
+				<tr>
+					
+					<td><span>成交时间</span>
+					<input class="order_time" type="text" name="beginTime" onfocus="WdatePicker()"  />到
+					<input class="order_time" type="text" name="endTime" onfocus="WdatePicker()" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<span>商户状态</span>
+						<select name='seller_id' >
+							<option  value='0'>全部</option>
+							<option value='2'>平台</option>
+							<option value='1'>商户</option>
+						</select>
+						<span>订单状态</span>
+						
+						<select name='status' >
+							<option value='0'>全部</option>
+							<option value='1'>等待支付</option>
+							<option value='2'>取消订单</option>
+							<option value='3'>等待发货</option>
+							<option value='4'>已发货</option>
+							<option value='6'>已完成</option>
+						</select>
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+	</form>
+
+	</div>
+	<form action='{url:/block/dopaymerge}' method='post' name='merge_pay'>
+	<div class='m_5' id='merge_pay'>
+		<input type="button" class='btn_gray btn_small' value="批量付款" name='merge_show' onclick='merge_pay_toggle()'/>
+		<select style='height:25px;' name='payment' class='hide'>
+			<option>请选择支付方式</option>
+			{set:$paymentList=Api::run('getPaymentList')}
+			{foreach:items = $paymentList}
+			{if:$item['id']!=0 || $this->freight_collect!=0}
+			<option value='{$item["id"]}'>{$item['name']}</option>
+			{/if}
+			{/foreach}
+		</select>
+		<input type="button" class='btn_gray btn_small hide' value="确认支付" name='to_pay' onclick='merge_pay_submit()'/>
+	</div>
+	
+	<!--新增搜索结束-->
+<!--全选js和显示隐藏筛选条件的js写在nav.js中-->
+    <div class="box m_10">
+        <table class="list_table" width="100%" cellpadding="0" cellspacing="0" >
+        	<col />
+            <tr>
+                <th ><span class="checktet"><input id="ckAll" class="checks" type="checkbox"/>全选</span></th>
+                <th>商品名称</th>
+             
+                <th>单价（元）</th>
+                <th>数量</th>
+                <th>状态</th>
+                <th>交易操作</th>
+               
+            </tr>
+            {set:$queryOrderList=$this->order_db;$tem_order_id=-1;}
+			{foreach:items = $queryOrderList->find()}
+			{set:$even=''}
+			{if:$item['id']!=$tem_order_id}
+			{set:$status=Order_Class::getOrderStatus($item);}
+
+			{set:$tem_order_id = $item['id'];$even = 'even'}
+				<tr class='{$even}'>
+
+
+					<td>
+						{if:$status==2}
+						<input  name="sub[]" class="checks" type="checkbox" value='{$item["id"]}'/>
+						{/if}
+						{$item['create_time']}
+					</td>
+					<td style='text-align:left;'>
+						订单号：<a href="{url:/ucenter/order_detail/id/$item[id]}" class="orange">{$item['order_no']}</a>
+					</td>
+					<td >
+						总计：{$item['order_amount']}
+					</td>
+
+						
+
+					<td>
+
+					</td>
+					<td>
+						订单状态:{echo:Order_Class::orderStatusText($status)}
+					</td>
+					<td>
+						{if:$status==2}
+							<a topay='{url:/block/dopay/order_id/$item["id"]}' money='{$item["order_amount"]}' href='javascript:void(0)' onclick='pay_confirm(this);'  class='btn_gray btn_small' style='margin-bottom:5px;'>立即支付</a>
+						{/if}
+						{if:in_array($status,array(1,2))}
+							<a href="{url:/ucenter/order_status/op/cancel/order_id/$item['id']}" class='btn_gray btn_small'>取消订单</a>
+						
+						{/if}
+						{if:$status==25}
+							<a tourl="{url:/ucenter/order_status/op/confirm/order_id/$item['id']}" href='javascript:void(0)' class='btn_gray btn_small' style='margin-bottom:5px;' onclick='ok_confirm(this);'>确认收货</a>
+					
+						{/if}
+					</td>
+				</tr>
+			{/if}
+			
+            <tr>
+            	
+				<td>
+					<a href="{url:/site/products/id/$item['goods_id']}">
+						<img src="{url:/pic/thumb/img/$item['img']/w/88/h/88}" width="88px" height="88px"  onerror='this.src="{skin:images/front/nopic_435_435.gif}"'/>
+					</a>
+				</td>
+				<td style='text-align:left;'>
+					{set:$goods_data = JSON::decode($item['goods_array'])}
+					<a >
+						{$goods_data['name']}{$goods_data['value']}
+					</a>
+				</td>
+            	<td>   
+            		<p>￥{$item['real_price']}</p>
+            	</td>
+				<td>
+					{$item['goods_nums']}	
+				</td>
+				<td>
+					<p>{echo:Order_Class::get_order_good_status($item)}</p>
+					
+				</td>
+				
+				<td>
+					
+				<p>{if:$item['refunds_status']==0 && in_array($item['status'],array(2,7,8,9)) && $item['order_amount']!=0}
+					<a href="{url:/ucenter/refunds_edit/og_id/$item['og_id']}"  class='btn_gray btn_small'>申请退换货</a>
+					{elseif:$item['order_amount']==0 && $item['is_send']==1 && $item['refunds_status']==0}
+					<a href="{url:/ucenter/refunds_edit/og_id/$item['og_id']}"  class='btn_gray btn_small'>申请退换货</a>
+					
+					{elseif:$item['can_chg'] && Refunds_Class::order_goods_chg($item)}
+					<a href="{url:/ucenter/refunds_edit/og_id/$item['og_id']}"  class='btn_gray btn_small'>申请退换货</a>
+					{/if}
+					{if:$item['comment_id']!=-1 && $item['comment_id'] && $item['comment_status']==0}
+						<a href="{url:/site/comments/id/$item['comment_id']}"  class='btn_gray btn_small'>评价</a>
+					{elseif :$item['comment_id']!=-1 && $item['comment_id'] && $item['comment_status']==1}
+						<b class="orange">已评价</b>
+					{/if}</p>	
+				</td>
+            </tr>
+			{/foreach}
+
+
+       
+            	
+            <tfoot><tr><td colspan="7" class="t_l">{$this->order_db->getPageBar()}</td></tr></tfoot>
+        </table>
+    </div>
+	</form>
+</div>
+<script type='text/javascript'>
+	//表单回填
+var formObj = new Form('search_order');
+formObj.init({
+	'order_no':'{$s_order_no}',
+	'beginTime':'{$s_beginTime}',
+	'endTime':'{$s_endTime}',
+	'status':'{$s_status}',
+	'seller_id':'{$s_seller_id}',
+});
+{if:$s_beginTime||$s_endTime||$s_status||$s_seller_id}
+$('.jsx').show();
+{/if}
+
+function pay_confirm(_this){
+	var to_pay = $(_this).attr('topay');
+	var pay_money = $(_this).attr('money');
+	confirm('该订单需支付￥'+pay_money+'，确认支付吗',"location.href='"+to_pay+"'",1);
+}
+
+
+$('[name=find_order]').on('click',function(){
+	var order_no = $('input[name=order_no]').val();
+	var status = $('[name=status]').val();
+	var seller_id = $('[name=seller_id]').val();
+	var beginTime = $('[name=beginTime]').val();
+	var endTime=$('[name=endTime]').val();
+	var to_url = '{url:/ucenter/order}';
+	to_url += '?order_no='+order_no+'&status='+status+'&seller_id='+seller_id+'&beginTime='+beginTime+'&endTime='+endTime;
+
+	location.href = to_url;
+})
+</script>

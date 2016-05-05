@@ -1,0 +1,86 @@
+{set:$config = new config('site_config');
+$main_name = $config->name;
+}
+
+<div class="headbar">
+	<div class="position">订单<span>></span><span>单据管理</span><span>></span><span>补开发票申请列表</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel({form:'orderForm'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	<form name="filter_form" method="get" action="{url:/}">
+		<input type='hidden' name='controller' value='order' />
+		<input type='hidden' name='action' value='fapiao_list' />
+		<div class="searchbar">
+			订单号：<input class="small" type="text" name="order_no"  value='{$order_no}'/>
+			<button class="btn" type="submit"><span class="sel">筛 选</span></button>
+		</div>
+	</form>
+	<div class="field">
+		<table class="list_table">
+			<colgroup>
+				<col width="30px" />
+				<col width="30px" />
+				<col width="160px" />
+				<col width="130px" />
+				<col width="160px" />
+				<col width="160px" />
+				<col width="160px" />
+				<col />
+			</colgroup>
+
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th></th>
+					<th>订单号</th>
+					<th>发票类型</th>
+					<th>发票抬头</th>
+					<th>状态</th>
+					<th>商户</th>
+					<th>申请人</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<form name="orderForm" action="{url:/order/fapiao_del}" method="post">
+<input type='hidden' name='toaction' value='fapiao_list'/>
+	<div class="content">
+		<table class="list_table">
+			<colgroup>
+				<col width="30px" />
+				<col width="30px" />
+				<col width="160px" />
+				<col width="130px" />
+				<col width="160px" />
+				<col width="160px" />
+				<col width="160px" />
+				<col />
+			</colgroup>
+			<tbody>
+				{set:$page=(isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=order_fapiao as f join=left join order as o on o.id eq f.order_id left join seller as s on s.id eq f.seller_id left join user as u on u.id eq f.user_id  where=f.status eq 1 $this->where   order=f.id desc page=$page fields=s.true_name,u.username,o.order_no,o.id as order_id,f.*}
+				
+				<tr>
+					<td class="t_c"><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+					<td><a href="{url:/order/fapiao_show/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_check.gif}" title="查看" /></a></td>
+					<td><a href='{url:/order/order_show/id/$item[order_id]}' style='color:#222;'>{$item['order_no']}</a></td>
+					<td>{if:$item['type']==0}普通{else:}增值税{/if}</td>
+					<td>{$item['taitou']}</td>
+					<td>{echo:Order_Class::getFapiaoStatus($item['status'])}</td>
+					
+					<td>
+						{if:$item['true_name']}{$item['true_name']}
+						{else:}{$main_name}{/if}
+					</td>
+					<td>
+						{$item['username']}
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</div>
+	{$query->getPageBar()}
+</form>

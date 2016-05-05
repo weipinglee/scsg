@@ -1,0 +1,120 @@
+{set:
+	$seo_data    = array();
+	$site_config = new Config('site_config');
+	$site_config = $site_config->getInfo();
+	$seo_data['title'] = "用户登录_".$site_config['name'];
+	seo::set($seo_data);
+	$callback = IReq::get('callback')?IReq::get('callback') :'/ucenter/' ;
+}
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="">
+        <title>登录</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+        <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+		<link rel="stylesheet" href="{skin:css/center.css}" type="text/css">            
+		<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		<script src="{theme:javascript/common.js}"></script>     
+		<script src="{theme:javascript/reg/register.js}"></script>    
+		<link rel="stylesheet" href="{skin:css/csshide1.css}">
+		<style>#sell-ad{display:none!important;}</style>
+		<script type="text/javascript">window.onerror=function(){return true;}</script></head>
+
+    <body data-mps="PA4101">
+        <div id="page">
+            <header class="wap-header">
+    <div class="wap-topbar">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回"></a></div>
+        <div class="h-center">
+            <h1>登录</h1>
+        </div>
+    </div>
+</header>
+<link rel="stylesheet" href="{skin:css/loglist.css}">
+<script>
+	var logPath = '{url:/simple/login_act}';
+	var checkErrTimesUrl = '{url:/simple/checkErrTimes}';
+	var returnUrl = '{url:$callback}';
+	var servicePhone = '{$site_config["phone"]}';
+	
+
+</script>
+<section class="reg-main">
+    <form id="login-form" class="reg-form" method="post" novalidate>
+        <div class="field username  field-login field-login-username">
+            <div class="field-relative">
+                <input class="reg-input" type="text" name="username"  placeholder="请输入手机号/邮箱/用户名" value="" autocomplete="off"> 
+                <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display: none;">清空</a>
+            </div>
+        </div>
+        <div class="field psw field-login field-login-psw">
+            <div class="field-relative">
+                <input class="reg-input" type="password" name="password" placeholder="请输入密码" value="" autocomplete="off" onpaste="return false;" oncopy="return false;" oncut="return false;"> 
+                <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display: none;">清空</a>
+            </div>
+        </div>
+		 <div class="field valid_code_box  field-login" style='display:none;'>
+            <div class="field-relative">
+                <input class="reg-input" type="text" name="validCode" placeholder="请输入验证码" value="" autocomplete="off"> 
+            </div>
+				<span class="verify_code_box" style="margin: 0px 15px 0px 15px;"><img src='{url:/simple/getCaptcha/w/122/h/55/s/15}' onclick="changeCaptcha('{url:/simple/getCaptcha/w/122/h/55/s/15}')" id='captchaImg' /></span>
+			
+        </div>
+		 		   
+            <div class="field forget">
+                <div class="reg-error-box" id='errorInfo'></div>
+                <a href="{url:/simple/find_password?tp=}" id="toForget">忘记密码？</a>
+            </div>
+                <div class="field submit-btn">
+                    <input type="button" id="loginBtn" onclick='loginSubmit()' class="reg-btn dark-btn" value="登录">
+                   <a href='{url:simple/reg}'> <input type="button" id="regLink" class="reg-btn light-btn mt10" value="注册">  </a>                  
+				</div>
+    </form>
+		<!--
+            <div class="other-login">
+            <strong>第三方帐号快速登录</strong>
+        </div>
+        <div class="qq-login">
+            <a href="" class="qq"><i>qq登录</i><p>qq登录</p>
+            </a>
+			<a  href="" class="yq"><i>无线阳泉</i><p>无线阳泉</p>
+            </a>
+            <a  href="" class="wx"><i>微信登录</i><p>微信登录</p>
+            </a>
+			
+        </div>   
+		-->		
+      
+</section>
+<input type="hidden" id="sendRedirect" name="sendRedirect" value="#">
+<input type="hidden" id="referer" name="referer" value="">
+<script src="{theme:javascript/validate.min.js}"></script>
+<script src="{theme:javascript/user.js}"></script>
+
+        </div>
+        <input type="hidden" id="is_login" name="is_login" value="">
+        <input type="hidden" id="show_nav" value="1">
+        <input type="hidden" data-isnew="" data-isold="" id="is_app" value="">
+        <img src="{skin:images/log_files/hm.gif}" width="0" height="0">
+        <script type="text/javascript" src="{theme:javascript/stat3.min.js}"></script>
+		<div style="display: none;">
+		<script type="text/javascript" async src="{theme:javascript/h.js}"></script>
+		</div><img id="stat_image" src="log_files/__utm.gif" style="display: none;">
+
+ 

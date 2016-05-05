@@ -1,0 +1,442 @@
+{set:
+	$myCartObj  = new Cart();
+	$myCartInfo = $myCartObj->getMyCart();
+	$siteConfig = new Config("site_config");
+	$callback   = IReq::get('callback') ? urlencode(IFilter::act(IReq::get('callback'),'url')) : '';
+	$categoryTop = Api::run('getCategoryListTop',10);
+}
+{if:$this->user}
+{set:$user_id = $this->user['user_id']}
+{set:$user = Api::run('getMemberInfo',$user_id)}
+{set:$m = new IModel('favorite');
+$favorite_id_arr = $m->getFields(array('user_id'=>$this->user['user_id']),'rid');
+$favorite_ids = implode(',',$favorite_id_arr);}
+{/if}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head>	
+	<title>{echo:$siteConfig->name} </title>
+	<link rel="stylesheet" href="{skin:css/public.css}">
+	<link rel="stylesheet" href="{skin:css/index.css}">
+	<link rel="stylesheet" type="text/css" href="{skin:css/style.css}">
+	<LINK rel="stylesheet" type="text/css" href="{skin:css/css.css}">
+	<link rel="stylesheet" href="{skin:css/PyoBeside.css}"/>
+	<link rel="stylesheet" href="{skin:css/index1.css}">
+<script type="text/javascript" src="{theme:javascript/PyoBeside.js}"></script>
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,uer-scalabe=no"/>
+	<meta property="qc:admins" content="365014653761146463757" />
+
+	{js:jquery}
+	{js:form}
+	{js:validate}
+	{js:artTemplate}
+
+	
+	<!--[if lte IE 7]>
+	 <script type="text/javascript">
+	window.location="{url:/simple/upbrower}";
+	</script>
+	<![endif]-->
+	<script type='text/javascript' src='{url:/lib/web/js/source/artdialog/artDialog.js?skin=aero}' ></script>
+		<script type='text/javascript' src='{url:/lib/web/js/source/artdialog/plugins/iframeTools.js}' ></script>
+	<script type='text/javascript' src="{theme:javascript/common.js}"></script>
+	<script type='text/javascript' src='{theme:javascript/site.js}'></script>
+	<script type="text/javascript"  src="{theme:javascript/nav.js}"></script>
+	<meta name="keywords" content="{echo:$siteConfig->index_seo_keywords}">
+	<meta name="description" content="{echo:$siteConfig->index_seo_description}">
+
+	
+</head>
+<body>
+<script type='text/javascript'>
+	$(function(){
+		$('#user_log,.hd_user_center').hover(function(){$('.hd_user_center').show();},function(){$('.hd_user_center').hide();})
+	})
+		function sign_point(_this){
+		$.ajax({
+			type : 'post',
+			async:true,
+			data:{},
+			dataType:'json',
+			url:'{url:/ucenter_ajax/sign_add_point}',
+			beforeSend:function(){
+				
+			},
+			success:function(data){
+				if(data.point){
+					$(_this).attr('src','{skin:images/yqiandao.gif}');
+					$('#head_point').text(data.point+parseInt($('#head_point').text()));
+				}
+			},
+			error:function(){
+				
+			},
+			complete:function(){
+			},
+			timeout:1000,
+		})
+	}
+</script>
+<div style="background:#F15A24;">
+	<div class="top"><div id="toTop"></div>
+		<!--导航开始-->
+		<div class="nav_z site-nav">
+
+			<ul  class="cl sn-login" style="float:left;" id='user_log'>
+				<li style="width:502px;color:#fff;">
+					Hi,{if:$this->user}
+					{$this->user['show']}
+						欢迎您来到{echo:$siteConfig->name}！
+					{else:}
+						欢迎您来到{echo:$siteConfig->name}！
+					<a href="{url:/simple/login?callback=$callback}">登录</a>
+					<span class="split"></span>
+					<a href="{url:/simple/reg?callback=$callback}">免费注册</a>
+					{/if}
+				</li>
+			</ul>
+			{if:$this->user}
+				<div class="hd_user_center hide" >
+					<a href="{url:/simple/logout}" class="blue_link">退出登录</a>
+					<div class="clearfix">
+						<div class="fl">
+							<a class="hd_avata_box" href="{url:/ucenter/}" target="_blank"><img src="{url:$this->user['head_ico']}" style='width:62px;' onerror='this.src="{skin:images/front/user_ico.gif}"'/></a>
+							<a class="grzl" href="{url:/ucenter/}" target="_blank">个人资料</a>
+						</div>
+						<div class="yhname">
+							<p><a class="name" target="_blank">{$this->user['show']}</a><a class="hydj"><!--<b style="font-size:20px">V</b>0会员--></a></p>
+							<p><span>会员等级:</span><a class="hd_login" href="">{$this->user['group_name']}</a></p>
+							<div class="hy_line">
+								<p class="hy_line_bar"></p>
+							</div>
+						</div>
+					</div>
+					<div class="hy_message">
+						<a  href="javascript:void(0)">
+							<b id='head_point'>{$this->user['point']}</b>
+							<span>积分<em>							
+							{if:$user['sign']==0}
+							<img src="{skin:images/qiandao.gif}" name='sign' onclick='sign_point(this)'/>
+							{else:}
+							<img src="{skin:images/yqiandao.gif}" name='sign' />
+							{/if}
+							</em></span>
+							
+						</a>
+						<a  href="{url:/ucenter/account_log}" target="_blank">
+							<b>{$this->user['balance']}</b>
+							<span>账户余额</span>
+							<span></span>
+						</a>
+						<a  href="">
+							<b>{$this->user['exp']}</b>
+							<span>成长值</span>
+							<span></span>
+						</a>
+					</div>
+				</div>
+				{/if}
+			<ul id="navul" class="cl" style="float:right;margin-left:170px;">
+				<li>
+					<a href="{url:/ucenter/index}" target="_blank">个人中心</a>
+					<ul>
+						<li><a target='blank' href="{url:/ucenter/order}" target="_blank">我的订单</a></li>
+						<li><a href="{url:/ucenter/address}" target="_blank">我的收货地址</a></li>
+						<li><a href="{url:/ucenter/integral}" target="_blank">我的积分</a></li>
+						<li><a href="{url:/ucenter/account_log}" target="_blank">我的资金</a></li>
+						<li><a href="{url:/ucenter/favorite}" target="_blank">我的关注</a></li>
+						<li><a href="{url:/ucenter/history}" target="_blank">我的足迹</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="{url:/simple/seller}" target="_blank">申请开店</a>
+				</li>
+				<li>
+					<a href="#">山城速购APP</a>
+					<ul><li style="height:125px;width:251px;border:0;box-shadow: 0 1px 3px #ccc;background:#fff;">
+							<div>
+										<div class="hd_mobile_show">
+										
+										<div class="hd_mobile_content">
+										<img src="{skin:images/erweima_app.jpg}" alt="" style="width:115px;height:115px;"/>
+										</div>
+										
+										<dl class="hd_mobile_tab">
+										<dt><b>山城速购APP</b></dt>
+										<dt><a class="blue_link" target="_blank">手机购物更优惠</a></dt>
+										<dt>
+											<a href="#" class="app_icons"><i class="app_icons_03" target="_blank"></i></a>
+											<a href="http://www.yqtvt.com/moblies.apk" class="app_icons"><i class="app_icons_04" target="_blank"></i></a>
+											<a href="#" class="app_icons"><i class="app_icons_05" target="_blank"></i></a>
+										</dt>
+										</dl>
+
+										</div>
+							</div>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="{url:/site/help_list}" target="_blank">帮助中心</a>
+					<ul>
+						<li><a href="{url:/site/help_list/id/9}" target="_blank">常见问题</a></li>
+						<li><a href="{url:/site/help_list/id/4}" target="_blank">支付帮助</a></li>
+						<li><a href="{url:/site/help/id/61}" target="_blank">当天送达</a></li>
+						<li><a href="{url:/site/help/id/56}" target="_blank">积分说明</a></li>
+						<li><a href="{url:/site/help/id/63}" target="_blank">退换货说明</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="{url:/ucenter/index}">客户服务</a>
+					<ul>
+						<li><a onclick="showService()">在线客服</a></li><!-- href="javascript:showService()" -->
+						<li><a href="{url:/ucenter/complain}" target="_blank">意见建议</a></li>
+						<li><a href="{url:/site/help_list/id/5}" target="_blank">售后服务</a></li>
+						<li><a href="{url:/ucenter/order}" target="_blank">订单状态</a></li>
+					</ul>
+				</li>
+				<li style="color:#fff;">关注我们:
+				</li>
+				<li  class="erwei">
+					<a class="erwei" title="关注山城速购新浪微博" target="_blank"><img src="{skin:images/weixin1_01.png}"></a>
+					<ul>
+						<li style="height:160px;width:140px;border:0;box-shadow: 0 1px 3px #ccc;"><a href="#"><img src="{skin:images/erweima2.png}"></a></li>
+					</ul>
+				</li>
+				<li class="erwei">
+					<a class="erwei" title="关注山城速购微信"><img src="{skin:images/weixin1_02.png}"></a>
+					<ul>
+						<li style="height:160px;width:140px;border:0;box-shadow: 0 1px 3px #ccc;"><a href="#"><img src="{skin:images/erweima1.png}"></a></li>
+					</ul>
+				</li>
+				<!--可在此处直接添加导航-->
+			</ul>
+		</div><!--导航结束-->
+		<script  type="text/javascript"> 
+		$(".navbg").capacityFixed();
+		</script>
+
+	</div>
+
+<!--导航-->
+</div>	
+
+{if:$this->isIndex}
+<!--下拉广告图-->
+{if:$siteConfig->index_ad_button == 'open'}
+{query:name=ad_manage as ad join=left join ad_position as p on ad.position_id eq p.id fields=ad.name,ad.link,ad.content where=p.name eq '首页顶部大图' limit=1 item=$adBig}
+{/query}
+<DIV class="advbox" >
+	<DIV {if:!empty($adBig)}style="display: none;"{/if} class="dt_small">
+		<DIV style="display: none;" class="dt_toBig"></DIV>
+		{query:name=ad_manage as ad join=left join ad_position as p on ad.position_id eq p.id fields=ad.name,ad.link,ad.content where=p.name eq '首页顶部缩略' item=$adData}
+			
+		{/query}
+		{if:!empty($adData)}
+			<A href="{$adData['link']}" target="_blank"><IMG alt="jquery广告图片缩略图" src="{url:$adData['content']}" width="1190" ></A>
+		{/if}
+	</DIV>
+	<DIV class="dt_big">
+		<DIV class="dt_toSmall"></DIV>
+		
+		{if:!empty($adBig)}
+		<A href="{$adBig['link']}" target="_blank">
+			<IMG id="actionimg" alt="jquery广告图片大图" src="{url:$adBig['content']}" width="1190" ></A> 
+		{/if}
+	</DIV>
+</DIV>
+{/if}
+<SCRIPT type="text/javascript">
+	var searchUrl = '{url:/site/search_list/word/}';
+function AdvClick(){
+	var a=1500;
+	var b=3*1000;
+	$(".dt_toSmall").click(function(){
+		$(".dt_small").delay(a).slideDown(a);
+		$(".dt_big").stop().slideUp(a);
+		$(".dt_toSmall").stop().fadeOut(0);
+		$(".dt_toBig").delay(a*2).fadeIn(0)
+	});$
+	(".dt_toBig").click(function(){
+		$(".dt_big").delay(a).slideDown(a);
+		$(".dt_small").stop().slideUp(a);
+		$(".dt_toBig").stop().fadeOut(0);
+		$(".dt_toSmall").delay(a*2).fadeIn(0)
+	})
+}
+
+function AdvAuto(){
+	if($(".dt_big").length>0){
+		var a=1000;
+		var b=3*500;
+		$(".dt_big").delay(b).slideUp(a,function(){
+			$(".dt_small").slideDown(a);
+			$(".dt_toBig").delay(a).fadeIn(0)
+		});
+		$(".dt_toSmall").delay(b).fadeOut(0)
+	}
+}
+</SCRIPT>
+
+<SCRIPT type="text/javascript">
+$(document).ready(function(){
+		AdvClick();
+
+});
+//顶部通览可展开收起效果
+if($("#actionimg").length>0){	
+	$("#actionimg").onload=AdvAuto();
+}
+</SCRIPT>
+
+<!--下拉广告图-->
+{/if}
+<!--search-->
+<div class="search">
+	<!--w1190 clearfix-->
+	<div class="w1190 clearfix">
+		<!--logo-->
+		<div class="logo">
+			<a href="{url:/}" class="go-home">
+				{if:isset($this->logoUrl)}
+
+
+
+				<img src="{skin:$this->logoUrl}" alt="" class="png_t" style="width:210px;height:65px;">
+
+
+				{else:}
+
+				<img src="{skin:images/logo.png}" alt="" class="png" style="width:171px;height:65px;">
+
+				{/if}
+
+				<a href="http://www.yqccb.com/"><img src="{skin:images/yqbank.png}" alt="" style="margin-left:10px;border:0"></a>
+
+			</a>
+		</div>
+		<!--logo-->
+
+		<!--cart f-r-->
+		<div class="cart f-r mycart" id="jCart">
+			<span class="cart-count"><span name="mycart_count">{$myCartInfo['count']}</span></span>
+			<a href="{url:/simple/cart}" class="cart-buying" target="_blank"><span class="cart-account">去购物车结算</span></a>
+			
+		</div>
+		
+		<!--cart f-r-->
+
+		<!--s-box f-r-->
+		<div class="s-box f-r">
+			<!--s-main-->
+			<form method="get" action="{url:/}">
+			<input type="hidden" name="controller" value="site">
+			<input type="hidden" name="action" value="search_list">
+			<div class="s-main">
+				<input class="ipt-key" type="text" name="word" onkeyup="getKeywords('{url:/block/getLikeWords}',$(this))" autocomplete="off" value="输入关键字...">
+				<input class="btn-search" type="submit" style='cursor:pointer;' value="搜索" onclick="checkInput(&#39;word&#39;,&#39;输入关键字...&#39;);">
+				
+			</div>
+			</form>
+			<div class='words-give' >
+				
+			</div>
+			<!--s-main-->
+			<!--kw-suggest-->
+			<div class="kw-suggest">
+				{foreach:items=Api::run('getKeywordList')}
+				<a href="{url:/site/search_list/word/$item['word']}" target="_blank">{$item['word']}</a>
+				{/foreach}
+			</div>
+			<!--kw-suggest-->
+		</div>
+		<!--s-box f-r-->
+
+	</div>
+	<!--w1190 clearfix-->
+</div>
+<!--search-->
+
+<!--nav-->
+<div class="nav">
+	<!--w1190 nav-main-->
+	<div class="w1190 nav-main">
+		<!--nav-cat-pos-->
+		<div class="nav-cat-pos">
+			<!--category-->
+			<div class="category " id="jCat">
+
+				<h2 class="cat-title"><a class="t14">全部商品分类<b class="png"></b></a></h2>
+
+				
+				<ul class="cat-list" {if:!isset($this->isIndex)}style='display:none;'{/if}>
+					{set:$hotCat=array();}
+					{foreach:items=$categoryTop key=$keyT item=$valT}
+					
+					{set:$k=$keyT+1;}
+					<li class="list-item" style='position:static;'>
+						<h3 class="cat-type-{$k}">
+							<a href="{url:/site/pro_list/cat/$valT[id]}" class='underline-a' target="_blank">{$valT['name']}</a>
+						</h3>
+						<p class="cat-rcmd">
+							{set:$secondCat=Api::run('getCategoryByParentid',array('#parent_id#',$valT['id']))}
+							{foreach:items=$secondCat key=$keyS item=$valS}
+								<a href="{url:/site/pro_list/cat/$valS[id]}" class='underline-a' target="_blank">{$valS['name']}</a>
+							{/foreach}
+						</p>
+						<div class="cat-pop" style="display:none;top:0px;">
+			                    <!--cat-layer-->
+								<div class="cat-layer clearfix ">
+			                        <ul class="cat-col">
+			                        	{set:$hotCat[$valT['id']]=array();}
+			                        	{foreach:items=$secondCat key=$keyS item=$valS}
+										{if:$valS['hot']==1 && count($hotCat[$valT['id']])<=5}
+										{set:$hotCat[$valT['id']][] = $valS;}
+										{/if}
+					                     <li class="cat-item">
+					                   		 <h3 class="level-title"><a href="{url:/site/pro_list/cat/$valS[id]}" class='underline-a' target="_blank">{$valS['name']}</a></h3>
+					                   		 <p class="level-list clearfix">
+					                   		 	{foreach:items=Api::run('getCategoryByParentid',array('#parent_id#',$valS['id']),30) key=$keyG item=$valG}
+													{if:$valG['hot']==1 && count($hotCat[$valT['id']])<=5}
+														{set:$hotCat[$valT['id']][] = $valG;}
+													{/if}
+													<a href="{url:/site/pro_list/cat/$valG[id]}" class='underline-a' target="_blank">{$valG['name']}</a>
+												{/foreach}
+										     </p>
+					                    </li>
+										{if:($keyS+1)%3==0}
+											<div class='clear'></div>
+										{/if}
+									{/foreach}
+			                         </ul>
+								</div>
+								<!--cat-layer-->
+								
+					
+	                    </div>
+					</li>
+					{/foreach}
+				
+					<div  id='nav-ad' style="float:right;display:none;">{echo:Ad::show("导航右侧")}</div>
+				</ul>
+				<!--cat-list-->
+	
+		  </div>
+			<!--category-->
+		</div>
+		<!--nav-cat-pos-->
+
+		<!--nav-cnt-->
+		<div class="nav-cnt">
+			{foreach:items=Api::run('getGuideList')}
+						<li class="nav-item"><a href="{url:$item['link']}" target="_blank">{$item['name']}</a></li>
+			{/foreach}			
+		</div>
+		<!--nav-cnt-->
+
+	</div>
+	<!--w1190 nav-main-->
+</div>

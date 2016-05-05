@@ -1,0 +1,192 @@
+<!--滑动面tab标签-->
+	<div class="main f_r" style="overflow:hidden; width:950px;">
+
+		<div class="uc_title" name="showButton">
+			<label class="current"><span>商品详情</span></label>
+			{if:($attribute)}
+			<label class="spec"><span>规格参数</span></label>
+			{/if}
+			<label id='point'><span>顾客评价({$comments})</span></label>
+			<label id='buyHistory'><span>购买记录({$buy_num})</span></label>
+			<label><span>购买前咨询({$refer})</span></label>
+		</div>
+
+		<div name="showBox">
+			<!-- 商品详情 start -->
+			<div>
+				<ul class="saleinfos m_10 clearfix">
+					<li>商品名称：{$name}</li>
+
+					{if:isset($brand) && $brand}
+					<li>品牌：{$brand}</li>
+					{/if}
+					
+					{if:isset($weight) && $weight}
+					<li>商品毛重：<label id="data_weight">{$weight}</label></li>
+					{/if}
+					
+					{if:isset($unit) && $unit}
+					<li>单位：{$unit}</li>
+					{/if}
+
+					{if:isset($up_time) && $up_time}
+					<li>上架时间：{$up_time}</li>
+					{/if}
+					
+					
+				</ul>
+				{if:isset($content) && $content}
+				<div class="salebox">
+					<strong class="saletitle block">产品描述：</strong>
+					<p class="saledesc">{$content}</p>
+				</div>
+				{/if}
+			</div>
+			<!-- 商品详情 end -->
+			{if:($attribute)}
+			<div id='spec_box' class='hidden'>
+				<div>
+				<ul class="saleinfos m_10 clearfix">
+				
+					{foreach:items=$attribute}
+					<li>{$item['name']}：{$item['attribute_value']}</li>
+					{/foreach}
+					
+				</ul>
+				</div>
+			</div>
+			{/if}
+			<!-- 顾客评论 start -->
+			<div class="hidden comment_list box">
+				<div class="title3">
+					<span class="f_r f12 light_gray normal">
+						只有购买过该商品的用户才能进行评价
+						{if:isset($this->user['user_id']) && $user_id = $this->user['user_id']}
+						{foreach:items=Api::run('getCommentByGoodsid',array('#id#',$id),array('#user_id#',$user_id),1) }
+						<a class="comm_btn" href="{url:/site/comments/id/$item[id]}"  target="_blank">我要评论</a>
+						{/foreach}
+						{/if}
+					</span>
+					<img src="{skin:images/front/comm.gif}" width="16px" height="16px" />商品评论<span class="f12 normal">（已有<b class="red2">{$comments}</b>条）</span>
+				</div>
+
+				<div id='commentBox'></div>
+
+				<!--评论JS模板-->
+				<script type='text/html' id='commentRowTemplate'>
+				<div class="item">
+					<div class="user">
+						<div class="ico">
+							<a href="javascript:void(0)">
+								<img src="{webroot:<%=head_ico%>}" width="70px" height="70px" onerror="this.src='{skin:images/front/user_ico.gif}'" />
+							</a>
+						</div>
+						<span class="blue"><%=username%></span>
+					</div>
+					<dl class="desc">
+						<% var widthPoint = 14 * point;%>
+						<p class="clearfix">
+							<b>评分：</b>
+							<span class="grade"><i style="width:<%=widthPoint%>px"></i></span>
+							<span class="light_gray"><%=comment_time%></span><label></label>
+						</p>
+						<hr />
+						<p><b>评价：</b><span class="gray"><%=contents%></span></p>
+						<%if(recontents){%>
+						<p><b>回复：</b><span class="red"><%=recontents%></span></p>
+						<%}%>
+					</dl>
+					<div class="corner b"></div>
+				</div>
+				<hr />
+				</script>
+			</div>
+			<!-- 顾客评论 end -->
+
+			<!-- 购买记录 start -->
+			<div class="hidden box" >
+				<div class="title3" >
+					<img src="{skin:images/front/cart.gif}" width="16" height="16" alt="" />
+					购买记录<span class="f12 normal">（已有<b class="red2">{$buy_num}</b>购买）</span>
+				</div>
+
+				<table width="100%" class="list_table m_10 mt_10">
+					<col width="150" />
+					<col width="120" />
+					<col width="120" />
+					<col width="150" />
+					<col />
+					<thead class="thead">
+						<tr>
+							<th>购买人</th>
+							<th>出价</th>
+							<th>数量</th>
+							<th>购买时间</th>
+							<th>状态</th>
+						</tr>
+					</thead>
+				</table>
+
+				<table width="100%" class="list_table m_10">
+					<col width="150" />
+					<col width="120" />
+					<col width="120" />
+					<col width="150" />
+					<col />
+					<tbody class="dashed" id="historyBox"></tbody>
+
+					<!--购买历史js模板-->
+					<script type='text/html' id='historyRowTemplate'>
+					<tr>
+						<td><%=show%></td>
+						<td><%=goods_price%></td>
+						<td class="bold orange"><%=goods_nums%></td>
+						<td class="light_gray"><%=completion_time%></td>
+						<td class="bold blue">成交</td>
+					</tr>
+					</script>
+				</table>
+			</div>
+			<!-- 购买记录 end -->
+
+			<!-- 购买前咨询 start -->
+			<div class="hidden comment_list box">
+				<div class="title3">
+					<span class="f_r f12 normal"><a class="comm_btn" href="{url:/site/consult/id/$id}" target="_blank">我要咨询</a></span>
+					<img src="{skin:images/front/cart.gif}" width="16" height="16" />购买前咨询<span class="f12 normal">（共<b class="red2">{$refer}</b>记录）</span>
+				</div>
+
+				<div id='referBox'></div>
+
+				<!--购买咨询JS模板-->
+				<script type='text/html' id='referRowTemplate'>
+				<div class="item">
+					<div class="user">
+						<div class="ico"><img src="{webroot:<%=head_ico%>}" width="70px" height="70px" onerror="this.src='{skin:images/front/user_ico.gif}'" /></div>
+						<span class="blue"><%=username%></span>
+						<p class="gray"><%=rtime%></p>
+					</div>
+					<dl class="desc gray">
+						<p>
+							<img src="{skin:images/front/ask.gif}" width="16px" height="17px" />
+							<b>咨询内容：</b><span class="f_r"><%=time%></span>
+						</p>
+						<p class="indent"><%=question%></p>
+						<hr />
+						<%if(answer){%>
+						<p class="bg_gray"><img src="{skin:images/front/answer.gif}" width="16px" height="17px" />
+						<b class="orange">{echo:$siteConfig->name}回复：</b><span class="f_r"><%=reply_time%></span></p>
+						<p class="indent bg_gray"><%=answer%></p>
+						<%}%>
+					</dl>
+					<div class="corner b"></div>
+					<div class="corner tl"></div>
+				</div>
+				<hr />
+				</script>
+			</div>
+			<!-- 购买前咨询 end -->
+
+			
+		</div>
+	</div>

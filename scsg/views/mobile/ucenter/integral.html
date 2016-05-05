@@ -1,0 +1,80 @@
+{set:$type=isset($_GET['type'])&&($_GET['type']=='plus' || $_GET['type']=='minus')?$_GET['type'] : 'all';}
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0, maximum-scale=1.0">
+<title>积分明细</title>
+
+  <link rel="stylesheet" type="text/css" href="{skin:css/jifen/jifen.css}">
+<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+{js:artTemplate}
+<script src="{theme:javascript/common.js}"></script>
+</head>
+<body>
+<div class="jiben">
+<div class="zhijia">
+<div class="ddtou">
+<h4> <a href="javascript:history.go(-1);" title="返回">＜山城速购</a><b>积分明细</b></h4>
+<span>我的积分：<i>{$this->memberRow['point']}</i></span>
+</div></div></div>
+<div class="wrapper">
+			 
+  <div class="main">
+           
+		<h4 id="title">
+			<a href='{url:/ucenter/integral}'><span class="on">全部</span></a>
+			<a href='{url:/ucenter/integral/type/plus}'><span id='plus'>收入</span></a>
+			<a href='{url:/ucenter/integral/type/minus}'><span id='minus'>支出</span></a>
+		</h4>
+		<div id="con">
+				<ul class="on"> </ul>
+	   </div>
+	</div>
+</div>
+<script type='text/html' id='jifen_box'>
+	<li>
+	     <font>
+	         <p><a href="{url:/site/detail}"><%==intro%></a></p>
+		</font>                       
+	      <h5><p><%=value%></p><p><a><%=datetime%></a></p></h5>
+	 </li>
+</script>
+
+<script type="text/javascript">
+var type = '{$type}';
+if (type == 'plus') {
+	$('span.on').removeClass('on');
+	$('#plus').addClass('on');
+}
+else if(type=='minus'){
+	$('span.on').removeClass('on');
+$('#minus').addClass('on');
+}
+
+
+
+//加载数据
+var obj = {
+	'url': '{url:/ucenter_ajax/get_integral}',
+	'template_id': 'jifen_box',
+	'append_to': $('#con ul'),
+	'loading_img': '{skin:images/files/loading.gif}',
+	'trans_data': {type:type},
+	'callback' : function(){
+		$('#con a').attr('href','javascript:void(0)');
+	}
+};
+
+var ajax = new Ajax_Get_Data();
+ajax.init(obj);
+
+
+</script>
+       
+
+
+
+</body>
+</html>

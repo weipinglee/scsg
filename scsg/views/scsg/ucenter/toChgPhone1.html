@@ -1,0 +1,44 @@
+<link rel="stylesheet" type="text/css" href="{skin:/account/css/shouji-1.css}">
+<script type='text/javascript' src='{theme:javascript/ucenter.js}'></script>
+<script type='text/javascript' >
+	var getCodeUrl = '{url:/ucenter/getMobileCode}';
+	var checkMobileUrl = '{url:/ucenter/checkMobile}';
+	var nextUrl = '{url:/ucenter/toChgPhone2}';
+</script>
+
+<div class="main f_r">
+	<div class="uc_title m_10">
+		<label class="current"><span>修改绑定手机</span></label>
+	</div>
+<div class="youxiang">
+
+	<div class="kuai">
+	   <ul>
+	  <li class="yanse">1.验证身份</li>
+	  <li class="sanjiao"><p>2.新手机验证</p><img src="{skin:/account/images/sanjiao_03.jpg}" width="17" height="34" alt="图标"></li>
+	  
+	   <li class="sanjiao"><p>3.修改手机成功</p><img src="{skin:/account/images/sanjiao_03.jpg}" width="17" height="34" alt="图标"></li>
+	   </ul>
+	</div>
+	<div class="wenzi">
+	<form action="" method="post">
+	 <ul>
+	 <li>
+	 	{set:$phone = user_like::getSecretPhone($this->user['phone'])}
+		{if:$phone}
+	   <p>您当前绑定的手机号码：<span>{$phone}</span></p>
+	   {/if}
+	   <li><input type="button" name='getMessCode' onclick="getMobileCode({$this->user['phone']});" value="获取短信验证码"></li>
+	   
+	   <!--<li class="lianjie"><p>手机接收不到短信？<a href="#">申请人工更换手机</a></p></li>-->
+	    
+	     <li><p class="ma">验证码：<input name="code" type="text"></p> 
+	    </li>
+	    <li><input class="xiyibu" style='cursor:pointer;' onclick='checkMobileNow();' type="button" value="下一步">
+	     </li>
+	     
+	 </ul>
+	</form>
+	</div>
+</div>
+</div>

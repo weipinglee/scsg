@@ -1,0 +1,225 @@
+﻿<input type='hidden' id='goods_id' alt='商品ID' value='{$id}' />
+<input type='hidden' id='product_id' alt='货品ID' value='' />
+<input type='hidden' name='promo_name' value="presell"/>
+<input type='hidden' name='active_id' value="{$preData['id']}"/>
+<div id='det1' >
+<article class="cat_item"> 
+    <div class="pic_detail">
+        <div class="picture">
+            <ul>
+            	 <div id="slides">
+                        <div class="common-slide" id="wrapper">
+                            <div class="list" id="scroller">
+                                <ul class="wrap" id="thelist">
+                                	{if:count($photo)!=0}
+                                	{foreach:items=$photo}
+                                    <li class="one-img"><a href="javascript:viewBigPicOn()"><img src="{url:/pic/thumb/img/$item[img]/w/200/h/200}" alt=" "></a></li>                             
+									{/foreach}
+									{else:}
+										<li class="one-
+											<a href="#" onclick='javascript:void(0)'>
+												<img src="{skin:images/front/nopic_435_435.gif}">
+											</a>
+										</li>
+									{/if}
+								</ul>
+                            </div>
+
+                        </div>
+
+                  </div>
+                <div class="mtbslide-pagination">
+                   
+                </div>
+
+
+                
+            </ul>
+        </div>
+    </div>
+				<div style="width:99%;margin:0 auto;">
+				<span class="name" style=" display:block; width:75%; margin-left:8px; float:left; line-height:20px;"><a href="" >{$preData['name']}{if:$preData['intro']}（{$preData['intro']}）{/if}</a></span>
+							
+				
+				<span onClick="toshare()" style="display:block;width:19%;text-align:center;float:right;margin-right:10px;cursor:pointer;height:60px;">
+                <img style="height:40px; width:40px;" src="{skin:images/detail_img/share.png}" width="459" height="459" alt="tupian" /><br />分享</span>
+
+				<div class="am-share">
+				  <h3 class="am-share-title">分享到</h3>
+				  <ul class="am-share-sns">
+					<li><a href="http://v.t.sina.com.cn/share/share.php?title={echo:$site_config->name}_{$name}http://www.yqtvt.com/pregoods/products/id/{$preData['id']}" target=_blank> <i class="share-icon-weibo share-sina"></i> <span>新浪微博</span> </a> </li>
+					<li>
+						<a href="javascript:void(0);" onclick="window.open('http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url='+encodeURIComponent(document.location.href));return false;" title="分享到QQ空间"  target=_blank><i class="share-icon-dou"></i> <span>QQ空间</span> </a>
+					</li>
+					<li><a href="http://v.t.qq.com/share/share.php?title={echo:$site_config->name}_{$name}http://www.yqtvt.com/pregoods/products/id/{$preData['id']}" target=_blank> <i class="share-icon-tweibo"></i> <span>腾讯微博</span> </a> </li>
+					<li><a href="javascript:window.open('http://share.renren.com/share/buttonshare.do?link='+encodeURIComponent(document.location.href)+'&title='+encodeURIComponent(document.title));void(0)" target=_blank> <i class="share-icon-renren"></i> <span>人人网</span> </a> </li>
+				  </ul>
+				  <div class="am-share-footer"><button class="share_btn">取消</button></div>	
+
+				</div>
+	</div>
+	</section>
+	<!-- item_pic begin -->
+
+	<!-- infor beigin -->
+	<section class="infor book_infor"  style=" clear:both;">
+			{if:isset($seller)}
+				<p class="shop"><span class="bg_shop">商家</span>{$seller['true_name']}</p>
+			{/if}
+			<p>
+				<span class="label">预售中</span>
+					<sapn class='countdown det_tuan' id="timeRemaining-1" style='line-height:40px;'>
+							{if:$preData["end_time"]>0}
+									还有
+										<span id='cd_day_1' style='color:red'></span>天
+										<span id='cd_hour_1' style='color:red'></span>小时
+										<span id='cd_minute_1' style='color:red'></span>分
+										<span id='cd_second_1' style='color:red'></span>秒	  结束
+										<input name='endTime'  style='color:red' type='hidden' value='{$preData["end_time"]}' />
+							{else:}
+								预售已结束
+							{/if}
+							</sapn>
+			</p>
+			<p>
+			{if:isset($group_price)}
+				<span class="label">会&nbsp;员&nbsp;价:</span>
+				<span class="d_price">￥{$group_price}</span></p>
+				<p>购买送积分:<span class="jifen">{$point}</span></p>   
+				<p>
+					<span class="label">总&nbsp;价:</span>
+					<span class="m_price">￥{$sell_price}</span>
+				</p>
+			{elseif:$maxSellPrice!=$minSellPrice}
+				<span class="label">总&nbsp;价:</span>
+				<span class="d_price">￥{$minSellPrice}--￥{$maxSellPrice}</span></p><p>
+				购买送积分:<span class="jifen">{$point}</span></p> 
+			{else:}
+				<span class="label">总&nbsp;价:</span>
+				<span class="d_price">￥{$sell_price}</span>
+				</p><p>
+				购买送积分:<span class="jifen">{$point}</span></p> 
+			{/if}
+			
+			<span class="label">预&nbsp;付&nbsp;款:</span>
+			{if:$maxSellPrice!=$minSellPrice}
+				<span class="d_price">￥{$minPresellPrice}-￥{$maxPresellPrice}</span>
+			{else:}
+				<span class="d_price">￥{$presellPrice}</span>
+			{/if}
+			<p>
+			<span class="label">尾款支付:</span>{$preData['wei_text']}
+			</p>
+			<p>
+				
+			尾款支付后{$preData['send_days']}天内发货
+			</p>
+			<p>
+				<span class="label">顾客评分:</span>
+				<span class="starlevel star_4">{$grade}</span>(共有<a href="javascript:void(0)" onclick='show_comments()' class="all">{$comments}</a>次评分)
+			</p>
+			
+		
+	</section>	
+
+
+
+	<!-- infor end -->
+
+  
+</article>
+<!-- recommend end 后台上传的图片要统一尺寸 -->
+<div class="viewbig hidden">
+    <div class="btn">
+        <a href="javascript:viewBigPicOff()">返回</a>
+    </div>
+    <div id="slides1" class="slides1">
+        <div class="common-slide1" id="wrapper1">
+            <div class="list1" id="scroller1">
+                <ul class="wrap">
+                	{if:count($photo)>0}
+                	{foreach:items=$photo}
+					    <li id="bigpic" class="one-img1"><img height="100%" width="100%" data-src="{url:/pic/thumb/img/$item[img]/w/300/h/300}" alt=" "></li>
+					{/foreach}
+					{else:}
+						<li id="bigpic" class="one-img1">
+							<a href="#" onclick='javascript:void(0)'>
+								<img src="{skin:images/front/nopic_435_435.gif}">
+							</a>
+						</li>
+					{/if}
+                </ul>
+            </div>
+			<div class="mtbslide-pagination">
+                <div id="picnum" class="picnum">
+                    <span class="pic_num" style ="bottom: 13px;"><span  id="indicatorBig">1</span>/{echo:count($photo)}</span>
+                </div>
+           </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 商品介绍-->
+<div class="history">
+	<h3 class="tit">商品介绍</h3>
+	<!--介绍内容-->
+	<div id="topPriceHistroyDiv">
+		<table id="table" cellpadding="0" cellspacing="0" >
+			<tr>
+				<td colspan="2">规格参数</td>
+			</tr>
+			{if:isset($brand) && $brand}
+			<tr>
+				<td width="20%">品牌</td>
+				<td>{$brand}</td>
+			</tr>
+			{/if}
+			{if:isset($weight) && $weight}
+			<tr>
+				<td width="20%">商品毛重</td>
+				<td>{$weight}</td>
+			</tr>
+			{/if}
+			{if:isset($unit) && $unit}
+			<tr>
+				<td width="20%">单位</td>
+				<td>{$unit}</td>
+			</tr>
+			{/if}
+			{if:($attribute)}
+				{foreach:items=$attribute}
+			<tr>
+				<td width="20%">{$item['name']}</td>
+				<td>{$item['attribute_value']}</td>
+			</tr>
+				{/foreach}
+			{/if}
+		</table>
+	</div>
+</div>
+
+<!-- 促销 -->
+<div class="history">
+	<h3 class="tit">促销</h3>
+	<div id="topPriceHistroyDiv">
+		<div class="cx">
+			{foreach:items=$promotion}
+			<span>{$item['plan']}</span><p>{$item['info']}</p>
+			{/foreach}
+		</div>
+	</div>
+	<!--<p><img src="images/li10.jpg" alt=""></p> -->
+</div>
+
+<!-- 评价晒单-->
+<div class="history">
+	<h3 class="tit">商品评价</h3>
+	<!--介绍内容-->
+	<div id="commentBox" style="margin: 6px 0px;">
+		<div style="text-align:center;">
+			<a  href="javascript:void(0)" style="border: 2px solid #845959;padding: 2px 10px;color: #000;" onclick="show_comments_list($('[name=pingjia]'))">查看更多</a>
+		</div>
+	</div>上腾娱乐
+</div>

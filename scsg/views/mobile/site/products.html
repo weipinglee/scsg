@@ -1,0 +1,129 @@
+{include:include/detail/det_head.html}
+{set:
+	$seo_data=array();
+	$site_config=new Config('site_config');
+	$seo_data['title']=$name."_".$site_config->name;
+	$seo_data['keywords']=$keywords;
+	$seo_data['description']=$description;
+	seo::set($seo_data);
+	$promotion=Api::run('getProrule');
+	$show_cart=1;
+}
+
+<!-- article begin -->
+<script type="text/javascript" src="{theme:javascript/iscroll.js}"></script>
+{include:include/detail/det1.html}
+{include:include/detail/det2.html}
+{include:include/detail/comments_list.html}
+
+<div class="cl"></div>
+<!-- article end -->
+<script type='text/javascript'>
+			var hasAttr=0;
+		$("#btn_buy").click(function(){
+			add_cart(0);
+		});
+		$("#Button2").click(function(){
+			add_cart(1);
+		});
+			
+		function add_cart(type){
+			if(hasAttr&&23274638==$("#product_id").text()){
+				showPopup("请选择您要的商品信息");
+			}else{
+				$.ajax({
+					url: "cart.php@sid=f0ffa4124eb66c0c",
+					type:'GET',
+					data: {
+						action: 'add_cart',
+						product_id :$("#product_id").text(),
+						shopid : 0,
+						promotype : 0,
+						result_format : 1,
+					},
+					success: function(data){
+						data=jQuery.parseJSON(data);
+						if(data.errorCode==0){
+							if(type==1)
+								showPopup("加入购物车成功");
+							else
+								window.location = "cart.php@action=list_cart&sid=f0ffa4124eb66c0c";
+						}else{
+							showPopup(data.errorMsg);
+						} 
+					}
+				});
+			}
+		}	
+
+
+		
+		$(document).ready(function() {
+			var arr,arru,reg=new RegExp("(^| )pdAdw=([^;]*)(;|$)"),uid=new RegExp("(^| )MDD_uid=([^;]*)(;|$)");
+			arru=document.cookie.match(uid);
+			if(arr=document.cookie.match(reg)) 
+				if(unescape(arr[2])==1&&unescape(arru[2])){
+					var exp = new Date();
+					exp.setTime(exp.getTime() - 1);
+					document.cookie= "pdAdw=1;domain=.dangdang.com;expires="+exp.toGMTString();
+					addToWishlist(23274638,0);
+				} 
+		});
+		function showPopup(msg){
+			$('#favoritesadd').html(msg);
+			$('#favoritesadd').fadeIn();
+			setTimeout("$('#favoritesadd').fadeOut();",2500);
+		}
+
+		function addToWishlist(pid){
+			$.ajax({
+				url: 'wishlist.php@sid=f0ffa4124eb66c0c',
+				type:'POST',
+				data:{
+					action : 'add_wishlist',
+					product_id : pid,
+					type: 'product',
+					result_format : 1
+				},
+				success: function(data){ 
+					if(data.indexOf('DOCTYPE')>0){ 
+						var exp = new Date(); 
+						exp.setTime(exp.getTime() + 5*60*1000);
+						document.cookie = "pdAdw="+ escape (1) + ";domain=.dangdang.com;expires=" + exp.toGMTString(); 
+						window.location = "login.php@sid=f0ffa4124eb66c0c&burl=product.php@pid=23274638";
+					}
+					data=jQuery.parseJSON(data);  
+					showPopup(data.errorMsg);
+					if(data.errorCode==0)
+						$('#fav_num').text(parseInt($('#fav_num').text())+1);
+				},
+			});
+		}
+
+//添加收藏夹
+function favorite_add(obj)
+{
+	{if:isset($this->user['user_id'])}
+		$.getJSON('{url:/simple/favorite_add}',{'goods_id':{$id},'random':Math.random},function(content)
+		{
+			if(content.isError == false)
+			{
+				$(obj).text(content.message);
+			}
+			else
+			{
+				$(obj).find('img').attr('src','{skin:images/detail_img/ygz.png}');
+				$(obj).find('p').eq(1).text('已关注');
+				alert(content.message);
+			}
+		});
+	{else:}
+		window.location.href="{url:/simple/login/?callback=/site/products/id/$id}";
+	{/if}
+}
+
+
+
+
+</script>
+{include: include/detail/det_foot.html}

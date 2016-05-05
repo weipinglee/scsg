@@ -1,0 +1,209 @@
+<link href="{skin:css/tm.css}" rel="stylesheet">
+<script type="text/javascript" src="{theme:javascript/shan/shan.js}"></script>
+<div class="cnt w1190">
+<style type="text/css">
+	h1{font-family:"微软雅黑";font-size:20px;margin-top:20px;letter-spacing:2px;}
+
+	.time-item strong{background:#C71C60;color:#fff;line-height:49px;font-size:18px;font-family:Arial;padding:0 5px;margin-right:5px;}
+	.time-item a:hover{color:#c71c60}
+	#day_show{float:left;line-height:49px;color:#c71c60;font-size:14px;margin:0 5px;font-family:Arial, Helvetica, sans-serif;}
+	.item-title .unit{background:none;line-height:49px;font-size:12px;padding:0 5px;float:left;}
+	
+	.pp_tm_show li{
+		position: relative;
+		float: left;
+		width: 435px;
+		height: 300px;
+		margin: 20px 10px 0 0;
+		padding: 10px;
+		border: 1px solid #ccc;
+		background: #fff;overflow:hidden;
+		font-size:16px;
+		
+	}
+	.pp_tm_show li:hover {
+		background: #f15a24;
+		border: 1px solid #f15a24;
+	}
+	.pp_tm_show dd{margin-top:15px;}
+
+	.pp_tm_show .pl{float:left;}
+	.pp_tm_show .pr{float:right;}
+
+</style>
+
+<link rel="stylesheet" type="text/css" href="{skin:css/base.css}">
+<link rel="stylesheet" type="text/css" href="{skin:css/index_sg.css}">
+<!--tuan-->
+<link type="text/css" rel="stylesheet" href="{skin:css/resource.css}">
+<!--tuan-->
+<!-- 团购活动列表 -->
+
+
+<div class="pp_tm_con_fr">
+	<a name="floor-1"></a>
+		<h3>今日团购<i>TOP</i></h3>
+</div>
+<div class="mb10 warp-all group-list">
+	<input name='start' type='hidden' value='{$this->count}'/>
+	  <div class="left_group">
+	  	{foreach:items = $this->todayList}
+		{set:$end= strtotime($item['end_time']) - time()}
+		{set:$zhe = 10*round($item['regiment_price']/$item['sell_price'],2)}
+	        <div class="today-deals-con">
+		        <div class="deal-img-wrap">
+		            <a title="" href="{url:/site/tuan_product/active/$item['id']}" target="_blank"><img src="{url:$item['img']}" alt=""  width="350" height="350"></a>
+		            <div class="all_bicon_box"></div>
+		        </div>
+		        <div class="deal-summary"> 
+				<span class="bk-timeleft home_timer today_end_time countdown" id="timeRemaining-{$key}">
+					<span class="icon">距团购结束</span>
+					<span id='cd_day_{$key}'></span>天
+					<span id='cd_hour_{$key}'></span>小时
+					<span id='cd_minute_{$key}'></span>分
+					<span id='cd_second_{$key}'></span>秒	
+					<input name='endTime' type='hidden' value='{$end}' />
+				</span>
+		            <a class="deal-summary-link" target="_blank" href="{url:/site/tuan_product/active/$item['id']}}">
+		                <p class="tit"> <em>{$zhe}折/</em>{$item['intro']}</p>
+		                <p class="price-wrap">
+		                    <span class="price"><em>¥</em>{$item['regiment_price']}</span>
+		                    <span class="dis"><del>¥{$item['sell_price']}</del></span> 
+		                </p>
+		                <div class="other clearfix">
+		                  <span class="buy_num_con"><span class="buy_number">{$item['sum_count']}</span>人已经购买</span>
+		                </div>
+		                <p class="summary-btn"> <span class="deal-btn">去看看</span>
+		                </p>
+		            </a>
+		        </div>
+	   		 </div>
+		{/foreach} 
+	</div>
+    <div class="right_group">
+		<a href="" target="_blank">
+			<img id="pic_adv_297" style="width:300px;height:333px" border="0" src="{skin:images/tuan1.png}" alt="团购右侧1">
+		</a>   
+		 <a href="" target="_blank">
+		 <!--<img id="pic_adv_298" style="width:300px;height:333px" border="0" src="{skin:images/tuan2.jpg}" alt="">-->
+		 </a>  
+	</div>
+</div>
+
+<div class="clear"></div>
+
+<style>
+	.shan-brand li {width:358px;}
+	.shan-brand li dt img { max-width:358px;max-height:220px; }
+	.shan-brand .brand-img {width:358px;height:220px;}
+	.pp_tm_con_se{width:1190px;}
+	.pp_tm_con_se_l{width:1190px;}
+	.width { width:1200px;margin:0 auto;}
+</style>
+{if:isset($this->brandList)&&$this->brandList}
+<div class="pp_tm_con">
+		  <div class="pp_tm_con_fr"><a name="floor-2"></a>
+			<h3>品牌团<i>Brand</i></h3>
+		  </div>
+			<div class="pp_tm_con_se">
+				<div class="pp_tm_con_se_l">
+				  <!--品牌特卖 -->
+					<div class="shan-brand width">
+						<ul class="shan-all-li">
+							{foreach:items = $this->brandList}
+							{set:$end=strtotime($item['end_time']) - time();$k=$key+2;}
+								<li style="margin-top:0;">
+									<dl>
+										<dt class="brand-img">
+											<a href="{url:/site/tuan_product/active/$item['id']}" target="_blank" title="{$item['title']}">
+												<img class="lazyload img"  src="{url:$item['img']}" alt="{$item['title']}">
+											</a>
+										</dt>
+										<dd>
+											<div class="fl">
+												<p class="name">
+													<a href="{url:/site/tuan_product/active/$item['id']}" title="{$item['title']}" target="_blank">{$item['title']}</a>
+												</p>
+														<p class="explain" title="&#160;">
+															<span class="gzmc_k"></span>
+															<span class="gzmc_z"></span>
+														</p>
+														<p class="prom" title="">
+																已有<span class="dazhe">{$item['sum_count']}</span>人团
+														</p>
+											</div>
+											<div class="fr">
+												<p class="brand-logo">
+												</p>
+												<p class="surplus countdown" id="timeRemaining-{$k}">
+													<span class="icon">剩余</span>
+													<span id='cd_day_{$k}'></span>天
+													<span id='cd_hour_{$k}'></span>小时
+													<span id='cd_minute_{$k}'></span>分
+													<span id='cd_second_{$k}'></span>秒	
+													<input name='endTime' type='hidden' value='{$end}' />
+												</p>
+											</div>
+											<div class="clear"></div>
+										</dd>
+									</dl>
+									<div class="brand-icon" id="brandsale_sold-out-_0">
+										<div class="clear"></div>
+									</div>
+								</li>
+							{/foreach}
+						</ul>
+						<div class="clear"></div>
+					</div>
+				</div>
+		</div>
+</div>
+{/if}
+		<div class="clear"></div>
+		<div class="next_more" style='margin-top:20px;'>
+			<span class="next_more_btn" id="nextgroup" onclick="loadPromotion('{url:/site/getMoreTuan}');">
+				<span class="next_more_text">查看下一组</span>
+			</span>
+		</div> 
+</div>
+<script type='text/html' id='promotion_box'>
+	<li style="margin-top:0;">
+		<dl>
+			<dt class="brand-img">
+				<a href="{url:/site/tuan_product/active/}/<%=id%>" target="_blank" title="<%=title%>">
+					<img class="lazyload img"  src="{url:<%=img%>}" alt="<%=title%>">
+				</a>
+			</dt>
+			<dd>
+				<div class="fl">
+					<p class="name">
+						<a href="{url:/site/tuan_product/active/}/<%=id%>" title="<%=title%>" target="_blank"><%=title%></a>
+					</p>
+							<p class="explain" title="&#160;">
+								<span class="gzmc_k"></span>
+								<span class="gzmc_z"></span>
+							</p>
+							<p class="prom" title="">
+									已有<span class="dazhe"><%=sum_count%></span>人团
+							</p>
+				</div>
+				<div class="fr">
+					<p class="brand-logo">
+					</p>
+					<p class="surplus countdown" id="timeRemaining-<%=key%>">
+						<span class="icon">剩余</span>
+						<span id='cd_day_<%=key%>'></span>天
+						<span id='cd_hour_<%=key%>'></span>小时
+						<span id='cd_minute_<%=key%>'></span>分
+						<span id='cd_second_<%=key%>'></span>秒	
+						<input name='endTime' type='hidden' value='<%=end%>' />
+					</p>
+				</div>
+				<div class="clear"></div>
+			</dd>
+		</dl>
+		<div class="brand-icon" id="brandsale_sold-out-_0">
+			<div class="clear"></div>
+		</div>
+	</li>
+</script>

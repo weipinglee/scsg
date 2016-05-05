@@ -1,0 +1,130 @@
+@charset "gb2312";
+
+
+/*
+*shan-banner ************************ 
+*/
+.shan-banner { position:relative;width:100%;}
+.shan-banner .banner-adv { width:100%;height:400px;}
+.shan-banner .banner-adv li { width:100%;height:400px;_overflow:hidden;}
+.shan-banner li.banner-item1 { background:url(../images/temp/shan_adv_09.jpg) center 0;}
+.shan-banner li.banner-item2 { background:url(../images/temp/shan_adv_10.jpg) center 0;}
+.shan-banner li.banner-item3 { background:url(../images/temp/shan_adv_11.jpg) center 0;}
+.shan-banner li img { width:100%;height:400px;_width:100%;}
+.shan-banner .banner-icon { position:absolute;left:0;bottom:0;}
+.shan-banner .banner-icon li { float:left;width:403px;height:30px;margin-right:1px;line-height:30px;text-align:center;font-size:12px;color:#fff;background:#684e4f;cursor:default;}
+.shan-banner .banner-icon li.current { background:#fff;color:#000;}
+.shan-banner .banner-icon li.last { width:402px;margin:0;}
+
+
+/*
+*shan-intro ************************ 
+*/
+.shan-intro { height:370px;margin-top:35px;background:#fff;}
+.shan-intro .shan-intro-child { display:none;}
+.shan-intro .intro-l { height:338px; width:676px; margin:1px;position:relative;}
+.shan-intro .intro-l img { width:676px;height:338px;}
+.shan-intro .intro-r { width:490px;margin:30px 0 0 20px;}
+.shan-intro .intro-r .date-end { width:490px;height:32px;line-height:32px;text-align:center;font-size:16px;color:#fff;background:#F15A24;}
+.shan-intro .intro-r .tit { width:470px;height:130px;padding:15px 10px 10px;margin-bottom:20px;font-size:16px;color:#000;line-height:1.8em;overflow:hidden;}
+.shan-intro .shan-pro-price .price span { font-size:24px;color:#000;}
+.shan-intro .shan-pro-price .price strong { line-height:36px;font-size:34px;font-weight:normal;color:#b61300;}
+.shan-intro .shan-pro-price .discount { margin-left:20px;}
+.shan-intro .shan-pro-price .discount dt { width:65px;height:20px;line-height:20px;text-align:center;font-size:14px;color:#fff;background:#F15A24;}
+.shan-intro .shan-pro-price .discount dd { text-decoration:line-through;color:#000;}
+.shan-intro .shan-pro-price a { display:block;width:109px;height:36px;line-height:36px;text-align:center;font-size:20px;color:#fff;background:url(../images/icon.png) -132px -96px;}
+.shan-intro li { width:403px;height:30px;margin-right:1px;line-height:30px;text-align:center;font-size:14px;color:#000;background:#bbb9b9;cursor:default;overflow:hidden;}
+.shan-intro li.current { background:#39282a;color:#fff;}
+.shan-intro li.last { width:402px;margin:0;}
+.recommend_none { display:none;}
+/*
+*品牌特卖 shan-brand ************************ 
+*/
+.shan-brand h2 { position:relative;padding-bottom:10px;font-size:20px;color:#fff;border-bottom:1px solid #c4c4c4;}
+.shan-brand h2 span { display:block;position:absolute;top:7px;left:102px;width:90px;height:19px;line-height:18px;*line-height:20px;_line-height:18px;font-size:14px;color:#000;background:#fff;}
+.shan-brand h2 span i { display:block;position:absolute;top:-4px;left:-16px;width:16px;height:25px;background:url(../images/icon.png) -238px -30px;}
+.shan-brand li { position:relative; float:left;width:424px;height:350px;margin:10px 10px 0 0;padding:15px;border:1px solid #ccc;background:#fff;}
+.shan-brand li.none { margin-right:0;}
+.shan-brand li dt img {width: 424px;height: 280px;}
+.shan-brand li dd { margin-top:15px;}
+.shan-brand li dd .name a { font-size:14px;font-weight:bold;color:#000;}
+.shan-brand li dd .explain { margin-top:10px; font-size:14px;color:#000;font-weight:bold;}
+.shan-brand li dd .explain .gzmc_k { font-size:14px; font-weight:normal;color:#000;}
+.shan-brand li.hover dd .explain .gzmc_k {color:#fff;}
+.shan-brand li.hover dd .explain .gzmc_z {color:#fff;}
+.shan-brand li dd .explain .gzmc_z { display:none;}
+.shan-brand li dd .prom { margin-top:10px; font-size:14px;color:#000;}
+.shan-brand dd .prom span { margin:0 5px;font-weight:bold;font-size:20px;color:#e13e4d; }
+.shan-brand dd .prom .gzmc_k { font-size:14px; font-weight:normal;color:#000;}
+.shan-brand dd .prom .gzmc_z { display:none;}
+.shan-brand dd .brand-logo { text-align:right;}
+.shan-brand dd .brand-logo img { width:110px;height:40px;}
+.shan-brand dd .surplus { margin-top:16px;font-size:14px;}
+.shan-brand li .brand-icon { position:absolute;top:20px;left:20px;}
+.shan-brand li .brand-icon .icon { margin:0 0 6px;padding:0;height:28px;line-height: 28px;}
+.shan-brand li .brand-icon .icon span { display:inline-block;padding:3px 10px;height:22px;line-height:22px;text-align:center;font-size:14px;color:#fff;}
+.shan-brand .brand-img {width:424px;height:280px;}
+.shan-brand .everyday-img {width:420px;height:210px;}
+.shan-brand .shan-pro-price a { display:block;width:109px;height:36px;line-height:36px;text-align:center;font-size:20px;color:#fff;background:url(../images/icon.png) -132px -96px;}
+/*
+*每日新品 shan-brand ************************ 
+*/
+.daily-buying { width:700px;}
+.daily-hot .daily-prod ,.daily-buying .last-buying { width:900px;}
+.daily-prod h2 span,.last-buying h2 span { display:block;position:absolute;top:7px;left:102px;width:126px;height:19px;line-height:18px;*line-height:20px;_line-height:18px;font-size:14px;color:#000;background:#fff;}
+.daily-prod li,.last-buying li { position:relative; float:left;width:420px;height:310px;margin:15px 16px 0 0;padding:10px;border:1px solid #ccc;background:#fff;}
+.daily-prod li dt,.last-buying li dt { width:420px;height:210px; }
+.daily-prod li dt img,.last-buying li dt img { width:100%;height:100%; }
+.daily-prod dd .surplus,.last-buying dd .surplus { margin-top:15px;}
+.last-buying h2 span { width:75px;}
+.last-buying li .rob-end { position:absolute;top:12px;left:10px;width:420px;height:210px;text-align:center;}
+.last-buying li .rob-end span { display:inline-block;width:125px;height:126px;margin-top:38px;background:url(../images/icon.png) 0 -200px;}
+.dazhe {margin-left: 10px;}
+/*售罄了*/
+.recommend_sold-out { position:absolute; top:95px; left:260px; display:block; width:125px;height:126px;background:url(../images/icon.png) 0 -200px;}
+.brandsale_sold-out { position:absolute; top:90px; left:230px; display:block; width:125px;height:126px;background:url(../images/icon.png) 0 -200px;}
+.dailyvariety_sold-out { position:absolute; top:50px; left:157px; display:block; width:125px;height:126px;background:url(../images/icon.png) 0 -200px;}
+.finallysnappedup_sold-out { position:absolute; top:50px; left:157px; display:block; width:125px;height:126px;background:url(../images/icon.png) 0 -200px;}
+/*
+*爆品预告 hot-herald ************************ 
+*/
+.hot-r { width:280px;margin-top:32px;}
+.hot-r .hot-herald h2 { position:relative;padding-bottom:10px;font-size:20px;color:#fff;border-bottom:1px solid #c4c4c4;}
+.hot-herald h2 span { display:block;position:absolute;top:7px;left:102px;width:110px;height:19px;line-height:18px;*line-height:20px;_line-height:18px;font-size:14px;color:#000;background:#fff;}
+.hot-herald h2 span i { display:block;position:absolute;top:-4px;left:-16px;width:16px;height:25px;background:url(../images/icon.png) -238px -30px;}
+.hot-herald .herald-adv { position:relative;margin-top:20px;padding:10px; border:1px solid #ccc;background:#fff;}
+.hot-herald .herald-adv img { width:260px;height:190px;}
+.hot-herald .herald-adv .herald-flo { position:absolute;top:172px;left:10px;_left:0;width:260px;height:30px;background:url(../images/icon.png) no-repeat 0 -135px;filter:alpha(opacity=90); -moz-opacity:0.9; opacity:0.9;}
+.hot-herald .herald-adv .herald-flo-con{ position:absolute;top:178px;left:20px;_left:10px;font-size:14px;color:#fff;z-index:2;}
+.hot-herald .herald-adv .herald-flo-con span { margin-left:20px;}
+.hot-herald .herald-info { width:230px;height:50px;margin-top:15px;background:#fff;}
+.hot-herald .herald-info dt { width:41px;height:41px;margin-right:15px;}
+.hot-herald .herald-info span { display:block;width:41px;height:41px;}
+.hot-herald .herald-info h3 { font-size:16px;margin:0 0 3px 0;}
+.hot-herald .herald-item1 dt  { background:url(../images/icon.png) no-repeat -195px 0;}
+.hot-herald .herald-item2 dt { background:url(../images/icon.png) no-repeat -195px -42px;}
+.shan-all-li li dd .explain a{ color:#000; font-weight:bold;}
+.wenjuan {margin-top: 15px;}
+.herald-adv img{width: 260px; height:190px;}
+
+.shan-brand .shan-pro-price .price span { font-size:14px;color:#000;}
+.shan-brand .shan-pro-price .price strong { line-height:36px;font-size:24px;font-weight:normal;color:#e13e4d;}
+.shan-brand .shan-pro-price .discount { margin:10px 0 0 20px; width:65px;height:20px;line-height:20px;text-align:center;font-size:14px;color:#fff;background:#F15A24;}
+.shan-brand li dd .old-price { font-size:16px;color:#000;text-decoration:line-through;}
+
+
+/* 鼠标 悬停 商品后的效果*/
+.shan-all-li li.hover { background:#F15A24; border: 1px solid #F15A24;}
+.shan-all-li li.hover dd .explain,.shan-all-li li.hover .prom ,.shan-all-li li.hover .prom span,.shan-all-li li.hover .surplus,.shan-brand li.hover dd .name a { color:#fff;}
+.shan-all-li li.hover dd .explain a{ color:#fff;}
+
+
+body.thousand .shan-all-li li dd .explain { width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+body.thousand .shan-all-li dd .name { width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+body.thousand .recommend_sold-out { position:absolute; top:60px; left:210px; display:block; width:125px;height:126px;background:url(../images/icon.png) 0 -200px;}
+body.thousand .brandsale_sold-out { position:absolute; top:60px; left:170px; display:block; width:125px;height:126px;background:url(../images/icon.png) 0 -200px;}
+body.thousand .dailyvariety_sold-out { position:absolute; top:30px; left:108px; display:block; width:125px;height:126px;background:url(../images/icon.png) 0 -200px;}
+body.thousand .finallysnappedup_sold-out { position:absolute; top:30px; left:108px; display:block; width:125px;height:126px;background:url(../images/icon.png) 0 -200px;}
+body.thousand .shan-brand .shan-pro-price .price strong { font-size:20px;}
+body.thousand .shan-brand .shan-pro-price .discount { margin-left:10px; width:50px;}
+body.thousand .shan-brand .old-price { font-size:14px;}

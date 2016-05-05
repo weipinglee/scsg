@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link rel="stylesheet" href="{skin:css/admin.css}" />
+{js:jquery}
+{js:dialog}
+{js:artTemplate}
+<script type='text/javascript' src='{theme:javascript/artTemplate/area_select.js}'></script>
+</head>
+<script type='text/javascript'>
+	//获取数据
+function getData(typeVal,id)
+{
+	var selectedVal =  !id ? $('select[name="'+typeVal+'"] option:selected').val() : id;
+	$.getJSON("{url:/block/getTakeselfList}",{"id":selectedVal,"type":typeVal},function(jsonData)
+	{
+		switch(typeVal)
+		{
+			case "province":
+			{
+				$('[name="city"] option:gt(0)').remove();
+				for(var index in jsonData)
+				{
+					var item = jsonData[index];
+					$('[name="city"]').append('<option value="'+item['city']+'">'+item['city_str']+'</option>');
+					
+				}
+			}
+			break;
+
+			case "city":
+			{
+				$('[name="area"] option:gt(0)').remove();
+				for(var index in jsonData)
+				{
+					var item = jsonData[index];
+					$('[name="area"]').append('<option value="'+item['area']+'">'+item['area_str']+'</option>');
+				}
+			}
+			break;
+			case "area":
+			{
+				$('#takeselfBox').empty();
+				for(var index in jsonData)
+				{
+					var item = jsonData[index];
+					var takeselfHtml = template.render('takeselfRowTemplate',{"item":item});
+					$('#takeselfBox').append(takeselfHtml);
+				}
+			}
+			break;
+		}
+	});
+}
+	/**
+ * 生成地域js联动下拉框
+ * @param name
+ * @param parent_id
+ * @param select_id
+ */
+function createAreaSelect(name,parent_id,select_id)
+{
+	//生成地区
+	$.getJSON("{url:/block/area_child}",{"aid":parent_id,"random":Math.random()},function(json)
+	{
+		$('[name="'+name+'"]').html(template.render('areaTemplate',{"select_id":select_id,"data":json}));
+	});
+}
+//DOM加载完成后
+$(function(){
+	template.compile("areaTemplate",areaTemplate);
+	var province = $('input[name=province]').val();
+	var city = $('input[name=city]').val();
+	var area = $('input[name=area]').val();
+	//修改模式
+	if(province!=''){
+		createAreaSelect('province',0,province);
+		createAreaSelect('city',province,city);
+		createAreaSelect('area',city,area);
+		getData('area',area);
+	}else{
+		createAreaSelect('province',0,"");
+	}
+})	
+</script>
+<body style="width:550px;min-height:160px;">
+<input type='hidden' name='province' value={$_GET['pro']}>
+<input type='hidden' name='city' value={$_GET['city']}>
+<input type='hidden' name='area' value={$_GET['area']}>
+	<div class="pop_win">
+		<table class="form_table" width="95%" cellspacing="0" cellpadding="0" border="0">
+			<colgroup>
+				<col width="90px" />
+				<col />
+			</colgroup>
+
+			<thead>
+				<tr>
+					<td class="t_r">自提点选择：</td>
+					<td>
+						<select name="province" child="city,area" onchange="areaChangeCallback(this);" >
+							<option value="">请选择省份</option>
+						</select>
+
+						<select name="city" child="area" parent="province" onchange="areaChangeCallback(this);">
+							<option value="">请选择城市</option>
+						</select>
+
+						<select name="area" parent="city" pattern="required" onchange="getData('area')">
+							<option value="">请选择区域</option>
+						</select>
+
+						
+					</td>
+				</tr>
+			</thead>
+
+			<tbody id="takeselfBox"></tbody>
+
+			<!--自提点模板-->
+			<script type="text/html" id="takeselfRowTemplate">
+			<tr>
+				<td></td>
+
+				<td>
+					<label>
+						<input type='radio' value='<%=jsonToString(item)%>' name='takeselfItem' checked='checked' />
+
+						<%=item['address']%>
+
+						<%if(item['phone']){%>
+						，电话：<%=item['phone']%>
+						<%}%>
+
+						<%if(item['mobile']){%>
+						，手机：<%=item['mobile']%>
+						<%}%>
+					</label>
+				</td>
+			</tr>
+			</script>
+		</table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://m.#.com/s/search?keyword=%E8%A1%A3%E6%9C%8D -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="http://static-web.#.com/wap/img/collect-logo/#-collect-logo.png">
+        <title>凑单</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+        <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+		<link rel="stylesheet" href="{skin:css/search_list.css}" type="text/css"> 
+	{js:artTemplate}
+		<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		<script src="{theme:javascript/common.js}"></script>
+		<script src="{theme:javascript/scrollTop.js}"></script>           
+		<!--隐藏页面css和js-->
+		<link rel="stylesheet" href="{skin:css/swiper.min.css}" type="text/css">   		
+        <script src="{theme:javascript/zepto.js}"></script>
+		<script src="{theme:javascript/filter.js}"></script>
+		<script src="{theme:javascript/cart.js}"></script>
+		<script src="{theme:javascript/swiper.jquery.min.js}"></script> 
+		<!--隐藏页面css和js结束-->
+		</head>
+
+    <body data-mps="PA4101">
+        <div id="page">
+            <header class="wap-header">
+    <div class="wap-topbar" style="">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
+        <div class="h-center">
+            <h1>凑单</h1>
+        </div>
+    </div>
+  </header>
+<section id="contents">
+		<div class="no-result-tip">
+			{if:$gap_price>0}
+			还差
+			<span>￥{$gap_price}</span>
+			{$info}
+			{else:}
+			没有更多的促销规则
+			{/if}
+		</div>
+      <link href="{skin:css/style1.2.css}" rel="stylesheet" type="text/css" />   
+    <section class="s-list cf" id="dataList">
+             <section class="deals">
+			</section>                                  
+     </section>
+            
+</section>
+ 
+ </div>
+<script type='text/html' id='goods_box'>
+	<div>
+	  <figure>
+		<a href="{url:/site/products/id/}/<%=id%>" target="_blank"><img src="{url:<%=img%>}"/></a>
+	  </figure>
+	  <h2>
+		<span><a href="{url:/site/products/id/}/<%=id%>" target="_blank"><%=name%></a></span>
+		</h2>
+
+	  <p>
+	  <span>￥<i><%=sell_price%></i></span>
+	  <cite>市场价<%=market_price%>&nbsp;&nbsp;</cite>
+		
+	  </p>
+	</div>
+</script>        
+  <script type='text/javascript'>
+  	var cou_price = {$cou_price};
+		var obj = {
+			'url': '{url:/simple/ajax_coudan}',
+			'template_id': 'goods_box',
+			'append_to': $('.deals'),
+			'loading_img': '{skin:images/files/loading.gif}',
+			'trans_data': {cou_price:cou_price},
+			'callback' : bindEvent
+		};
+	 function bindEvent(json){
+	 	
+		$('a[name=goods_'+json.id+']').on('click',function(){
+			joinCart_ajax(json.id,"{url:/simple/joinCart}","goods");
+		})
+		
+	 }
+	var ajax = new Ajax_Get_Data();
+	ajax.init(obj);
+  </script>  
+
+<footer id="footer">
+	<div class="f-qk-tl">
+		<div class="f-login">
+<a href="{url:/simple/login?callback=}">登录</a><span>|</span><a href="{url:/simple/reg?callback=}">注册</a>
+		<div class="f-go-top" id="goTop"><a href="#">TOP</a></div>
+		</div>
+	</div>
+	<div class="f-ch-cp">
+		<div class="item"><a href="{url:/site/index?callback=}">触屏版</a><a href="http://www.yqtvt.com/index.html">标准版</a></div>
+		<div class="item"><span class="copyright_1">Copyright</span> <span class="copyright_2">2012-2015</span><span class="copyright_3">NAI.COM</span><span class="copyright_4">版权所有</span></div></div>
+</footer></body></html>

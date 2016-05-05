@@ -1,0 +1,424 @@
+{set:
+	$site_config=new Config('site_config');
+	$seo_data=array();
+	$seo_data['title']=$site_config->name;
+	$seo_data['title'].='-'.$site_config->index_seo_title;
+	$seo_data['keywords']=$site_config->index_seo_keywords;
+	$seo_data['description']=$site_config->index_seo_description;
+	seo::set($seo_data);
+}		
+<script type="text/javascript" src="{theme:javascript/jquery.kinMaxShow-1.0.min.js}"></script>
+<script type"text/javascript" src="{theme:javascript/a.js}"></script>
+<link href="{skin:css/bm.css}" rel="stylesheet">
+
+<!--流量统计代码-->
+<script type="text/javascript">
+var _mvq = window._mvq || []; 
+window._mvq = _mvq;
+_mvq.push(['$setAccount', 'm-170377-0']);
+
+
+_mvq.push(['$logConversion']);
+(function() {
+	var mvl = document.createElement('script');
+	mvl.type = 'text/javascript'; mvl.async = true;
+	mvl.src = ('https:' == document.location.protocol ? 'https://static-ssl.mediav.com/mvl.js' : 'http://static.mediav.com/mvl.js');
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(mvl, s); 
+})();	
+
+</script>
+<!--流量统计代码-->
+
+<!--bn-->
+<div class="bn" style="height:490px;">
+		<!--轮播开始-->
+			<script type='text/javascript' >
+				var tId;
+				startScroll();
+				$(function(){
+				    $('#ad_index li').each(function(){
+				        $(this).click(function(){
+				            slideHere($(this));
+				        }).mouseover(function(){
+				            stopHere($(this));
+				        }).mouseout(function(){
+				            startScroll();
+				        });
+				    });
+				});
+				function startScroll(){
+				    tId = setInterval(function(){
+				        var nextImg = $('#ad_index .nonce').next('.initial');
+				        if(nextImg.length==0){
+				            nextImg = $($('#ad_index li')[0]);
+				        }
+				        slideHere($(nextImg));
+				    }, 3000);
+				}
+				function stopScroll(){
+				    clearInterval(tId);
+				}
+				function slideHere(imgObj){
+				    $('#ad_index li').removeClass('nonce');
+				    $('#ad_index li').addClass('initial');
+				    imgObj.removeClass('initial');
+				    imgObj.addClass('nonce');
+				    if($('#ad_index img').length)
+				    {
+				        $('#ad_index .pic img')
+				            .attr('src', imgObj.attr('target_src'))
+				            .css('display', 'none')
+				            .fadeIn('normal')
+				            .parent().attr('href', imgObj.attr('target_link'))
+				            .attr('target', '_blank');
+						$('#scroll').css('background-color','#'+imgObj.attr('target_color'))
+				   }
+				}
+				function stopHere(imgObj){
+				    slideHere(imgObj);
+				    stopScroll();
+				}
+			</script>
+		{if:$this->index_slide}
+		<div id='scroll' style="background-color:#{$this->index_slide[0]['color']}" >
+			
+			<div class="ad_cycle ad_index" id='ad_index'>
+				<div class="number" >
+					<ul style=''>
+						{foreach:$items=$this->index_slide }
+							{set:$key=$key+1}
+							{if:$key==1}
+							{set:$fUrl=$item['url'];$fImg=$item['img'];}
+								<li class="nonce" alt="{$key}" target_color="{$item['color']}" target_link="{webroot:$item['url']}" target_src="{webroot:$item['img']}"></li>
+							{else:}
+								<li class="initial" alt="1" target_color="{$item['color']}" target_link="{webroot:$item['url']}" target_src="{webroot:$item['img']}"></li>
+							{/if}
+						{/foreach}
+					</ul>
+					
+				</div>
+				<div style="width:200px;float:left;height:10px;display:inline-block;"></div>
+				<div class='pic'>
+					<a href="{webroot:$fUrl}" target="_blank">
+						<img src="{webroot:$fImg}" style="width:100%;height:490px;">
+					</a>
+				</div>
+				<div style="width: 231px;float:right;height:10px;display:inline-block;"></div>
+			</div>
+			
+		</div>
+		{/if}
+		<!--轮播结束-->
+		
+		<!--轮播右侧-->
+		<div class="w1190">
+			<!--right-cnt-->
+			<div class="right-cnt">
+				  <!--promise-->
+				  <ul class="promise" id="promise">
+   					<li class="15day">
+    					<a style="cursor: pointer;" href="#"><span class="ic"><img src="{skin:images/index_icon_1.png}"></span> 7天退换货</a>
+    				</li>
+    				<li class="baoyou">
+    					<a style="cursor: pointer;" href="#"><span class="ic"><img src="{skin:images/index_icon_2.png}"></span> 满79包邮</a>
+    				</li>
+    				<li class="cirida">
+    					<a style="cursor: pointer;" href="#"><span class="ic"><img src="{skin:images/index_icon_3.png}"></span> 同城当日达</a>&nbsp;
+    				</li>
+				</ul>
+				 <script>
+					$("#promise").find("li").hover(function(){						
+						$(this).css("background-color","#e77b0d");
+						$(this).find("a").css("color","#fff");
+						},function(){
+						$(this).css("background-color","#f5c53a");
+						$(this).find("a").css("color","#933232");
+					});
+				 </script>
+					<!--promise-->
+				
+				<!--公告、抢购-->
+		        <div class="notice f-r">
+		        	  <!--tabs-->
+		        	<div class="tabs">
+							
+		    				<ul class="tab-title clearfix">
+		    					<li class="tab-title-hover"><h2 class="t14">商城公告</h2></li>
+								<li class=""><h2 class="t14">山城推荐</h2></li>								
+		    				</ul>
+		    				<div class="tab-cnt">
+		                        <div class="tab-item tab-item-hover" style="display: block;">
+								<ul class="news-list">
+									{foreach:items=Api::run('getAnnouncementList',8)}
+										<li><a style='height:22px;' href='{url:/site/notice_detail/id/$item["id"]}' class="limit" target="_blank">{$item['title']}</a>
+										</li>
+									{/foreach}
+								</ul>
+								</div>
+                        <div class="tab-item tab-item-hover" style="display: none;">
+						<ul class="news-list">
+								<li>
+											<!--limit-->
+											<div class="limit">
+												<!--limit-zero-->
+												<div class="limit-zero">																						
+													{echo:Ad::show("首页山城推荐")}
+												</div>
+												<!--limit-zero-->
+
+											</div>
+											<!--limit-->
+								</li>
+						</ul>
+   						</div>
+							
+		                  
+		    				</div>
+						</div>
+						  <!--tabs-->
+		                <!--便民服务-->
+		                <div class="small-pro">
+		<!--便民服务
+			                <div class="ad-pic" id="ad_pic_5712">
+			                  <div class="demo">	
+								
+								<ul class="tabbtn" id="fadetab">
+									<li class="current"><a href="#">话费</a></li>
+									<li><a href="#">彩票</a></li>
+									<li><a href="#">游戏</a></li>
+									<li><a href="#">保险</a></li>
+								</ul>tabbtn end
+								<div class="tabcon" id="fadecon">
+									<div class="sublist">
+										<ul>
+											<li><a href="#" target="_blank" class='red-a'>交话费</a></li>
+											
+										</ul>
+									</div>
+									<div class="sublist">
+										<ul>
+											<li><a href="#" target="_blank" class='red-a'>买彩票</a></li>
+											
+										</ul>
+									</div>
+									<div class="sublist">
+										<ul>
+											<li><a href="#" target="_blank" class='red-a'>充点卡</a></li>
+											
+										</ul>
+									</div>
+									<div class="sublist">
+										<ul>
+											<li><a href="#" target="_blank" class='red-a'>上保险</a></li>
+											
+										</ul>
+									</div>
+								</div>tabcon end
+								
+								
+								
+							</div>tabbox end
+							<script type="text/javascript" src="{theme:javascript/jquery.tabso_yeso.js}"></script>
+							<script type="text/javascript">
+								$(document).ready(function($){
+									
+																	
+									//淡隐淡现选项卡切换
+									$("#fadetab").tabso({
+										cntSelect:"#fadecon",
+										tabEvent:"mouseover",
+										tabStyle:"fade"
+									});
+									
+																	
+								});
+							</script>
+						    </div>
+		便民服务--><a href="{url:/simple/seller}" target="_blank"><img src="{skin:images/bianmin.png}" style="width:228px;height:200px;margin-top:5px;"></a>
+						</div>
+		                  <!--便民服务-->
+		        </div>
+        <!--notice f-r-->
+		</div>
+			<!--right-cnt-->
+		</div>
+		<!--轮播右侧-->
+		
+</div>
+<!--bn-->
+<!--第二层-->
+<div class="cnt w1190" id="w1190">
+	<!--猜你喜欢-->
+	<div class="floor floor-1" data-tpa="YHD_NHOME_INDEX2_FLOOR1" >
+			<div class="fl-title clearfix">
+				<div  id="floor-1" class="item"></div>
+				<h2 class="t18">猜你喜欢</h2>
+			</div>
+	
+	<!--buying-->
+		<div class="buying clearfix">
+			<ul class="goods-list clearfix" style="width:1190px;margin-left:2px;">
+				{foreach:items=$this->user_like_goods}
+				
+				<li class="xi">
+					 <a class="goods-img" href="{url:/site/products/id/$item['id']}"  target="_blank">
+						<img class="jImg" src="{url:/pic/thumb/img/$item[img]/w/170/h/170}"><div class="shine">&nbsp;</div>
+					</a>
+					<a class="goods-name" href="{url:/site/products/id/$item['id']}" title="{$item['name']}"  target="_blank">
+						{$item['name']}<span class="txt-red"></span>
+					</a>
+					<div class="goods-price">
+						<span class="p-normal">￥{$item['sell_price']}</span>
+						<span class="p-del">￥{$item['market_price']}</span>
+					</div>
+				</li>
+				{/foreach}
+					
+				
+			</ul>
+		</div>
+	</div>
+	<!--猜你喜欢-->
+
+	<!--推荐商品-->
+    <div class="clearfix">
+    	<!--tabs rcmd f-l-->
+    	<div class="tabs rcmd f-l">
+        	<!--tab-title-->
+			{query: name=commend_tags where=is_close eq 0 and show_index eq 1 order=sort asc limit=5 items=$tags}
+			{/query}
+        	<div class="tab-title clearfix">
+        		{foreach:items=$tags key=$k}
+				{if:$k==0}
+            	<li class="tab-title-hover"><h2 class="t14">{$item['name']}</h2></li>
+				{else:}
+				<li class=""><h2 class="t14">{$item['name']}</h2></li>
+				{/if}
+                {/foreach}
+            </div>
+			 <div class="tab-cnt">
+				<!--热卖商品列表 -->
+				{foreach:items=$tags item=$tag}
+            	<div class="tab-item"  {if:$key==0}style='display:block'{/if}>
+                	<ul class="goods-list clearfix">
+						
+                		{foreach:items=Api::run('getGoodsListByTags',array('#id#',$tag['id']),6)}
+                    	<li>
+	                         <a class="goods-img"  target="_blank" href="{url:/site/products/id/$item['id']}">
+	                            <img class="jImg" src="{url:/pic/thumb/img/$item[img]/w/170/h/170}"><div class="shine">&nbsp;</div>
+	                        </a>
+	                        <a class="goods-name red-a" target="_blank" href="{url:/site/products/id/$item['id']}" title=" {$item['name']}">
+	                            {$item['name']}<span class="txt-red"></span>
+	                        </a>
+	                        <div class="goods-price">
+	                            <span class="p-normal">￥{$item['sell_price']}</span>
+	                            <span class="p-del">￥{$item['market_price']}</span>
+	                        </div>
+                  	 	 </li>
+						{/foreach}
+					</ul>
+                </div>	
+				{/foreach}
+				
+				<!--热卖商品列表 -->
+				
+				<!--推荐商品列表 -->
+			</div>
+             <!--tab-cnt-->
+        </div>
+        <!--tabs rcmd f-l-->
+         
+    </div>
+	<!--推荐商品-->
+	<!--通栏广告1-->
+	<div  class="big-pro ad-shine">
+		{echo:Ad::show("首页推荐层通栏")}
+	</div>
+	<!--通栏广告1-->
+	
+	<!--分类产品列表-->		
+	<!--floor1-->
+	{foreach:items=$this->categoryList item=$base}
+	{set:$K=$key+2;$Kad=$key+1;}
+	<div class="floor floor-{$K} item" id='floor-{$K}' name="showGoods">
+			<div class="fl-title clearfix">
+				<h2 class="t18">{$base['name']}</h2>
+				<ul class="fl-cat">
+					{foreach:items=$base['child'] item=$second}
+								<li><a href="site/pro_list/cat/{$second['id']}" target="_blank">{$second['name']}</a>|</li>
+					{/foreach}
+								<li><a href="site/pro_list/cat/{$base['id']}" style="font-size: 12px;"target="_blank">更多</a></li>
+				</ul>
+			</div>
+			<div class="fl-cnt clearfix">
+				<div class="fl-rcmd f-l">
+					<div class="fl-rcmd-bg ad-shine">
+						<div class="keyword">
+							{if:isset($hotCat[$base['id']])}
+							{foreach:items=$hotCat[$base['id']] item=$hot kHot=$key}
+							
+								<a href="{url:site/pro_list/cat/$hot[id]}" class="key red-a"target="_blank">{$hot['name']}</a>
+							{/foreach}
+							{/if}
+						</div>
+									
+						{echo:Ad::show("首页楼层".$Kad."-小广告")}
+					</div>
+				</div>
+				<!--分层轮播广告-->
+				<div class="fl-rcmd1 f-l" >
+					<div class="fl-rcmd-bg1 ad-shine" >
+					
+						{echo:Ad::show("首页楼层".$Kad."-大广告",0,1)}
+					</div>
+				</div>
+				<!--分层轮播广告-->
+				<!--分类产品列表-->
+                <div class="f-r">
+				    <ul class="goods-list clearfix">
+				    	{foreach:items=$base['goods'] item=$goods key=$gk}
+						{if:$gk>=6}
+						{set:break}
+						{/if}
+					    	<li>
+					        <a class="goods-img" href="{url:/site/products/id/$goods['id']}" title="{$goods['name']}" target="_blank">
+					            <img class="jImg" alt="{$goods['name']}" src="{url:/pic/thumb/img/$goods[img]/w/180/h/180}" target="_blank">
+								<div class="shine">&nbsp;</div>
+					        </a>
+					        <a class="goods-name red-a" href="{url:/site/products/id/$goods['id']}" title="{$goods['name']}" target="_blank">
+					         <span class="txt-red">{if:$goods['is_del']==4}[预售]{/if}</span> {$goods['name']}
+					        </a>
+					        <div class="goods-price">
+					            <span class="p-normal">￥{$goods['sell_price']}</span>
+					            <span class="p-del">￥{$goods['market_price']}</span>
+					        </div>
+					    </li>
+						{/foreach}
+				    </ul>
+				 </div>
+			</div>
+		</div>
+		
+		<div class="big-pro">
+	       <div class='seller_list'>
+		 		{foreach:items=$base['seller'] item=$seller}
+					<a href="{url:/site/home/id/$seller['id']}" target="_blank"><img src="{url:/pic/thumb/img/$seller['logo_img']/w/119/h/60}"/></a>
+				{/foreach}
+		 	</div>
+		</div>
+		 <!--floor floor-1-->
+		 <div class="big-pro">
+		 	
+	        <div class="ad-pic ad-shine" id="ad_pic_5713">
+	            	{echo:Ad::show("首页楼层".$Kad."-通栏")}		
+			</div>
+			
+		</div>
+	{/foreach}
+	
+	
+	
+	<!--分类产品列表-->
+</div>	
+

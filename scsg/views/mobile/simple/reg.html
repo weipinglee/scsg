@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="">
+        <title>注册</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+        <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+		<link rel="stylesheet" href="{skin:css/center.css}" type="text/css">       
+		<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		<script src="{theme:javascript/common.js}"></script> 
+		    
+		<link rel="stylesheet" href="{skin:css/csshide1.css}">
+<style>#sell-ad{display:none!important;}</style>
+<script type="text/javascript">window.onerror=function(){return true;}</script></head>
+<script type="text/javascript">
+var returnUrl = '{url:$callback}';
+var logPath = '{url:/simple/login}';
+var regPath = '{url:/simple/reg_act}';
+var checkPhoneIsOneUrl = '{url:/simple/checkPhoneIsOne}';
+var checkEmailIsOneUrl = '{url:/simple/checkEmailIsOne}';
+var getMobileCodeUrl = '{url:/simple/getMobileValidateCode}';
+
+</script>
+<script src="{theme:javascript/reg/register.js}"></script> 
+    <body data-mps="PA4101">
+        <div id="page">
+            <header class="wap-header">
+    <div class="wap-topbar">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回"></a></div>
+        <div class="h-center">
+            <h1>注册</h1>
+        </div>
+    </div>
+</header><link rel="stylesheet" href="{skin:css/loglist.css}">
+
+
+  <div id="formbackground" style=" width:100%; height:100%; z-index:-1">  
+	<!--<img src="{skin:images/1-15010H20146430.jpg}"  width="100%"/> --> 
+</div>                                   
+
+<section class="reg-main">  
+
+    <form id="register-form" class="reg-form" method="post" novalidate>
+		<div class="reg-error-box" id='errorInfo'></div>
+        <div class="field username">
+            <div class="field-relative">
+                <input id="mobile" class="reg-input icon-reg icon-reg-phone" type="text" name="mobile" onblur='showPhoneTipWhenBlur()' onfocus='hideErrInfo()' placeholder="请输入手机号" value="" autocomplete="off">
+                <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display:none;">清空</a>
+            </div>
+        </div>
+        <div class="field code mt10">
+            <div class="field-relative cf">
+                <input id="code" class="reg-input reg-disabled fl" type="text" name="code" placeholder="请输入验证码" value="" onfocus='hideErrInfo()' autocomplete="off" maxlength="6" >
+                <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display:none;">清空</a>
+                <a id="getCode" type="button" onclick='receiveCode()' href='javascript:void(0)' class="receive_code  reg-btn dark-btn get-code get-code-register fr" >获取验证码</a>
+            </div>
+
+
+        </div>
+        <div class="field psw mt10">
+            <div class="field-relative">
+                <input class="reg-input reg-disabled icon-reg icon-reg-psw" type="password" name="password" placeholder="请输入密码" onfocus='hideErrInfo()' value="" autocomplete="off" onpaste="return false;" oncopy="return false;" oncut="return false;" disabled="disabled">
+                <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display:none;">清空</a>
+            </div>
+        </div>
+        <div class="field protocol">
+            <input id="protocol" type="checkbox" checked="checked">
+            <label for="protocol">我已阅读并同意<a id="toProtocol" href="{url:/site/help/id/58}">《用户注册协议》</a></label>
+        </div>
+        <div class="field submit-btn">
+            <input type="button" id="registerBtn" class="reg-btn dark-btn" onclick='registerByPhoneSubmit()' value="注册">
+        </div>
+        <input type="hidden" id="relate" name="relate" value="">
+    </form>
+</section>
+<input type="hidden" id="sendRedirect" name="sendRedirect" value="#">
+<input type="hidden" id="referer" name="referer" value="">
+<input type="hidden" id="relate" name="relate" value="">
+<input type="hidden" id="is_app" value="">
+<script src="{theme:javascript/js/validate.min.js}"></script>
+<script src="{theme:javascript/js/user.js}"></script>
+<script>
+    $(function(){
+        window.B5M_UC = {
+            rootPath : '#'
+        };
+        wapReg.regFun();
+    });
+</script>        </div>
+        <input type="hidden" id="is_login" name="is_login" value="">
+        <input type="hidden" id="show_nav" value="1">
+        <input type="hidden" data-isnew="" data-isold="" id="is_app" value="">
+        <img src="{skin:images/files/hm.gif}" width="0" height="0">
+        <script type="text/javascript" src="{theme:javascript/js/stat3.min.js}"></script>
+		<div style="display: none;">
+		<script type="text/javascript" async src="{theme:javascript/js/h.js}"></script>
+		</div>
+		<img id="stat_image" src="{skin:images/files/__utm.gif}" style="display: none;">

@@ -1,0 +1,160 @@
+<script type='text/javascript' src='{theme:/javascript/cart.js}'></script>
+<div class="wrapper clearfix">
+	<div class="position mt_10"> <span>您当前的位置：</span> <a href="{url:}"> 首页</a> » 购物车</div>
+	<div class="myshopping m_10">
+		<ul class="order_step">
+			<li class="current"><span class="first">1、查看购物车</span></li>
+			<li><span>2、填写核对订单信息</span></li>
+			<li class="last"><span>3、成功提交订单</span></li>
+		</ul>
+	</div>
+	<div id="cart_prompt" class="cart_prompt f14 t_l">
+		<p class="m_10 gray"><b class="orange">恭喜，</b>您的订单已经满足了以下优惠活动！</p>
+		
+	</div>
+
+<form method='post' action='{url:/simple/cart2}' name='cart'>
+	<table width="100%" class="cart_table m_10">
+		<caption>查看购物车</caption>
+		<thead></thead>
+		<tbody>
+			<tr>
+				<td colspan="8">
+					
+					{foreach:items = $this->goodsList item=$value}
+					<table class="cart_table m_10" width='100%'>
+						<col width="115px" />
+						<col />
+						<col width="80px" />
+						<col width="80px" />
+						<col width="80px" />
+						<col width="80px" />
+						<col width="80px" />
+						<col width="80px" />
+						<caption>商家：{$value['seller_name']}</caption>
+						<thead>
+							<tr><th>图片</th><th>商品名称</th><th>赠送积分</th><th>单价</th><th>优惠</th><th>数量</th><th>小计</th><th class="last">操作</th></tr>
+						</thead>
+						<tbody>
+							{foreach:items=$value key=$k}
+							
+							{if:is_array($item)}
+							{set:$type=isset($item['spec_array'])?'product':'goods'}
+							{set:$item['id']=isset($item['spec_array'])?$item['product_id']:$item['goods_id']}
+							{set:$item['type']=$type}
+							{set:$item_json = JSON::encode($item)}
+							<tr>
+								<td>
+									<input type='checkbox' name='sub[]' data-json='{$item_json}' value="{$type}-{$item['id']}" />
+									<img src="{url:/pic/thumb/img/$item[img]/w/66/h/66}" width="66px" height="66px" alt="{$item['name']}" title="{$item['name']}" />
+								</td>
+								<td class="t_l">
+									<a href="{url:/site/products/id/$item[goods_id]}" class="blue">{$item['name']}</a>
+									{if:isset($item['spec_array'])}
+									<p>
+									{set:$spec_array=Block::show_spec($item['spec_array']);}
+									{foreach:items=$spec_array item=$specValue key=$specName}
+										{$specName}：{$specValue} &nbsp&nbsp
+									{/foreach}
+									</p>
+									{/if}
+								</td>
+								<td>{$item['point']}</td>
+								<td><b>￥{$item['sell_price']}</b></td>
+								<td>减￥{$item['reduce']}</td>
+								<td>
+									<div class="num">
+										<a class="reduce" href="javascript:void(0)" onclick='cart_reduce({$item_json});'>-</a>
+										<input class="tiny" value="{$item['count']}" onblur='cartCount({$item_json});' name='{$type}-{$item["id"]}' type="text" id="{$type}_count_{$item['id']}" />
+										<a class="add" href="javascript:void(0)" onclick='cart_increase({$item_json});'>+</a>
+									</div>
+								</td>
+								<td>￥<b class="red2" id="{$type}_sum_{$item['id']}">{$item['sum']}</b></td>
+								<td><a href="{url:/simple/removeCart/link/cart/type/$type/goods_id/$item[id]}">删除</a></td>
+							</tr>
+							{/if}
+							{/foreach}
+						</tbody>
+					</table>
+					{/foreach}
+				</td>
+			</tr>
+
+			<tr class="stats">
+
+				<td><input id="ckAll" class="checks" type="checkbox"/>全部</td>
+				<td colspan="2" style="text-align:right;">
+					<!--<span>商品总重量：<b id='weight'>0</b>g</span>--><span>商品总金额：￥<b id='origin_price'>0</b> - 商品优惠：￥<b id='discount_price'>0</b> - 促销活动优惠：￥<b id='promotion_price'>0</b></span><br />
+					金额总计（不含运费）：￥<b class="orange" id='sum_price'></b>
+
+				</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="2" class="t_l">
+				
+					<a class="del" href="javascript:void(0);" onclick="delModel({msg:'确定要清空购物车么？',link:'{url:/simple/clearCart}'});">清空购物车</a>
+				</td>
+				<td colspan="6" class="t_r">
+					{set:$callback = IFilter::act(IReq::get('callback'),'text');}
+					<a class="btn_gray btn_small mr_10" href="{url:$callback}" style="float:right;">继续购物</a>
+					{if:$this->goodsList}
+					<a class="btn_brown btn_big mr_20" onclick="check_finish();" href='javascript:void(0)'>去结算</a>
+					{/if}
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</form>
+<!--<a href='javascript:void(0);' onclick='$("[name^=sub]").not("input:checked").trigger("click")'>123</a>-->
+	<div class="box"><div class="title">热门商品推荐</div></div>
+	<div class='cart-hot'>
+		<div class='cart-hot-box'>
+			<ul id="scrollpic" class="prolist">
+				{foreach:items=Api::run('getCommendHot',5)}
+				
+				<li>
+					<a href="{url:/site/products/id/$item[id]}">
+						<img width="98px" height="106px" src="{url:/pic/thumb/img/$item[img]/w/98/h/106}" alt="{$item['name']}" title="{$item['name']}" onerror='this.src="{skin:images/front/nopic_435_435.gif}"'>
+					</a>
+					<p class="pro_title"><a href="{url:/site/products/id/$item[id]}">"{$item['name']}"</a></p>
+					<p class="brown"><b>￥{$item['sell_price']}</b></p>
+				</li>
+				{/foreach}
+			</ul>
+		</div>
+		
+	</div>
+		
+</div>
+
+<script type='text/javascript'>
+	var prom_url = '{url:/simple/promotionRuleAjax/random/@random@}';
+	var cart_url = '{url:/simple/joinCart}';
+	var cart2_url = '{url:/simple/cart2}';
+//检测购买完成量
+function check_finish()
+{
+	var checked = $('input[name^=sub]:checked');
+	if(checked.length==0)return false;
+	$('form[name=cart]').submit();
+}
+
+/**
+ * 读取购物车
+ */
+function deposit_cart_get()
+{
+	$.getJSON('{url:/simple/deposit_cart_get}',{"random":Math.random()},function(json)
+	{
+		if(json.isError == 1)
+		{
+			alert('读取购物车失败');
+			return;
+		}
+		//页面刷新
+		window.location.reload();
+	});
+}
+</script>

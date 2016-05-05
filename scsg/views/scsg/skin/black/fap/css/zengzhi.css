@@ -1,0 +1,62 @@
+@charset "utf-8";
+/* CSS Document */
+	*{ margin:0; padding:0;}
+	ul, li, body, h2, h3, div, body, p{
+		display: block;
+	}
+	a{ text-decoration:none;}
+	ul{ list-style-type:none;}
+		.contfp{
+			/*border:1px solid #c0c0c0;*/
+			padding:15px 10px;
+		}
+		.contfp .tylx{
+			padding:3px 0px;
+			line-height:30px;
+		}
+		
+		.contfp .tylx .titles{
+			font-weight:600;
+		}
+		.contfp .tylx .zy{
+			font-size: 14px;
+			color: #44668b;
+		}
+		.qer{
+			padding: 8px 10px;
+			background-color: #df3f01;
+			color: #FFF;
+			border: 1px solid #a64f46;
+		}
+		.qx{
+			color: #060606;
+			background-color: #d3d3d3;
+			margin-left: 10px;
+			border: 1px solid #999;
+			padding: 8px 13px;
+		}
+		.tex{
+			height: 30px;
+			width: 245px;
+		}
+		/*增值税发票样式*/
+		.anniu{
+			padding: 0px 10px;
+		}
+		.anniu ul li{
+			height: 37px;
+			line-height: 37px;
+		}
+		 .anniu ul li i {
+			font-style: normal;
+			color: #F00;
+			float: left;
+			padding-right: 2px;
+		}
+		
+		.anniu ul li p {
+			float: left;
+			width: 112px;
+			text-align: center;
+		}
+	/*增值税发票样式结束*/

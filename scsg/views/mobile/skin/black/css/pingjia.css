@@ -1,0 +1,42 @@
+*{margin: 0;padding: 0;}
+
+ul,  li, body, h2, h3, h4, div, body, p{
+	display: block;
+	color: #666;
+}
+a{
+	text-decoration: none;
+}
+ul{ list-style-type:none;}
+.pingjia{ width:100%; height:auto; overflow:hidden; margin:0 auto; /* margin-top:70px; */}
+.pingjia .anniu{width: 100%;
+	height: auto;
+	overflow: hidden;
+	text-align: center;
+	line-height: 40px;
+	padding: 10px 0;
+	border-bottom: 1px solid #c0c0c0;
+}
+.pingjia .anniu .current{float:left;background-color: #aa0505;border-radius:10px; height: 40px;width: 23%; margin:0 1%; color:#666; }
+.pingjia .anniu .other{float:left;background-color: #fbb570;border-radius:10px; height: 40px;width: 23%;  margin:0 1%;}
+.pingjia .anniu a{
+	display: block;
+	font-size:13px;
+	text-align: center;
+	font-weight: 700;
+}
+.pingjia .anniu .current a{ color:#FFF; }
+.pingjia .anniu .other a{ color:#666;}
+
+.pingjia .content{ margin:0 auto; height:auto; overflow:hidden; margin-top:15px;font-size: 12px;}
+.pingjia .content ul{ padding:0 15px; font-size:14px; color:#646060; line-height:1.2em; margin-bottom:15px;}
+.pingjia .content ul li img{ width:3%; height:auto;}
+.pingjia .content ul li b{ font-weight:normal;  float:left; color:#333;}
+.pingjia .content ul li a{ color:#666;float:right; margin-right:10px; }
+.pingjia .content ul li i{ font-style:normal; line-height:30px; }
+.pingjia .content ul li span{ color:#908e8e; line-height:1.2em;}
+.pingjia hr{ color:#CCC; width:100%; margin:10px 0; auto; size:1px; }
+.pingjia .content ul li em{ width:150px; height:100px;}
+.pingjia .content ul li .chongdb{ width:80px; height:80px;}
+
+

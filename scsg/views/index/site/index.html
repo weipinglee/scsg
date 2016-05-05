@@ -1,0 +1,301 @@
+{set:
+	$site_config=new Config('site_config');
+	$seo_data=array();
+	$seo_data['title']=$site_config->name;
+	$seo_data['title'].=$site_config->index_seo_title;
+	$seo_data['keywords']=$site_config->index_seo_keywords;
+	$seo_data['description']=$site_config->index_seo_description;
+	seo::set($seo_data);
+}
+
+<link rel="stylesheet" type="text/css" href="{skin:css/style.css}" />
+<script type='text/javascript'>
+	function showCat(_this){
+		$(_this).parent().find('ul').css('display','none');
+		$(_this).parent().children('li').removeClass('selected');
+		$(_this).children('ul').css('display','list-item');
+		$(_this).addClass('selected');
+	}
+</script>
+<div class="sn-content">
+			<div class="sn-main">
+					<div class="left" widget_type="area" area="top_left">
+						<!--幻灯片 -->
+						<script type='text/javascript' >
+							var tId;
+							startScroll();
+							$(function(){
+							    $('.ad_cycle li').each(function(){
+							        $(this).click(function(){
+							            slideHere($(this));
+							        }).mouseover(function(){
+							            stopHere($(this));
+							        }).mouseout(function(){
+							            startScroll();
+							        });
+							    });
+							});
+							function startScroll(){
+							    tId = setInterval(function(){
+							        var nextImg = $('.nonce').next('.initial');
+							        if(nextImg.length==0){
+							            nextImg = $($('.ad_cycle li')[0]);
+							        }
+							        slideHere($(nextImg));
+							    }, 3000);
+							}
+							function stopScroll(){
+							    clearInterval(tId);
+							}
+							function slideHere(imgObj){
+							    $('.ad_cycle li').removeClass('nonce');
+							    $('.ad_cycle li').addClass('initial');
+							    imgObj.removeClass('initial');
+							    imgObj.addClass('nonce');
+							    if($('.ad_cycle img').length)
+							    {
+							        $('.ad_cycle img')
+							            .attr('src', imgObj.attr('target_src'))
+							            .css('display', 'none')
+							            .fadeIn('normal')
+							            .parent().attr('href', imgObj.attr('target_link'))
+							            .attr('target', '_blank');
+							   }
+							}
+							function stopHere(imgObj){
+							    slideHere(imgObj);
+							    stopScroll();
+							}
+						</script>
+						<div id="_widget_548" class="widget" widget_type="widget" name="sn_cycle_image">
+							
+							<div class="cycle_image">
+								<div class="ad_cycle">
+									{if:$this->index_slide}
+										<div class="number">
+											
+												<ul>
+													{foreach:$items=$this->index_slide }
+														{set:$key=$key+1}
+														{if:$key==1}
+														{set:$fUrl=$item['url'];$fImg=$item['img'];}
+															<li class="nonce" alt="{$key}" target_link="{webroot:$item['url']}" target_src="{webroot:$item['img']}">{$key}</li>
+														{else:}
+															<li class="initial" alt="1" target_link="{webroot:$item['url']}" target_src="{webroot:$item['img']}">{$key}</li>
+														{/if}
+													{/foreach}
+												</ul>
+										</div>
+										<a href="{webroot:$fUrl}" target="_blank">
+											<img src="{webroot:$fImg}" style="">
+										</a>
+									{/if}
+									<div class="clr"></div>
+								</div>
+							</div>
+						</div>
+						<!--幻灯片结束-->
+						
+						<!--商品分类-->
+						<div id="_widget_810" class="widget" widget_type="widget" name="sn_categories">
+							<div class="product_list">
+								<a class="product_all" href="category/goods"></a>
+								<ul class="product_list_ul">
+									{foreach:items=$this->categoryList item=$parent}
+										{if:$key==0}{set:$cla='selected';$dis='list-item';}
+										{else:}{set:$cla='';$dis='none';}
+										{/if}
+										<li class="{$cla}" onmouseover='showCat(this)'>
+											<a class="icon{$key}"  target="_blank" href="{url:/site/pro_list/cat/$parent[id]}">{$parent['name']}</a>
+											<ul style="display:{$dis}">
+												{foreach:items=$parent['child']  item=$second}
+													<li>
+														<a target="_blank" href="{url:/site/pro_list/cat/$second[id]}">{$second['name']}</a>
+													</li>
+												{/foreach}
+											</ul>
+										</li>
+									{/foreach}
+								</ul>
+							</div>
+						</div>
+						<!--商品分类结束-->
+						
+						<!--品牌推荐-->
+						<div id="_widget_783" class="widget" widget_type="widget" name="sn_brands">
+								<div class="brand_recommend">
+									<span class="more_title">
+										<a href="">更多</a>
+									</span>
+									<a id="prev1" class="cursor" onfocus="this.blur()" href="javascript:void(0)" style="display: none;"></a>
+									<div class="Jinteraction">
+										<div class="caroufredsel_wrapper" style="position: relative; overflow: hidden; width: 670px; height: 150px;">
+											<div class="caroufredsel_wrapper" style="position: relative; overflow: hidden; width: 670px; height: 150px;">
+												<ul id="interaction" style="position: absolute; width: 680px; height: 150px;">
+													{foreach:items=Api::run('getBrandList',10)}
+													{set:$tmpId=$item['id'];}
+														<li>
+															<p class="brand_show">
+																<a href="{url:/site/brand_zone/id/$tmpId}">
+																	<img src="{webroot:$item[logo]}">
+																	<span>{$item['name']} </span>
+																</a>
+															</p>
+															
+														</li>
+													{/foreach}
+												</ul>
+											</div>
+										</div>
+									</div>
+								<a id="next1" class="cursor2" onfocus="this.blur()" href="javascript:void(0)" style="display: none;"></a>
+							</div>
+						</div>
+					</div>
+					<div class="right" widget_type="area" area="top_right">
+						<div class="module_common">
+							<div class="news_bg_top">
+								<a style="float: right; line-height: 35px; margin-right: 10px;" href="{url:/site/notice}">更多</a>
+							</div>
+							<div class="wrap_child" >
+								<ul class="news_list">
+									{foreach:items=Api::run('getAnnouncementList')}
+									<li class="clearfix">
+										<a title="{$item['title']}" href="{url:/site/notice_detail/id/$item['id']}">
+										<strong>·</strong>
+										{$item['title']}
+										</a>
+									</li>
+									{/foreach}
+								</ul>
+							</div>
+					</div>
+					<div class="clr"></div>
+			</div>
+			<div widget_type="area" area="floor">
+				{foreach:items=$this->categoryList item=$parent}
+				<div id="_widget_104" class="widget" widget_type="widget" name="sn_floor">
+					<div class="floor">
+						<div class="top">
+							<h3>
+								<img width="160" height="40" src="{skin:1F.jpg}">
+							</h3>
+							<div class="hotsword">
+								{foreach:items=$parent['child'] item=$child}
+									<a class="words" href="?controller=site&action=pro_list&cat={$child['id']}">{$child['name']}</a>
+									<span style="color:#ccc;">|</span>
+								{/foreach}
+								<a href="?controller=site&action=pro_list&cat={$child['parent_id']}">
+									<img width="10" border="0" height="11" align="absmiddle" src="{skin:images/jiahao.png}">
+									更多
+								</a>
+							</div>
+							<div class="clr"></div>
+						</div>
+						<div class="content">
+							<div class="left">
+								<div>
+									<a target="_blank" href="">
+										<img width="280" height="400" src="">
+									</a>
+								</div>
+								<div class="logo_show">
+									<ul>
+									{foreach:items=$parent['brand'] item=$brand }
+										<li>
+											<a target="_blank" href="{url:/site/brand_zone/id/$brand['id']}">
+												<img style='max-width:84px;max-height:49px' src="{webroot:$brand['logo']}">
+											</a>
+										</li>
+									{/foreach}	
+									</ul>
+								</div>
+							</div>
+							<div class="right">
+								<ul>
+									{foreach:items=$parent['goods'] item=$goods}
+									<li>
+										<p class="pic">
+											<a target="_blank" href="{url:/site/products/id/$goods['id']}">
+												<img width="210" height="210" src="{webroot:$goods['img']}">
+											</a>
+										</p>
+										<h3>
+											<a title="{$goods['name']}" target="_blank" href="goods/18">{$goods['name']}</a>
+										</h3>
+										<p class="price">{$goods['sell_price']}</p>
+									</li>
+									{/foreach}
+								</ul>
+							</div>
+						</div>
+						<div class="clr"></div>
+					</div>
+					
+				</div>{/foreach}
+			</div>
+		</div>
+
+<script type='text/javascript'>
+//dom载入完毕执行
+jQuery(function()
+{
+	//幻灯片开启
+	$('.bxslider').bxSlider({'mode':'fade','captions':true,'pager':false,'auto':true});
+
+	//index 分类展示
+	$('#index_category tr').hover(
+		function(){
+			$(this).addClass('current');
+		},
+		function(){
+			$(this).removeClass('current');
+		}
+	);
+
+	//email订阅 事件绑定
+	var tmpObj = $('input:text[name="orderinfo"]');
+	var defaultText = tmpObj.val();
+	tmpObj.bind({
+		focus:function(){checkInput($(this),defaultText);},
+		blur :function(){checkInput($(this),defaultText);}
+	});
+
+	//显示抢购倒计时
+	var cd_timer = new countdown();
+	{if:isset($countNumsItem) && $countNumsItem}
+	{foreach:items = $countNumsItem}
+		cd_timer.add({$item});
+	{/foreach}
+	{/if}
+
+	//首页商品变色
+	var colorArray = ['green','yellow','purple'];
+	$('div[name="showGoods"]').each(function(i)
+	{
+		$(this).addClass(colorArray[i%colorArray.length]);
+	});
+});
+
+//电子邮件订阅
+function orderinfo()
+{
+	var email = $('[name="orderinfo"]').val();
+	if(email == '')
+	{
+		alert('请填写正确的email地址');
+	}
+	else
+	{
+		$.getJSON('{url:/site/email_registry}',{email:email},function(content){
+			if(content.isError == false)
+			{
+				alert('订阅成功');
+				$('[name="orderinfo"]').val('');
+			}
+			else
+				alert(content.message);
+		});
+	}
+}
+</script>

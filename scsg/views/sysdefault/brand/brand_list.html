@@ -1,0 +1,102 @@
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>品牌管理</span><span>></span><span>品牌列表</span></div>
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="window.location='{url:/brand/brand_edit}'"><span class="addition">添加品牌</span></button></a>
+	</div>
+	<div class="searchbar">
+		<form action="{url:/}" method="get" name="brand_list">
+			<input type='hidden' name='controller' value='brand' />
+			<input type='hidden' name='action' value='brand_list' />
+			<input type='hidden' name='ids' />
+			<select name="search[category_ids]" class="auto">
+				<option value="0">选择品牌分类</option>
+				{query:name=brand_category}
+				<option value="{$item['id']}">{$item['name']}</option>
+				{/query}
+			</select>
+
+			<select class="auto" name="search[name]">
+				<option value="">选择筛选条件</option>
+				<option value="name">品牌名称</option>
+				<option value="url">网址</option>
+			</select>
+			<input class="small" name="search[keywords]" type="text" value="" />
+			<button class="btn" type="submit"  ><span class="sel">筛 选</span></button>
+		</form>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="100px" />
+			<col width="150px" />
+			<col width="200px" />
+			<col />
+			<col width="150px" />
+			<thead>
+				<tr>
+					<th>排序</th>
+					<th>品牌名称</th>
+					<th>网址</th>
+					<th>品牌分类</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+	<table id="list_table" class="list_table">
+		<col width="100px" />
+		<col width="150px" />
+		<col width="200px" />
+		<col />
+		<col width="150px" />
+		<tbody>
+			{set:$catAll = array()}
+			{query: name = brand_category}
+				{set:$catAll[$item['id']] = $item['name']}
+			{/query}
+
+			{foreach:items=$this->brand_db->find()}
+			<tr>
+				<td><input class="tiny" id="sort{$item['id']}" type="text" onblur="toSort({$item['id']});" value="{$item['sort']}" pattern='int' /></td>
+				<td>{$item['name']}</td>
+				<td>{$item['url']}</td>
+				<td>
+				{foreach:items = explode(',',$item['category_ids']) item = $val}
+				{$catAll[$val]} &nbsp;
+				{/foreach}
+				</td>
+				<td><a href="{url:/brand/brand_edit/bid/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a><a href="javascript:void(0)" onclick="delModel({link:'{url:/brand/brand_del/bid/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a></td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+	{$this->brand_db->getPageBar()}
+</div>
+
+<script language="javascript">
+//排序
+function toSort(id)
+{
+	if(id!='')
+	{
+		var va = $('#sort'+id).val();
+		var part = /^\d+$/i;
+		if(va!='' && va!=undefined && part.test(va))
+		{
+			$.get("{url:/goods/brand_sort}",{'id':id,'sort':va}, function(data)
+			{
+				if(data=='1')
+				{
+					alert('修改商品品牌排序成功!');
+				}else
+				{
+					alert('修改商品品牌排序错误!');
+				}
+			});
+		}
+	}
+}
+
+</script>

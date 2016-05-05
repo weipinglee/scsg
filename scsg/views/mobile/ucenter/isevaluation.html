@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8" />
+	<title>我的山城</title>
+	<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0, maximum-scale=1.0">    
+        <link rel="apple-touch-icon" href="apple_logo" />
+	<link rel="stylesheet" type="text/css" href="{skin:css/style/account-1.css}">
+    
+    <link rel="stylesheet" type="text/css" href="{skin:css/style/reset.css}">
+    <link rel="stylesheet" type="text/css" href="{skin:css/style/style.css}">
+	<script src="{theme:javascript/js/account-1.js/modernizr.js}"></script>
+	<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+	{js:artTemplate}
+	<script src="{theme:javascript/common.js}"></script>
+<script src="{theme:javascript/js/account-1.js/main.js}"></script>  
+<style>
+	.loading-imgS{background:#fff;text-align:center;padding:10px 0;width:100%}
+
+.loading-imgS p{font-size:16px;color:#9A9A9A;text-align:center}
+
+.loading-imgS img{width:32px!important;height:32px!important;display:none}
+
+</style> 
+
+</head>
+<body>
+	<header>
+		<div class="logo" role="heading">
+			<a href="{url:/site/index?callback=}">山城速购</a><em class="nickname">我的山城</em>
+		</div>
+
+		<a href="{url:/simple/login?callback=}" class="login">注销</a>
+
+ <div class="caidan">
+  <ul>
+   <li class="qbys"><a href="{url:/ucenter/isevaluation}">已评价</a></li>
+    <li ><a href="{url:/ucenter/evaluation}">未评价</a></li>
+  </ul>
+     </div>  
+
+
+
+
+<div class="qijiandian" id='order_list'>
+
+</div>  
+<script type='text/html' id='pingjia_box'>
+<ul>
+ 	<li>
+	 	
+	  
+	  	<h3><a href="#">订单号：<%=order_no%></a></h3>
+ 	</li>
+ 	<li class="chanpin">
+		 <a class="tupian"  href="{url:/site/products/id/}/<%=goods_id%>"> <img src="{url:<%=img%>}" ></a>
+		   
+		   <p><a href="{url:/site/products/id/}/<%=goods_id%>"><%=name%><br><b><%=comment_time%></b>
+		    </a></p> 
+ 			<a class="hongzi wd-popup-trigger" href="javascript:void(0)" >已评价</a>  
+   </li>
+ 	 <li class="huise"><hr/></li>
+</ul>
+</script>
+<div class="wd-popup" role="alert">
+	<div class="wd-popup-container">
+		<p></p>
+		<ul class="wd-buttons">
+			<li><a name='todo' href="">是</a></li>
+			<li><a href="#" class="wd-popup-close image-repeat">否</a></li>
+		</ul>
+		<a href="#" class="wd-popup-close img-replace">关闭</a>
+	</div> 
+</div> 
+
+
+<footer id="footer">
+		<nav>
+			<a href="{url:/site/index?callback=}">首页</a>
+			<!-- <a href="http://wap.zol.com.cn/">分类</a> --><a href="category">分类</a>
+			<a class="badge" href="{url:/site/pro_lists?callback=}">搜索</a>
+			<!-- <a href="http://app.zol.com.cn/">应用</a> --><a href="#">应用</a>
+		</nav>
+
+	<div class="f-ch-cp">
+		<div class="item"><a href="{url:/site/index/client/pc}">标准版</a></div>
+		<div class="item"><span class="copyright_1">Copyright</span> <span class="copyright_2">2012-2015</span><span class="copyright_3">NAI.COM</span><span class="copyright_4">版权所有</span></div></div>
+</footer>
+
+
+
+
+<div class="bottom">
+<div class="dibu">
+</form>
+
+
+
+
+
+
+</div>
+
+</div>
+
+
+<script type='text/javascript'>
+		var obj = {
+			'url': '{url:/ucenter_ajax/pingjia_list}',
+			'template_id': 'pingjia_box',
+			'append_to': $('#order_list'),
+			'loading_img': '{skin:images/files/loading.gif}',
+			'trans_data': {status:1},
+			'callback' : null
+		};
+	var ajax = new Ajax_Get_Data();
+	ajax.init(obj);
+
+ 
+</script>
+ 
+ <script type='text/javascript'>
+
+  $("#ckAll").click(function() {
+    $("input[name='sub']").prop("checked", this.checked);
+  });
+  
+  $("input[name='sub']").click(function() {
+    var $subs = $("input[name='sub']");
+    $("#ckAll").prop("checked" , $subs.length == $subs.filter(":checked").length ? true :false);
+  });
+
+
+	
+
+</script>
+
+ 
+    
+</body>
+</html>

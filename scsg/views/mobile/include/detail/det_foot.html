@@ -1,0 +1,131 @@
+{if:isset($seller['server_num'])}
+{set:$server_num = $seller['server_num'];}
+{/if}
+	<!-- 底部浮动 -->
+ <div style="height:50px;"></div>       
+ {if:isset($show_cart)&&$show_cart==1}
+{set:$width = 0;}
+{else:}
+{set:$width = 1;}
+ {/if}
+<!-- <link rel="stylesheet" href="../css/bottom_nav.css" type="text/css"/>  -->
+ 	<section class="sr-l">
+
+ 		{if:isset($server_num)}
+			{if:$server_num}
+            <div class="s-btn s-cd" data="sales" {if:$width==1}style="width:25%;"{/if}>
+				<a href="{echo:Sonline::getChatUrl($server_num)}">
+	             	 <p><img src="{skin:images/detail_img/qq.png}"  alt="qq"/></p>
+	             	 <p>客&nbsp;服</p>
+              	</a>
+            </div>
+			{/if}
+		{else:}
+			<div class="s-btn s-cd" data="sales" {if:$width==1}style="width:25%;"{/if}>
+			
+			<div id="BDBridgeFixedWrap"></div>
+			</div>
+		{/if}
+            <div class="s-btn s-cd" data="price" style="top:7px;"{if:$width==1}style="top:7px;"{/if}>
+				<a href="javascript:void(0);" onclick='favorite_add(this)'>
+					{if:isset($favorite_id_arr)&&in_array($id,$favorite_id_arr)}
+					<p><img src="{skin:images/detail_img/ygz.png}"  /></p>
+	             	 <p>已关注</p>
+					{else:}
+	             	 <p><img src="{skin:images/detail_img/gz.png}"  /></p>
+	             	 <p>关注</p>
+					 {/if}
+              	</a>
+            </div>
+			
+			{if:isset($show_cart)&&$show_cart==1}
+            <div class="s-btn s-an s-colo" data="hot">
+				<a class="jrgwc" name='toCart' onClick="toshop(joinCart)">加入购物车</a>
+			</div>
+			<div class="s-btn s-an s-colos" data="default">
+				<a class="ljgm" name='buyNow' onClick="toshop(buy_now)"">立即购买</a>
+            </div>
+            
+			{else:}
+			<div class="s-btn s-an s-colos" data="default" style="width:60%;">
+				<a class="ljgm" name='buyNow' onClick="toshop(buy_now)"">立即购买</a>
+            </div>
+         	{/if}
+       </section>
+        <!--点击加入购物车弹框 -->
+          <div id="tc_shop" class="tc_shop">
+          <form method="" action="">
+				<div class="tc_le tc_tite">
+					<div class="tc_img"><img src="{url:/pic/thumb/img/$img/w/200/h/200}" alt=" "></div>
+					<div class="tc_cont">
+						<p style="color:red; display: inline-block;"  class='price'>￥{if:isset($tuan_price)}{$tuan_price}{elseif:isset($group_price)}{$group_price}{else:}{$sell_price}{/if}</p>
+                        
+                        <span style="position: absolute;top:3px;right:3px;" class="share_btn">关闭</span>
+                        
+						<p>{$name}{if:$short_desc}（{$short_desc}）{/if}</p>
+					</div>
+					<div style="clear: none;"></div>
+				</div>
+				<div class="tc_le">
+					{if:$spec_array}
+					{set:$specArray = JSON::decode($spec_array);}
+					{foreach:items=$specArray}
+					<div name='specCols'>
+					<p class="tc_tit">{$item['name']}</p>
+						{set:$specVal=explode(',',trim($item['value'],','))}
+						<div id="specList{$item['id']}">
+						{foreach:items=$specVal item=$spec_value}
+						{if:!isset($tuan_price)}
+							{if:$item['type'] == 1}
+								<span class="tc_gg" onclick="sele_spec(this);"><a  href="javascript:void(0);" value='{"id":"{$item['id']}","type":"{$item['type']}","value":"{$spec_value}","name":"{$item['name']}"}'>{$spec_value}</a></span>
+							{else:}
+								<span class="tc_gg" onclick="sele_spec(this);"><a  href="javascript:void(0);" value='{"id":"{$item['id']}","type":"{$item['type']}","value":"{$spec_value}","name":"{$item['name']}"}'><img src="{webroot:$spec_value}" width='30px' height='30px' /></a></span>
+							{/if}
+						{else:}
+							{if:$item['type'] == 1}
+								<span class="tc_gg" onclick="sele_spec(this,1);"><a  href="javascript:void(0);" value='{"id":"{$item['id']}","type":"{$item['type']}","value":"{$spec_value}","name":"{$item['name']}"}'>{$spec_value}</a></span>
+							{else:}
+								<span class="tc_gg" onclick="sele_spec(this,1);"><a  href="javascript:void(0);" value='{"id":"{$item['id']}","type":"{$item['type']}","value":"{$spec_value}","name":"{$item['name']}"}'><img src="{webroot:$spec_value}" width='30px' height='30px' /></a></span>
+							{/if}
+						{/if}
+						{/foreach}
+						</div>
+					</div>
+					{/foreach}
+					{/if}
+				</div>
+				<div class="tc_le tc_gmsl">
+					<div class="gmsl">购买数量</div>
+					<div class="fn fl" >
+						<div class="spinner">
+							<button type="button" class="decrease" onclick='modified(-1);'>-</button>
+							<input id="buyNums" type="text" class="spinner value" value='1'>
+							<button type="button" style="margin-right:30px;" class="increase" onclick='modified(1);'>+</button>
+						</div>
+					
+					</div>库存：<span id='data_storeNums' style='background:#fff;'>{$store_nums}</span>
+					
+				</div>
+				<div class="tc_le"><input class="submit" name='buyNowButton' type="button" value="确定" /></div>
+			</form>
+		</div>
+	
+<!--点击加入购物车弹框结束 -->
+{if:!isset($server_num)}
+<script type="text/javascript"> var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://"); document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F0885aeaf12e11e6a4919f3317c26942a' type='text/javascript'%3E%3C/script%3E")) </script>
+{/if}	
+</body>
+</html> 
+<script type='text/html' id='commentRowTemplate'>
+	<div class="sppj">
+			<span  class="yhimg">
+			<img src="{webroot:<%=head_ico%>}" onerror="this.src='{skin:images/front/user_ico.gif}'"/></span>
+			<span class="yhname"><%=username%></span>
+	</div>
+	<p><%=contents%></p>
+	<%if(recontents){%>
+		<p><b>回复：</b><span class="red"><%=recontents%></span></p>
+	<%}%>
+</script>
+
+

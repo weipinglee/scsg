@@ -1,0 +1,25 @@
+{include:layouts/head.html}
+
+
+{if:!isset($this->isIndex)}
+{if:$this->yushou}
+	<div class="bn" id='shan_ad'>
+			{echo:Ad::show("预售top")}
+	</div>
+	<script type=text/javascript >$('#shan_ad').find('img').css('width','100%');</script>
+{/if}
+{if:$this->tuangou}
+	<div class="bn" id='shan_ad'>
+			{echo:Ad::show("团购top")}
+	</div>
+	<script type=text/javascript >$('#shan_ad').find('img').css('width','100%');</script>
+{/if}
+<div style='width:1190px;margin:5px auto;'>
+	{viewcontent}
+</div>
+{else:}
+	{viewcontent}
+{/if}
+
+
+{include:layouts/footer.html}

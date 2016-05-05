@@ -1,0 +1,80 @@
+{set:$user_id = $this->user['user_id']}
+{set:$historySum = 0}
+
+<div class="main f_r">
+	<div class="uc_title m_10">
+		<label class="current"><span>我的足迹</span></label>
+	</div>
+	<div class="box">
+		<div class="title">
+			<b class="gray">按分类查找：</b>
+			<a href="{url:/ucenter/history}" class='{if:IReq::get('cat_id') == ''}orange{/if}'>全部（<label id='historySum'></label>）</a>
+			{foreach:items=Api::run('getUcenterHistoryByCatid',array('#user_id#',$user_id))}
+			{set:$historySum+=$item['num']}
+			<a href="{url:/ucenter/history/cat_id/$item[id]}" class='{if:IReq::get('cat_id') == $item['id']}orange{/if}'>{$item['name']}（{$item['num']}）</a>
+			{/foreach}
+		</div>
+	</div>
+	<form action='#' method='post' id='history' name='history'>
+		<table class="border_table" width="100%" cellpadding="0" cellspacing="0">
+			<col width='15px' />
+			<col />
+			<col width='100px' />
+			<col width='120px' />
+			<col width='90px' />
+			<thead>
+				<tr>
+					<td><input name="id[]" type="checkbox" onclick="selectAll('id[]');" /></td>
+					<td align="center">商品名称</td>
+					<td align="center">浏览时间</td>
+					<td align="center">价格</td>
+					<td align="center">操作</td>
+				</tr>
+			</thead>
+
+			<tbody>
+				{set:$historyObj = null;$historyList = $this->get_history($historyObj)}
+				{foreach:items=$historyList}
+				<tr>
+					<td><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+					<td>
+						<dl>
+							<dt><a href="{url:/site/products/id/$item['goods_id']}">
+								{if:$item['data']['img']!=''}
+								<img src="{url:/pic/thumb/img/$item['data']['img']/w/88/h/88}" width="88px" height="88px" alt="{$item['data']['name']}" />
+								{else:}
+								<img src="{skin:images/front/nopic_435_435.gif}" width="88px" height="88px" alt="{$item['data']['name']}" />
+								{/if}
+								</a>
+							</dt>
+							<dd><a class="blue" href="{url:/site/products/id/$item[goods_id]}">{$item['data']['name']}</a></dd>
+
+							<input type='hidden' name='goods_id[]' value='{$item["goods_id"]}' />
+							<dd>库存：{$item['data']['store_nums']}</dd>
+						</dl>
+					</td>
+					<td>{$item['time']}</td>
+					<td><span class='red'>￥{$item['data']['sell_price']}</span></td>
+					<td>
+						<label class="btn_gray_s"><input type="button" class='btn_gray btn_mini mt_5' value="删除" onclick="delModel({link:'{url:/ucenter/history_del/id/$item[id]}',msg:'是否删除？'});" /></span></label>
+					</td>
+				</tr>
+				{/foreach}
+			</tbody>
+
+			<tfoot>
+				<tr>
+					<td colspan="5">
+						<div class="pages_bar f_r">{$historyObj->getPageBar()}</div>
+						<label><input name="id[]" class="radio" type="checkbox" onclick="selectAll('id[]');" />全选</label>
+						<label class="btn_gray_s"><input type="button" class='btn_gray btn_mini' onclick="$('#history').attr('action','{url:/ucenter/history_del}');delModel({msg:'是否删除浏览历史？',form:'history'});" value="删除记录" /></span></label>
+					</td>
+				</tr>
+			</tfoot>
+
+		</table>
+	</form>
+</div>
+<script type='text/javascript'>
+	$('#historySum').html('{$historySum}');
+</script>	

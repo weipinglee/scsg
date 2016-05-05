@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0, maximum-scale=1.0">
+<meta content="telephone=no" name="format-detection" />
+<title>山城速购</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+
+		<link rel="stylesheet" href="{skin:css/wap/index.css}" type="text/css" />
+		<script type="text/javascript" src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		<link rel="stylesheet" href="{skin:css/common.css}" type="text/css">               
+		<script src="{theme:javascript/common.js}"></script>
+		<link rel="stylesheet" href="{skin:css/wap/details.css}" type="text/css" />
+		<link rel="stylesheet" href="{skin:css/search_list.css}" type="text/css">       
+		 <script src="{theme:javascript/scrollTop.js}"></script>
+
+</head>
+<body>
+	
+<header class="wap-header">
+    <div class="wap-topbar" style="">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
+        <div class="h-center">
+            <h1>商品分类</h1>
+        </div>
+            <a href="{url:/site/mail}" class="search_nav_icon_none"><img src="{skin:css/wap/app_mail_nav.png}" style="width:35px;height:35px;"></a>
+    </div>
+</header>
+
+	<ul class="sortList">
+			{foreach:items=Api::run('getCategoryListTop',10)}
+			{set:$secondCat = Api::run('getCategoryByParentid',array('#parent_id#',$item['id']),3);}
+				<li>
+					<a href="{url:/site/pro_list/cat/$item['id']}">
+						<span class="icon icon1"><!--<img alt="" src="{skin:/images/category/shoujishuma.jpg}" style="width:35px;height:40px"/>--></span>
+						<h3>{$item['name']}</h3>
+						<p>
+							{foreach:items=$secondCat key=$k item=$i}
+							{$i['name']}&nbsp;
+							{/foreach}
+							</p>
+						<span class="arrow"></span>
+					</a>
+				</li>
+			{/foreach}
+		</ul>
+	

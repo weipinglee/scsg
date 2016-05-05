@@ -1,0 +1,51 @@
+{set:$tags = $this->tags ;}
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>标签管理</span><span>></span><span>{if:isset($tags['id'])}编辑{else:}添加{/if}标签</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/brand/tags_save}" method="post" name='tags' enctype='multipart/form-data'>
+			<table class="form_table" cellpadding="0" cellspacing="0">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>标签名称：</th>
+					<td><input class="normal" name="name" type="text" value="{$tags['name']}" pattern="required" alt="标签名称不能为空" />
+						<label>*</label>
+						<input name="tags_id" value="{$tags['id']}" type="hidden" />
+					</td>
+				</tr>
+				<tr>
+					<th>是否开启：</th>
+					<td>
+						<label><input type='radio' name='is_close' value='0' checked='checked'/>开启</label>
+						<label><input type='radio' name='is_close' value='1'/>关闭</label>
+					</td>
+				</tr>
+				<tr>
+					<th>是否首页显示：</th>
+					<td>
+						<label><input type='radio' name='show_index' value='1' />是</label>
+						<label><input type='radio' name='show_index' value='0' checked='checked'/>否</label>
+					</td>
+				</tr>
+				<tr>
+					<th>排序：</th><td><input class="normal" name="sort" type="text" value="{$tags['sort']}" pattern='int' empty alt='必需为整形数值'/></td>
+				</tr>
+				<tr>
+					<th>图片：</th><td><div>{if:isset($tags['img'])}<img src="{webroot:$tags[img]}" height="60px"/><br />{/if}<input type='file' class='normal' name='img'/></div></td>
+				</tr>
+				<tr>
+					<th valign="top">描述：</th><td><textarea name="intro" id="intro" style="width:400px;height:80px;">{$tags['intro']}</textarea></td>
+				</tr>
+				<tr>
+					<td></td><td><button class="submit" type="submit"><span>确 定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type='text/javascript'>
+	var formObj = new Form('tags');
+	formObj.init({echo:JSON::encode($tags)});
+</script>	

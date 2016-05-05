@@ -1,0 +1,50 @@
+{if:isset($this->referTypeRow)}
+	{set:$referType=$this->referTypeRow}
+{/if}
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>咨询管理</span><span>></span><span>添加咨询类型</span></div>
+</div>
+
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/comment/refer_type_act}" method="post" name='refer_type'>
+			<input name="id" value="" type="hidden" />
+			<table class="form_table" cellpadding="0" cellspacing="0">
+				<colgroup>
+					<col width="150px" />
+					<col />
+				</colgroup>
+
+				<tr>
+					<th>分类名称：</th>
+					<td>
+						<input class="normal" name="name" type="text" value="" pattern="required" alt="分类名称不能为空" /><label>* 必选项</label>
+					</td>
+				</tr>
+				<tr>
+					<th>启用：</th>
+					<td>
+						<label class='attr'><input name="is_open" type="radio" value="1" checked/> 是 </label>
+						<label class='attr'><input name="is_open" type="radio" value="0" /> 否 </label>
+					</td>
+				</tr>
+				<tr>
+					<th>排序：</th><td><input class="normal" name="sort" pattern='int' empty alt='排序必须是一个数字' type="text" value="{if:isset($referType['sort'])}{$referType['sort']}{/if}"/></td>
+				</tr>
+				<tr>
+					<th>描述：</th><td><textarea name="description" cols="" rows=""></textarea></td>
+				</tr>
+				<tr>
+					<td></td><td><button class="submit" type="submit"><span>确 定</span></button></td>
+				</tr>
+				
+			</table>
+		</form>
+	</div>
+</div>
+<script type='text/javascript'>
+	var data = {echo:JSON::encode($this->referTypeRow)};
+	data.lockField = 0;//锁起来的字段
+	edit_info_init(data,'refer_type');
+	
+</script>

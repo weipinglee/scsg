@@ -1,0 +1,103 @@
+{set:
+$id = IFilter::act(IReq::get('id'),'int');
+$order_id = IFilter::act(IReq::get('order_id'),'int');
+}
+{if:$id}
+{set:$fa = new IModel('order_fapiao');
+$this->fapiaoRow = $fa->getObj('id='.$id);}
+{/if}
+<link rel="stylesheet" type="text/css" href="{skin:/fap/css/zengzhi.css}">
+
+<div class="main f_r">
+	<div class="uc_title m_10">
+		<label class="current"><span>补开发票</span></label>
+	</div>
+	<div class="form_content m_10">
+		<div class="uc_title2 m_10"><strong>填写发票内容</strong></div>
+		
+		<div class="contfp">
+	<form action="{url:/ucenter/fapiao_add_act}" method="post" name='fapiao'>
+		<input type='hidden' name='order_id' value='{$order_id}' />
+		<input type='hidden' name='id' value='{$id}' />
+		<div class="tylx">
+			<span class="titles">发票类型：</span>
+			<span>
+				<input class="ptfps" type="radio" name="type" value="0" checked/>普通发票
+				<input class="zzsfp" type="radio" name="type" value="1"/>增值税发票
+			</span>
+		</div>
+		
+		<!--普通发票-->
+		<!--<div class="tylx">
+			发票抬头：<input class="tex" type="text"/>
+		</div>-->
+		<div class="anniu show1">
+				<ul>
+					<li><i>&nbsp;</i><p style="width:85px;">发票抬头：</p><input class="tex" name="taitou" type="text"></li>
+				</ul>
+		</div>
+		<!--普通发票结束-->
+		<!--增值税发票-->
+			<div class="anniu show2" style="display:none;">
+				<ul>
+					<li><i>*</i><p>单位名称：</p><input class="tex" name="com" type="text"></li>
+					<li><i>*</i><p class="shibh">纳税人识别号：</p><input class="tex" name="tax_no" type="text"></li>
+					<li><i>*</i><p>注册地址：</p><input class="tex" name="address" type="text"></li>
+					<li><i>*</i><p>注册电话：</p><input class="tex" name="telphone" type="text"></li>
+					<li><i>*</i><p>开户银行：</p><input class="tex" name="bank" type="text"></li>
+					<li><i>*</i><p>银行账户：</p><input class="tex" name="account" type="text"></li>
+				</ul>
+			</div>
+		
+		<!--增值税发票结束-->
+		<div class="tylx">
+			<span><span class="titles">发票内容:</span>商品明细</span>
+		</div>
+		<div class="tylx">
+			<p class="zy">
+				注：购物车中"某商品标题"为合作伙伴提供的商品，不提供发票，敬请谅解！
+			</p>
+		</div>
+		<div class="tylx">
+			<input class="qer" type="submit" value="确认发票信息"/>
+			<input class="qx" type="button" value="取消"/>
+		</div>
+		</form>
+	</div>
+	</div>
+</div>
+<script type='text/javascript' >
+//更换增值发票和普通发票
+$(document).ready(function(){
+	$("input[class='zzsfp']").click(function(){
+		$(".show1").hide();
+		$(".show2").show();
+	})
+	$("input[class='ptfps']").click(function(){
+		$(".show2").hide();
+		$(".show1").show();
+	})
+})
+		
+	//表单回填
+{if:$this->fapiaoRow}
+var formObj = new Form('fapiao');
+formObj.init({
+	'id':'{$this->fapiaoRow['id']}',
+	'type':'{$this->fapiaoRow['type']}',
+	'taitou':'{$this->fapiaoRow['taitou']}',
+	'com':'{$this->fapiaoRow['com']}',
+	'tax_no':'{$this->fapiaoRow['tax_no']}',
+	'address':'{$this->fapiaoRow['address']}',
+	'telphone':'{$this->fapiaoRow['telphone']}',
+	'bank':'{$this->fapiaoRow['bank']}',
+	'account':'{$this->fapiaoRow['account']}',
+});
+{if:$this->fapiaoRow['type']!=0}
+$(function(){
+	$('input[type=radio][value=1]').trigger('click');
+})
+
+{/if}
+{/if}
+</script>

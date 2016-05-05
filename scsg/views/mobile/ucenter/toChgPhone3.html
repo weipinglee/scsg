@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1" />
+<title>操作成功</title>
+</head>
+<style>
+*{ margin:0; padding:0;}
+ul, li, body, h2, h3, div, body, p{display: block;}
+a{ text-decoration:none; height:35px; line-height:35px;}
+.success{ height:auto; width:100%; overflow:hidden; margin:0 auto; margin-top:50px;}
+.success .center{ margin:0 auto; text-align:center;}
+.success .center img{ height:80px;; width:80px; /*margin:0 20%;*/ margin-right:8px;  }
+.success .center p{ margin-top:35px; font-size:16px; color:#E00; font-weight:bold;}
+.success .succed{ width:100%; height:auto; overflow:hidden; margin:0 auto; text-align:center;}
+.success .succed a{width:33%; /*height:35px;*/float:left; margin-top:50px;     font-size: 12px;}
+a:hover{background: #f15a24;color: #EEE;}
+</style>
+<body>
+	<div class="success">
+		<div class="center">
+			<img src="{skin:images/success.jpg}" width="200" height="200" alt="图片"> 
+			<p>{echo:IReq::get('message') ? IFilter::act(IReq::get('message'),'text') : '操作成功！'}</p>
+			</div>
+			<div class="succed">
+			{set:$callback = IFilter::act(IReq::get('callback'),'text')}
+			{if:$callback}
+			<a href="{url:$callback}" title="返回">继续操作</a>
+			{/if}
+			{if:$this->user['user_id']}
+			<a href="{url:/ucenter/index}">我的山城</a>  
+			{/if}
+			
+			<a href="{url:/site}">首页</a> 
+		</div>
+	</div>
+</body>
+</html>

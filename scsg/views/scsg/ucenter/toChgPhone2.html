@@ -1,0 +1,41 @@
+<link rel="stylesheet" type="text/css" href="{skin:/account/css/shouji-1.css}">
+{js:validate}
+<script type='text/javascript' src='{theme:javascript/ucenter.js}'></script>
+<script type='text/javascript' >
+	var getCodeUrl = '{url:/ucenter/getMobileCode}';
+	var checkMobileUrl2 = '{url:/ucenter/checkMobile2}';
+</script>
+<div class="main f_r">
+	<div class="uc_title m_10">
+		<label class="current"><span>修改绑定手机</span></label>
+	</div>
+	<div class="youxiang">
+	
+	<div class="kuai">
+	   <ul>
+	   <li class="sanjiao"><p>1.验证身份 </p><img src="{skin:/account/images/sanjiao_03.jpg}" width="17" height="34" alt="图标"></li>
+	  <li class="yanse">2.新手机验证</li>
+	  <li class="sanjiao"><p>3.修改手机成功</p><img src="{skin:/account/images/sanjiao_03.jpg}" width="17" height="34" alt="图标"></li>
+	  
+	   </ul>
+	</div>
+	<div class="wenzi">
+	<form action="" method="post" name='newPhone'>
+	 <ul>
+	 <li>
+	   <li><p class="ma xinhao">新手机号：<input name="newPhone" pattern='mobi' type="text"></p> 
+	    <li class="lianjie chang"><p>请填写正确的手机号码，我们将把验证码发送到您的手机</p></li>
+	   <li><input class="anniu" name='getMessCode' id='getNew' type="button"  value="获取短信验证码"></li>
+	   <li><p class="ma yan">请填写手机校验码：<input name="code" type="text"></p> 
+	    </li>
+	    <li><input class="xiyibu" style='cursor:pointer;' onclick='checkMobileNew()' type="button" value="下一步">
+	     </li>
+	     
+	 </ul>
+	</form>
+	</div>
+	<hr/>
+	
+	
+	</div>
+</div>

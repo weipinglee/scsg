@@ -1,0 +1,191 @@
+<article class="module width_full">
+	<header>
+		<h3 class="tabs_involved">商品退款详情</h3>
+	</header>
+
+	<form action="{url:/seller/refundment_update}" name="refundForm" method="post">
+		
+		<div class="module_content">
+			<fieldset>
+				<label>订单号:</label>
+				<div class="box">{$order_no}</div>
+			</fieldset>
+
+			<fieldset>
+				<label>订单时间:</label>
+				<div class="box">{$create_time}</div>
+			</fieldset>
+
+			<fieldset>
+				<label>用户名:</label>
+				<div class="box">{$username}</div>
+			</fieldset>
+
+			<fieldset>
+				<label>退款金额:</label>
+				<div class="box">{$amount}</div>
+			</fieldset>
+
+			<fieldset>
+				<label>退款商品:</label>
+				<div class="box">
+					{query:name=order_goods where=order_id eq $order_id and goods_id eq $goods_id and product_id eq $product_id}
+					{set:$goods = JSON::decode($item['goods_array'])}
+					{$goods['name']} X {$item['goods_nums']}件
+					【{echo:Order_Class::goodsSendStatus($item['is_send'])}】
+					{set:$is_send = $item['is_send'];$num=$item['goods_nums'];}
+					{/query}
+				</div>
+			</fieldset>
+
+			<fieldset>
+				<label>退款原因:</label>
+				<div class="box">{$content}</div>
+			</fieldset>
+
+			{if:$dispose_time!=NULL}
+					{set:$h=$pay_status==1?'驳回':'核准'}
+					<fieldset>
+						<label>{$h}时间：</label><div class="box">{$dispose_time}</div>
+					</fieldset>
+					<fieldset>
+						<label>处理意见：</label><div class="box">{$dispose_idea}</div>
+					</fieldset>
+			{/if}
+			{if:$delivery_time!=NULL}
+					<fieldset>
+						<label>退货快递单：</label><div class="box">{$delivery_com} | {$delivery_code}</div>
+					</fieldset>
+			{/if}
+			
+			{if:$dispose_time2!=NULL}
+					{set:$h=$pay_status==5?'驳回':'核准'}
+					<fieldset>
+						<label>{$h}时间：</label><div class="box">{$dispose_time2}</div>
+					</fieldset>
+					<fieldset>
+						<label>处理意见：</label><div class="box">{$dispose_idea2}</div>
+					</fieldset>
+			{/if}
+			{if:$pay_status==0}
+					<fieldset>
+						<label>处理：</label>
+						<div class="box">
+							{set:$agree_status=$is_send==1 ? 3:2}
+							<label><input type="radio" name="pay_status" value="{$agree_status}" checked='checked' />同意</label>&nbsp;&nbsp;
+							<label><input type="radio" name="pay_status" value="1" />拒绝</label>
+							
+						</div>
+						
+					</fieldset>
+					{if:$is_send==1}
+					<fieldset>
+						<label>退货地址：</label>
+						<div class="box">
+							<select name="delivery_add" pattern="required" alt="请选择收货地址方式" class="normal">
+								<option value='0'>请选择收货地址方式</option>
+								{query:name=merch_ship_info where=is_del eq 1 and seller_id eq $seller_id}
+								<option value="{$item['id']}">{$item['ship_name']}</option>
+								{/query}
+							</select>
+						</div>
+					</fieldset>
+					{/if}
+					<fieldset>
+						<label>处理意见：</label>
+						<div class="box">
+							<textarea name="dispose_idea" class="normal"></textarea>
+						</div>
+					</fieldset>
+				
+			{/if}
+			{if:$pay_status==4}
+					<fieldset>
+						<label>处理：</label>
+						<div  class="box">
+							<label><input type="radio" name="pay_status" value="2" checked='checked' />同意</label>&nbsp;&nbsp;
+							<label><input type="radio" name="pay_status" value="5" />拒绝</label>
+							<span class='red'></span>
+						</div>
+						
+					</fieldset>
+					<fieldset>
+					<label>处理意见：</label>
+					<div  class="box">
+						<textarea name="dispose_idea" class="normal"></textarea>
+					</div>
+					</fieldset>
+			{/if}
+	
+		<input type="hidden" name="id" value="{$id}"/>
+		<input type='hidden' name='status' value='{$pay_status}' />
+		<input type='hidden' name='is_send' value='{$is_send}'/>
+		<footer>
+			<div class="submit_link">
+				<input type="submit" onclick="return checkForm({$is_send},{$type})" class="alt_btn" value="确 定" />
+				<input type="reset" value="重 置" />
+			</div>
+		</footer>
+	</div>
+	</form>
+</article>
+<script type="text/javascript">
+	$(function(){
+		$('input[name=pay_status]').change(function(){
+			var pay_status = $('input[name=pay_status]:checked').val();
+			var select = $('select[name=delivery_add]');
+			if(pay_status==3){
+				select.parents('tr').removeClass('hide');
+			}else{
+				select.val(0).parents('tr').addClass('hide');
+			}
+		})
+	})
+//退款
+function refundment(id,refundsId)
+{
+	var tempUrl = '{url:/seller/order_refundment/id/@id@/refunds_id/@refunds_id@}';
+	tempUrl     = tempUrl.replace('@id@',id).replace('@refunds_id@',refundsId);;
+	art.dialog.open(tempUrl,{
+		id:'refundment',
+		cancelVal:'关闭',
+		okVal:'退款',
+	    title: '订单号:{$order_no}',
+	    ok:function(iframeWin, topWin){
+	    	iframeWin.document.forms[0].submit();
+	    	return false;
+	    },
+	    cancel:function(){
+	    	return true;
+		}
+	});
+}
+
+//执行回调处理
+function actionCallback(msg)
+{
+	if(msg)
+	{
+		alert(msg);
+		art.dialog.list['refundment'].close();
+		return;
+	}
+	document.forms[0].submit();
+}
+
+//表单提交
+function checkForm(is_send,type)
+{
+	if(is_send==2)return false;
+	var payValue = $('[name="pay_status"]:checked').val();
+	if(payValue == 2 && type==0)
+	{
+			refundment({$order_id},{$id});
+			return false;
+	}
+	
+	return true;
+}
+
+
+</script>

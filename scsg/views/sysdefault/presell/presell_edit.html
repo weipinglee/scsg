@@ -1,0 +1,255 @@
+{js:my97date}
+<script type="text/javascript" src="{theme:javascript/event.js}"></script>
+<div class="headbar">
+	<div class="position"><span>营销</span><span>></span><span>营销活动管理</span><span>></span><span>添加预售</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/presell/presell_edit_act}"  method="post" name='presell_edit' enctype='multipart/form-data'>
+			<input type='hidden' name='id' />
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>预售名称：</th>
+					<td><input type='text' class='normal' name='name' pattern='required' alt='预售名称' /><label>* 预售名称</label></td>
+				</tr>
+				<tr>
+					<th>预付款比例：</th>
+					<td><input type='text' class='normal' name='money_rate' pattern='float' alt='预付款比例' />%<label>* 预付款比例须介于0和100之间</label></td>
+				</tr>
+				
+				<tr>
+					<th>预付款结束时间：</th>
+					<td>
+						<input type='text' name='yu_end_time' class='Wdate' pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" onblur="FireEvent(this,'onchange');" alt='请填写一个日期' /> ～
+						<label>* 此时间之前支付预付款</label>
+					</td>
+				</tr>
+				<tr>
+					<th>订单确认时间：</th>
+					
+					<td >
+						<div style='margin-bottom:5px;'>
+						<input type='radio' name='sure_type' class='type' value='0' checked/>
+							<label>预付款支付后</label>
+							<input type='text' name='sure_days' class='small'  alt='请填写一个数字'  /> 
+							天内确认*<label></label>
+						</div>
+						
+						<div>
+							<input type='radio' name='sure_type' class='type' value='1' />
+							<input type='text' name='sure_start' class='Wdate'  readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" onblur="FireEvent(this,'onchange');" alt='请填写一个日期' /> ～
+							<input type='text' name='sure_end' class='Wdate'  readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" onblur="FireEvent(this,'onchange');" alt='请填写一个日期' /> 
+							<label>* 此时间段确认</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th>尾款支付时间：</th>
+					
+					<td >
+						<div style='margin-bottom:5px;'>
+						<input type='radio' name='wei_type' class='type' value='0' checked />
+							<label>预付款支付后</label>
+							<input type='text' name='wei_days' class='small' pattern='int' alt='请填写一个数字'  /> 
+							天内支付尾款*<label></label>
+						</div>
+						
+						<div>
+							<input type='radio' name='wei_type' class='type' value='1'/>
+							<input type='text' name='wei_start_time' class='Wdate'  readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" onblur="FireEvent(this,'onchange');" alt='请填写一个日期' /> ～
+							<input type='text' name='wei_end_time' class='Wdate'  readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" onblur="FireEvent(this,'onchange');" alt='请填写一个日期' /> 
+							<label>* 此时间段支付尾款</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th>发货时间</th>
+					<td>
+						<label>尾款支付后</label>
+							<input type='text' name='send_days' class='small' pattern='int' alt='请填写一个数字'  /> 
+							天内*<label></label>
+					</td>
+					
+				</tr>
+				<tr>
+					<th>是否开启：</th>
+					<td>
+						<label class='attr' ><input type='radio' name='is_close' value='0' />是</label>
+						<label class='attr' ><input type='radio' name='is_close' value='1' checked=checked />否</label>
+					</td>
+				</tr>
+				<tr>
+					<th>设置商品：</th>
+					<td>
+						<table class='border_table' style='width:70%'>
+							<col width="150px" />
+							<col width="250px" />
+								<col width="100px" />
+									<col width="100px" />
+							<col />
+							<thead>
+								<tr>
+									<th>图片</th>
+									<th>名称</th>
+									<th>价格</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr id='speed_goods' class='td_c'></tr>
+								<tr>
+									<td colspan='5'>
+										<button type='button' class='btn' onclick="searchGoods('{url:/block/search_goods/type/radio/seller_id/0}',searchGoodsCallback);"><span>选择商品</span></button>
+										<label>* 设置商品，仅能设置一种商品</label>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<th>设置预售展示图片：</th>
+					<td>
+						<input type='file' name='presell_img' />
+						{if:isset($this->presellRow['presell_img'])&&$this->presellRow['presell_img']}
+							<p><img src='{webroot:}{$this->presellRow["presell_img"]}' style='width:320px;border:1px solid #ccc' /></p>
+						{/if}
+					</td>
+				</tr>
+				<tr>
+					<th>介绍：</th>
+					<td><textarea class='textarea' name='intro'></textarea></td>
+				</tr>
+				<tr><td></td><td><button class="submit" type='submit'><span>确 定</span></button><span class='red'></span></td></tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	//输入筛选商品的条件
+	function searchGoodsCallback(goodsList)
+	{
+		goodsList.each(function()
+		{
+			var temp = $.parseJSON($(this).attr('data'));
+			
+			if(!temp.product_id){
+				temp.product_id = 0;
+			}
+			var goods_id = temp.goods_id;
+			var is_tuan = 0;
+			$.ajax({
+				type:'post',
+				async:false,
+				data:{'goods_id':goods_id},
+				url:'{url:/market/is_tuan}',
+				beforeSend:function(){
+					
+				},
+				success:function(data){
+					if(data==1){
+						$('.red').text('该商品已参加团购，不能参加预售');
+						is_tuan = 1;
+					}
+				},
+				error:function(){
+					
+				},
+				complete:function(){
+				
+				},
+				timeout:1000,
+				
+			})
+			if(is_tuan==1)return false;
+			var content = {
+				"data":
+				{
+					"goods_id":temp.goods_id,
+					"product_id":temp.product_id,
+					"name":temp.name,
+					"img":temp.img,
+					"sell_price":temp.sell_price
+				}
+			};
+			relationCallBack(content);
+		});
+	}
+
+	//关联商品回调处理函数
+	function relationCallBack(content)
+	{
+		if(content)
+		{
+			var imgUrl = "{webroot:@url@}";
+			imgUrl     = imgUrl.replace("@url@",content['data']['img']);
+
+			var html =   '<td><img src="'+imgUrl+'" title="'+content['data']['name']+'" style="max-width:140px;" /></td>'
+						+'<td>'+content['data']['name']+'</td>'
+						+'<td>'+content['data']['sell_price']+'</td>'
+						+'<input type="hidden" name="goods_id" value="'+content['data']['goods_id']+'"/>'+
+							'<input type="hidden" name="product_id" value="'+content['data']['product_id']+'"/>';
+
+			$('#speed_goods').html(html);
+		}
+	}
+
+	
+
+	
+	//预定义商品绑定
+	{if:isset($this->presellRow['goodsRow'])}
+		var goodsData = {$this->presellRow['goodsRow']};
+		relationCallBack(goodsData);
+		var wei_type = '{$this->presellRow["wei_type"]}';
+		var sure_type = '{$this->presellRow["sure_type"]}';
+		//表单回填
+		var formObj = new Form('presell_edit');
+		formObj.init
+		({
+			'id':'{$this->presellRow['id']}',
+			'name':'{$this->presellRow['name']}',
+			'money_rate':'{$this->presellRow['money_rate']}',
+			'yu_end_time':'{$this->presellRow['yu_end_time']}',
+			
+			'is_close':'{$this->presellRow['is_close']}',
+			'intro':'{$this->presellRow['intro']}',
+			'goods_id':'{$this->presellRow['goods_id']}',
+			'sure_type':'{$this->presellRow['sure_type']}',
+			'wei_type' : '{$this->presellRow['wei_type']}',
+			'send_days': '{$this->presellRow['send_days']}',
+			{if:$this->presellRow['wei_type']==1}
+			'wei_start_time':'{$this->presellRow['wei_start_time']}',
+			'wei_end_time':'{$this->presellRow['wei_end_time']}',
+			{else:}
+			'wei_days':'{$this->presellRow['wei_days']}',
+			{/if}
+			{if:$this->presellRow['sure_type']==1}
+			'sure_start':'{$this->presellRow['sure_start']}',
+			'sure_end':'{$this->presellRow['sure_end']}',
+			{else:}
+			'sure_days':'{$this->presellRow['sure_days']}',
+			{/if}
+			
+		});
+		
+	{/if}
+	
+	$(function(){
+		
+		$('.type').on('click',function(){
+			var parentTd = $(this).parents('td');
+			parentTd.find('input[type=text]').attr('disabled','true').removeAttr('pattern');
+			if($(this).val()==1){
+				$(this).parent('div').find('input[type=text]').removeAttr('disabled').attr('pattern','datetime');
+			}else{
+				$(this).parent('div').find('input[type=text]').removeAttr('disabled').attr('pattern','int');
+			}
+			
+		})
+		$('input[name=wei_type][value='+wei_type+']').trigger('click');
+		$('input[name=sure_type][value='+sure_type+']').trigger('click');
+	})
+</script>

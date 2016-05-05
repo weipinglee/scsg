@@ -1,0 +1,48 @@
+
+<div id='det2' class='hidden'>
+	<div class="history">
+	<!--介绍内容-->
+			<div id="topPriceHistroyDiv">
+				<table id="table" cellpadding="0" cellspacing="0" >
+					{if:isset($brand) && $brand}
+			<tr>
+				<td width="20%">品牌</td>
+				<td>{$brand}</td>
+			</tr>
+			{/if}
+			{if:isset($weight) && $weight}
+			<tr>
+				<td width="20%">商品毛重</td>
+				<td>{$weight}</td>
+			</tr>
+			{/if}
+			{if:isset($unit) && $unit}
+			<tr>
+				<td width="20%">单位</td>
+				<td>{$unit}</td>
+			</tr>
+			{/if}
+			{if:($attribute)}
+				{foreach:items=$attribute}
+				<tr>
+				<td width="20%">{$item['name']}</td>
+				<td>{$item['attribute_value']}</td>
+				</tr>
+				{/foreach}
+			{/if}
+				</table>
+				{if:isset($content) && $content}
+				<div class="spjs_img">
+					{$content}
+				</div>
+				{/if}
+		</div>
+	
+		</div>
+</div> 
+<script type='text/javascript'>
+	$(function(){
+		$('div.spjs_img').find('div').css('width','100%');
+	})
+
+</script>

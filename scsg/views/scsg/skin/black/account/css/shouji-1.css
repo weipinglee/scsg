@@ -1,0 +1,101 @@
+@charset "utf-8";
+/* CSS Document */
+*{ margin:0; padding:0;}
+
+ul,  li, body, h2, h3, h4, div, body, p{
+	display: block;}
+
+a{ text-decoration:none;}
+ul{ list-style-type:none;}
+
+.youxiang{ margin:0 auto; width:785px; height:auto; overflow:hidden;}
+.youxiang h4{ color: #333;font-weight: normal;line-height: 40px;font-size: 1.3px;margin-left: 5px;}
+.youxiang .kuai{ height:35px; background-color:#e6e6e6;}
+.youxiang .kuai ul .sanjiao.er{ width:266px;}
+.youxiang .kuai ul .yanse.san{ width:259px}
+.youxiang .kuai ul li{ width:260px; height:35px; line-height:35px; float:left; text-align:center; color:#999; font-weight:bold; font-size:12px;}
+
+.youxiang .kuai ul .yanse {
+	color: #FFF;
+	background-image: url(../images/jiaanjiao.jpg);
+	background-repeat: no-repeat;
+	background-position: left center;
+	height: 35px;
+	width: 263px;
+}
+.youxiang .kuai ul .sanjiao img {
+	float: right;
+}
+.youxiang .kuai ul .sanjiao p { line-height:35px;
+	float: left;
+	width: 242px;
+}
+.youxiang .wenzi{
+	width: 500px;
+	margin-top: 50px;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: auto;
+	overflow: hidden;
+}
+.youxiang .wenzi ul{
+	font-size: 14px;
+	color: #666;
+	overflow: hidden;
+	height: auto;
+}
+.youxiang .wenzi form ul li p{ line-height:35px;}
+.youxiang .wenzi form ul li p span{
+	margin-right: 10px;
+	color: #F60;
+}
+.youxiang .wenzi form ul li input{  height:32px; margin-left:150px; }
+.youxiang .wenzi form ul li .anniu{  height: 32px; margin-left: 125px;}
+.youxiang .wenzi form ul li .ma.yan{margin-top: 10px; margin-left:0px;
+	line-height: 25px;
+	text-align: center;
+	float: left;  }
+
+
+.youxiang .wenzi form ul .lianjie{ margin-left:150px;}
+.youxiang .wenzi form ul .lianjie.chang{
+	margin-left: 125px;
+	clear: both;
+	margin-bottom: 10px;
+}
+
+.youxiang .wenzi form ul li p a{ text-decoration:underline;}
+.youxiang .wenzi form ul li .ma{ margin-left:95px;
+	margin-top: 8px;
+	line-height: 25px;
+	text-align: center;
+	float: left;
+}
+.youxiang .wenzi form ul li .ma input{
+	margin-left: 0px;
+	width: 150px;
+	height: 22px;
+	background-color: #FFF;
+	border: 1px solid #CCCCCC;
+}
+.youxiang .wenzi form ul li .xiyibu{
+	margin-top: 15px;
+	margin-left: 150px;
+	width: 100px;
+	height: 30px;
+	color: #FFF;
+	background: #fc8d28;
+	border: solid 1px  #fd6500;
+	;
+}
+
+
+.youxiang hr{ color:#cccbca; margin:0 auto; margin-top:100px;}
+.youxiang .wenzi form ul li .ma.xinhao{
+	margin-left: 60px;
+}
+
+.youxiang .wenzi img{ height:25px; width:25px; float:left; margin-right:5px;}
+.youxiang .wenzi.bangding{ width:315px;}	
+.youxiang .wenzi.bangding p{ line-height:25px; color:#333;}	
+.youxiang .wenzi.bangding .tiaozhuan{ color:#666; font-size:14px; margin-top:15px;}	

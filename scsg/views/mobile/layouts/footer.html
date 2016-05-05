@@ -1,0 +1,53 @@
+<footer id="footer">
+	<div class="f-qk-tl">
+		{if:!isset($this->user)}
+		<div class="f-login">
+			<a href="{url:/simple/login?callback=}">登录</a><span>|</span>
+			<a href="{url:/simple/reg?callback=}">注册</a>
+		<!--<div class="f-go-top" id="goTop"><a href="#">TOP</a></div>-->
+		</div>
+		{/if}
+	</div>
+	<div class="f-ch-cp">
+		<div class="item">
+		<a href="{url:/site/index/client/pc}">桌面版</a></div>
+		<div class="item"><span class="copyright_1">Copyright</span> <span class="copyright_2">2012-2015</span><span class="copyright_3">NAI.COM</span><span class="copyright_4">版权所有</span></div></div>
+</footer>
+
+<!--底部浮动-->
+		<link rel="stylesheet" href="{skin:css/bottom_nav.css}" type="text/css"/> 
+
+     <section class="sr-s">
+            <div class="s-btn" data="sales">
+				<a href="{url:/site/index?callback=}">
+              <img  src="{skin:images/m_xiabiao/imgs1.png}" width="50" height="50" alt="首页"  id="imgs1"></a>
+            </div>
+            <div class="s-btn" data="price">
+				<a href="{url:/site/category?}"><img src="{skin:images/m_xiabiao/img2.png}" width="50" height="50" alt="分类"  id="imgs2"></a>
+            </div>
+            <div class="s-btn" data="hot">
+				<a href="{url:/site/tuangou}"><img src="{skin:images/m_xiabiao/img3.png}" width="50" height="50" alt="团购" id="imgs3"></a>
+            </div>
+            <div class="s-btn" data="default">
+				<a href="{url:/simple/cart?callback=}"><img src="{skin:images/m_xiabiao/img4.png}" width="50" height="50" alt="购物车"  id="imgs4"></a>
+            </div>
+            <div class="s-btn" data="default">
+				<a href="{url:/ucenter}"><img src="{skin:images/m_xiabiao/img5.png}" width="50" height="50" alt="我的山城"  id="imgs5"></a>
+            </div>
+        </section>
+
+<!-- <img id="imgs1" src="images/1.gif" onclick="changeImage(id)"> -->
+    
+
+<script type="text/javascript">
+    function changeImage(id){
+    document.getElementById("imgs1").src="img1.png";
+    document.getElementById("imgs2").src="img2.png";
+    document.getElementById("imgs3").src="img3.png";
+    document.getElementById("imgs4").src="img4.png";
+    document.getElementById("imgs5").src="img5.png";
+    document.getElementById(this).src=id+".png";
+    }
+</script>
+
+</body></html>

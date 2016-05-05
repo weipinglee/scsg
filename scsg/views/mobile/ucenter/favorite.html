@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://m.#.com/s/search?keyword=%E8%A1%A3%E6%9C%8D -->
+<html>
+	<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="http://static-web.#.com/wap/img/collect-logo/#-collect-logo.png">
+        <title>我的关注</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+        <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+		<link rel="stylesheet" href="{skin:css/search_list.css}" type="text/css"> 
+		<link rel="stylesheet" href="{skin:css/style1.2.css}" type="text/css">
+		<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		{js:artTemplate}
+		<script src="{theme:javascript/common.js}"></script>
+		<script src="{theme:javascript/cart.js}"></script>
+		<script src="{theme:javascript/scrollTop.js}"></script>           
+
+	</head>
+
+    <body data-mps="PA4101">
+        <div id="page">
+            <header class="wap-header">
+			    <div class="wap-topbar" style="">
+			        <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
+			        <div class="h-center">
+			            <h1>我的关注</h1>
+			        </div>
+			            
+			    </div>
+    		 </header>
+	<section id="contents">
+	       <section class="s-list cf" id="dataList">
+	       		<section class="deals"></section>    
+			</section>
+	            
+	</section>
+
+ </div>
+    <script type='text/html' id='favorite_product'>
+    	<div>
+			  <figure>
+				<a href="{url:/site/products/id/}/<%=id%>" target="_blank">
+					<img src="{url:<%=img%>}"/>
+				</a>
+			  </figure>
+			  <h2>
+				<span><a href="{url:/site/products/id/}/<%=id%>" target="_blank"><%=name%></a></span>
+			  </h2>
+			  <p>
+				  <span>￥<i><%=sell_price%></i></span>
+					<p><sub><a name='cancle_favorite_<%=fid%>' href="javascript:void(0)"><img src="{skin:css/wap/del.png}" style="width:20px;height:20px;border:0;"></a></sub>
+					</p>
+			 </p>
+		</div>
+	</script>
+<script type='text/javascript'>
+	var del_url = '{url:/ucenter/favorite_del/id/}/';
+		var obj = {
+			'url': '{url:/ucenter/get_favorite_ajax}',
+			'template_id': 'favorite_product',
+			'append_to': $('#dataList .deals'),
+			'loading_img': '{skin:images/files/loading.gif}',
+			'trans_data': {},
+			'callback' : bindEvent
+		};
+	 function bindEvent(json){
+	 	$('a[name=cancle_favorite_'+json.fid+']').on('click',function(){
+			window.location.href=del_url+json.fid;
+		})
+		$('a[name=favorite_to_cart_'+json.id+']').on('click',function(){
+			joinCart_ajax(json.id,"{url:/simple/joinCart}","goods");
+		})
+		
+	 }
+	var ajax = new Ajax_Get_Data();
+	ajax.init(obj);
+	
+
+</script>

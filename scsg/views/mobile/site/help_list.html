@@ -1,0 +1,79 @@
+{set:$seo_data=array();$site_config=new Config('site_config');$site_config=$site_config->getInfo();}
+
+{set:$seo_data['title']=isset($site_config['name'])?$site_config['name']:""}
+{set:$seo_data['title']=$this->cat_row['name'].'_'.$seo_data['title'] }
+{set:seo::set($seo_data);}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0, maximum-scale=1.0">
+<meta content="telephone=no" name="format-detection" />
+<title>帮助中心</title>
+
+<link rel="stylesheet" href="{skin:css/wap/index.css}" type="text/css" />
+<script type="text/javascript" src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+<link rel="stylesheet" href="{skin:css/common.css}" type="text/css">               
+<script src="{theme:javascript/common.js}"></script>
+<link rel="stylesheet" href="{skin:css/details.css}" type="text/css" />
+<link rel="stylesheet" href="{skin:css/search_list.css}" type="text/css">  
+<script src="{theme:javascript/scrollTop.js}"></script>
+
+</head>
+<body>
+	<style>
+		.sortSub ul {
+			background: none;
+			padding: 0 0 10px 0;
+			box-shadow: none;
+		}
+	</style>
+	
+
+
+         <header class="wap-header">
+    <div class="wap-topbar" style="">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
+        <div class="h-center">
+            <h1>帮助中心</h1>
+        </div>
+            <a href="mail" class="search_nav_icon_none">
+			<img src="{skin:css/wap/app_mail_nav.png}" style="width:35px;height:35px;"></a>
+    </div>
+  </header>
+
+<script type="text/javascript">
+// 收缩展开效果
+$(document).ready(function(){
+    $("a.click").click(function() {
+            $(this).next().toggle('fast');
+            $(this).parent().siblings().find('ul').hide('slow');
+   });
+});
+
+
+</script>	
+<style>
+.sortSub ul{display: none;}
+</style>
+
+		<ul class="sortSub" id="sortSub">
+			{foreach:items=Api::run('getHelpCategoryLeft',10)}
+				<li>
+					<a class="click"><span></span>{$item['name']}</a>
+					<ul id="ul1">
+						{foreach:items=Api::run('getHelpListByCatidAll',array('#cat_id#',$item['id'])) item=$help_row}
+							<li><a href="{url:/site/help/id/$help_row[id]}">{$help_row['name']}</a></li>
+						{/foreach}
+						
+					</ul>
+				</li>
+		
+			{/foreach}
+				
+		</ul>
+
+
+
+
+{include:layouts/footer_1.html}

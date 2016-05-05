@@ -1,0 +1,47 @@
+<div class="main f_r">
+	<div class="uc_title m_10">
+		<label class="current"><span>绑定手机</span></label>
+	</div>
+	<div class="chg-account m_10">
+		<ul class="order_step">
+		<li class="current">
+		<span class="first">1.验证身份</span>
+		</li>
+		<li>
+		<span>2.输入短信验证码完成绑定</span>
+		</li>
+		<li class="last">
+		<span>3.手机绑定成功</span>
+		</li>
+		</ul>
+	</div>
+	<div class="form_content">
+	<form action='{url:/ucenter/phone_edit}' method='post'>
+			<table class="form_table" cellpadding="0" cellspacing="0">
+				<col width="200px" />
+				<col />
+				<!--{if:$user_phone}
+				<tr>
+					<th><span class="red">*</span>已绑定手机：</th><td>{$user_phone}</td>
+				</tr>
+				{/if}-->
+				<tr>
+					<th><span class="red">*</span>绑定的手机号码：</th><td><input type='text' class="normal" name="password" pattern='required'  /><label></label></td>
+				</tr>
+				<tr>
+					<th><span class="red">*</span>验证码：</th>
+					<td><input type='text' class="small" name="repassword" pattern='required' />
+						<input type="reset" value="获取验证码" />
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<label class="btn"><input type="submit" value="确认提交" /></label>
+						<label class="btn"><input type="reset" value="取消" /></label>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

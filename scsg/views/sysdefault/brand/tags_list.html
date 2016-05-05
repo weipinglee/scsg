@@ -1,0 +1,95 @@
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>标签管理</span><span>></span><span>标签列表</span></div>
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="window.location='{url:/brand/tags_edit}'"><span class="addition">添加标签</span></button></a>
+	</div>
+	<div class="searchbar">
+		<form action="{url:/}" method="get" name="tags_list">
+			<input type='hidden' name='controller' value='brand' />
+			<input type='hidden' name='action' value='tags_list' />
+			<select name="search[show_index]" class="auto">
+				<option value="-1">是否在首页显示</option>
+				<option value="0">否</option>
+				<option value="1">是</option>
+			</select>
+
+			<button class="btn" type="submit"  ><span class="sel">筛 选</span></button>
+		</form>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="100px" />
+			<col width="150px" />
+			<col width="150px" />
+			<col width="150px" />
+			<col />
+			
+			<col width="150px" />
+			<thead>
+				<tr>
+					<th>排序</th>
+					<th>标签名称</th>
+					<th>标签图片</th>
+					<th>是否关闭</th>
+					<th>是否在首页显示</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+	<table id="list_table" class="list_table">
+		<col width="100px" />
+		<col width="150px" />
+		<col width="150px" />
+		<col width="150px" />
+		<col />
+		<col width="150px" />
+		<tbody>
+			
+			{foreach:items=$this->tags}
+			<tr>
+				<td><input class="tiny" id="sort{$item['id']}" type="text" onblur="toSort({$item['id']});" value="{$item['sort']}" pattern='int' /></td>
+				<td>{$item['name']}</td>
+				<td>
+					<img height='20px' src='{webroot:$item[img]}' />
+				</td>
+				<td>
+					{if:$item['is_close']==0}开启{else:}关闭{/if}
+				</td>
+				<td>
+					{if:$item['show_index']==1}是{else:}否{/if}
+				</td>
+				<td><a href="{url:/brand/tags_edit/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a><a href="javascript:void(0)" onclick="delModel({link:'{url:/brand/tags_del/id/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a></td>
+			</tr>
+			{/foreachS}
+		</tbody>
+	</table>
+</div>
+
+<script language="javascript">
+//排序
+function toSort(id)
+{
+	if(id!='')
+	{
+		var va = $('#sort'+id).val();
+		var part = /^\d+$/i;
+		if(va!='' && va!=undefined && part.test(va))
+		{
+			$.get("{url:/goods/brand_sort}",{'id':id,'sort':va}, function(data)
+			{
+				if(data=='1')
+				{
+					alert('修改商品品牌排序成功!');
+				}else
+				{
+					alert('修改商品品牌排序错误!');
+				}
+			});
+		}
+	}
+}
+</script>

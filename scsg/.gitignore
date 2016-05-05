@@ -1,0 +1,9 @@
+node_modules
+*.log
+.*
+.txt
+/runtime
+/upload
+/backup
+/config
+!.gitignore

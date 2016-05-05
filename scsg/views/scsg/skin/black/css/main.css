@@ -1,0 +1,15 @@
+
+
+
+
+#rightsead { width: 300px; height: 100%; position: fixed; top: 0px; right: 0px; background-color: #959595;  border: 0; z-index: 100;}
+*html #rightsead { margin-top: 0px; position: fixed;  }
+.ico{background-image: url(../images/ico_bg.png); background-repeat:no-repeat;}
+#rightsead .ico { width: 200px; height: 100%; position: relative; }
+#rightsead .ico span {border: 1px solid #fff;display:none; font-size: 12px; left: -121px; position: absolute; text-align: center; top: 0; width: 120px;  height: auto; line-height: 28px; background-color: #FFF; z-index: 99; border-right: 0; overflow: hidden; }
+
+#rightsead .side_chart span { padding: 15px 0; }
+
+
+
+

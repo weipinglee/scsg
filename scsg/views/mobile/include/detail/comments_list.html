@@ -1,0 +1,31 @@
+<div class="pingjia hidden" id='comments'>
+	<div class="content"></div>
+</div>
+<input type='hidden' name='comment_page' value='1'/>
+<script type='text/html' id='comment_statics'>
+	 <div class="anniu">
+		 <div class="current" type='all'><a href="javascript:void(0);" >全部(<%=comment_total%>)</a></div>
+		 <div class="other" type='good'><a href="javascript:void(0);" >好评(<%=good%>)</a></div>
+		 <div class="other" type='middle'><a href="javascript:void(0);" >中评(<%=middle%>)</a></div>
+		 <div class="other" type='bad'><a href="javascript:void(0);" >差评(<%=bad%>)</a></div>
+	 </div>
+</script>
+<script type='text/html' id='comment_list' >
+	<ul>
+		<li>
+			<b>用户：<%=user_show%></b>
+			<a href="#"><%=time%></a><br/>
+			<i>评分：
+			<% for(var i=0;i<point;i++){%>
+				<img src="{skin:images/pingjia_img/huangxing.png}" width="100" height="100" >
+			<% } %>
+			<% for(var i=0;i<5-point;i++){%>
+				<img src="{skin:images/pingjia_img/huangse.png}" width="100" height="100" >
+			<% } %>
+			</i>
+			<p><%=contents%></p>
+		<li>
+	</ul>
+	<hr/>
+</script>
+

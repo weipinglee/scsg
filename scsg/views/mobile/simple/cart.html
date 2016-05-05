@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="http://static-web.#.com/wap/img/collect-logo/#-collect-logo.png">
+        <title>山城速购</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+        <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+        <link rel="stylesheet" href="{skin:css/guess.css}" type="text/css">
+		<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		<script src="{theme:javascript/common.js}"></script>
+		<script src="{theme:javascript/scrollTop.js}"></script>
+		<script src="{theme:javascript/cart.js}"></script>
+		<link rel="stylesheet" href="{skin:css/cart.css}" type="text/css">
+        <link rel="stylesheet" href="{skin:css/swiper.min.css}" type="text/css">
+		<script src="{theme:javascript/filter.js}"></script>
+		<script src="{theme:javascript/swiper.jquery.min.js}"></script>
+		
+		
+		</head>
+
+    <body>
+    
+        <div id="page">
+            <header class="wap-header">
+    <div class="wap-topbar" style="">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
+        <div class="h-center">
+            <h1>购物车</h1>
+        </div>
+            <a href="{url:/site/mail}" class="search_nav_icon_none"><img src="{skin:css/wap/app_mail_nav.png}" style="width:35px;height:35px;"></a>
+    </div></header>
+<section id="contents">
+
+                  
+    <section class="s-list cf" id="dataList">
+    	{if:$this->sum>0}
+            <div class="wrap">
+				
+				<form method='post' action='{url:/simple/cart2}' name='cart'> 
+				<div class="container">
+					<div class="cart clear">
+						<div class="shadow">
+						<table width="100%" border="0">
+							<tr>
+								<td width="10%"> <input type="checkbox" class="check_alls checkbox"  name="check_all" id="check_all" > </td>
+								<td width="75%">
+								  <h5 class="fl">购物车中的产品</h5></li>
+								</td>
+								<td width="10%" id='coudan'><a href="{url:/simple/add_order}" class="goadd">去凑单&nbsp;&gt;</a></td>
+							</tr>
+						</table>		   
+					   <div class="c_list cb" id="list">
+						<ul>
+							{foreach:items = $this->goodsList item=$value}
+							{foreach:items=$value key=$k}
+							{if:is_array($item)}
+							{set:$type=isset($item['spec_array'])?'product':'goods'}
+							{set:$item['id']=isset($item['spec_array'])?$item['product_id']:$item['goods_id']}
+							{set:$item['type']=$type;}
+							<li>
+								<table>
+									<tr>
+										<td width="15%"><a href="{url:/site/products/id/$item[goods_id]}"><img src="{url:/pic/thumb/img/$item[img]/w/52/h/52}" width="52" height="52"></a></td>
+										<td width="35%">
+											<p><a href="{url:/site/products/id/$item[goods_id]}">{$item['name']}</a></p>
+											<p><span class="lse">￥{echo:number_format($item['sell_price']-$item['reduce'],2)}</span></p>
+										</td>
+										<td width="30%" valign="middle">
+											{set:$item_json = JSON::encode($item)}
+											<div class="spinner">
+												<button type="button" class="decrease" onclick='cart_reduce({$item_json});'>-</button>
+												<input id="{$type}_count_{$item['id']}" type="text" class="spinner value" name='{$type}-{$item["id"]}' onblur='cartCount({$item_json});' value='{$item["count"]}' >
+												<button type="button" class="increase" onclick='cart_increase({$item_json});'>+</button>
+											</div>
+										</td>
+										<td width="10%"> <input type="checkbox" class="checkbox" name="sub[]"  data-json='{$item_json}' value="{$type}-{$item['id']}"></td>
+									</tr>
+								</table>
+							  </li>
+							  {/if}
+							  {/foreach}
+							  {/foreach}
+						</ul>
+					   </div>
+					   
+					   
+					</div>  
+					</div>
+				</div>
+				<div>
+					
+					
+				</div>
+				<div class="cart_bg">
+				<table width="100%" border="0">
+					<tr>
+						<td width="3%"></td>
+						<td width="25%"><input type="checkbox" class="check_alls checkbox" id="box_all"> 全选</td>
+						<td></td>
+						<td><span id='origin_price' class='hide'>0</span>
+							<span id='discount_price' class='hide'>0</span>
+							<span id='promotion_price' class='hide'>0</span>
+							<p style='text-align:right;margin-right:25px;'>已优惠：￥<b id='youhui_price'>0</b></p>
+							<p style='text-align:right;margin-right:25px;margin-bottom:5px;'>总价（不含运费）：￥<b id='sum_price'>0</b></p>
+						</td>
+					</tr>
+				
+				</table>
+				<table width="100%" border="0">
+						<tr>
+						<td width="3%"></td>
+
+
+						<td width='50%'>							
+							
+						</td>
+						<td width="15%"><a href='javascript:void(0)' onclick='cart_del_many()'><button class="submit2" type='button' style='max-width:100px;'>删除</button></a></td>
+
+						<td width="18%">
+							
+							<button class="submit" onclick="check_finish();" type='button'>去结算</button>
+						</td>
+						
+					</tr>
+				</table>
+				</div> 
+				
+
+				</form>
+			
+			</div>
+			{else:}
+                <div class="centerContent" >
+                    <div class="centerContent-nothing">
+                        <div class="centerContent-nothing-img">
+                            <img src="{skin:images/nothing-bg.png}">
+                        </div>
+                        <div class="centerContent-nothing-desc">
+                            购物车快饿瘪了~
+                            <em>主人快给我挑点宝贝吧！</em>
+                        </div>
+                        <a href="{url:/site/index?callback=}" class="shopping-btn">去逛逛</a>
+                    </div>
+                </div>
+			{/if}
+    </section>	
+</section>
+			<section>
+				<div id='cart_prompt'>
+				满足的优惠活动：
+				</div>
+			</section>
+			    
+<section id="wrap" style="height:160px; margin-bottom:30px;">
+	<!--品牌wrap-->
+            <div class="brand_wrap swiper-container swiper-container-horizontal" >
+				<h5>猜你喜欢</h5>
+				<div class="brand_swiper_wrap swiper-wrapper " style="height:146px;">
+					<ul class="swiper-slide clear-fix fl swiper-slide-active" style="width: 640px;">
+						{foreach:items=Api::run('getCommendHot',5)}
+							<li class="fl">
+								<div class="brand_one_box" style="height:140px;" >
+									<a href="{url:/site/products/id/$item[id]}"><img src="{url:/pic/thumb/img/$item[img]/w/98/h/106}" onerror='this.src="{skin:images/front/nopic_435_435.gif}"' /></a>
+								<a href="{url:/site/products/id/$item[id]}"><span  class="title">{$item['name']}</span><span class="price">￥{$item['sell_price']}</span></a></div>
+							</li>  
+						{/foreach}
+					</ul>  
+                                 
+				</div>
+			</div>
+        
+		<script type="text/javascript">
+		   
+			window.WapFilter.init();
+			$('#submit-btn').on('click', function(){
+				$('#frms').submit();
+			});
+			//]]>
+		</script> 
+</section>
+<script type='text/javascript'>
+	var cart2_url = '{url:/simple/cart2}';
+	var join_cart_url = '{url:/simple/joinCart}';
+	var cart_url = '{url:/simple/cart}';
+	var promotion_url = '{url:/simple/promotionRuleAjax/random/@random@}';
+	var del_cart_url = '{url:/simple/removeCartMany/link/cart}';
+
+
+</script>
+        
+   {include:layouts/footer.html}

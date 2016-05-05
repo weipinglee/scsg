@@ -1,0 +1,125 @@
+{set:$user_id = $this->user['user_id']}
+{set:$user = Api::run('getMemberInfo',$user_id)}
+{set:$group = new IModel('user_group');$group_name = $group->getField('id='.$user['group_id'],'group_name');}
+{set:$statistics = Api::run('getMemberTongJi',$user_id)}
+{set:$msgObj = new Mess($user_id);$msgNum = $msgObj->needReadNum()}
+{set:$propIds = trim($user['prop'],',');$propIds = $propIds ? $propIds : 0}
+{set:$propData = Api::run('getPropTongJi',$propIds);$show_foot_nav=1;}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8" />
+	<title>我的山城</title>
+	<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1" />
+        <link rel="apple-touch-icon" href="apple_logo" />
+	<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+</head>
+<body>
+	<header>
+		<div class="logo" role="heading">
+			<a href="{url:/site/index}">山城速购</a><em class="nickname">我的山城</em>
+		</div>
+
+		<a href="{url:/simple/logout}" class="login">退出</a>
+
+	</header>
+		
+		<div>
+	<a href="{url:/ucenter/info}" class="profile menuitem" role="menuitem"><i>编辑</i>
+			<div class="avatar">
+				{set:$user_ico = $this->user['head_ico']}
+				<img src="{url:/pic/thumb/img/$user_ico/w/50/h/50}" width="50" height="50" alt="头像" onerror="this.src='{skin:images/front/user_ico.gif}'"/>
+			</div>
+			<em class="name">{$this->user['username']}</em>
+			<span class="rank"></span></a>
+			<!--<span class="rank"><a href="{url:/ucenter/message}"><img class="xximg" src="{skin:css/wap/app_mail_nav.png}"/></a></span>-->
+		</div>
+	
+	<div  class="profile menuitem yh">
+		<ul>
+			<li><a href="javascript:void(0)" class="dfk"><p class="sj">{$propData['prop_num']} 张</p><p class="tex">代金券</p></a></li>
+			<li><a href="javascript:void(0)" class="dfh"><p class="sj">￥{$user['balance']}</p><p class="tex">账户余额</p></a></li>
+			<li><a href="{url:/ucenter/integral}" class="dsh"><p class="sj" name='point'>{$user['point']} </p><p class="tex">积分</p></a></li>
+			<li>{if:$user['sign']==0}
+				<a href="javascript:void(0)" class="dpl">
+				  <span class="qdjf" onclick='sign_point(this)'>
+				</a>
+				{else:}
+				<a href="javascript:void(0)" class="dpl">
+				  <span class="yqd" >
+				</a>
+				{/if}
+			</li>
+		</ul>
+	</div>		
+
+	<div class="account-menu menu" role="menu" style='margin-bottom:10px;'>
+		<a role="menuitem" class="menuitem" href="{url:/ucenter/order}">
+           <em class="comment">我的订单</em>
+		</a>
+	
+			<div class="wa">
+				<ul>
+					<li><a href="{url:/ucenter/order/status/1}" class="dfk"><p>待付款</p></a></li>
+					<li><a href="{url:/ucenter/order/status/2}" class="dfh"><p>待发货</p></a></li>
+					<li><a href="{url:/ucenter/order/status/3}" class="dsh"><p>待收货</p></a></li>
+					<li><a href="{url:/ucenter/order/status/4}" class="dpl"><p>待评论</p></a></li>
+				</ul>
+			</div>			
+		
+		
+		<a role="menuitem" class="menuitem" href="{url:/ucenter/favorite}">
+			<i></i>
+			<em class="fav">我的关注</em>
+		</a>
+		
+		<a role="menuitem" class="menuitem" href="{url:/ucenter/integral}">
+			
+			<em class="ershou">我的积分</em>
+		</a>
+		<a role="menuitem" class="menuitem" href="{url:/simple/address}">
+			<i></i>
+			<em class="shdz">管理收货地址</em>
+		</a>
+		<a role="menuitem" class="menuitem" href="{url:/ucenter/complain}">
+			<i></i>
+			<em class="yjfk">意见反馈</em>
+		</a>
+		<a role="menuitem" class="menuitem" href="{url:/site/help_list}">
+			<i></i>
+			<em class="ask">帮助中心</em>
+		</a>
+		
+		<a role="menuitem" class="menuitem" href="{url:/ucenter/info}">
+			<i></i>
+			<em class="tuan">设置</em>
+		</a>
+		
+	</div>
+<script type='text/javascript'>
+	function sign_point(_this){
+		$.ajax({
+			type : 'post',
+			async:true,
+			data:{},
+			dataType:'json',
+			url:'{url:/ucenter_ajax/sign_add_point}',
+			beforeSend:function(){
+				
+			},
+			success:function(data){
+				if(data.point){
+					$(_this).removeClass('qdjf').addClass('yqd');
+					$('p[name=point]').text(data.point+parseInt($('p[name=point]').text()));
+				}
+			},
+			error:function(){
+				
+			},
+			complete:function(){
+			},
+			timeout:1000,
+		})
+	}
+</script>
+{include:include/uc_foot.html}

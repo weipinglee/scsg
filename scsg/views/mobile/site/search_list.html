@@ -1,0 +1,136 @@
+{set:$seo_data=array();$site_config=new Config('site_config');$site_config=$site_config->getInfo();}
+{set:$seo_data['title']="商品搜索_".$site_config['name']}
+{set:seo::set($seo_data);}
+{set:$order=isset($_GET['order'])?$_GET['order'] : 'new';}
+{set:$type=(isset($_GET['show_type'])&&$_GET['show_type']=='win')?'win' : 'list';}
+{if:$type=='win'}
+{set:$template='proWinBox';$class ='list';}
+{else:}
+{set:$class = '';$template='proListBox';}
+{/if}
+
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://m.#.com/s/search?keyword=%E8%A1%A3%E6%9C%8D -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="http://static-web.#.com/wap/img/collect-logo/#-collect-logo.png">
+        <title>山城速购</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+        <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+		<link rel="stylesheet" href="{skin:css/search_list.css}" type="text/css">   
+		<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+		<script src="{theme:javascript/common.js}"></script> 
+		<script type="text/javascript" src="{theme:javascript/searchlist.js}" charset="UTF-8"></script>
+		{js:artTemplate}
+		</head>
+
+    <body data-mps="PA4101">
+        <div id="page">
+  <header class="wap-header">
+    <div class="wap-topbar" style="">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
+        
+           {include:layouts/search_head.html}
+    
+		{if:$type=='list'}
+            <a href="{echo:search_goods::searchUrl('show_type','win')}" class="search_nav_icon_none"><img src="{skin:css/wap/app_mode_l.png}" style="width:35px;height:35px;"></a>
+   		{else:}
+		     <a href="{echo:search_goods::searchUrl('show_type','list')}" class="search_nav_icon_none"><img src="{skin:css/wap/app_mode.png}" style="width:35px;height:35px;"></a>
+   		{/if}
+    </div>
+
+ <div class="nav_top">
+        	<ul>
+        		{foreach:items=search_goods::getOrderType()}
+				{set:$next = search_goods::getOrderValue($key)}
+        		<li><a href="{echo:search_goods::searchUrl('order',$next)}" class="{echo:search_goods::isOrderCurrent($key) ? 'tit_col':''}"><span>{$item}</span></a></li>
+				{/foreach}
+        	</ul>
+        </div>
+</header>
+   <script type='text/javascript'>
+    	var getMoreUrl = '{url:/mobile/getMoreSearchList}';
+		var temp ='{$template}';
+		$(function(){
+			showMoreSearch();
+		})
+    </script> 
+<section id="contents">
+	<section class="s-list cf {$class}" id="dataList">
+    	<div class="no-result-tip" style="display:none;">
+			搜索“
+			<span></span>
+			”无结果
+		</div>
+	</section>
+		   		<input type='hidden' name='order' value='{$order}'/>
+			   	<input name='page' type='hidden' value='1' />
+				<input name='word_ajax' type='hidden' value='{$this->word}' />
+				<input name='cat_id' type='hidden' value='{$this->cat_id}' />
+	            <div class="loading-ctn loading-imgS">
+	            <p onclick='showMoreSearch();'>下拉查看更多</p>
+	            <img alt="" src="{skin:images/files/loading.gif}">
+			    </div>
+</section>
+    	
+    
+        </div>
+
+   <script  type='text/html' id='proListBox'>  
+		<div class="s-item">
+	        <div>
+	        	<a href="{url:/site/products/id/}/<%=id%>" class="s-img">
+	                <div class="goods-one-img"><img src="{url:<%=img%>}" onerror="#"></div>
+				</a>
+			</div>
+	        <div>
+	        	<a href="{url:/site/products/id/}/<%=id%>" class="s-text"><%=name%></a>
+			</div>
+         
+	        <div class="am">
+	            <span class="price">¥ <%=sell_price%></span>
+	            <span class="sales">销量:<%=sale%></span>
+	        </div>
+    	</div>
+   </script>
+
+	<script type='text/html' id='proWinBox'>
+			<div  >
+			  <figure>
+				<a href="detail" target="_blank"><img src="{url:<%=img%>}"/></a>
+			  </figure>
+			  <h2>
+				<span><a href="detail" target="_blank"><%=name%></a></span>
+				</h2>
+			  <aside>
+			  </aside>
+			  <p>
+			  <span>￥<i><%=sell_price%></i></span>
+			  <cite>销量<%=sale%></cite>
+				
+			  </p>
+			</div>
+	</script>
+		<script type='text/javascript' >
+		window.onscroll = function(){
+			 if ($(document).scrollTop() >= $(document).height() - $(window).height()){
+					showMoreSearch();
+			 }
+		}
+	</script>
+	{include:layouts/footer.html} 

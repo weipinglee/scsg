@@ -1,0 +1,33 @@
+{js:artTemplate}
+
+<article class="module width_full">
+	<header>
+		<h3>更改密码</h3>
+	</header>
+	
+	<form action="{url:/seller/seller_pass}" method="post" name="chg_pass" enctype='multipart/form-data'>
+		<div class="module_content">
+			<fieldset>
+				<label>原密码：</label>
+				<input name="old_pass" type="password" value="" pattern="required" alt="原密码不能为空"  />
+				<label class="tip">* （必填）</label>
+			</fieldset>
+
+
+			<fieldset>
+				<label>新密码：</label>
+				<input name="new_pass" type="password" value="" pattern="required"  alt="新密码不能为空"/>
+			</fieldset>
+			<fieldset>
+				<label>重复新密码：</label>
+				<input name="new_pass_2" type="password" value="" pattern="required"  />
+			</fieldset>
+		</div>
+		<footer>
+			<div class="submit_link">
+				<input type="submit" class="alt_btn" value="确 定" />
+				<input type="reset" value="重 置" />
+			</div>
+		</footer>
+	</form>
+</article>

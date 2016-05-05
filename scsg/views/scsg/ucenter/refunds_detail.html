@@ -1,0 +1,151 @@
+{if:$type==0}
+{set:$typeName = '退货';}
+{else:}
+{set:$typeName = '换货';}
+{/if}
+
+<div class="main f_r">
+
+    <div class="uc_title m_10">
+        <label class="current"><span>退款详情</span></label>
+    </div>
+
+	<div class="box m_10">
+		<table class="border_table" width="100%" cellpadding="0" cellspacing="0">
+			<colgroup>
+				<col width="150px" />
+				<col />
+			</colgroup>
+
+			<tr>
+				<th>订单号：</th>
+				<td>{$order_no}</td>
+			</tr>
+			<tr>
+				<th>{$typeName}单号：</th>
+				<td>{$refunds_no}</td>
+			</tr>
+			<tr>
+				<th>申请时间：</th>
+				<td>{$this->data['time']}</td>
+			</tr>
+			<tr>
+				<th>{$typeName}类型：</th>
+				<td>{echo:Order_Class::refundmentType($goods['is_send'],$type)}</td>
+			</tr>
+			<tr>
+				<th>{$typeName}状态：</th>
+				<td>{echo:Order_Class::refundmentText($pay_status,$type)}</td>
+			</tr>
+			{if:$type==0}
+			<tr>
+				<th>{$typeName}金额：</th>
+				<td class="red2 bold">{$this->data['amount']}</td>
+			</tr>
+			{/if}
+			<tr>
+				<th>{$typeName}商品：</th>
+				{set:$goodsInfo = JSON::decode($goods['goods_array'])}
+				<td><a class="blue" href="{url:/site/products/id/$goods_id}" href="_blank">{$goodsInfo['name']} {if:$goodsInfo['value']}{$goodsInfo['value']}{/if} X {$this->data['goods']['goods_nums']}件</a></td>
+			</tr>
+			<tr>
+				<th>{$typeName}原因：</th>
+				<td>{$this->data['content']}</td>
+			</tr>
+		
+
+			
+
+			
+
+			<tr>
+				<th>处理时间：</th>
+				<td>{echo:$this->data['dispose_time']?$this->data['dispose_time']:'未处理';}</td>
+			</tr>
+
+			<tr>
+				<th>处理建议：</th>
+				<td>{echo:$this->data['dispose_idea']?$this->data['dispose_idea']:'未回复'}</td>
+			</tr>
+
+			
+			
+			{if:$this->data['delivery_time']}
+			<tr>
+				<th>寄回时间：</th>
+				<td>{echo:$this->data['delivery_time']}</td>
+			</tr>
+			<tr>
+				<th>寄回快递：</th>
+				<td>{echo:$this->data['delivery_com']}|{echo:$this->data['delivery_code']}</td>
+			</tr>
+			<tr>
+				<th>快递图片：</th>
+				<td><img height='200' src="{url:$this->data['delivery_img']}" style='max-width:100%;'/></td>
+			</tr>
+			{/if}
+			{if:$this->data['pay_status']==3}
+			<tr>
+				<th>寄回时间：</th>
+				<td>
+					<ul id='limit-2' class="countdown">
+						<li>请在 </li>
+						<li class="time-num"><b id='cd_day_2'></b></li>
+						<li class="split">天</li>
+						<li class="time-num"><b id='cd_hour_2'></b></li>
+						<li class="split">:</li>
+						<li class="time-num"><b id='cd_minute_2'></b></li>
+						<li class="split">: </li>
+						<li class="time-num"><b id='cd_second_2'></b></li>
+						<li>之内上传退货单据 </li>
+						<input name='endTime' type='hidden' value='{$this->endTime}' />
+					</ul>
+				</td>
+			</tr>
+			<tr>
+				<th>寄回地址：</th>{set:$add=$this->data['delivery_add']}
+				{query:name=merch_ship_info where=id eq $add fields=area,postcode,address,telphone limit=1 }
+				{set:$area=area::allName($item['area']);}
+				<td>{$area['province']}&nbsp;{$area['city']}&nbsp;{$area['area']}
+					&nbsp;{$item['address']}&nbsp;邮编：{$item['postcode']}&nbsp;电话：{$item['telphone']}
+				</td>
+				{/query}
+			</tr>
+				
+			{/if}
+				
+			
+			
+			<tr>
+				<th></th>
+				<td>
+					<label class="btn"><input type="button" value="返 回" onclick='event_link("{url:/ucenter/refunds}")'></label>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+	{if:$this->data['pay_status']==3}
+	<div class="orange_box">
+		<form action="{url:/ucenter/refunds_delivery}" method="post" enctype='multipart/form-data'>
+			<input type='hidden' name='id' value="{$_GET['id']}"/>
+		    <table class="form_table" width="100%" cellpadding="0" cellspacing="0">
+		        <col width="120px" />
+		        <col />
+		        <tr>
+		            <th>快递公司：</th><td><input name="delivery_com" type="text" pattern='required' alt='快递公司不能为空' class="normal" /><label >*</label></td>
+		        </tr>
+		        <tr>
+		            <th>快递单号：</th><td><input name='delivery_code' pattern='required' alt='单号不能为空' class="normal"/><label>*</label></td>
+		        </tr>
+				<tr>
+		            <th>上传图片：</th><td><input type='file' name='delivery_img' /></td>
+		        </tr>
+		        <tr>
+		            <th></th><td><label class="btn"><input type="submit" class='btn_gray btn_small' value="提交" /></label></td>
+		        </tr>
+		    </table>
+		</form>
+    </div>
+	{/if}
+</div>

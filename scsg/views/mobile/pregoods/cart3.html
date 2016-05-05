@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0, maximum-scale=1.0">
+	<title>订单已提交</title>
+	<link rel="stylesheet" type="text/css" href="{skin:css/ddytj.css/ddytj.css}">
+	</head>
+	
+	<body>
+	<div class="jiben">
+	<div class="zhijia">
+	<div class="ddtou">
+	<h4> <a href="javascript:history.go(-1);" title="返回">＜山城速购</a><b>订单信息</b></h4>
+	</div></div>
+	<div class="xinxi">
+		{if:$this->user['user_id']}
+			{set:$tmpId=$this->order_id;}
+		{/if}
+	<ul>
+	<!-- <li class="huise"><span>基本信息</span> </li> -->
+	<li style="margin:12px;0px;"><span>订单编号</span><a href="#">{$this->order_num}</a> </li>
+	<li style="margin:12px;0px;"><span>下单时间</span><a href="#">{$create_time}</a></li>
+	<li style="margin:12px;0px;"><span>订单金额</span><a href="#"><i>￥{$this->final_sum}</i></a> </li>
+	<li style="margin:12px;0px;"><span>预付金额</span><a href="#"><i>￥{$this->pre_sum}</i></a> </li>
+	<li style="margin:12px;0px;"><span>配送方式</span><a href="#">{$this->delivery}</a></li>
+	<li style="margin:12px;0px;"><span>支付方式</span><a href="#">{$this->payment}</a></li>
+	<li style="margin:12px;0px;"><span>收货人名：</span><a href="#">{$accept_name}</a></li>
+	<li style="margin:12px;0px;"><span>联系方式：</span><a href="#">{$mobile}</a></li>
+	{if:$this->tax_title!=''}
+	<li style="margin:12px;0px;"><span>发票抬头：</span><a href="#">{$this->tax_title}</a></li>
+	{/if}
+	{if:$this->deliveryType != 1 && $this->paymentType == 1}
+	<form action='{url:/block/doPayPresell/order_id/$this->order_id}' method='post' >
+		<li class="annu one"><input type='submit' class="secsed" href="javascript:void(0);" style="width:96%;height:35px;" value='立即支付' ></li>
+	</form>
+	{/if}
+	</ul>
+	
+	</div>
+	
+	
+	</div>   
+	
+	</body>
+</html>

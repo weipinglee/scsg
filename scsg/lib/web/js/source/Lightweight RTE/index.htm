@@ -1,0 +1,27 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>A light weight RTE jQuery Plugin</title>
+<link type="text/css" rel="stylesheet" href="rte.css">
+<style type="text/css">
+	body,textarea{font-family:sans-serif;font-size:12px}body{margin:20px;padding-bottom:40px}
+</style>
+</head>
+<body>
+<div id="main">
+<form>
+	<p>
+  	<textarea name="Content" id="Content" class="rte-zone">rte1</textarea>
+	</p>
+	
+	<p>
+  	<textarea name="Content1" id="Content1" class="rte-zone">rte2</textarea>
+	</p>
+	<input type="submit" name="submit"/>
+</form>    
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="jquery.rte.js"></script>
+<script type="text/javascript">$('.rte-zone').rte('rte.css','img/');</script>
+</div>
+</body>
+</html>

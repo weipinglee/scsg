@@ -1,0 +1,249 @@
+select, input, option, textarea { font-size: 100%; -webkit-box-sizing: border-box; box-sizing: border-box; }
+select, textarea, input[type="email"], input[type="text"], input[type="tel"], input[type="number"], input[type="search"], input[type="submit"], input[type="button"], input[type="reset"] { -webkit-appearance: ; -webkit-box-shadow: none; box-shadow: none; -webkit-border-image: none; border-image: none; -webkit-border-radius: 0; border-radius: 0; }
+.pages{
+	
+}
+
+/*�ջ��˵�ַ*/
+.pages .qrdd{
+	background: #fff;
+}
+.pages .qrdd .dz{
+	display: block;
+	padding: 10px 15px 10px 10px;
+}
+.pages .qrdd .dz:before{
+	content: ' ';
+	position: absolute;
+	border: #999 solid;
+	border-width: 2px 0 0 2px;
+	width: 13px;
+	height: 13px;
+	-webkit-transform: rotate(-225deg);
+	-moz-transform: rotate(-225deg);
+	right: 5px;
+	margin-top: 13px;
+}
+
+.pages .qrdd .float_rt{
+	float:right;
+	padding-right: 5px;
+}
+/*�ջ��˵�ַ����*/
+/* ��Ʒ���� */
+.pages .qrdds{
+	margin-top:15px; 
+	
+}
+.pages .qrdds .qr_xq{
+	padding: 7px 0 15px 0;
+	/*border-bottom: 1px solid #c0c0c0;
+ 	display: inline-block; 
+	height:105px;*/
+}
+.pages .qrdds .tjxq_tit{
+	font-size:13px;
+	padding-right: 5px;
+	position: relative;
+	top: 5px;
+}
+.pages .qrdds .tjxq_tit .tjxq_ge{
+	color:#c0c0c0;
+	font-size: 12px;
+}
+.pages .qrdds .qr_xq .tjxq_img{
+	float:left;
+	position: relative;
+	top: 6px;
+	padding: 0 10px;
+}
+.pages .qrdds .qr_xq .tjxq_img img{
+	widht:80px;
+	height:80px;
+}
+
+.pages .qrdds .qr_xq  .tjxq_sum{
+	/* float: right; */
+	position: relative;
+	top: 10px;
+	font-size: 12px;
+	/* left: -10px; */
+}
+
+/* ֧����ʽ */
+.pages .qrdds .qrdds_zf{
+	
+	border-top:1px solid #c0c0c0;
+	border-bottom:1px solid #c0c0c0;
+	padding-left:10px;
+	position:relative;
+	top:0px;
+	
+}
+.pages .qrdds .qrdds_zf h4{
+	 line-height: 30px;
+    height: 30px;
+    margin-right: 5px;
+    display: inline-block;
+    width: 75px;
+    text-align: right;
+}
+.pages .qrdds .qrdds_zf h4 i{
+	color: red;
+    font-size: 16px;
+    padding-right: 5px;
+}
+.pages .qrdds .qrdds_zf select{
+	width:65%;
+	height:30px;
+	margin: 10px 0px;
+	padding: 0 5px;
+	color: #A9A4A4;
+}
+.xt{
+	border:1px solid #c0c0c0;
+	width:97%;
+	height:30px;
+	margin: 10px 0px;
+	padding: 0 5px;
+}
+.pages .qrdds .qrdds_sum{
+	line-height: 35px;
+	text-align: right;
+	padding-right: 20px;
+	
+}
+.pages .qrdds .qrdds_sum b{
+	color:red;
+}
+.pages .qrdds .yhj{
+	height:40px;
+	line-height:40px;
+	padding-left:10px;
+}
+.pages .qrdds .yhj b{
+	color:red;
+}
+.pages .qrdds .yhj_check{
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	border: 1px solid #c0c0c0;
+	float: right;
+	position: relative;
+	top: 10px;
+	right: 10px;
+}
+.pages .qrdds .show_check{
+	background: url(../images/check.jpg) center no-repeat;
+}
+.anniu{
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+}
+.anniu .an{
+	float:left;
+	line-height: 50px;
+	height:50px;
+}
+.anniu .fk{
+	background: #000;
+	color: #fff;
+	width: 55%;
+	padding-left: 10px;
+	
+}
+.anniu .but{
+	background: red;
+	color: #fff;
+	width: 45%;
+	text-align: center;
+	font-size: 18px;
+}
+
+
+/*.anniu .but{
+	border: 0;
+	background: red;
+	color: #fff;
+	position: fixed;
+	bottom: 0px;
+	width: 70%;
+	height: 50px;
+	font-size:20px;
+}
+订单页面中代金劵按钮*/
+.anniu  input{
+	width: 90%;
+	padding: 5px;
+	margin: 5px 0;
+	background: #FC9002;
+	color: #fff;
+}
+
+/*��Ʊ*/
+
+.qrdd .fapiao{
+	padding-left: 10px;
+	border-top: 1px solid #c0c0c0;
+	padding-top: 10px;
+}
+.qrdd .fapiao .fa_tit{
+	height:30px;
+	line-height: 30px;
+}
+.qrdds_sum .total{
+	font-size:16px;
+	font-weight:bold;
+}
+/*订单详情*/
+.sj{
+	padding: 0 0px 5px 5px;
+	border-bottom: 1px solid  #E4E2E2;
+}
+.sj a{
+    display: block;
+    padding: 5px 0 0 30px;
+}
+.sj a:after{
+    content: ' ';
+    position: absolute;
+    border: #BEBBBB solid;
+    border-width: 2px 0 0 2px;
+    width: 10px;
+    height: 10px;
+    -webkit-transform: rotate(-225deg);
+    -moz-transform: rotate(-225deg);
+    margin-top: 4px;
+}
+.pages .dxq p{
+    height: 25px;
+    line-height: 25px;
+    padding-left: 20px;
+    color: #848282;
+    font-size: 13px;
+}
+.pages .dxq p i{
+	padding-left: 10px;
+ }
+.pages .dxzt{
+    height: 40px;
+    line-height: 40px;
+    background: #fff;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    text-align: right;
+                      
+}
+.pages .dxzt a{
+    border: 1px solid #c0c0c0;
+    padding: 0px 5px;
+     margin-right: 10px;
+}
+.pages .qrfp{
+	padding: 2px 10px;
+	border-bottom: 1px solid #F4F1F1;
+}
+/*订单详情结束*/
