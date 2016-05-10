@@ -4,7 +4,7 @@
 首页数据
 author:wangzhande
  */
-class mobieGoods extends IController {
+class mobileGoods extends IController {
 
 	//获取分类列表
 	public function getAllCat() {
