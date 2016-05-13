@@ -3,10 +3,11 @@ function getMobileCode(phone){
 	if(!phone)return false;
 	var btn = $('input[name=getMessCode]');
 	var toUrl = getCodeUrl;
+	var check_code = $('input[name=checkCode]').val();
 	btnCount(btn);
-	$.post(toUrl,{phone:phone},function(data){
+	$.post(toUrl,{phone:phone,check_code:check_code},function(data){//alert(JSON.stringify(data));
 		if(data.errorCode!=0){
-			alt(data.mess);
+			alert(data.mess);
 		}
 	},'json');
 	
@@ -48,7 +49,7 @@ function checkMobileNew(){
 			if(data.errorCode==0){
 			location.href=data.next;
 		}else{
-			alt(data.mess);
+			alert(data.mess);
 		}
 		},'json');
 }

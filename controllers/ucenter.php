@@ -1605,7 +1605,7 @@ class Ucenter extends IController
 					'phone'=>$phone,
 					'time'=>time(),
 					'user_phone'=>$this->user['phone'],
-					'user_id'=>$this->user['id'],
+					'user_id'=>$this->user['user_id'],
 					'user_username'=>$this->user['username']
 				);
 				ISafe::set('mobileValidate',array($sess_arr));
@@ -1619,10 +1619,14 @@ class Ucenter extends IController
 
 			echo JSON::encode($res);
 		}
+		
 
     }
     
-    
+    public function aa(){
+		
+		print_r($_SESSION);
+	}
     //初次校验验证码
     public function checkMobile(){
     	$res = array('errorCode'=>0);
@@ -1635,21 +1639,25 @@ class Ucenter extends IController
     		$res['errorCode']=1;
     		$res['mess']='验证码不能为空';
     	}
-    	else if($codeData = ISafe::get('mobileValidate')){
+    	else if($codeData = ISafe::get('mobileValidate')){ $codeData = $codeData[0];
     		if(time() - $codeData['time']>=1800){
     			$res['errorCode']=2;//验证码过期
     			$res['mess']='验证码已过期，请重新获取';
-    		}else if($codeData['phone']!=$this->user['phone']){//非法操作
+    		}else if($codeData['user_phone']!=$this->user['phone']){//非法操作
+			
     			$res['errorCode']=3;
     			$res['mess']='操作非法';
     		}else if($codeData['code'] !=$code){//验证码错误
+			
     			$res['errorCode'] = 4;
     			$res['mess']='验证码错误';
     		}else{//验证正确
+			
     			ISafe::clear('mobileValidate');
     			ISafe::set('mobileValidRes',array('phone'=>$this->user['phone'],'time'=>time()));//session记录验证结果，和时间
     			$res['next']=$nextUrl ? $nextUrl : IUrl::getHost().IUrl::creatUrl("/ucenter/toChgPhone2");
     		}
+			
     	}else{
     		$res['errorCode']=5;//没有验证码
     		$res['mess']='请获取验证码';
@@ -1714,6 +1722,7 @@ class Ucenter extends IController
     		$res['mess']='请填写验证码';
     	}else{
     		$validData = ISafe::get('mobileValidate');
+			$validData = $validData[0];
     		$checkRes = ISafe::get('mobileValidRes');
     		if($checkRes && $this->user['phone']==$checkRes['phone'] &&time()- $checkRes['time']<1800 ){
     			if($validData['phone']==$newPhone && $validData['code']==$code && time()- $validData['time']<1800){//验证通过
