@@ -1623,10 +1623,7 @@ class Ucenter extends IController
 
     }
     
-    public function aa(){
-		
-		print_r($_SESSION);
-	}
+  
     //初次校验验证码
     public function checkMobile(){
     	$res = array('errorCode'=>0);
