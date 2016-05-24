@@ -349,6 +349,7 @@ background-color: #fff;
     border: 2px solid #F15A24;
     font: 12px/1.5 tahoma, arial, 'Hiragino Sans GB', \5b8b\4f53, sans-serif;
     padding: 4px 5px;
+    color: #bcbcbc;
 }
 .search .s-box .s-main .btn-search {
 display: block;
