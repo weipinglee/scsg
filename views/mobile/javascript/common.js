@@ -514,7 +514,6 @@ $(function(){
 
     $(function(){
     $('#keyword').click(function(){
-		alert("dd");
 		$div1=$('.words-give');
 		$div2=$('#dataList');
 		if($div1.is(':hidden')){
