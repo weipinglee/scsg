@@ -1,4 +1,4 @@
-﻿SVN.committedRevision=1442192 */
+SVN.committedRevision=1442192 */
 ﻿body,p,form,input,button,dl,dt,dd,ul,ol,li,h1,h2,h3,h4{margin:0;padding:0;list-style:none;}
 
 body,button,input,select,textarea{font:12px Arial,Helvetica,sans-serif;color:#333;}
@@ -289,7 +289,7 @@ body{background:#FAFAFA;}
 
 .login_entry_css .login_entry .account_list_big li{float:left;padding:0 20px 10px 0;_display:inline;}
 
-.login_entry_css .login_entry .account_list_big a{display:block;width:32px;height:32px;background:url(images/login_icon_bg.png) no-repeat;}
+.login_entry_css .login_entry .account_list_big a{display:block;width:32px;height:32px;/*background:url(images/login_icon_bg.png) no-repeat;*/}
 
 .login_entry_css .login_entry .account_list_big a.qq{background-position:0 0;}
 

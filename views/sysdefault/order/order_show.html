@@ -47,7 +47,7 @@
 				{if:$item['is_send']==0 && ($item['refunds_status']==0 || $item['refunds_status']==5) }
 				{set:$show_deli = 1;}
 				{/if}
-				<tr>
+				<tr {if:$this->good_id == $item['goods_id']} style="color:red;" {/if}>
 					<td>
 						{set:$goodsRow = JSON::decode($item['goods_array'])}
 						{$goodsRow['name']} &nbsp;&nbsp; {$goodsRow['value']}

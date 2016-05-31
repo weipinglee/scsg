@@ -117,7 +117,8 @@ class Menu
 
 		'营销'=>array(
         	'促销活动' => array(
-        		'/market/pro_rule_list' => '促销活动列表'
+        		'/market/pro_rule_list' => '促销活动列表',
+				'/market/pro_argument'  => '营销参数'
         	),
         	'营销活动' => array(
         		'/presell/presell_list' => '预售',

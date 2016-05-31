@@ -221,7 +221,7 @@
 
 			<input class="submit_buy" type="button" id="buyNowButton" onclick="spec_show_obj.buy_now();" value="立即购买" />
 
-
+            {if:$type==0}
 			<div class="shop_cart" style="z-index:1">
 				<input class="submit_join" type="button" id="joinCarButton" onclick="spec_show_obj.joinCart();" value="加入购物车" />
 
@@ -237,6 +237,7 @@
 					</dl>
 				</div>
 			</div>
+            {/if}
 			{/if}
 		</div>
 		

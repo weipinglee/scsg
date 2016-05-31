@@ -64,7 +64,7 @@ class Ucenter_ajax extends IController
 			$where .= ' and (type!=4 and status=5 or type=4 and status=11)';
 		}
 		//$order_db->join = 'left join presell as p on p.'
-		$order_db->where = 'user_id='.$userid.' and if_del=0'.$where;
+		$order_db->where = 'user_id='.$userid.' and if_del=0 and o.type !=4'.$where;
 		$order_db->fields = '*';
 		$order_db->order ='id DESC';
 		$order_db->page = $page;

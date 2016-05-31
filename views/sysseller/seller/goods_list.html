@@ -31,7 +31,8 @@
 				<col />
 				<col width="150px" />
 				<col width="70px" />
-				<col width="70px" />
+                <col width="70px" />
+				<col width="100px" />
 				<col width="70px" />
 				<col width="70px" />
 				<col width="80px" />
@@ -43,7 +44,8 @@
 					<th class="header">商品名字</th>
 					<th class="header">分类</th>
 					<th class="header">销售价</th>
-					<th class="header">库存</th>
+                    <th class="header">库存</th>
+					<th class="header">商品类型</th>
 					<th class="header">状态</th>
 					<th class="header">排序</th>
 					<th class="header">操作</th>
@@ -64,7 +66,8 @@
 						{echo:join(',',$catName)}
 					</td>
 					<td>{$item['sell_price']}</td>
-					<td>{$item['store_nums']}</td>
+                    <td>{$item['store_nums']}</td>
+					<td>{if:$item['type']==1}虚拟商品{else:}普通商品{/if}</td>
 					<td class="{echo:$item['is_del']==0 ? "green":"red"}">{echo:goods_class::statusText($item['is_del'])}</td>
 					<td><input class="tiny" type="text" value="{$item['sort']}" onchange="changeSort({$item['id']},this);" /></td>
 					<td>

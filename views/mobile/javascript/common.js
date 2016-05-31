@@ -71,7 +71,7 @@ window.loadding = function(message){var message = message ? message : '正在执
 window.unloadding = function(){art.dialog({"id":"loadding"}).close();}
 window.tips = function(mess){art.dialog.tips(mess);}
 window.realAlert = window.alert;
-window.alert = function(mess){art.dialog.alert(mess);}
+
 window.realConfirm = window.confirm;
 window.confirm = function(mess,bnYes,bnNo)
 {

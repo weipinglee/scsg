@@ -144,6 +144,7 @@ function show_det2(_this){
 	
 }
 function show_comments_list(_this){
+	$('.anniu').remove();
 	$('.lin').removeClass('lin');
 	$(_this).parent('li').addClass('lin');
 	$('#det2').addClass('hidden');

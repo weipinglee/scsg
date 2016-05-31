@@ -1,7 +1,7 @@
+
 {set:$seo_data=array(); $site_config=new Config('site_config');$site_config=$site_config->getInfo();}
 {set:$seo_data['title']="用户注册_".$site_config['name']}
 {set:seo::set($seo_data);}
-
 <link type="text/css" rel="stylesheet" href="{skin:css/reg/layer.css}" id="skinlayercss"></head>
 <link href="{skin:css/reg/register-2.0.css}" rel="stylesheet" type="text/css">
 <script src="{skin:css/reg/register.js}" type="text/javascript"></script>
@@ -15,7 +15,7 @@
 	        	<input type="hidden" name="activities" value="0" id="activities">
 	        	<input type="hidden" id="lockEmail" name="lockEmail" value="0">
 	        	
-	        	<input id="emailValidateSig" type="hidden" value="">
+	        	<input id="emailValidateSig" type="hidden" value="tvxzlk6RYdjICwzP5QRWnhe4CaVJIbdpJ8XVHFjpuV5MChP3">
 	        	<input id="validateSig" type="hidden">
 	        	
 	        	<input type="hidden" name="returnUrl" value="" id="returnUrl">
@@ -41,6 +41,13 @@
                             <div class="tips_box regist_tips_error" id="phone_error"></div>
                             <div class="tips_box username_ok" id="phone_desc"></div>
                         </li>
+                        <li>
+                            <div class="form_item" style="height: 60px;">
+                                <label>验证码：</label>
+                                <input type="text" class="ipt gay_text" name="captcha" value="填写下面图片所示的字符" id="validCaptcha" onclick="if(this.value == '填写下面图片所示的字符')this.value='';">
+                                <img style="margin-top: 2px;" src='{url:/site/getCaptcha}' id='captchaImgPhone' /><span class="light_gray">看不清？<a id='chgPhoneCaptcha' href="javascript:void(0)" class="link" onclick="changeCaptcha('{url:/site/getCaptcha}', 'captchaImgPhone');">换一张</a></span>
+                            </div>
+                        </li>                       
                         <li class="clearfix recv_mobile_code">
                         	<div class="code_wrap">
 	                        	<div class="mb_code_box">
@@ -92,6 +99,7 @@
 								<div class="tips_box username_ok" id="password_mobile2_desc"></div>
                             </div>
                         </li>
+                       
                         <!--
                         <li class="service_agreement">
                             <a href="#" class="check_agreement">我已阅读并同意 《<a href="#" class="blue_link" target="_blank">山城速购服务协议</a>》</a>
@@ -170,6 +178,13 @@
 	                        <span class="verify_code_box" tabindex="-1"><img name="valid_code_pic" tabindex="-1" src="reg/getjpg.do"></span>
 	                        <i class="change_code" tabindex="-1">换一张</i>
 	                    </li>
+                        <li>
+                            <div class="form_item" style="height: 60px;">
+                                <label>验证码：</label>
+                                <input type="text" class="ipt gay_text validCaptcha" name="captcha" value="填写下面图片所示的字符" onclick="if(this.value == '填写下面图片所示的字符')this.value='';">
+                                <img style="margin-top: 2px;" src='{url:/site/getCaptcha}' id='captchaImgEmail' /><span class="light_gray">看不清？<a id='chgEmailCaptcha' href="javascript:void(0)" class="link" onclick="changeCaptcha('{url:/site/getCaptcha}', 'captchaImgEmail');">换一张</a></span>
+                            </div>
+                        </li> 
 	                    <!--手机验证码 begin -->
 	                    <li class="verify_code phone_code clearfix" style="display: list-item;">
 	                        <div class="form_item">
@@ -237,26 +252,23 @@
 </div>
 <!--注册成功end -->
 </script>
-<script type="text/javascript">
-var returnUrl = '{url:$callback}';
-var logPath = '{url:/simple/login}';
-var regPath = '{url:/simple/reg_act}';
-var checkPhoneIsOneUrl = '{url:/simple/checkPhoneIsOne}';
-var checkEmailIsOneUrl = '{url:/simple/checkEmailIsOne}';
-var getMobileCodeUrl = '{url:/simple/getMobileValidateNum}';
 
-var showValidCodeWhenRegistByMobile = 0; 
+<script type="text/javascript">
+	var returnUrl = '{url:$callback}';
+	var logPath = '{url:/simple/login}';
+	var regPath = '{url:/simple/reg_act}';
+	var checkPhoneIsOneUrl = '{url:/simple/checkPhoneIsOne}';
+	var checkEmailIsOneUrl = '{url:/simple/checkEmailIsOne}';
+	var getMobileCodeUrl = '{url:/simple/getMobileValidateNum}';
+
+	var showValidCodeWhenRegistByMobile = 0;
 	var registerValidateUserBehaviorSwitcher = 1;
 	var showValidCodeWhenRegistByEmail = 0; 	$(".email_register_form .img_code").hide();
 	$(".phone_code").show();
 	jsRegistFed.loadFunRegist();
 	$(document).ready(function(){
-		onload();
-		loadImageUrl("2","Passport_Register_Ad_Click");
 		bindEvent();
-		refresh_valid_code(window, email_captcha_callback);
 	});
 </script>
 <div class="tips">错误信息<br>文字文字</div>
-
 

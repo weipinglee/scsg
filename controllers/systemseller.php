@@ -16,6 +16,7 @@ class SystemSeller extends IController
 		$seller_name = IFilter::act(IReq::get('username'));
 		$password    = IReq::get('password');
 		$captcha = IFilter::act(IReq::get('captcha'));
+        $callbackUrl    = IReq::get('callbackUrl','post');
 		$message     = '';
 
 		if($seller_name == '')
@@ -46,8 +47,14 @@ class SystemSeller extends IController
 				ISafe::set('seller_id',$sellerRow['id']);
 				ISafe::set('seller_name',$sellerRow['seller_name']);
 				ISafe::set('seller_pwd',$sellerRow['password']);
-
-				$this->redirect('/seller/index');
+                if($callbackUrl)
+                {
+                    $this->redirect("$callbackUrl");
+                }
+                else
+                {
+                    $this->redirect('/seller/index');
+                }   
 			}
 			else
 			{

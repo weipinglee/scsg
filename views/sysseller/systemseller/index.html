@@ -30,6 +30,7 @@
                     <div class="col-md-12 column">
                         <h3 class="text-center w700" style="color:#333">商家管理中心</h3>
                         <form method="post" name="login" action="{url:/systemseller/login}" autoComplete="off" class="form-horizontal" role="form">
+                            <input type="hidden" name="callbackUrl" value="{$_GET['callback']}" />
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <input class="form-control" placeholder="用户名" name="username" type="text" />

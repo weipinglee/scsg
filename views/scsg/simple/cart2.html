@@ -52,6 +52,9 @@ jQuery(function(){
 
 	//配送方式初始化
 	orderFormInstance.deliveryInit("{$this->custom['delivery']}");
+    {if:$this->good_type}
+    orderFormInstance.paymentInit("{$this->custom['payment']}");
+    {/if}
 
 	
 
@@ -305,6 +308,7 @@ function selectTakeself(deliveryId)
 		<input type='hidden' name='direct_num' value='{$this->num}' />
 		<input type='hidden' name='direct_promo' value='{$this->promo}' />
 		<input type='hidden' name='direct_active_id' value='{$this->active_id}' />
+        <input type='hidden' name='good_type' value='{$this->good_type}' />
 		
 
 		<div class="cart_box m_10">
@@ -328,12 +332,14 @@ function selectTakeself(deliveryId)
 						<script type='text/html' id='addressShowTemplate'>
 							<tr><th>收货人信息：</th><td><%=province_val%> <%=city_val%>  (<%=accept_name%>收)</td></tr>
 							<tr><th></th><td><%=area_val%> <%=address%>  <%=mobile%>  <%=telphone%></td></tr>
+                            {if:!$this->good_type}
 							<tr><th>代收点：</th><td><input type='checkbox' name='takeself' class='hide checks' value='0'/> <span id="takeself"></span>
 								<a href="javascript:selectTakeself();"><span class="red">切换自提点</span></a>
 								</td>
 							</tr>
 							<tr class='hide' id='takeselfParam'><td><%=province%></td><td><%=city%></td><td><%=area%></td></tr>
-						</script>
+						    {/if}
+                        </script>
 					</table>
 					<!--地址展示 结束-->
 
@@ -399,6 +405,7 @@ function selectTakeself(deliveryId)
 				<!--地址管理 结束-->
 
 				<!--配送方式 开始-->
+                {if:!$this->good_type}
 				<div class="wrap_box" id='deliveryBox' style='display:none'>
 					<h3>
 						<span class="orange">配送方式</span>
@@ -459,10 +466,14 @@ function selectTakeself(deliveryId)
 
 					<label class="btn_orange3"><input type="button" id="delivery_save_button" onclick="orderFormInstance.deliverySave();" value="保存配送方式" /></label>
 				</div>
+                {else:}
+                <input type="hidden" name="delivery_id" value="0">
+                <input type="hidden" name="accept_time" value="任意">
+                {/if}
 				<!--配送方式 结束-->
 
 				<!--支付方式 开始-->
-				<div class="wrap_box" id='paymentBox' style='display:none'>
+				<div class="wrap_box" id='paymentBox' {if:!$this->good_type} style='display:none' {/if}>
 					<h3>
 						<span class="orange">支付方式</span>
 						<a class="normal f12" href="javascript:void(0)" id='paymentToggleButton' onclick="orderFormInstance.paymentModToggle();">[关闭]</a>
@@ -559,7 +570,9 @@ function selectTakeself(deliveryId)
 								<col width="80px" />
 							</colgroup>
 							<caption>商家：{$value['seller_name']}
+                                {if:!$this->good_type}
 								<span style='float:right'><span>配送费用：</span><span id='deliveryfee_{$value[0]["seller_id"]}_{$value["weight"]}_{$value["total_price"]}'></span></span>
+                                {/if}
 							</caption>
 							<input type='hidden' value='{$value[0]['seller_id']}' name='seller_id[]' />
 							
@@ -623,7 +636,7 @@ function selectTakeself(deliveryId)
 			<div class="cont_2">
 				<strong>结算信息</strong>
 				<div class="pink_box">
-					<p class="f14 t_l">{if:$this->final_sum != $this->sum}优惠后总金额{else:}商品总金额{/if}：<b>{$this->final_sum}</b> - 代金券：<b name='ticket_value'>0</b> + 税金：<b id='tax_fee'>0</b> + 运费总计：<b id='delivery_fee_show'>0</b> + 保价：<b id='protect_price_value'>0</b> + 支付手续费：<b id='payment_value'>0</b></p>
+					<p class="f14 t_l">{if:$this->final_sum != $this->sum}优惠后总金额{else:}商品总金额{/if}：<b>{$this->final_sum}</b> - 代金券：<b name='ticket_value'>0</b> + 税金：<b id='tax_fee'>0</b>{if:!$this->good_type} + 运费总计：<b id='delivery_fee_show'>0</b> + 保价：<b id='protect_price_value'>0</b>{/if} + 支付手续费：<b id='payment_value'>0</b></p>
 					{if:!isset($this->prop_not)}
 					<a href="javascript:void(0)" id="ticket_a" class="fold" hidefocus>
 						<b class="orange">使用代金券</b>

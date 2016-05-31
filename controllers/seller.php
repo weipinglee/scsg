@@ -16,6 +16,24 @@ class Seller extends IController
 	{
 		IInterceptor::reg('CheckRights@onCreateAction');
 	}
+    
+    //验证二维码
+    function checkCode(){
+        $order_id = IFilter::act(IReq::get('id'), 'int');
+        $good_id = IFilter::act(IReq::get('gId'), 'int');
+        $seller_id = IFilter::act(IReq::get('sId'), 'int');
+        $good = new IModel('goods');
+        $time = $good->getField('id='.$good_id, 'past_time');
+        if($time && $time <> '0000-00-00' && $time < date('Y-m-d'))
+        {
+            exit('该商品已过期');
+        }
+        if($seller_id <> $this->seller['seller_id'])
+        {
+            exit('当前登录商家无权限操作该订单');
+        }                                                        
+        $this->order_deliver($order_id, $good_id);
+    }
 	/**
 	 * @brief 商品添加中图片上传的方法
 	 */
@@ -79,7 +97,18 @@ class Seller extends IController
 		//初始化商品数据
 		unset($_POST['id']);
 		unset($_POST['callback']);
-
+        if($_POST['type'] == 0)
+        {
+            unset($_POST['past_time']);
+        }      
+        else
+        {
+            $_POST['past_time'] = $_POST['past_time'] ? $_POST['past_time'] : '0000-00-00';
+            if($_POST['is_del']==3 && $_POST['past_time'] <> '0000-00-00' && $_POST['past_time'] < date('Y-m-d'))
+            {
+                die('该商品已过期,不能申请上架');                  
+            }
+        }
 		$goodsObject = new goods_class($this->seller['seller_id']);
 		$goodsObject->update($id,$_POST);
 
@@ -276,17 +305,25 @@ class Seller extends IController
 	/**
 	 * @brief 发货订单页面
 	 */
-	public function order_deliver()
-	{
-		$order_id = IFilter::act(IReq::get('id'),'int');
+	public function order_deliver($order_id = '', $good_id = '')
+	{                                                 
+        $order_id = $order_id ? $order_id : IFilter::act(IReq::get('id'),'int');          
 		$data = array();
 		if($order_id)
 		{
-			$order_show = new Order_Class();
+            $order = new IModel('order');
+            $this->order_status = $order->getField('id='.$order_id, 'status');
+			$order_show = new Order_Class();     
 			$data = $order_show->getOrderShow($order_id);
+            if($good_id)
+            {
+                $goods = new IModel('goods');
+                $this->type = $goods->getField('id='.$good_id, 'type');
+            }
+            $this->good_id = $good_id;
 		}
 		$this->setRenderData($data);
-		$this->redirect('order_deliver');
+		$this->redirect('order_deliver',false);
 	}
 	/**
 	 * @brief 发货操作

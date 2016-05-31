@@ -214,6 +214,7 @@ function selectProtect(obj)
 			<input type='hidden' name='direct_num' value='{$this->num}' />
 			<input type='hidden' name='direct_promo' value='{$this->promo}' />
 			<input type='hidden' name='direct_active_id' value='{$this->active_id}' />
+            <input type='hidden' name='good_type' value='{$this->good_type}' />
 	     	<div class="qrdd">
 	     		<a class="dz" href="{url:simple/address}">
 	     			<input type='hidden' value='{$this->defaultAddressId}' name='address_id' pattern='int'/>
@@ -248,7 +249,7 @@ function selectProtect(obj)
 							{set:$type='product';$id=$item['product_id']}
 						{/if}
 						<input type='hidden' name='goods[]' value='{$type}-{$id}-{$item["count"]}' />
-		     		<a href="{url:/site/products/id/$item['goods_id']}">
+		     		<a href="{url:/site/products/id/$item['goods_id']}" style="display:block;">
 		     			<div class="tjxq_img" style="margin-top:-5px;">
 		     				<img src="{url:/pic/thumb/img/$item[img]/w/66/h/66}"/>
 		     			</div>
@@ -273,8 +274,11 @@ function selectProtect(obj)
 							<p style='color:red; text-align:right;padding-right:15px;'>
 								小计：<b >￥{$item['sum']}</b>
 							</p>
-							<p style="float: right;padding-right: 16px;">配送费用<span id='deliveryfee_{$value[0]["seller_id"]}_{$value["weight"]}_{$value["total_price"]}}'></span></p>
+							{if:!$this->good_type}
+                            <p style="float: right;padding-right: 16px;">配送费用<span id='deliveryfee_{$value[0]["seller_id"]}_{$value["weight"]}_{$value["total_price"]}}'></span></p>
+                            {/if}
 			     		</div>
+						<div style="clear:both;"></div>
 			     	</a>
 					</div>
 				{/if}
@@ -283,13 +287,15 @@ function selectProtect(obj)
      		<!-- 商品详情结束 -->
      		
      		<div class="qrdds_zf">
-     			<h4 style=" margin-right:10px;margin-top:12px;">代收点</h4>
+     			{if:!$this->good_type}
+                <h4 style=" margin-right:10px;margin-top:12px;">代收点</h4>
 
 
 				<select style="width:97%;height:33px;background-color: #F30; color:#fff;">
 
      				<option>请选择代收点（可空）</option>
      			</select>
+                {/if}
      			<h4 style=" margin-right:10px; margin-top:2px;">支付方式</h4>
      			
      			<select style="width:97%;height:33px;background-color: #F30; color:#fff;" name="payment" onchange='orderFormInstance.paymentSave()' pattern='int'>
@@ -302,16 +308,19 @@ function selectProtect(obj)
 						{/if}
 					{/foreach}
      			</select>
-				
-     			<p style=" margin-right:10px; margin-top:7px;margin-bottom:6px;">配送方式</p>
-     			<select style="width:97%;height:33px; background-color: #F30; color:#fff; " name='delivery_id' onchange='orderFormInstance.deliverySave()' pattern='int'>
+				{if:!$this->good_type}
+                 <p style=" margin-right:10px; margin-top:7px;margin-bottom:6px;">配送方式</p>
+                 <select style="width:97%;height:33px; background-color: #F30; color:#fff; " name='delivery_id' onchange='orderFormInstance.deliverySave()' pattern='int'>
 
-     				<option value='-1'>请选配送方式</option>
-					{set:$deliveryData = $this->allDeliveryType}
-					{foreach:items = $deliveryData}
-     				<option value="{$item['id']}" >{$item['name']}</option>
-					{/foreach}
-     			</select>
+                     <option value='-1'>请选配送方式</option>
+                    {set:$deliveryData = $this->allDeliveryType}
+                    {foreach:items = $deliveryData}
+                     <option value="{$item['id']}" >{$item['name']}</option>
+                    {/foreach}
+                 </select>
+                {else:}
+                <input type="hidden" name="delivery_id" value="0">
+                {/if}
      			<input style="width:97%;height:33px;" class="xt" type="text" name='message' placeholder="买家留言"/>
      			
      		</div>
@@ -363,8 +372,10 @@ function selectProtect(obj)
      			<p>{if:$this->final_sum != $this->sum}优惠后总金额{else:}商品总金额{/if}<b>￥{$this->final_sum}</b></p>
 				<p> - 代金券：<b name='ticket_value'>0</b></p>
 				<p> + 税金：<b id='tax_fee'>0</b></p>
+                {if:!$this->good_type}
 				<p> + 运费总计：<b id='delivery_fee_show'>0</b></p>
 				<p> + 保价：<b id='protect_price_value'>0</b></p>
+                {/if}
 				<p> + 支付手续费：<b  id='payment_value'>0</b></p>
 				<p class='total'> 应付金额：<b  id='final_sum'>{$this->final_sum}</b></p>
      		</div>

@@ -294,7 +294,18 @@ class ProRule
 		}
 		return $sum;
 	}
-
+	//赠送礼物
+	public function giftSend($giftArray,$user_id){
+		$array = array();
+		if(isset($giftArray['point']))
+			$array[] = array('award_type'=>'3','award_value'=>$giftArray['point']);
+		if(isset($giftArray['ticket']))
+			$array[] = array('award_type'=>'4','award_value'=>$giftArray['ticket']);
+		if(isset($giftArray['exp']))
+			$array[] = array('award_type'=>'7','award_value'=>$giftArray['exp']);
+		
+		$this->giftAction($array,$user_id);
+	}
 	/**
 	 * @brief 赠品促销规则奖励操作
 	 * @param array 赠品促销规则奖励信息

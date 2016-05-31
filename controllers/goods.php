@@ -223,8 +223,7 @@ class Goods extends IController
 		if($goods_id && !$data)
 		{
 			die("没有找到相关商品！");
-		}
-
+		}               
 		$this->setRenderData($data);
 		$this->redirect('goods_edit');
 	}
@@ -269,7 +268,19 @@ class Goods extends IController
 
 		//初始化商品数据
 		unset($_POST['id']);
-		unset($_POST['callback']); 
+		unset($_POST['callback']);
+        if($_POST['type'] == 0)
+        {
+            unset($_POST['past_time']);
+        }
+        else
+        {
+            $_POST['past_time'] = $_POST['past_time'] ? $_POST['past_time'] : '0000-00-00';
+            if($_POST['is_del']==0 && $_POST['past_time'] <> '0000-00-00' && $_POST['past_time'] < date('Y-m-d'))
+            {
+                die('该商品已过期');                  
+            }
+        }
 		$goodsObject = new goods_class();
 		$goodsObject->update($id,$_POST);
 

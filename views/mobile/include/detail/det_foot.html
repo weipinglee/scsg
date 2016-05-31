@@ -38,10 +38,10 @@
               	</a>
             </div>
 			
-			{if:isset($show_cart)&&$show_cart==1}
+			{if:isset($show_cart)&&$show_cart==1&&$type==0}        
             <div class="s-btn s-an s-colo" data="hot">
 				<a class="jrgwc" name='toCart' onClick="toshop(joinCart)">加入购物车</a>
-			</div>
+			</div>   
 			<div class="s-btn s-an s-colos" data="default">
 				<a class="ljgm" name='buyNow' onClick="toshop(buy_now)"">立即购买</a>
             </div>

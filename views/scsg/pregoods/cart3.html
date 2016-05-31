@@ -42,7 +42,7 @@ jQuery(function(){
 						<tr><th>订单金额：</th><td class="f18 bold red2">￥<b>{$this->final_sum}</b></td></tr>
 						<tr><th>预付金额：</th><td class="f18 bold red2">￥<b>{$this->pre_sum}</b></td></tr>
 						<tr><th>支付方式：</th><td class="f18 bold red2">{$this->payment}</td></tr>
-						<tr><th>配送方式：</th><td class="f18 bold red2">{$this->delivery}</td></tr>
+						{if:$this->delivery}<tr><th>配送方式：</th><td class="f18 bold red2">{$this->delivery}</td></tr>{/if}
 					</tbody>
 				</table>
 

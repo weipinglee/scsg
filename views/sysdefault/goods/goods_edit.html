@@ -50,6 +50,17 @@
 							<a href='{url:/member/seller_edit}' class='orange'>请点击添加商户</a>
 						</td>
 					</tr>
+                    <tr>
+                        <th>商品类型：</th>
+                        <td>
+                            <label class='attr'><input type="radio" name="type" value="0" checked> 普通商品</label>
+                            <label class='attr'><input type="radio" name="type" value="1"> 虚拟商品</label>
+                        </td>
+                    </tr>
+                    <tr class="js_show_time" style="display: none;">
+                        <th>过期时间：</th>
+                        <td><input type='text' name='past_time' class='Wdate' value="{$past_time}" onblur="FireEvent(this,'onchange');" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" alt='请选择一个日期' /></td>
+                    </tr>
 					<tr>
 						<th>所属分类：</th>
 						<td>
@@ -57,8 +68,8 @@
 
 							<!--分类数据显示-->
 							<script id="categoryButtonTemplate" type="text/html">
-							<button class="btn" type="button" onclick="return confirm('确定删除此分类？') ? $(this).remove() : '';">
-								<input type="hidden" value="<%=templateData['id']%>" name="_goods_category[]" />
+                            <input type="hidden" value="<%=templateData['id']%>" name="_goods_category[]" />
+							<button class="btn" type="button" onclick="return confirm('确定删除此分类？') ? $(this).remove() : '';">     
 								<span class="del"><%=templateData['name']%></span>
 							</button>
 							</script>
@@ -387,6 +398,17 @@
 </div>
 
 <script language="javascript">
+function showTime(t)
+{
+    if(t==1)
+    {
+        $('.js_show_time').show();
+    }
+    else
+    {
+        $('.js_show_time').hide();
+    }
+}
 //创建表单实例
 var formObj = new Form('goodsForm');
 
@@ -396,10 +418,17 @@ var defaultProductNo = '{echo:goods_class::createGoodsNo()}';
 $(function()
 {
 	initProductTable();
-
+    $('input[name=type]').each(function(){
+        $(this).click(function(){
+            var _v = $(this).val();
+            showTime(_v);
+        })
+    })
 	//存在商品信息
 	{if:isset($form)}
 	var goods = {echo:JSON::encode($form)};
+    //商品类型选择
+    showTime(goods.type);
 	//window.realAlert(JSON.stringify(goods));
 	var goodsRowHtml = template.render('goodsRowTemplate',{'templateData':[goods]});
 	$('#goodsBaseBody').html(goodsRowHtml);

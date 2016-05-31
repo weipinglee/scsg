@@ -16,12 +16,13 @@
 			<div class="logo">
 				<a href="{url:}"><img src="{skin:images/admin/logo.png}" width="303" height="58" /></a>
 			</div>
-		</div>
+		</div>               
 		<div id="wrapper" class="clearfix">
 			<div class="login_box">
 				<div class="login_title">后台管理登录</div>
 				<div class="login_cont">
 					<form action='{url:/systemadmin/login_act}' method='post'>
+                        <input type="hidden" name="callbackUrl" value="{$_GET['callback']}" />
 						<table class="form_table">
 							<col width="90px" />
 							<col />

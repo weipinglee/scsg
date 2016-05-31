@@ -123,12 +123,12 @@ class Pregoods extends IController
 		$goods_info['attribute'] = $tb_attribute_goods->find();
 	
 		
-	
+
 		//购买记录
 		$tb_shop = new IQuery('order_goods as og');
 		$tb_shop->join = 'left join order as o on o.id=og.order_id';
 		$tb_shop->fields = 'count(*) as totalNum';
-		$tb_shop->where = 'og.goods_id='.$goods_id.' and o.status = 5';
+		$tb_shop->where = 'og.goods_id='.$goods_id.' and (o.type <> 4 and o.status = 5 OR (o.type = 4 and o.status in (3,4,7,9,11)))';
 		$shop_info = $tb_shop->find();
 		$goods_info['buy_num'] = 0;
 		if($shop_info)
@@ -249,12 +249,26 @@ class Pregoods extends IController
 	
 		//计算商品
 		$countSumObj = new CountSum($user_id);
-	
+	    $this->good_type = 0;
 		if($id && $type)//立即购买
 		{
 			
 			$result = $countSumObj->presell_count($id,$type,$buy_num,$active_id);
-			
+			$goods = new IModel('goods');
+            if($type == 'goods')
+            {
+                $good_type = $goods->getField('id='.$id, 'type');
+            }
+            else
+            {
+                $product = new IModel('products');
+                $gId = $product->getField('id='.$id, 'goods_id');
+                if($gId)
+                {
+                    $good_type = $goods->getField('id='.$gId, 'type');
+                }
+            }
+            $this->good_type = isset($good_type) ? $good_type : 0;
 				
 			$this->gid       = $id;
 			$this->type      = $type;
@@ -383,6 +397,7 @@ class Pregoods extends IController
 		$telphone      = IFilter::act(IReq::get('telphone'));
 		$zip           = IFilter::act(IReq::get('zip'));
 		$delivery_id   = IFilter::act(IReq::get('delivery_id'),'int');
+        $good_type     = IFilter::act(IReq::get('good_type'),'int');
 		$accept_time   = IFilter::act(IReq::get('accept_time'));
 		$payment       = IFilter::act(IReq::get('payment'),'int');
 		$order_message = IFilter::act(IReq::get('message'));
@@ -419,7 +434,7 @@ class Pregoods extends IController
 			IError::show(403,'请填写收货地址的省市地区');
 		}
 	
-		if($delivery_id == 0)
+		if($delivery_id == 0 && $good_type == 0)
 		{
 			IError::show(403,'请选择配送方式');
 		}
@@ -649,8 +664,11 @@ class Pregoods extends IController
 		$this->final_sum   = $dataArray['order_amount'];
 		$this->payment     = $paymentName;
 		$this->paymentType = $paymentType;
-		$this->delivery    = $deliveryRow['name'];
-		$this->deliveryType= $deliveryRow['type'];
+        if($good_type == 0)
+        {
+            $this->delivery    = $deliveryRow['name'];
+            $this->deliveryType= $deliveryRow['type'];
+        }
 		$this->pre_sum     = $goodsResult['pre_sum'];
 	
 		//订单金额为0时，订单自动完成

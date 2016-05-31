@@ -967,7 +967,7 @@ class Site extends IController
 		$orderGoodsDB = new IQuery('order_goods as og');
 		$orderGoodsDB->join   = 'left join order as o on og.order_id = o.id left join user as u on o.user_id = u.id';
 		$orderGoodsDB->fields = 'o.user_id,og.goods_price,og.goods_nums,o.create_time as completion_time,u.username,u.email,u.phone';
-		$orderGoodsDB->where  = 'og.goods_id = '.$goods_id.' and o.status = 5';
+		$orderGoodsDB->where  = 'og.goods_id = '.$goods_id.' and (o.type != 4 and o.status = 5 OR o.type=4 and o.status in (3,4,7,9,10))';
 		$orderGoodsDB->order  = 'o.create_time desc';
 		$orderGoodsDB->page   = $page;
 
@@ -1185,8 +1185,5 @@ class Site extends IController
 	}
 
 
-	function ce(){
-
-	}
 	
 }

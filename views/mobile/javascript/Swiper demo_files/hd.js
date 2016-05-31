@@ -23,6 +23,7 @@ $(document).ready(function(){
 			//loop : true,
 			//slidesPerView : 'auto',
 			//loopedSlides :6,
+			autoHeight: true ,
 	    });
 	    swiperPanel.on('slideChangeEnd', function(evt){
 	    	swiperHead.slideTo(swiperPanel.activeIndex-1);

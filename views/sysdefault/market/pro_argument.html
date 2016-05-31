@@ -1,0 +1,83 @@
+{set:$siteConfigObj = new Config("site_config");$site_config = $siteConfigObj->getInfo();}
+{set:$this->confRow = $site_config;}
+
+<div class="headbar">
+	<div class="position"><span>营销</span><span>></span><span>促销活动管理</span><span>></span><span>促销参数设置</span></div>
+
+</div>
+<div class="content_box">
+
+	<div class="content form_content">
+		<form action="{url:/market/pro_arg_edit}"  method="post" name='base_conf'>
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				
+				<tr>
+					<th>注册赠送积分：</th>
+					<td><input type='text' class='normal' pattern='required' name='reg_point' empty alt='注册赠送积分' value='0' /></td>
+				</tr>
+				<tr>
+					<th>注册赠送代金券：</th>
+					<td>
+						<select name='reg_ticket' class='normal'>
+							<option value='0' >请选择</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>商业银行首笔订单</br>
+					赠送代金券：
+					
+					</th>
+					<td>
+						<select name='ticket_combank' class='normal'>
+							<option value='0' >请选择</option>
+						</select>
+					</td>
+				</tr>
+	
+				<tr>
+					<th></th>
+					<td>
+						<button class="submit" type='submit'><span>保存设置</span></button>
+					</td>
+				</tr>
+			</table>
+		</form>
+<script type='text/javascript' >
+	$.ajax({
+		type:'post',
+		async:false,
+		data:{},
+		dataType:'json',
+		url:'{url:/market/getTicketList}',
+		success:function(content){
+			for(pro in content)
+			{
+				var expire = content[pro]['expire'] ? '(已过期)' : '';
+				$('select[name="reg_ticket"]').append('<option value="'+content[pro]['id']+'">'+content[pro]['name']+'   面值:'+content[pro]['value']+'元'+expire+'</option>');
+				$('select[name="ticket_combank"]').append('<option value="'+content[pro]['id']+'">'+content[pro]['name']+'   面值:'+content[pro]['value']+'元'+expire+'</option>');
+				
+			}
+			
+		},
+	})
+</script>
+		
+<script type='text/javascript'>
+//DOM加载完毕
+$(function(){
+
+
+//全部表单自动填入值
+	var formNameArray = ['base_conf'];
+	for(var index in formNameArray)
+	{
+		var formObject = new Form(formNameArray[index]);
+		formObject.init({echo:JSON::encode($this->confRow)});
+	}
+
+});
+
+</script>

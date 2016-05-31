@@ -82,11 +82,14 @@ class DBBackup
 
 	//下载文件
 	function download($file)
-	{
-		header('Content-Description: File Transfer');
-		header('Content-Length: '.filesize($this->dir.'/'.$file));
-		header('Content-Disposition: attachment; filename='.basename($file));
-		readfile($this->dir.'/'.$file);
+	{  
+        ob_end_clean();   
+        header('Content-Description: File Transfer');
+        header('Content-Length: '.filesize($this->dir.'/'.$file));
+        header('Content-Disposition: attachment; filename='.basename($file));
+        readfile($this->dir.'/'.$file);    
+        flush();
+        ob_flush();
 		return $this->dir.'/'.$file;
 	}
 
@@ -190,17 +193,18 @@ class DBBackup
 	function packDownload()
 	{
 		if(class_exists('ZipArchive'))
-		{
+		{            
 			$fileName = $this->fPrefix.'_'.date('Ymd_His').'.zip';
 			$zip = new ZipArchive();
-			$zip->open($this->dir.'/'.$fileName,ZIPARCHIVE::CREATE);
+			if($zip->open($this->dir.'/'.$fileName,ZIPARCHIVE::CREATE) !== TRUE){
+                return "无法打开文件，或者文件创建失败";
+            }
 			foreach($this->ctrlRes as $file)
 			{
 				$attachfile = $this->dir.'/'.$file;
 				$zip->addFile($attachfile,basename($attachfile));
 			}
-			$zip->close();
-
+			$zip->close();  
 			return $fileName;
 		}
 		else

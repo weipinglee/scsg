@@ -196,7 +196,18 @@ class CheckRights extends IInterceptorBase
 			$object->seller = self::getSeller();
 			if(!$object->seller)
 			{
-				$object->redirect('/systemseller/index');
+                $url = '/'.$controllerId.'/'.$actionId;
+                $temp = $_GET;
+                foreach($temp as $k => $v)
+                {
+                    if($k == 'controller' || $k == 'action')
+                    {
+                        continue;
+                    }
+                    $url .= '/'.$k.'/'.$v;
+                }
+                $object->callbackUrl = $url;
+                $object->redirect("/systemseller/index?callback={$url}");
 			}
 		}
 	}
@@ -234,7 +245,18 @@ class CheckRights extends IInterceptorBase
 			$admin = self::getAdmin();
 			if(!$admin)
 			{
-				$object->redirect('/systemadmin/index');
+                $url = '/'.$controllerId.'/'.$actionId;
+                $temp = $_GET;
+                foreach($temp as $k => $v)
+                {
+                    if($k == 'controller' || $k == 'action')
+                    {
+                        continue;
+                    }
+                    $url .= '/'.$k.'/'.$v;
+                }
+                $object->callbackUrl = $url;
+				$object->redirect("/systemadmin/index?callback={$url}");
 			}
 
 			//获取管理员数据

@@ -1,20 +1,26 @@
-.swiper-slide,.swiper-wrapper {
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    width: 100%
-}
-
-.swiper-pagination,.swiper-wrapper {
-    -webkit-transform: translate3d(0,0,0)
-}
-
+/**
+ * Swiper 3.3.1
+ * Most modern mobile touch slider and framework with hardware accelerated transitions
+ * 
+ * http://www.idangero.us/swiper/
+ * 
+ * Copyright 2016, Vladimir Kharlampidi
+ * The iDangero.us
+ * http://www.idangero.us/
+ * 
+ * Licensed under MIT
+ * 
+ * Released on: February 7, 2016
+ */
 .swiper-container {
     margin: 0 auto;
     position: relative;
     overflow: hidden;
-    z-index: 1;
-	
+    z-index: 1
+}
+
+.swiper-container-no-flexbox .swiper-slide {
+    float: left
 }
 
 .swiper-container-vertical>.swiper-wrapper {
@@ -26,6 +32,9 @@
 }
 
 .swiper-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
     z-index: 1;
     display: -webkit-box;
     display: -moz-box;
@@ -37,25 +46,23 @@
     -o-transition-property: -o-transform;
     -ms-transition-property: -ms-transform;
     transition-property: transform;
-    -moz-transform: translate3d(0,0,0);
-    -o-transform: translate(0,0);
-    -ms-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box
 }
 
-.swiper-slide,.swiper-wrapper {
-    -ms-transform-style: preserve-3d;
-    -moz-transform-style: preserve-3d;
-    -webkit-transform-style: preserve-3d
+.swiper-container-android .swiper-slide,.swiper-wrapper {
+    -webkit-transform: translate3d(0,0,0);
+    -moz-transform: translate3d(0,0,0);
+    -o-transform: translate(0,0);
+    -ms-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0)
 }
 
 .swiper-container-multirow>.swiper-wrapper {
     -webkit-box-lines: multiple;
     -moz-box-lines: multiple;
-    -ms-fles-wrap: wrap;
+    -ms-flex-wrap: wrap;
     -webkit-flex-wrap: wrap;
     flex-wrap: wrap
 }
@@ -72,7 +79,35 @@
 .swiper-slide {
     -webkit-flex-shrink: 0;
     -ms-flex: 0 0 auto;
-    flex-shrink: 0
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    position: relative
+}
+
+.swiper-container-autoheight,.swiper-container-autoheight .swiper-slide {
+    height: auto
+}
+
+.swiper-container-autoheight .swiper-wrapper {
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+    -webkit-transition-property: -webkit-transform,height;
+    -moz-transition-property: -moz-transform;
+    -o-transition-property: -o-transform;
+    -ms-transition-property: -ms-transform;
+    transition-property: transform,height
+}
+
+.swiper-container .swiper-notification {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    opacity: 0;
+    z-index: -1000
 }
 
 .swiper-wp8-horizontal {
@@ -102,7 +137,8 @@
 
 .swiper-button-next.swiper-button-disabled,.swiper-button-prev.swiper-button-disabled {
     opacity: .35;
-    cursor: auto
+    cursor: auto;
+    pointer-events: none
 }
 
 .swiper-button-prev,.swiper-container-rtl .swiper-button-next {
@@ -134,11 +170,13 @@
 }
 
 .swiper-pagination {
+    position: absolute;
     text-align: center;
-    -webkit-transition: 300ms;
-    -moz-transition: 300ms;
-    -o-transition: 300ms;
-    transition: 300ms;
+    -webkit-transition: .3s;
+    -moz-transition: .3s;
+    -o-transition: .3s;
+    transition: .3s;
+    -webkit-transform: translate3d(0,0,0);
     -ms-transform: translate3d(0,0,0);
     -o-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
@@ -149,6 +187,12 @@
     opacity: 0
 }
 
+.swiper-container-horizontal>.swiper-pagination-bullets,.swiper-pagination-custom,.swiper-pagination-fraction {
+    bottom: 10px;
+    left: 0;
+    width: 100%
+}
+
 .swiper-pagination-bullet {
     width: 8px;
     height: 8px;
@@ -156,6 +200,17 @@
     border-radius: 100%;
     background: #000;
     opacity: .2
+}
+
+button.swiper-pagination-bullet {
+    border: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -webkit-appearance: none;
+    appearance: none
 }
 
 .swiper-pagination-clickable .swiper-pagination-bullet {
@@ -179,7 +234,7 @@
     background: #000
 }
 
-.swiper-container-vertical>.swiper-pagination {
+.swiper-container-vertical>.swiper-pagination-bullets {
     right: 10px;
     top: 50%;
     -webkit-transform: translate3d(0,-50%,0);
@@ -189,19 +244,70 @@
     transform: translate3d(0,-50%,0)
 }
 
-.swiper-container-vertical>.swiper-pagination .swiper-pagination-bullet {
+.swiper-container-vertical>.swiper-pagination-bullets .swiper-pagination-bullet {
     margin: 5px 0;
     display: block
 }
 
-.swiper-container-horizontal>.swiper-pagination {
-    bottom: 10px;
-    left: 0;
-    width: 100%
+.swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet {
+    margin: 0 5px
 }
 
-.swiper-container-horizontal>.swiper-pagination .swiper-pagination-bullet {
-    margin: 0 5px
+.swiper-pagination-progress {
+    background: rgba(0,0,0,.25);
+    position: absolute
+}
+
+.swiper-pagination-progress .swiper-pagination-progressbar {
+    background: #007aff;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    -o-transform: scale(0);
+    transform: scale(0);
+    -webkit-transform-origin: left top;
+    -moz-transform-origin: left top;
+    -ms-transform-origin: left top;
+    -o-transform-origin: left top;
+    transform-origin: left top
+}
+
+.swiper-container-rtl .swiper-pagination-progress .swiper-pagination-progressbar {
+    -webkit-transform-origin: right top;
+    -moz-transform-origin: right top;
+    -ms-transform-origin: right top;
+    -o-transform-origin: right top;
+    transform-origin: right top
+}
+
+.swiper-container-horizontal>.swiper-pagination-progress {
+    width: 100%;
+    height: 4px;
+    left: 0;
+    top: 0
+}
+
+.swiper-container-vertical>.swiper-pagination-progress {
+    width: 4px;
+    height: 100%;
+    left: 0;
+    top: 0
+}
+
+.swiper-pagination-progress.swiper-pagination-white {
+    background: rgba(255,255,255,.5)
+}
+
+.swiper-pagination-progress.swiper-pagination-white .swiper-pagination-progressbar {
+    background: #fff
+}
+
+.swiper-pagination-progress.swiper-pagination-black .swiper-pagination-progressbar {
+    background: #000
 }
 
 .swiper-container-3d {
@@ -260,41 +366,45 @@
     background-image: linear-gradient(to bottom,rgba(0,0,0,.5),rgba(0,0,0,0))
 }
 
-.swiper-container-coverflow .swiper-wrapper {
+.swiper-container-coverflow .swiper-wrapper,.swiper-container-flip .swiper-wrapper {
     -ms-perspective: 1200px
 }
 
-.swiper-container-fade.swiper-container-free-mode .swiper-slide {
-    -webkit-transition-timing-function: ease-out;
-    -moz-transition-timing-function: ease-out;
-    -ms-transition-timing-function: ease-out;
-    -o-transition-timing-function: ease-out;
-    transition-timing-function: ease-out
-}
-
-.swiper-container-fade .swiper-slide {
-    pointer-events: none
-}
-
-.swiper-container-fade .swiper-slide-active {
-    pointer-events: auto
-}
-
-.swiper-container-cube {
+.swiper-container-cube,.swiper-container-flip {
     overflow: visible
 }
 
-.swiper-container-cube .swiper-slide {
+.swiper-container-cube .swiper-slide,.swiper-container-flip .swiper-slide {
     pointer-events: none;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+    z-index: 1
+}
+
+.swiper-container-cube .swiper-slide .swiper-slide,.swiper-container-flip .swiper-slide .swiper-slide {
+    pointer-events: none
+}
+
+.swiper-container-cube .swiper-slide-active,.swiper-container-cube .swiper-slide-active .swiper-slide-active,.swiper-container-flip .swiper-slide-active,.swiper-container-flip .swiper-slide-active .swiper-slide-active {
+    pointer-events: auto
+}
+
+.swiper-container-cube .swiper-slide-shadow-bottom,.swiper-container-cube .swiper-slide-shadow-left,.swiper-container-cube .swiper-slide-shadow-right,.swiper-container-cube .swiper-slide-shadow-top,.swiper-container-flip .swiper-slide-shadow-bottom,.swiper-container-flip .swiper-slide-shadow-left,.swiper-container-flip .swiper-slide-shadow-right,.swiper-container-flip .swiper-slide-shadow-top {
+    z-index: 0;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden
+}
+
+.swiper-container-cube .swiper-slide {
     visibility: hidden;
     -webkit-transform-origin: 0 0;
     -moz-transform-origin: 0 0;
     -ms-transform-origin: 0 0;
     transform-origin: 0 0;
-    -webkit-backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    -ms-backface-visibility: hidden;
-    backface-visibility: hidden;
     width: 100%;
     height: 100%
 }
@@ -320,11 +430,32 @@
     background: #000;
     opacity: .6;
     -webkit-filter: blur(50px);
-    filter: blur(50px)
+    filter: blur(50px);
+    z-index: 0
 }
 
-.swiper-container-cube.swiper-container-vertical .swiper-cube-shadow {
-    z-index: 0
+.swiper-container-fade.swiper-container-free-mode .swiper-slide {
+    -webkit-transition-timing-function: ease-out;
+    -moz-transition-timing-function: ease-out;
+    -ms-transition-timing-function: ease-out;
+    -o-transition-timing-function: ease-out;
+    transition-timing-function: ease-out
+}
+
+.swiper-container-fade .swiper-slide {
+    pointer-events: none;
+    -webkit-transition-property: opacity;
+    -moz-transition-property: opacity;
+    -o-transition-property: opacity;
+    transition-property: opacity
+}
+
+.swiper-container-fade .swiper-slide .swiper-slide {
+    pointer-events: none
+}
+
+.swiper-container-fade .swiper-slide-active,.swiper-container-fade .swiper-slide-active .swiper-slide-active {
+    pointer-events: auto
 }
 
 .swiper-scrollbar {
@@ -378,9 +509,9 @@
     -webkit-transform-origin: 50%;
     -moz-transform-origin: 50%;
     transform-origin: 50%;
-    -webkit-animation: swiper-preloader-spin 1s step-end infinite;
-    -moz-animation: swiper-preloader-spin 1s step-end infinite;
-    animation: swiper-preloader-spin 1s step-end infinite
+    -webkit-animation: swiper-preloader-spin 1s steps(12,end) infinite;
+    -moz-animation: swiper-preloader-spin 1s steps(12,end) infinite;
+    animation: swiper-preloader-spin 1s steps(12,end) infinite
 }
 
 .swiper-lazy-preloader:after {
@@ -400,113 +531,13 @@
 }
 
 @-webkit-keyframes swiper-preloader-spin {
-    0% {
-        -webkit-transform: rotate(0)
-    }
-    
-    8.33333333% {
-        -webkit-transform: rotate(30deg)
-    }
-    
-    16.66666667% {
-        -webkit-transform: rotate(60deg)
-    }
-    
-    25% {
-        -webkit-transform: rotate(90deg)
-    }
-    
-    33.33333333% {
-        -webkit-transform: rotate(120deg)
-    }
-    
-    41.66666667% {
-        -webkit-transform: rotate(150deg)
-    }
-    
-    50% {
-        -webkit-transform: rotate(180deg)
-    }
-    
-    58.33333333% {
-        -webkit-transform: rotate(210deg)
-    }
-    
-    66.66666667% {
-        -webkit-transform: rotate(240deg)
-    }
-    
-    75% {
-        -webkit-transform: rotate(270deg)
-    }
-    
-    83.33333333% {
-        -webkit-transform: rotate(300deg)
-    }
-    
-    91.66666667% {
-        -webkit-transform: rotate(330deg)
-    }
-    
     100% {
         -webkit-transform: rotate(360deg)
     }
 }
 
 @keyframes swiper-preloader-spin {
-    0% {
-        transform: rotate(0)
-    }
-    
-    8.33333333% {
-        transform: rotate(30deg)
-    }
-    
-    16.66666667% {
-        transform: rotate(60deg)
-    }
-    
-    25% {
-        transform: rotate(90deg)
-    }
-    
-    33.33333333% {
-        transform: rotate(120deg)
-    }
-    
-    41.66666667% {
-        transform: rotate(150deg)
-    }
-    
-    50% {
-        transform: rotate(180deg)
-    }
-    
-    58.33333333% {
-        transform: rotate(210deg)
-    }
-    
-    66.66666667% {
-        transform: rotate(240deg)
-    }
-    
-    75% {
-        transform: rotate(270deg)
-    }
-    
-    83.33333333% {
-        transform: rotate(300deg)
-    }
-    
-    91.66666667% {
-        transform: rotate(330deg)
-    }
-    
     100% {
         transform: rotate(360deg)
     }
-}
-
-#contents #dataList .wrap form .cart_bg table tr td a {
-    color: #FFF;
 }

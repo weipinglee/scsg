@@ -1112,5 +1112,12 @@ class Market extends IController
 			echo 1;
 		else echo 0;
 	}
+	//营销参数编辑
+	public function pro_arg_edit(){
+		$inputArray = $_POST;
+		$siteObj = new Config('site_config');
+		$siteObj->write($inputArray);
+		$this->redirect('pro_argument');
+	}
 
 }

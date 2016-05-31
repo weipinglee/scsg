@@ -12,7 +12,8 @@ class SystemAdmin extends IController
 	{
 		$admin_name = IFilter::act(IReq::get('admin_name'));
 		$password   = IReq::get('password');
-		$captcha    = IReq::get('captcha','post');
+        $captcha    = IReq::get('captcha','post');
+		$callbackUrl    = IReq::get('callbackUrl','post');
 
 		$message    = '';
 
@@ -56,8 +57,15 @@ class SystemAdmin extends IController
 				}
 				ISafe::set('admin_id',$adminRow['id']);
 				ISafe::set('admin_name',$adminRow['admin_name']);
-				ISafe::set('admin_pwd',$adminRow['password']);
-				$this->redirect('/system/default');
+				ISafe::set('admin_pwd',$adminRow['password']);             
+                if($callbackUrl)
+                {
+                    $this->redirect("$callbackUrl");
+                }
+                else
+                {
+                    $this->redirect('/system/default');
+                }
 			}
 			else
 			{

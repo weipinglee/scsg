@@ -80,7 +80,8 @@
 				<col width="380px" />
 				<col width="180px" />
 				<col width="90px" />
-				<col width="70px" />
+                <col width="70px" />
+				<col width="100px" />
 				<col width="80px" />
 				<col width="70px" />
 				<col width="70px" />
@@ -93,7 +94,8 @@
 					<th>商品名称</th>
 					<th>分类</th>
 					<th>销售价</th>
-					<th>库存</th>
+                    <th>库存</th>
+					<th>商品类型</th>
 					<th>状态</th>
 					<th>排序</th>
 					<th>创建日期</th>
@@ -112,7 +114,8 @@
 				<col width="380px" />
 				<col width="180px" />
 				<col width="90px" />
-				<col width="70px" />
+                <col width="70px" />
+				<col width="100px" />
 				<col width="80px" />
 				<col width="70px" />
 				<col width="70px" />
@@ -132,7 +135,8 @@
 					{echo:join(',',$catName)}
 					</td>
 					<td><a href="javascript:quickEdit({$item['id']},'price');" class="orange" title="点击更新价格" id="priceText{$item['id']}">{$item['sell_price']}</a></td>
-					<td><a href="javascript:quickEdit({$item['id']},'store');" class="orange" title="点击更新库存" id="storeText{$item['id']}">{$item['store_nums']}</a></td>
+                    <td><a href="javascript:quickEdit({$item['id']},'store');" class="orange" title="点击更新库存" id="storeText{$item['id']}">{$item['store_nums']}</a></td>
+					<td>{if:$item['type']==1}虚拟商品{else:}普通商品{/if}</td>
 					<td>
 						<select onchange="changeIsDel({$item['id']},this)" disabled>
 							<option value="up" {echo:$item['is_del']==0 ? 'selected':''}>上架</option>

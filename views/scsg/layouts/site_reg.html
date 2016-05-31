@@ -61,8 +61,12 @@
 
 <script type='text/javascript' >
 //切换验证码
-function changeCaptcha(urlVal)
-{
+function changeCaptcha(urlVal,obj)
+{                              
+    if(typeof(obj) == 'undefined')
+    {
+        obj = 'captchaImg';
+    }
 	var radom = Math.random();
 	if( urlVal.indexOf("?") == -1 )
 	{
@@ -72,7 +76,7 @@ function changeCaptcha(urlVal)
 	{
 		urlVal = urlVal + '&random'+radom;
 	}
-	$('#captchaImg').attr('src',urlVal);
+	$('#'+obj).attr('src',urlVal);
 }
 </script>
 

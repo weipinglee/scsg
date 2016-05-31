@@ -22,7 +22,7 @@
 	<li style="margin:12px;0px;"><span>订单编号</span><a href="#">{$this->order_num}</a> </li>
 	<li style="margin:12px;0px;"><span>下单时间</span><a href="#">{$create_time}</a></li>
 	<li style="margin:12px;0px;"><span>订单金额</span><a href="#"><i>￥{$this->final_sum}</i></a> </li>
-	<li style="margin:12px;0px;"><span>配送方式</span><a href="#">{$this->delivery}</a></li>
+	{if:$this->delivery}<li style="margin:12px;0px;"><span>配送方式</span><a href="#">{$this->delivery}</a></li>{/if}
 	<li style="margin:12px;0px;"><span>支付方式</span><a href="#">{$this->payment}</a></li>
 	<li style="margin:12px;0px;"><span>收货人名：</span><a href="#">{$accept_name}</a></li>
 	<li style="margin:12px;0px;"><span>联系方式：</span><a href="#">{$mobile}</a></li>

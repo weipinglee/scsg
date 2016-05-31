@@ -430,6 +430,20 @@ class Preorder_Class extends Order_Class{
 					'note'       => $note,
 					'admin_id'   => $admin_id ? $admin_id : 0
 			);
+
+			//非货到付款的支付方式
+			if($orderRow['pay_type'] != 0 && $type == 1)
+			{
+				//减少库存量
+				$orderGoodsDB = new IModel('order_goods');
+				$orderGoodsList = $orderGoodsDB->query('order_id = '.$orderRow['id']);
+				$orderGoodsListId = array();
+				foreach($orderGoodsList as $key => $val)
+				{
+					$orderGoodsListId[] = $val['id'];
+				}
+				self::updateStore($orderGoodsListId,'reduce');
+			}
 			if($type ==1){
 				$collectionData['amount'] = $orderRow['pre_amount'];
 				$collectionData['pay_status'] = 1;

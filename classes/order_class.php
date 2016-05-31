@@ -463,7 +463,8 @@ class Order_Class
 				$goodsArray['goods_array'] = IFilter::addSlash(JSON::encode($specArray));
 				$goodsArray['delivery_fee']= $val['deliveryPrice'];
 				$goodsArray['save_price']  = $val['insuredPrice'];
-				$goodsArray['tax']         = $val['taxPrice'];
+                $goodsArray['tax']         = $val['taxPrice'];
+				$goodsArray['seller_id']   = $val['seller_id'];
 				$orderGoodsObj->setData($goodsArray);
 				$orderGoodsObj->add();
 			}
@@ -799,7 +800,7 @@ class Order_Class
 		if($orderGoodsRow['is_send']==0){
 			return '未发货';
 		}
-		else if($orderGoodsRow['status']==5 && $orderGoodsRow['is_send']==1){
+		else if(isset($orderGoodsRow['status']) && $orderGoodsRow['status']==5 && $orderGoodsRow['is_send']==1){
 			return '已完成';
 		}
 		else if($orderGoodsRow['is_send']==1){
@@ -1303,7 +1304,25 @@ class Order_Class
 			$trade_record_db = new IModel('trade_record');
 			$acc_no = $trade_record_db->getField('order_no like "%'.$orderRow['order_no'].'"  OR FIND_IN_SET("'.$order_id.'",order_ids)' ,'acc_no');
 			$acc_no = intval($acc_no);
-			if($acc_no>=621272 && $acc_no<=621738)$point_mul = 2;
+			if($acc_no>=621272 && $acc_no<=621738)
+			{
+				$point_mul = 2;
+				if($memberRow['com_orders']==0){
+					$site_config = new Config('site_config');
+					$site_config=$site_config->getInfo();
+					$ticket_combank = isset($site_config['ticket_combank']) ? intval($site_config['ticket_combank']) : 0;
+					if($ticket_combank){
+						$prop = new ProRule(0);
+						$prop->giftSend(array('ticket'=>$ticket_combank),$user_id);
+						$memberObj->setData(array('com_orders'=>1));
+						$memberObj->update('user_id='.$user_id);
+					}
+					
+					
+					
+				}
+				
+			}
 			else $point_mul=1;
 			
 			$order_goods_query->where = 'og.order_id='.$order_id.' and og.is_send=2';

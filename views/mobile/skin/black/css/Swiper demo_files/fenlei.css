@@ -220,3 +220,6 @@ background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAA8AQMAAACU1
 	border:0;
 	
 }
+.panel{
+	height: auto;
+}

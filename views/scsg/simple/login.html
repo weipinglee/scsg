@@ -89,10 +89,17 @@
 					<div class="login_entry">
 						<p>合作网站账号登录</p>
 						<ul class="account_list_big clearfix">
-							<li><a href="#" target="_blank" class="qq" title="QQ"></a></li>
+                            <!--{set:$callback=IFilter::act(IReq::get('callback'),'text')}
+                            {foreach:items=$this->oauth}
+                                <li><a href="{url:simple/oauth_login/id/$item['id']/callback/$callback}"><img src="{webroot:$item['logo']}" alt=""></a></li>
+                            {/foreach}-->
+                            <li><a href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101301539&redirect_uri=http%3A%2F%2Fwww.yqtvt.com%2Fsimple%2Fqqlogin_callback"><img src="{skin:images/bt_white.png}" alt=""></a></li>
+							<li><a href="https://api.weibo.com/oauth2/authorize?response_type=code&client_id=1243816408&redirect_uri=http%3A%2F%2Fwww.yqtvt.com"><img src="{skin:images/sinaweibo.png}" alt=""></a></li>
+                            <li><a href="https://open.weixin.qq.com/connect/qrconnect?appid=wx7c617be727038b3c&redirect_uri=http://www.yqtvt.com&response_type=code&scope=snsapi_login&state=2014#wechat_redirect"><img src="{skin:images/weixinlogo.png}" alt=""></a></li>
+                            <!--<li><a href="#" target="_blank" class="qq" title="QQ"></a></li>
 							<li><a href="#" target="_blank" class="sina" title="新浪微博"></a></li>
 							<li><a href="#" target="_blank" class="alipay" title="支付宝"></a></li>
-							<li><a href="#" target="_blank" class="weixin" title="微信"></a></li>
+							<li><a href="#" target="_blank" class="weixin" title="微信"></a></li>-->
 						</ul>
 				
 					</div>

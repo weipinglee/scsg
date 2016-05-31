@@ -40,17 +40,23 @@ function resetCheckCode(code){
 
     }
 	$(".receive_code").addClass('reacquire_code');
-	var phone = $('#mobile').val();
+
      var checkCode = $('input[name=check_code]').val();
+
+    var phone = $('#mobile').val();
+	var captcha = $('#validCaptcha').val();
+
     $.ajax({
         type: "POST",
         url: getMobileCodeUrl,
 		dataType:'json',
         async: false,
-		data : {phone:phone,check_code:checkCode},
+
+		data : {phone:phone,check_code:checkCode,captcha:captcha},
         success: function(a) {
-            resetCheckCode(a.check_code);
+
             if (a) {
+                resetCheckCode(a.check_code);
                 if (0 == a.errorCode) {
                     var d = $(".receive_code");
 					d.attr("disabled", true);
@@ -72,20 +78,28 @@ function resetCheckCode(code){
                     if (-1 == a.errorCode) {
                         showErrInfo('网络繁忙，请稍候再试');
                         return
+
                     }
                     else if(a.errorCode == 13){
                         showErrInfo('请重新获取验证码');
                         return
                     }
+                    else if(100001 == a.errorCode)
+                        {
+                            $('#chgPhoneCaptcha').trigger('click');
+                            showErrInfo('验证码不正确或已过期');
+                            return;
+                        }
                     else {
                         showErrInfo('手机号码格式不正确');
                         return
+
                     }
                 }
             }
         },
 		complete:function(){
-			
+            $(".receive_code").removeClass('reacquire_code');
 		}
     });
     return false

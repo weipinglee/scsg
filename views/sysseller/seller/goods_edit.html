@@ -32,7 +32,17 @@
 				<input type='text' name='search_words' value='' />
 				<label class="tip">每个关键词最长为15个字符，超过后系统不予存储，每个词以逗号分隔</label>
 			</fieldset>
-
+            <fieldset>
+                <label>商品类型：</label>
+                <label class='attr'><input type="radio" name="type" value="0" checked> 普通商品</label>
+                <label class='attr'><input type="radio" name="type" value="1"> 虚拟商品</label> 
+            </fieldset>
+            <fieldset class="js_show_time" style="display: none;">
+                <label>过期时间：</label>
+                <div class="box">
+                <input type='text' name='past_time' class='normal' value="{$past_time}" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" alt='请选择一个日期' />
+                </div>
+            </fieldset>
 			<fieldset>
 				<label>所属分类</label>
 				<div class="box">
@@ -40,8 +50,8 @@
 
 					<!--分类数据显示-->
 					<script id="categoryButtonTemplate" type="text/html">
+                    <input type="hidden" value="<%=templateData['id']%>" name="_goods_category[]" />
 					<button class="btn" type="button" onclick="return confirm('确定删除此分类？') ? $(this).remove() : '';">
-						<input type="hidden" value="<%=templateData['id']%>" name="_goods_category[]" />
 						<span class="del"><%=templateData['name']%></span>
 					</button>
 					</script>
@@ -266,6 +276,17 @@
 </article>
 
 <script language="javascript">
+function showTime(t)
+{
+    if(t==1)
+    {
+        $('.js_show_time').show();
+    }
+    else
+    {
+        $('.js_show_time').hide();
+    }
+}
 //创建表单实例
 var formObj = new Form('goodsForm');
 
@@ -275,11 +296,17 @@ var defaultProductNo = '{echo:goods_class::createGoodsNo()}';
 $(function()
 {
 	initProductTable();
-
+    $('input[name=type]').each(function(){
+        $(this).click(function(){
+            var _v = $(this).val();
+            showTime(_v);
+        })
+    })
 	//存在商品信息
 	{if:isset($form)}
 	var goods = {echo:JSON::encode($form)};
-
+    //商品类型选择
+    showTime(goods.type);
 	var goodsRowHtml = template.render('goodsRowTemplate',{'templateData':[goods]});
 	$('#goodsBaseBody').html(goodsRowHtml);
 

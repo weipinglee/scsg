@@ -51,6 +51,48 @@ class hookCreateAction extends IInterceptorBase
 	public static function order_refundment_list(){
 		self::ucenter_refunds();
 	}
+    
+    //平台后台商品列表
+    public static function goods_goods_list()
+    {
+        $goods = new IModel('goods');
+        $ids = $goods->query("type=1 and is_del=0 and past_time <> '0000-00-00' and past_time<DATE_FORMAT(NOW(),'%Y-%m-%d')", 'id');
+        $idList = array();
+        foreach($ids as $k => $v)
+        {
+            $idList[] = $v['id'];
+        }
+        unset($ids);
+        //打开商品列表页，自动下架过期商品
+        if($idList)
+        {
+            $goods->setData(array('is_del'=>2));
+            $goods->update('id in ('.join(',', $idList).')');
+        }
+        unset($idList);
+    }
+    
+    //商家后台商品列表
+    public static function seller_goods_list()
+    {
+        $goods = new IModel('goods');
+        $ids = $goods->query("type=1 and is_del=0 and past_time <> '0000-00-00' and past_time<DATE_FORMAT(NOW(),'%Y-%m-%d')", 'id');
+        $idList = array();
+        foreach($ids as $k => $v)
+        {
+            $idList[] = $v['id'];
+        }
+        unset($ids);
+        
+        //打开商品列表页，自动下架过期商品
+        if($idList)
+        {
+            $goods->setData(array('is_del'=>2));
+            $goods->update('id in ('.join(',', $idList).')');
+        }
+        unset($idList);
+    }
+    
 	//用户中心退款列表 
 	public static function ucenter_refunds()
 	{

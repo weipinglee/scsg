@@ -201,9 +201,8 @@ class Ucenter extends IController
     public function order_detail()
     {
         $id = IFilter::act(IReq::get('id'),'int');
-
         $orderObj = new order_class();
-        $this->order_info = $orderObj->getOrderShow($id,$this->user['user_id']);
+        $this->order_info = $orderObj->getOrderShow($id,$this->user['user_id']);                   
         if($this->order_info['type']==4)$this->redirect('preorder_detail/id/'.$this->order_info['id']);
 		$this->fapiao_data = array();
 		if($this->order_info['invoice']==1){
@@ -235,9 +234,68 @@ class Ucenter extends IController
         $tb_order_goods->join = 'left join goods as g on og.goods_id=g.id';
         $tb_order_goods->where = 'og.order_id='.$id;
         $tb_order_goods->group = 'og.id';
-        $tb_order_goods->fields = 'g.sell_price,g.point,og.is_send,og.real_price,og.refunds_status,og.id as og_id,og.goods_id,og.img,og.goods_array,og.goods_nums';
+        $tb_order_goods->fields = 'g.type,g.sell_price,g.point,og.is_send,og.real_price,og.refunds_status,og.id as og_id,og.goods_id,og.img,og.goods_array,og.goods_nums,og.seller_id';
         $this->og_data = $tb_order_goods->find();
+        
        	$this->redirect('order_detail',false);
+    }
+    
+    //二维码页面
+    function makeCode(){
+        $id = IReq::get('id', 'get');
+        $order = new IModel('order');
+        $this->order_no = $order->getField('id='.$id, 'order_no');
+        $tb_order_goods = new IQuery('order_goods as og');
+        $tb_order_goods->join = 'left join goods as g on og.goods_id=g.id';
+        $tb_order_goods->where = 'og.order_id='.$id;
+        $tb_order_goods->group = 'og.id';
+        $tb_order_goods->fields = 'g.id,g.name,g.type,g.past_time,g.seller_id,og.order_id';
+        $data = $tb_order_goods->find();
+        IWeb::autoload('phpqrcode');
+        $currUrl = IUrl::getUrl();
+        $temp = parse_url($currUrl);
+        $conn = isset($temp['port']) ? ':'.$temp['port'] : '';
+        foreach($data as $k => $v)
+        {
+            if($v['type'] == 1)
+            {
+                $filename = $this->order_no.'_'.$v['id'];
+                if($v['seller_id'])
+                {
+                    $url = 'http://'.$temp['host'].$conn.IUrl::creatUrl("")."seller/checkCode/id/{$v['order_id']}/gId/{$v['id']}/sId/{$v['seller_id']}";
+                }
+                else
+                {
+                    $url = 'http://'.$temp['host'].$conn.IUrl::creatUrl("")."order/checkCode/id/{$v['order_id']}/gId/{$v['id']}";
+                }               
+                $data[$k]['code'] = $filename;
+                $data[$k]['url'] = $url;
+                $this->qrcode($url, $filename);
+            }
+            else
+            {
+                unset($data[$k]);
+            }
+            
+        }               
+        $this->og_data = $data;   
+        //$h = $this->qrcode();
+        $this->redirect('makeCode');
+    }
+    
+    //生成二维码
+    function qrcode($url,$file)
+    {
+        // 二维码数据 
+        $url = $url; 
+        // 生成的文件名 
+        $filename = $file.'.png'; 
+        // 纠错级别：L、M、Q、H 
+        $errorCorrectionLevel = 'L';  
+        // 点的大小：1到10 
+        $matrixPointSize = 4;  
+        //创建一个二维码文件 
+        QRcode::png($url, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
     }
 	
     /**
@@ -1547,7 +1605,7 @@ class Ucenter extends IController
 					'phone'=>$phone,
 					'time'=>time(),
 					'user_phone'=>$this->user['phone'],
-					'user_id'=>$this->user['id'],
+					'user_id'=>$this->user['user_id'],
 					'user_username'=>$this->user['username']
 				);
 				ISafe::set('mobileValidate',array($sess_arr));
@@ -1561,10 +1619,11 @@ class Ucenter extends IController
 
 			echo JSON::encode($res);
 		}
+		
 
     }
     
-    
+  
     //初次校验验证码
     public function checkMobile(){
     	$res = array('errorCode'=>0);
@@ -1577,21 +1636,25 @@ class Ucenter extends IController
     		$res['errorCode']=1;
     		$res['mess']='验证码不能为空';
     	}
-    	else if($codeData = ISafe::get('mobileValidate')){
+    	else if($codeData = ISafe::get('mobileValidate')){ $codeData = $codeData[0];
     		if(time() - $codeData['time']>=1800){
     			$res['errorCode']=2;//验证码过期
     			$res['mess']='验证码已过期，请重新获取';
-    		}else if($codeData['phone']!=$this->user['phone']){//非法操作
+    		}else if($codeData['user_phone']!=$this->user['phone']){//非法操作
+			
     			$res['errorCode']=3;
     			$res['mess']='操作非法';
     		}else if($codeData['code'] !=$code){//验证码错误
+			
     			$res['errorCode'] = 4;
     			$res['mess']='验证码错误';
     		}else{//验证正确
+			
     			ISafe::clear('mobileValidate');
     			ISafe::set('mobileValidRes',array('phone'=>$this->user['phone'],'time'=>time()));//session记录验证结果，和时间
     			$res['next']=$nextUrl ? $nextUrl : IUrl::getHost().IUrl::creatUrl("/ucenter/toChgPhone2");
     		}
+			
     	}else{
     		$res['errorCode']=5;//没有验证码
     		$res['mess']='请获取验证码';
@@ -1656,6 +1719,7 @@ class Ucenter extends IController
     		$res['mess']='请填写验证码';
     	}else{
     		$validData = ISafe::get('mobileValidate');
+			$validData = $validData[0];
     		$checkRes = ISafe::get('mobileValidRes');
     		if($checkRes && $this->user['phone']==$checkRes['phone'] &&time()- $checkRes['time']<1800 ){
     			if($validData['phone']==$newPhone && $validData['code']==$code && time()- $validData['time']<1800){//验证通过
