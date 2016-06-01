@@ -176,8 +176,12 @@ class mobileGoods extends IController {
 		$all_id[] = $id;
 		$all_id = implode(',', $all_id);
 		//$m_goods->fileds='';
+
 		$m_goods = new IQuery('goods as go');
-		$m_goods->where = 'c.category_id in (' . $all_id . ')';
+		$m_goods->distinct='1';
+
+		$m_goods->where = 'c.category_id in (' . $all_id . ') ';
+		$m_goods->fields='go.id,go.sale,go.sell_price,go.img,go.name';
 		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
 		$result = $m_goods->find();
 		foreach ($result as $k => $v) {
@@ -192,11 +196,11 @@ class mobileGoods extends IController {
 		$siteConfigObj = new Config("site_config");
 		$site_config = $siteConfigObj->getInfo();
 		$index_slide = isset($site_config['index_slide']) ? unserialize($site_config['index_slide']) : array();
-		$tem = array();
+		
 		foreach ($index_slide as $k => $v) {
-			$tem[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
+			$index_slide[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
 		}
-		echo JSON::encode($tem);
+		echo JSON::encode($index_slide);
 
 	}
 	//获取猜你喜欢的商品信息
