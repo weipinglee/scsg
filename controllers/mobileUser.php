@@ -219,7 +219,6 @@ class MobileUser extends IController
 		}
 		echo JSON::encode($data);
 
-
 	}
 	//设置token
 	private function setToken($user_id)
