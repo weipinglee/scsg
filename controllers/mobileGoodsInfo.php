@@ -12,10 +12,13 @@ class mobileGoodsInfo extends IController{
 		$goods_id = IFilter::act(IReq::get('goods_id'),'int');
 		$data=array();
 		if(!$goods_id)
-		{	$data['code']=0;
+		{	$goods_id=IFilter::act(IReq::get('goods_id','post'),'int');
+			if(!$goods_id){
+			$data['code']=0;
 			$data['info']='传递的参数不正确';
 			echo JSON::encode($data);
 			exit;
+			}
 		}
 		$user_id = $this->user ? $this->user['user_id'] : 0;
 		//把当前商品的数据添加到用户喜欢的数据表中
@@ -30,13 +33,19 @@ class mobileGoodsInfo extends IController{
 			echo JSON::encode($data);
 			exit;
 		}
+		$preg = '/<img.*?src=[\"|\']?(.*?)[\"|\']?\s.*?>/i';
+		preg_match_all($preg,$goods_info['content'],$goods_info['content']);
+		unset($goods_info['content'][0]);
+		foreach($goods_info['content'][1] as $k=>$v){
+			$goods_info['content'][1][$k]='http://v.yqrtv.com:8080/app/'.$v;
+		}
 		//团购
 		$regiment_db = new IModel('regiment');
 		$goods_info['regiment'] = $regiment_db->getObj('goods_id='.$goods_id.' and is_close=0 and  TIMESTAMPDIFF(second,start_time,NOW()) >=0 and TIMESTAMPDIFF(second,end_time,NOW())<0');
 		//关联货品表获得商品的规格，库存
 		$product_db = new IModel('products');
 		$goods_info['product'] = $product_db->query('goods_id='.$goods_info['id'],'id,spec_array,store_nums');
-		$goods_info['product'] = $goods_info['product'];
+		//$goods_info['product'] = $goods_info['product'];
 		//获取品牌信息
 		if($goods_info['brand_id'])
 		{
@@ -73,10 +82,10 @@ class mobileGoodsInfo extends IController{
 				$goods_info['photo'][$key] = $temp;
 			}
 		}
-		$goods_info['img']='http://localhost/iweb2/'.$goods_info['img'];
+		$goods_info['img']='http://v.yqrtv.com:8080/app/'.$goods_info['img'];
 		//处理图片地址
 		foreach($goods_info['photo'] as $k=>$v){
-			$goods_info['photo'][$k]['img']='http://localhost/iweb2/'.$v['img'];
+			$goods_info['photo'][$k]['img']='http://v.yqrtv.com:8080/app/'.$v['img'];
 
 		}
 		//商品是否参加促销活动(团购，抢购)
@@ -104,7 +113,7 @@ class mobileGoodsInfo extends IController{
 				$shop_goods_array[] = $val['user_id'];
 			}
 			$goods_info['buyer_id'] = join(',',$shop_goods_array);
-		}
+
 		//透过用户id列表获得商品数据
 
 		$tb_order->join='left join order as o on og.order_id=o.id left join goods as lg on lg.id=og.goods_id and lg.is_del=0';
@@ -113,10 +122,11 @@ class mobileGoodsInfo extends IController{
 		$tb_order->order='o.completion_time desc';
 		$tb_order->limit=5;
 		$goods_info['buyer_info']=$tb_order->find();
+		}
 		//处理图片地址
 		if(!empty($goods_info['buyer_info'])){
 			foreach($goods_info['buyer_info'] as $k=>$v){
-				$goods_info['buyer_info'][$k]['img']='http://localhost/iweb2/'.$v['img'];
+				$goods_info['buyer_info'][$k]['img']='http://v.yqrtv.com:8080/app/'.$v['img'];
 			}
 
 		}
@@ -178,7 +188,7 @@ class mobileGoodsInfo extends IController{
 			$sellerDB = new IModel('seller');
 			//获取商家的id，名称，邮箱，手机号，logo图片，客服号码，总评分，评价总数
 			$goods_info['seller'] = $sellerDB->getObj('id = '.$goods_info['seller_id'],'id,true_name,email,mobile,logo_img,server_num,point,num');
-			$goods_info['seller']['logo_img']='http://localhost/iweb2/'.$goods_info['seller']['logo_img'];
+			$goods_info['seller']['logo_img']='http://v.yqrtv.com:8080/app/'.$goods_info['seller']['logo_img'];
 		}
 		user_like::add_like_cate($goods_id,$this->user['user_id']);
 		//获得评论内容
@@ -191,9 +201,11 @@ class mobileGoodsInfo extends IController{
 		$goods_info['comment']=$commentInfo;
 		if(!empty($goods_info['comment'])){
 			foreach($goods_info['comment'] as $k=>$v){
-				$goods_info['comment'][$k]['head_ico']='http://localhost/iweb2/'.$v['head_ico'];
+				$goods_info['comment'][$k]['head_ico']='http://v.yqrtv.com:8080/app/'.$v['head_ico'];
 			}
 		}
+		//分享的url
+		$goods_info['sharurl']='http://v.yqrtv.com:8080/app/site/products?id='.$goods_id;
 		$goods_info['code']=1;
 		echo JSON::encode($goods_info);
 
