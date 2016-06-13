@@ -106,17 +106,18 @@ class mobileGoods extends IController {
 	//首页团购数据
 	public function getRegiment() {
 		//实例化团购表
-		$m_regiment = new IModel('regiment');
-		$where = 'is_close = 0 and NOW() between start_time and end_time';
-		$order = 'id';
+		$m_regiment = new IQuery('regiment as r');
+		$m_regiment->where = 'is_close = 0 and NOW() between start_time and end_time';
+		$m_regiment->order = 'id';
 		//排序
 		//$order='sort';
 		//字段
-		$cols = '*';
+		$m_regiment->fields = "r.id as goods_id,r.title,r.start_time,r.end_time,r.regiment_price,sell_price,r.img";
 
-		$re_list = $m_regiment->query($where, $cols, $order);
+		$re_list = $m_regiment->find();
 		foreach ($re_list as $k => $v) {
 			$re_list[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
+
 		}
 		echo JSON::encode($re_list);
 	}
@@ -180,8 +181,8 @@ class mobileGoods extends IController {
 		$m_goods = new IQuery('goods as go');
 		$m_goods->distinct='1';
 
-		$m_goods->where = 'c.category_id in (' . $all_id . ') ';
-		$m_goods->fields='go.id,go.sale,go.sell_price,go.img,go.name';
+		$m_goods->where = 'c.category_id in (' . $all_id . ') AND (go.is_del=0 or go.is_del=4) ';
+		$m_goods->fields='go.id as goods_id,go.sale,go.sell_price,go.img,go.name';
 		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
 		$result = $m_goods->find();
 		foreach ($result as $k => $v) {
