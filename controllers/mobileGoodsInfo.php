@@ -207,6 +207,8 @@ class mobileGoodsInfo extends IController{
 		//分享的url
 		$goods_info['sharurl']='http://v.yqrtv.com:8080/app/site/products?id='.$goods_id;
 		$goods_info['code']=1;
+		//把商品id转换成整型
+		$goods_info['dealId']=$goods_info['id'];
 		echo JSON::encode($goods_info);
 
 	}
