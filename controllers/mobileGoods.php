@@ -191,6 +191,311 @@ class mobileGoods extends IController {
 		echo JSON::encode($result);
 
 	}
+	/**
+	 *粮油分类下面的数据
+	 */
+	public function getLiangyouList(){
+		$id = 2;
+		$m_category = new IQuery('category');
+		$m_category->fields = 'id,parent_id';
+		//$m_goods->where='id='.$id;
+		$cat_list = $m_category->find();
+		$cat_ids = $this->getTreeList($cat_list, $id);
+		$all_id = array();
+		foreach ($cat_ids as $k => $v) {
+			$all_id[] = $v['id'];
+		}
+		$all_id[] = $id;
+		$all_id = implode(',', $all_id);
+		//$m_goods->fileds='';
+
+		$m_goods = new IQuery('goods as go');
+		$m_goods->distinct='1';
+
+		$m_goods->where = 'c.category_id in (' . $all_id . ') AND (go.is_del=0 or go.is_del=4) ';
+		$m_goods->fields='go.id as goods_id,go.sale,go.sell_price,go.img,go.name';
+		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
+		$m_goods->order='go.sort asc';
+		$result = $m_goods->find();
+		foreach ($result as $k => $v) {
+			$result[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
+
+		}
+		echo JSON::encode($result);
+
+	}
+
+	/**
+	 *日化清洁下面的数据
+	 */
+	public function getRihuaList(){
+		$id = 35;
+		$m_category = new IQuery('category');
+		$m_category->fields = 'id,parent_id';
+		//$m_goods->where='id='.$id;
+		$cat_list = $m_category->find();
+		$cat_ids = $this->getTreeList($cat_list, $id);
+		$all_id = array();
+		foreach ($cat_ids as $k => $v) {
+			$all_id[] = $v['id'];
+		}
+		$all_id[] = $id;
+		$all_id = implode(',', $all_id);
+		//$m_goods->fileds='';
+
+		$m_goods = new IQuery('goods as go');
+		$m_goods->distinct='1';
+
+		$m_goods->where = 'c.category_id in (' . $all_id . ') AND (go.is_del=0 or go.is_del=4) ';
+		$m_goods->fields='go.id as goods_id,go.sale,go.sell_price,go.img,go.name';
+		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
+		$m_goods->order='go.sort asc';
+		$result = $m_goods->find();
+		foreach ($result as $k => $v) {
+			$result[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
+
+		}
+		echo JSON::encode($result);
+
+	}
+
+	/**
+	 *个人护理分类下面的数据
+	 */
+	public function getHuliList(){
+		$id = 16;
+		$m_category = new IQuery('category');
+		$m_category->fields = 'id,parent_id';
+		//$m_goods->where='id='.$id;
+		$cat_list = $m_category->find();
+		$cat_ids = $this->getTreeList($cat_list, $id);
+		$all_id = array();
+		foreach ($cat_ids as $k => $v) {
+			$all_id[] = $v['id'];
+		}
+		$all_id[] = $id;
+		$all_id = implode(',', $all_id);
+		//$m_goods->fileds='';
+
+		$m_goods = new IQuery('goods as go');
+		$m_goods->distinct='1';
+
+		$m_goods->where = 'c.category_id in (' . $all_id . ') AND (go.is_del=0 or go.is_del=4) ';
+		$m_goods->fields='go.id as goods_id,go.sale,go.sell_price,go.img,go.name';
+		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
+		$m_goods->order='go.sort asc';
+		$result = $m_goods->find();
+		foreach ($result as $k => $v) {
+			$result[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
+
+		}
+		echo JSON::encode($result);
+
+	}
+
+	/**
+	 *本地农产品分类数据
+	 */
+	public function getBendiList(){
+		$id =6;
+		$m_category = new IQuery('category');
+		$m_category->fields = 'id,parent_id';
+		//$m_goods->where='id='.$id;
+		$cat_list = $m_category->find();
+		$cat_ids = $this->getTreeList($cat_list, $id);
+		$all_id = array();
+		foreach ($cat_ids as $k => $v) {
+			$all_id[] = $v['id'];
+		}
+		$all_id[] = $id;
+		$all_id = implode(',', $all_id);
+		//$m_goods->fileds='';
+
+		$m_goods = new IQuery('goods as go');
+		$m_goods->distinct='1';
+
+		$m_goods->where = 'c.category_id in (' . $all_id . ') AND (go.is_del=0 or go.is_del=4) ';
+		$m_goods->fields='go.id as goods_id,go.sale,go.sell_price,go.img,go.name';
+		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
+		$m_goods->order='go.sort asc';
+		$result = $m_goods->find();
+		foreach ($result as $k => $v) {
+			$result[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
+
+		}
+		echo JSON::encode($result);
+
+	}
+
+	/**
+	 *食品饮料分类数据
+	 */
+	public function getShipinList(){
+		$id = 34;
+		$m_category = new IQuery('category');
+		$m_category->fields = 'id,parent_id';
+		//$m_goods->where='id='.$id;
+		$cat_list = $m_category->find();
+		$cat_ids = $this->getTreeList($cat_list, $id);
+		$all_id = array();
+		foreach ($cat_ids as $k => $v) {
+			$all_id[] = $v['id'];
+		}
+		$all_id[] = $id;
+		$all_id = implode(',', $all_id);
+		//$m_goods->fileds='';
+
+		$m_goods = new IQuery('goods as go');
+		$m_goods->distinct='1';
+
+		$m_goods->where = 'c.category_id in (' . $all_id . ') AND (go.is_del=0 or go.is_del=4) ';
+		$m_goods->fields='go.id as goods_id,go.sale,go.sell_price,go.img,go.name';
+		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
+		$m_goods->order='go.sort asc';
+		$result = $m_goods->find();
+		foreach ($result as $k => $v) {
+			$result[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
+
+		}
+		echo JSON::encode($result);
+
+	}
+
+	/**
+	 *养生臻品分类数据
+	 */
+	public function getYangshengList(){
+		$id =23;
+		$m_category = new IQuery('category');
+		$m_category->fields = 'id,parent_id';
+		//$m_goods->where='id='.$id;
+		$cat_list = $m_category->find();
+		$cat_ids = $this->getTreeList($cat_list, $id);
+		$all_id = array();
+		foreach ($cat_ids as $k => $v) {
+			$all_id[] = $v['id'];
+		}
+		$all_id[] = $id;
+		$all_id = implode(',', $all_id);
+		//$m_goods->fileds='';
+
+		$m_goods = new IQuery('goods as go');
+		$m_goods->distinct='1';
+
+		$m_goods->where = 'c.category_id in (' . $all_id . ') AND (go.is_del=0 or go.is_del=4) ';
+		$m_goods->fields='go.id as goods_id,go.sale,go.sell_price,go.img,go.name';
+		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
+		$m_goods->order='go.sort asc';
+		$result = $m_goods->find();
+		foreach ($result as $k => $v) {
+			$result[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
+
+		}
+		echo JSON::encode($result);
+
+	}
+
+	/**
+	 *海外潮货
+	 */
+	public function getHaiwaiList(){
+		$id = 20;
+		$m_category = new IQuery('category');
+		$m_category->fields = 'id,parent_id';
+		//$m_goods->where='id='.$id;
+		$cat_list = $m_category->find();
+		$cat_ids = $this->getTreeList($cat_list, $id);
+		$all_id = array();
+		foreach ($cat_ids as $k => $v) {
+			$all_id[] = $v['id'];
+		}
+		$all_id[] = $id;
+		$all_id = implode(',', $all_id);
+		//$m_goods->fileds='';
+
+		$m_goods = new IQuery('goods as go');
+		$m_goods->distinct='1';
+
+		$m_goods->where = 'c.category_id in (' . $all_id . ') AND (go.is_del=0 or go.is_del=4) ';
+		$m_goods->fields='go.id as goods_id,go.sale,go.sell_price,go.img,go.name';
+		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
+		$m_goods->order='go.sort asc';
+		$result = $m_goods->find();
+		foreach ($result as $k => $v) {
+			$result[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
+
+		}
+		echo JSON::encode($result);
+
+	}
+
+	/**
+	 *数码家电分类数据
+	 */
+	public function getShumaList(){
+		$id =36;
+		$m_category = new IQuery('category');
+		$m_category->fields = 'id,parent_id';
+		//$m_goods->where='id='.$id;
+		$cat_list = $m_category->find();
+		$cat_ids = $this->getTreeList($cat_list, $id);
+		$all_id = array();
+		foreach ($cat_ids as $k => $v) {
+			$all_id[] = $v['id'];
+		}
+		$all_id[] = $id;
+		$all_id = implode(',', $all_id);
+		//$m_goods->fileds='';
+
+		$m_goods = new IQuery('goods as go');
+		$m_goods->distinct='1';
+
+		$m_goods->where = 'c.category_id in (' . $all_id . ') AND (go.is_del=0 or go.is_del=4) ';
+		$m_goods->fields='go.id as goods_id,go.sale,go.sell_price,go.img,go.name';
+		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
+		$m_goods->order='go.sort asc';
+		$result = $m_goods->find();
+		foreach ($result as $k => $v) {
+			$result[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
+
+		}
+		echo JSON::encode($result);
+
+	}
+
+	/**
+	 *获取乡村旅游的数据
+	 */
+	public function getLvyouList(){
+		$id = 37;
+		$m_category = new IQuery('category');
+		$m_category->fields = 'id,parent_id';
+		//$m_goods->where='id='.$id;
+		$cat_list = $m_category->find();
+		$cat_ids = $this->getTreeList($cat_list, $id);
+		$all_id = array();
+		foreach ($cat_ids as $k => $v) {
+			$all_id[] = $v['id'];
+		}
+		$all_id[] = $id;
+		$all_id = implode(',', $all_id);
+		//$m_goods->fileds='';
+
+		$m_goods = new IQuery('goods as go');
+		$m_goods->distinct='1';
+
+		$m_goods->where = 'c.category_id in (' . $all_id . ') AND (go.is_del=0 or go.is_del=4) ';
+		$m_goods->fields='go.id as goods_id,go.sale,go.sell_price,go.img,go.name';
+		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
+		$m_goods->order='go.sort asc';
+		$result = $m_goods->find();
+		foreach ($result as $k => $v) {
+			$result[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
+
+		}
+		echo JSON::encode($result);
+
+	}
 	//获取首页图片的信息
 	public function getIndexSlide() {
 		$siteConfigObj = new Config("site_config");
