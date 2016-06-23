@@ -56,6 +56,7 @@ class MobileUser extends IController
 					//member表
 					$memberArray = array(
 						'user_id' => $user_id,
+						'mobile'=>$phone,
 						'time' => ITime::getDateTime(),
 						'status' => 1,
 					);
@@ -244,6 +245,83 @@ class MobileUser extends IController
 		}else{
 			return false;
 		}
+	}
+	/**
+	 *用户帮助接口
+	 */
+	public function getHelpCat(){
+		$helpCat=new IQuery('help_category');
+		$helpCat->fields='id,name';
+		$helpCat->order='`sort` asc';
+		$helpCatList=$helpCat->find();
+		$helpObj=new IQuery('help');
+		$res=array();
+		foreach($helpCatList as $k=>$v){
+			$helpObj->where=' cat_id ='.$v['id'];
+			$res[$k]['data']=$helpList=$helpObj->find();
+			$res[$k]['id']=$v['id'];
+			$res[$k]['name']=$v['name'];
+		}
+		die(JSON::encode($res));
+	}
+	/**
+	 *修改收获地址,添加收获地址
+	 */
+	public function editAdress(){
+		$token=IFilter::act(IReq::get('token','post'));
+		if($token){
+			$tokenObj=new IModel('token');
+			if($res=$tokenObj->getObj('token ='.$token)){
+				$addId=IFilter::act(IReq::get('add_id','post'),'int');
+				$accept_name=IFilter::act(IReq::get('accept_name','post'));
+				$address=IFilter::act(IReq::get('$address','post'));
+				$mobile = IFilter::act(IReq::get('mobile','post'));
+				$zip=IFilter::act(IReq::get('zip','post'),'int');
+				if(!$accept_name){
+					die(JSON::encode(['code'=>0,'info'=>'请填写收货人姓名']));
+				}
+				if(!$address){
+					die(JSON::encode(['code'=>0,'info'=>'请输入地址']));
+				}
+				if(!IValidate::phone($mobile)){
+					die(JSON::encode(['code'=>0,'info'=>'请输入手机号']));
+				}
+				if(!IValidate::zip($zip)){
+					die(JSON::encode(['code'=>0,'info'=>'请输入邮箱']));
+				}
+				$addObj=new IModel('address');
+				$data['accept_name']=$accept_name;
+				$data['address']=$address;
+				$data['mobile']=$mobile;
+				$data['zip']=$zip;
+				$data['default']=IFilter::act(IReq::get('default','post'),'int')?IFilter::act(IReq::get('default','post'),'int'):0;
+				$data['province']=0;
+				$data['city']=0;
+				$data['area']=0;
+				if($addId){
+					$oldAddData=$addObj->getObj('id='.$addId);
+					$data['province']=$oldAddData['province'];
+					$data['city']=$oldAddData['city'];
+					$data['area']=$oldAddData['area'];
+					if($addObj->setData($data)->update('id='.$addId)){
+						die(JSON::encode(['code'=>1,'info'=>'修改成功']));
+					}else{
+						die(JSON::encode(['code'=>0,'info'=>'修改失败']));
+					}
+				}else{
+					if($addObj->setData($data)->add()){
+						die(JSON::encode(['code'=>0,'info'=>'添加成功']));
+					}else{
+						die(JSON::encode(['code'=>1,'info'=>'添加失败']));
+					}
+				}
+			}else{
+				die(JSON::encode(['code'=>0,'info'=>'请登录']));
+			}
+		}else{
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
+
 	}
 }
 

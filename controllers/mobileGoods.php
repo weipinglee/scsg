@@ -124,7 +124,7 @@ class mobileGoods extends IController {
 	//特价商品
 	public function getTejia() {
 		$m_goods = new IQuery('commend_goods as co');
-		$m_goods->fields = 'go.img,go.sell_price,go.name,go.id,go.market_price';
+		$m_goods->fields = 'go.img,go.sell_price,go.name,go.id as goods_id,go.market_price';
 		$m_goods->join = 'left join goods as go on co.goods_id = go.id';
 		$m_goods->where = 'co.commend_id = 3 and go.is_del = 0 AND go.id is not null';
 		$m_goods->order = 'sort asc,id desc';
