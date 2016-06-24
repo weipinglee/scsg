@@ -42,8 +42,8 @@ class mobileSearch extends IController{
             $where .= " and go.id in (".join(',',$GoodsId).") ";
             }else{$where.=' and false';}
             $goodsObj=new IQuery('goods as go');
-            $goodsObj->join='left join commend_goods as c on c.goods_id=go.id';
-            $goodsObj->fields   = ' go.id as goods_id,go.name,go.is_del,go.comments,go.grade,go.goods_no,go.sell_price,go.market_price,go.store_nums,go.img,go.sale,go.seller_id,go.sale,go.grade,c.commend_id,go.up_time ';
+            //$goodsObj->join='left join commend_goods as c on c.goods_id=go.id';
+            $goodsObj->fields   = ' go.id as goods_id,go.name,go.is_del,go.comments,go.grade,go.goods_no,go.sell_price,go.market_price,go.store_nums,go.img,go.sale,go.seller_id,go.sale,go.grade,go.up_time ';
             $goodsObj->where=$where;
             $goodsObj->order='go.sort asc';
             $res=$goodsObj->find();

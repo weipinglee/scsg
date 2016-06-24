@@ -323,6 +323,105 @@ class MobileUser extends IController
 		}
 
 	}
+	/**
+	 *修改头像
+	 */
+	public function userIcoUpload(){
+		$token=IFilter::act(IReq::get('token','post'));
+		$tokenObj=new IModel('token');
+		$user=$tokenObj->getObj('token='.$token);
+		if(!$user) {
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
+		if(isset($_FILES['attach']['name']) && $_FILES['attach']['name'] != '')
+		{
+			$photoObj = new PhotoUpload();
+			$photo    = $photoObj->run();
+
+			if($photo['attach']['img'])
+			{
+				$user_id   = $user['user_id'];
+				$user_obj  = new IModel('user');
+				$dataArray = array(
+					'head_ico' => $photo['attach']['img'],
+				);
+				$user_obj->setData($dataArray);
+				$where  = 'id = '.$user_id;
+				$isSuss = $user_obj->update($where);
+
+				if($isSuss !== false)
+				{
+					die(JSON::encode(['code'=>1,'info'=>$photo['attach']['img']]));
+
+				}
+				else
+				{
+					die(JSON::encode(['code'=>0,'info'=>'上传失败']));
+
+				}
+			}
+		}
+	}
+
+	/**
+	 *修改昵称
+	 */
+	public function editUserName(){
+		$token=IFilter::act(IReq::get('token','post'));
+		$tokenObj=new IModel('token');
+		$user=$tokenObj->getObj('token='.$token);
+		if(!$user){
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
+		$userName=IFilter::act(IReq::get('user_name','post'));
+		if(!$userName){
+			die(JSON::encode(['code'=>0,'info'=>'请输入用户名']));
+		}
+
+		$userObj=new IModel('user');
+		if($userObj->where('username='.$userName)){
+			die(JSON::encode(['code'=>0,'info'=>'用户名重复']));
+		}
+		$userObj->setData(['username'=>$userName]);
+		$res=$userObj->update('id='.$user['user_id']);
+		if($res){
+			die(JSON::encode(['code'=>1,'info'=>'修改成功']));
+		}else{
+			die(JSON::encode(['code'=>0,'info'=>'修改失败']));
+		}
+	}
+	/**
+	 *反馈意见接口
+	 */
+	public function addSuggestion(){
+		$token=IFilter::act(IReq::get('token','post'));
+		$tokenObj=new IModel('token');
+		$user=$tokenObj->getObj('token='.$token);
+		if(!$user){
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
+		$title=IFilter::act(IReq::get('title','post'));
+		$content=IFilter::act(IFilter::get('content','post'));
+		$time=date('Y-m-d H:i:s',time());
+		if(!$content){
+			die(JSON::encode(['code'=>0,'info'=>'内容不能为空']));
+		}
+		$data=[
+			'title'=>$title,
+			'content'=>$content,
+			'user_id'=>$user['user_id'],
+			'time'=>$time
+		];
+		$suggesion=new IModel('suggestion');
+		$suggesion->setData($data);
+		if($suggesion->add()){
+			die(JSON::encode(['code'=>1,'info'=>'添加成功']));
+		}else{
+			die(JSON::encode(['code'=>0,'info'=>'添加失败']));
+		}
+
+	}
+
 }
 
 
