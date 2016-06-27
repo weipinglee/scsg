@@ -227,7 +227,7 @@ class MobileUser extends IController
 		$token=sha1($user_id.time());
 		$tokenModel=new IModel('token');
 		if($tokenModel->getObj('user_id='.$user_id)){
-			$tokenModel->setData(array('user_id'=>$user_id,'token'=>$token));
+			$tokenModel->setData(array('user_id'=>$user_id,'token'=>$token,'time'=>date('Y-m-d H:i:s',time())));
 			$tokenModel->update('user_id='.$user_id);
 		} else{
 			$tokenModel->setData(array('user_id'=>$user_id,'token'=>$token));
@@ -256,13 +256,17 @@ class MobileUser extends IController
 		$helpCatList=$helpCat->find();
 		$helpObj=new IQuery('help');
 		$res=array();
+		$helpObj->fields='id,cat_id,name';
+		$helpObj->order='`sort` asc';
 		foreach($helpCatList as $k=>$v){
 			$helpObj->where=' cat_id ='.$v['id'];
+
 			$res[$k]['data']=$helpList=$helpObj->find();
 			$res[$k]['id']=$v['id'];
 			$res[$k]['name']=$v['name'];
 		}
 		die(JSON::encode($res));
+		//var_dump($res);
 	}
 	/**
 	 *修改收获地址,添加收获地址
@@ -271,7 +275,7 @@ class MobileUser extends IController
 		$token=IFilter::act(IReq::get('token','post'));
 		if($token){
 			$tokenObj=new IModel('token');
-			if($res=$tokenObj->getObj('token ='.$token)){
+			if($res=$tokenObj->getObj('token ='.'\''.$token.'\'')){
 				$addId=IFilter::act(IReq::get('add_id','post'),'int');
 				$accept_name=IFilter::act(IReq::get('accept_name','post'));
 				$address=IFilter::act(IReq::get('$address','post'));
@@ -329,7 +333,7 @@ class MobileUser extends IController
 	public function userIcoUpload(){
 		$token=IFilter::act(IReq::get('token','post'));
 		$tokenObj=new IModel('token');
-		$user=$tokenObj->getObj('token='.$token);
+		$user=$tokenObj->getObj('token ='.'\''.$token.'\'');
 		if(!$user) {
 			die(JSON::encode(['code'=>0,'info'=>'请登录']));
 		}
@@ -369,7 +373,7 @@ class MobileUser extends IController
 	public function editUserName(){
 		$token=IFilter::act(IReq::get('token','post'));
 		$tokenObj=new IModel('token');
-		$user=$tokenObj->getObj('token='.$token);
+		$user=$tokenObj->getObj('token ='.'\''.$token.'\'');
 		if(!$user){
 			die(JSON::encode(['code'=>0,'info'=>'请登录']));
 		}
@@ -396,7 +400,7 @@ class MobileUser extends IController
 	public function addSuggestion(){
 		$token=IFilter::act(IReq::get('token','post'));
 		$tokenObj=new IModel('token');
-		$user=$tokenObj->getObj('token='.$token);
+		$user=$tokenObj->getObj('token ='.'\''.$token.'\'');
 		if(!$user){
 			die(JSON::encode(['code'=>0,'info'=>'请登录']));
 		}
