@@ -139,10 +139,14 @@
 	</script>
 	<script type='text/javascript' >
         var i = 1;
+        var _t = '{$type}';
 		window.onscroll = function(){
 			 if ($(document).scrollTop() >= $(document).height() - $(window).height()){
 					showMorePro(i);
-                    i++;
+                    if(_t == 'list')
+                    {
+                        i++;
+                    }
 			 }
 		}
 	</script>

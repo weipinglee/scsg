@@ -1011,7 +1011,14 @@ class Market extends IController
 	{
 		$id = IFilter::act(IReq::get('id'),'int');
 		$billDB = new IModel('bill');
-		$this->billRow = $billDB->getObj('id = '.$id);
+		$billRow = $billDB->getObj('id = '.$id);
+        $n=strrchr($billRow['log'],'：');
+        preg_match("/\d+(.\d{1,4})?/", $n, $t);
+        if($t)
+        {
+            $billRow['amount'] = $t[0];
+        }
+        $this->billRow = $billRow;
 		$this->redirect('bill_edit');
 	}
 

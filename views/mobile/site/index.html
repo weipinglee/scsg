@@ -204,6 +204,7 @@
 	<section class="activity_floor">
 		{echo:Ad::show("手机端首页掌上团购上方")}
 	</section>
+    {if:$this->tuanList}
     <section class="suggestion">
         <header class="title clear-fix">
             <h2 class="fl">掌上团购</h2>
@@ -247,6 +248,7 @@
     <section class="activity_floor">
         {echo:Ad::show("手机端首页掌上团购下方")}
     </section>
+    {/if}
     <section class="activity_floor">
                        
         
@@ -351,7 +353,7 @@
                         {/foreach}
 					</ul>
 
-                    <div class="look_more"><a href="">查看更多</a></div>
+                    <div class="look_more"><a href="{url:/site/pro_list/cat/$goods['id']}">查看更多</a></div>
 
 				</div>
                 {/foreach}

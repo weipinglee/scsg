@@ -27,7 +27,7 @@
 								<tr><th>产品数量</th><td><a href="{url:/goods/goods_list}"><b class="f14 red3">{echo:statistics::goodsCount()}</b> 个</a></td></tr>
 								<tr><th>品牌数量</th><td>{query:name=brand fields=count(id) as countNums}<a href="{url:/brand/brand_list}"><b class="f14 red3">{$item['countNums']}</b> 个</a>{/query}</td></tr>
 								<tr><th>订单数量</th><td>{query:name=order fields=count(id) as countNums where=if_del eq 0}<a href="{url:/order/order_list}"><b class="f14 red3">{$item['countNums']}</b> 个</a>{/query}</td></tr>
-								<tr><th>库存预警</th><td>{query:name=goods fields=count(id) as countNums where=store_nums l $store_num_warning and (is_del eq 0 or is_del eq 4)}<a href="javascript:formSubmit('storeNumWarning');"><b class="f14 red3">{$item['countNums']}</b> 个</a>{/query}</td></tr>
+								<tr><th>库存预警</th><td>{query:name=goods fields=count(id) as countNums where=store_nums l $store_num_warning and (is_del eq 0 or is_del eq 4) and seller_id eq 0}<a href="javascript:formSubmit('storeNumWarning');"><b class="f14 red3">{$item['countNums']}</b> 个</a>{/query}</td></tr>
 								{set:$i=0;}
 								<tr><th>恶意用户</th><td>{query:name=member as m join=left join refundment_doc as r on m.user_id eq r.user_id group=m.user_id  where=TIMESTAMPDIFF(second,r.time,NOW()) l $limit_seconds having=count(r.id) g $refund_warning fields=count(m.user_id) as times}{set:$i++}{/query}<a href="{url:/member/bad_member_list}"><b class="f14 red3">{$i}</b> 个</a></td></tr>
 							
