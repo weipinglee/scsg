@@ -257,3 +257,12 @@ body{font-size:62.5%}
 .banner_bottom p{display:block;width:300%;height:35px;line-height:35px;position:absolute;bottom:0;overflow:hidden;-webkit-animation:marquee 20s linear infinite;-moz-animation:marquee 20s linear infinite;-ms-animation:marquee 20s linear infinite;-o-animation:marquee 20s linear infinite;animation:marquee 20s linear infinite}
 
 .banner_bottom p span{width:300%;height:35px;color:#fff;font-size:14px}
+.look_more{
+	text-align: center;
+    height: 30px;
+    line-height: 35px;
+}
+.look_more a{
+	color: #898989;
+    font-size: 13px;
+}
