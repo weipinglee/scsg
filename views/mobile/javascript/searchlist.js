@@ -1,5 +1,5 @@
 
-function getData(obj,url){
+function getData(obj,url, j){
 	$('.loading-imgS img').show();
 	$('.loading-imgS p').hide();
 	
@@ -16,6 +16,10 @@ function getData(obj,url){
 			if(data==0){
 				$('.loading-imgS p').text('没有更多数据');
 			}else{
+                if(j % 2 === 0)
+                {
+                    $('.js_show_cat_ad').clone().show().appendTo('#dataList');
+                }
 				for(var i in data){
 					var newPro = template.render(temp,data[i]);
 					$('#dataList').append(newPro);
@@ -31,7 +35,7 @@ function getData(obj,url){
 	})
 }
 //获取更多产品
-function showMorePro(){
+function showMorePro(i){
 	
 	var page = parseInt($('input[name=page]').val());
 	var childCat = $('input[name=childCat]').val();
@@ -40,7 +44,7 @@ function showMorePro(){
 		page:page,childCat:childCat,order:order
 	};
 	
-	getData(obj,getMoreUrl);
+	getData(obj,getMoreUrl, i);
 }
 //获取更多搜索产品
 function showMoreSearch(){
@@ -51,6 +55,6 @@ function showMoreSearch(){
 	var obj = {
 		page:page,word:word,order:order,cat_id:cat_id
 	};
-	getData(obj,getMoreUrl);
+	getData(obj,getMoreUrl,1);
 }
 

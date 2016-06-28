@@ -69,7 +69,7 @@
     	var getMoreUrl = '{url:/mobile/getMoreProlist}';
 		var temp ='{$template}';
 		$(function(){
-			showMorePro();
+			showMorePro(1);
 		})
     </script> 
 <section id="contents">
@@ -81,10 +81,9 @@
 		</div>
 
 
-		<div class="s-item" style="padding-bottom: 0;">
-			<div>
-			  <a href=""><img src="{skin:images/files/dianxintu.jpg}" style="width:100%;height:257px;"></a>
-			</div>
+		<div class="s-item js_show_cat_ad" style="padding-bottom: 0;display: none;" >
+            {echo:ad::show('导航右侧', $this->catId, 0, true)}
+			  <!--<a href=""><img src="{skin:images/files/dianxintu.jpg}" style="width:100%;height:257px;"></a>-->
 		</div>
 
 
@@ -139,9 +138,11 @@
 			</div>
 	</script>
 	<script type='text/javascript' >
+        var i = 1;
 		window.onscroll = function(){
 			 if ($(document).scrollTop() >= $(document).height() - $(window).height()){
-					showMorePro();
+					showMorePro(i);
+                    i++;
 			 }
 		}
 	</script>
