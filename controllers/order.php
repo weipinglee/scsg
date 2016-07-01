@@ -1006,7 +1006,7 @@ class Order extends IController
 		//搜索条件
 		$search = IFilter::act(IReq::get('search'),'strict');
 		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
-        $plat = IReq::get('plat') ? IReq::get('plat') : 'plat';
+        $plat = IReq::get('plat') ? IReq::get('plat') : '';
         if($plat == 'plat')
         {
             $search['seller_id'] = '=0';
@@ -1017,7 +1017,7 @@ class Order extends IController
         } 
         else
         {
-            $search['pid'] = 0;
+            $search['seller_id'] = ' IS NULL';
         }
         $search['distribution_status'] = IReq::get('distribution_status');
 		//条件筛选处理

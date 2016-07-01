@@ -50,7 +50,7 @@ class alipay extends paymentPlugin
 
 		//生成签名结果
 		$mysign = $this->buildMysign($para_sort,Payment::getConfigParam($paymentId,'M_PartnerKey'));
-        $pay_level   = isset($callbackData['pay_level']) ? $callbackData['pay_level'] : 2;
+
 		if($callbackData['sign'] == $mysign)
 		{
 			//回传数据
@@ -65,7 +65,7 @@ class alipay extends paymentPlugin
 
 			if($callbackData['trade_status'] == 'TRADE_FINISHED' || $callbackData['trade_status'] == 'WAIT_SELLER_SEND_GOODS')
 			{
-				return array('result' => true, 'pay_level' => $pay_level);
+				return true;
 			}
 		}
 		else
@@ -129,7 +129,7 @@ class alipay extends paymentPlugin
 		//签名结果与签名方式加入请求提交参数组中
 		$return['sign'] = $mysign;
 		$return['sign_type'] = 'MD5';
-        $return['pay_level'] = isset($payment['pay_level']) ? $payment['pay_level'] : 2;
+
 		return $return;
 	}
 

@@ -78,8 +78,10 @@ class balance extends paymentPlugin
 		$encryptKey = isset(IWeb::$app->config['encryptKey']) ? IWeb::$app->config['encryptKey'] : 'iwebshop';
 		$urlStr .= $user_id . $partnerKey . $encryptKey;
 		$return['sign'] = md5($urlStr);
-
-        $return['pay_level'] = isset($payment['pay_level']) ? $payment['pay_level'] : 2;
+        if(isset($payment['pay_level']))
+        {
+            $return['pay_level'] = $payment['pay_level'] ? $payment['pay_level'] : 2;
+        }
         return $return;
     }
 	/**
@@ -181,7 +183,10 @@ class balance extends paymentPlugin
 
         $orderNo = $ExternalData['order_no'];
         $money   = $ExternalData['total_fee'];
-        $pay_level   = isset($ExternalData['pay_level']) ? $ExternalData['pay_level'] : 2;
+        if(isset($ExternalData['pay_level']))
+        {
+            $pay_level = $ExternalData['pay_level'] ? $ExternalData['pay_level'] : 2;
+        }
 
         if($ExternalData['sign'] == md5($testStr))
         {
@@ -199,7 +204,14 @@ class balance extends paymentPlugin
 						'order_id' => $orderNo,
 					);
 					$log->write($config);
-                	return array('result' => true, 'pay_level' => $pay_level);
+                    if(isset($pay_level))
+                    {
+                        return array('result' => true, 'pay_level' => $pay_level);
+                    }
+                	else
+                    {
+                        return true;
+                    }
                 }
                 break;
 

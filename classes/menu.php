@@ -108,6 +108,7 @@ class Menu
 
 	   '订单'=>array(
         	'订单管理'=>array(                    
+                '/order/order_list' => '所有订单',
                 '/order/order_list_plat' => '平台订单',
                 '/order/order_list_seller' => '商户订单',
                 '/order/order_edit' => '添加订单',

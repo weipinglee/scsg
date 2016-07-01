@@ -134,7 +134,7 @@ class Preorder_Class extends Order_Class{
 					
 			}else return false;
 		}
-		else if(in_array($pay_type,array(3))){
+		else if(in_array($pay_type,array(3,13))){
 			$paymentInstance = Payment::createPaymentInstance($pay_type);
 			$paymentData = Payment::getPaymentInfoForPresellRefund($pay_type,$refundId,$order_id,$amount);
 			

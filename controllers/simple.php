@@ -2169,92 +2169,6 @@ class Simple extends IController
     		$this->redirect('login');
     	}
     }
-    
-    
-    //微信商城入口
-    public function wecheatshop()
-    {
-        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx245f90eb0759be3a&redirect_uri=".urlencode('http://www.yqtvt.com/simple/wecheatshoplogin')."&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
-        echo "<script language='javascript' type='text/javascript'>";
-        echo "window.location.href='{$url}'";
-        echo "</script>";
-    }
-    
-    public function wecheatshoplogin()
-    {
-        $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx245f90eb0759be3a&secret=7591b6700db5a1d7bbd700463bab2d81&code={$_GET['code']}&grant_type=authorization_code";
-        $response = $this->get_contents($url);
-        $result = json_decode($response,true);
-        unset($url);
-        unset($response);
-        if(isset($result['openid']) && $result['openid'])
-        {
-            $oauthUserObj = new IModel('oauth_user');
-            $user_id = $oauthUserObj->getField("oauth_user_id = '{$result['openid']}' and oauth_id = 5", 'user_id');
-            if(!empty($user_id))
-            {
-                $userRow = CheckRights::isValidUser($result['openid'].'@qq.com',md5($result['openid']));
-
-                CheckRights::loginAfter($userRow);
-            }
-            else
-            {
-                $userObj = new IModel('user');
-                $temp = mt_rand();
-                $userArray = array(
-                        'email'    => $result['openid'].'@qq.com',
-                        'password' => md5($result['openid']),
-                );
-                $userObj->setData($userArray);
-                $user_id = $userObj->add();
-                $userObj->commit();
-                
-                $group = new IModel('user_group');
-                $group_id =$group->getField('is_default=1','id');
-                
-                $memberObj  = new IModel('member');
-                $memberData = array(
-                    'user_id'   => $user_id,
-                    'true_name' => '微信用户'.$temp,
-                    'last_login'=> ITime::getDateTime(),
-                    'sex'       => 1,
-                    'time'      => ITime::getDateTime(),
-                );
-                if($group_id)$memberData['group_id']=$group_id;
-                $memberObj->setData($memberData);
-                $memberObj->add();
-                $memberObj->commit();
-                $oauthUserObj = new IModel('oauth_user');
-
-                //插入关系表
-                $oauthUserData = array(
-                    'oauth_user_id' => $result['openid'],
-                    'oauth_id'      => 5,
-                    'user_id'       => $user_id,
-                    'datetime'      => ITime::getDateTime(),
-                );
-                $oauthUserObj->setData($oauthUserData);
-                $oauthUserObj->add();
-                $oauthUserObj->commit();  
-                $userRow = CheckRights::isValidUser($userArray['email'],$userArray['password']);
-                CheckRights::loginAfter($userRow);
-            }
-        }
-        $this->redirect('/site/index/client/mobile');
-    }
-    
-    public function get_contents($url)
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        $response =  curl_exec($ch);
-        curl_close($ch);
-
-        return $response;
-    }
-    
     //同步绑定用户数据
     public function bindUser($userInfo,$oauthId)
     {
@@ -2414,10 +2328,6 @@ class Simple extends IController
                 $userObj->setData($userArray);
                 $user_id = $userObj->add();
                 $userObj->commit();
-                
-                $group = new IModel('user_group');
-                $group_id =$group->getField('is_default=1','id');
-                
                 $memberObj  = new IModel('member');
                 $memberData = array(
                     'user_id'   => $user_id,
@@ -2426,7 +2336,6 @@ class Simple extends IController
                     'sex'       => isset($oauth_userInfo['sex']) ? $oauth_userInfo['sex'] : 1,
                     'time'      => ITime::getDateTime(),
                 );
-                if($group_id)$memberData['group_id']=$group_id;
                 $memberObj->setData($memberData);
                 $memberObj->add();
                 $memberObj->commit();
@@ -2762,5 +2671,5 @@ class Simple extends IController
         $num            = IReq::get('num') ? IFilter::act(IReq::get('num'), 'int') :１;
         $result = Delivery::getDelivery(0, $delivery_id, $goods_id, $product_id, $num);
         echo JSON::encode($result);
-    }   
+    }
 }

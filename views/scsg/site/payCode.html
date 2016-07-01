@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-{set:$file = IFilter::act(IReq::get('data'));}
+{set:$id=IReq::get('product_id');$oId=IReq::get('order_id');$pay_level=IReq::get('pay_level');$total = IReq::get('pay_total');$data = IFilter::act(IReq::get('code_url'));$file = urlencode($data);}
 <head>
 	<meta charset="UTF-8">
 	<title>微信支付</title>
@@ -15,7 +15,7 @@
                            <div class="j_weixinInfo font-red">请根据提示扫描二维码进行微信支付</div>
                            <div class="p-w-box">
                                <div class="pw-box-hd">
-                                   <img src="{url:/views/qrcode/}/{$file}.png" width="298">
+                                   <img src="http://paysdk.weixin.qq.com/example/qrcode.php?data={$file}" width="298">
                                </div>
                                <div class="pw-box-ft" style="background: url({skin:images/cocen.png}) 50px 8px no-repeat #ff7674;">
                                    <p>请使用微信扫一扫</p>
@@ -36,4 +36,76 @@
 
 	
 </body>
+<script language=javascript>
+    var t1;
+    var sum = 0;
+    var id = '{$id}';
+    function updata_native_state()
+    {
+        sum++;
+        if(sum > 120)
+        {
+            window.clearInterval(t1);
+            return false;
+        }
+        if(sum > 60)
+        {
+            m = sum % 3;
+            if(m != 0){return false;}
+            
+        }
+        $.ajax({
+            type:'post',
+            async:false,
+            data:{id:id},
+            dataType:'json',
+            url:'{url:/plugins/payments/pay_scan_wechat/notify_state.php}',
+            beforeSend:function(){
+                
+            },
+            success:function(data){
+                if(data.state == 'SUCCESS')
+                {
+                    window.clearInterval(t1);
+                    var oId = '{$oId}';
+                    var pay_level = '{$pay_level}';
+                    var pay_total = '{$total}';
+                    $.ajax({
+                        type:'post',
+                        async:false,
+                        data:{oId:oId,pay_level:pay_level,id:id,pay_total:pay_total},
+                        dataType:'json',
+                        url:'{url:/block/wecheat_callback}',
+                        beforeSend:function(){
+                            
+                        },
+                        success:function(res){
+                            if(res.status == 1)
+                            {
+                                window.location = res.url;
+                            }
+                            else
+                            {
+                                alert(res.msg);
+                            }
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown){
+                            console.info(textStatus);
+                        }
+                    })
+                }
+                else if(data.state == 'fail')
+                {
+                    window.clearInterval(t1);
+                    alert(data.info)
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                console.info(textStatus);
+            }
+        })
+    }
+    t1 = window.setInterval(updata_native_state,3000)
+    
+</script>
 </html>

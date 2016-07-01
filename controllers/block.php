@@ -377,8 +377,7 @@ class Block extends IController
 		$order_id   = IFilter::act(IReq::get('order_id'),'int');
 		$recharge   = IReq::get('recharge');
         $payment_id = IFilter::act(IReq::get('payment_id'),'int');
-		$pay_level = IFilter::act(IReq::get('pay_level'),'int');
-		
+		$pay_level = IReq::get('pay_level') ? IFilter::act(IReq::get('pay_level'),'int') : 2;
 		if($order_id)
 		{
 			//获取订单信息
@@ -401,73 +400,30 @@ class Block extends IController
 
 		//获取支付方式类库
 		$paymentInstance = Payment::createPaymentInstance($payment_id);
+        
+		//在线充值
+		if($recharge !== null)
+		{
+			if($payment_id==7){//担保交易不能充值
+				IError::show(403,'担保交易不能用户充值');
+			}
+			$recharge   = IFilter::act($recharge,'float');
+			$paymentRow = Payment::getPaymentById($payment_id);
 
-        if($payment_id <> 13)
-        {
-		    //在线充值
-		    if($recharge !== null)
-		    {
-			    if($payment_id==7){//担保交易不能充值
-				    IError::show(403,'担保交易不能用户充值');
-			    }
-			    $recharge   = IFilter::act($recharge,'float');
-			    $paymentRow = Payment::getPaymentById($payment_id);
-
-			    //account:充值金额; paymentName:支付方式名字
-			    $reData   = array('account' => $recharge , 'paymentName' => $paymentRow['name']);
-			    $sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'recharge',$reData));
-		    }
-		    //订单支付
-		    else if($order_id)
-		    {
-			    $sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id, $pay_level));
-		    }
-		    else
-		    {
-			    IError::show(403,'发生支付错误');
-		    }
-            $paymentInstance->doPay($sendData);
-        }
-        else
-        {
-            //在线充值
-            if($recharge !== null)
-            {
-                $recharge   = IFilter::act($recharge,'float');
-                $paymentRow = Payment::getPaymentById($payment_id);
-
-                //account:充值金额; paymentName:支付方式名字
-                $reData   = array('account' => $recharge , 'paymentName' => $paymentRow['name']);
-                $sendData = $paymentInstance->getUrlCode(Payment::getPaymentInfo($payment_id,'recharge',$reData));
-            }
-            //订单支付
-            else if($order_id)
-            {
-                $sendData = $paymentInstance->getUrlCode(Payment::getPaymentInfo($payment_id,'order',$order_id, $pay_level));
-            }
-            else
-            {
-                IError::show(403,'发生支付错误');
-            }
-            $filename = 'pay_'.ITime::getTime();
-            $this->qrcode($sendData, $filename);
-            $this->redirect('/site/payCode', false, $filename);
-        }                                   
-    }
-    //生成二维码
-    function qrcode($url,$file)
-    {
-        IWeb::autoload('phpqrcode');
-        // 二维码数据 
-        $url = $url; 
-        // 生成的文件名 
-        $filename = $file.'.png'; 
-        // 纠错级别：L、M、Q、H 
-        $errorCorrectionLevel = 'L';  
-        // 点的大小：1到10 
-        $matrixPointSize = 6;  
-        //创建一个二维码文件 
-        QRcode::png($url, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+			//account:充值金额; paymentName:支付方式名字
+			$reData   = array('account' => $recharge , 'paymentName' => $paymentRow['name']);
+			$sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'recharge',$reData));
+		}
+		//订单支付
+		else if($order_id)
+		{
+			$sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id, $pay_level));
+		}
+		else
+		{
+			IError::show(403,'发生支付错误');
+		}
+        $paymentInstance->doPay($sendData);                             
     }
 	/**
 	 * 合并支付同步回调
@@ -596,9 +552,8 @@ class Block extends IController
 		unset($callbackData['action']);
 		unset($callbackData['_id']);
 		$return = $paymentInstance->callback($callbackData,$payment_id,$money,$message,$orderNo);
-
 		//支付成功
-		if($return == 1 && !is_array($return))
+		if($return && !is_array($return))
 		{
 			//充值方式
 			if(stripos($orderNo,'recharge') !== false)
@@ -611,55 +566,10 @@ class Block extends IController
 				}
 				IError::show(403,'充值失败');
 			}
-			else if(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
-			{
-				$order_id = Preorder_Class::updateOrderStatus($orderNo);
-				if($order_id)
-				{
-					$url  = '/site/success/message/'.urlencode("支付成功");
-					if(IClient::getDevice()=='mobile'){
-						$url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
-					}
-					else{
-						$url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
-					}
-					
-					$this->redirect($url);
-					exit;
-				}
-				IError::show(403,'订单修改失败');
-			}
-			else{
-				$order_id = Order_Class::updateOrderStatus($orderNo);
-				if($order_id)
-				{
-					$url  = '/site/success/message/'.urlencode("支付成功");
-					if(IClient::getDevice()=='mobile'){
-						$url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
-					}
-					else{
-						$url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
-					}
-					$this->redirect($url);
-					exit;
-				}
-				IError::show(403,'订单修改失败');
-			}
 		}
         elseif(is_array($return))
         {
-            //充值方式
-            if(stripos($orderNo,'recharge') !== false)
-            {
-                $recharge_no = str_replace('recharge','',$orderNo);
-                if(payment::updateRecharge($recharge_no))
-                {
-                    $this->redirect('/site/success/message/'.urlencode("充值成功").'/?callback=/ucenter/account_log');
-                    exit;
-                }
-                IError::show(403,'充值失败');
-            }
-            else if(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
+            if(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
             {
                 $order_id = Preorder_Class::updateOrderStatus($orderNo);
                 if($order_id)
@@ -715,6 +625,7 @@ class Block extends IController
 	 */
 	function server_callback()
 	{
+        
 		//从URL中获取支付方式
 		$payment_id      = IFilter::act(IReq::get('_id'),'int');
 		$paymentInstance = Payment::createPaymentInstance($payment_id);
@@ -738,7 +649,7 @@ class Block extends IController
  
 		
 		//支付成功
-		if($return == 1)
+		if($return && !is_array($return))
 		{
 			
 			//充值方式
@@ -751,7 +662,10 @@ class Block extends IController
 					exit;
 				}
 			}
-			else if(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
+        }
+        elseif(is_array($return))
+        {
+			if(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
 			{
 				$order_id = Preorder_Class::updateOrderStatus($orderNo);
 				if($order_id)
@@ -764,7 +678,7 @@ class Block extends IController
 			else
 			{
 				
-				$order_id = Order_Class::updateOrderStatus($orderNo);
+				$order_id = Order_Class::updateOrderStatus($orderNo, '', '', $return['pay_level']);
 				if($order_id)
 				{
 					$paymentInstance->notifyStop();
@@ -780,6 +694,99 @@ class Block extends IController
 			exit;
 		}
 	}
+    
+    //微信支付成功回调函数
+    public function wecheat_callback()
+    {
+        $paymentInstance = Payment::createPaymentInstance(13);
+
+        if(!is_object($paymentInstance))
+        {
+            IError::show(403,'支付方式不存在');
+        }
+        $orderNo = IReq::get('oId');
+        $pay_level = IReq::get('pay_level');
+        $tradeNo = IReq::get('id');
+        $pay_total = IReq::get('pay_total');
+        $paymentInstance->recordTN($orderNo,$tradeNo,$pay_level);
+        $resArr = array(
+                'order_no'     => $orderNo,
+                'trade_no'     => $tradeNo,
+                'trade_type'   => 1,
+                'money'        => $pay_total/100,
+                'pay_type'     => 13,
+                'trade_status' => 1,
+                'time'         => date('Y-m-d H:i:s')
+            );
+        $paymentInstance->addTradeData($resArr);
+        $msg = array();
+        
+        //充值方式
+        if(stripos($orderNo,'recharge') !== false)
+        {
+            $recharge_no = str_replace('recharge','',$orderNo);
+            if(payment::updateRecharge($recharge_no))
+            {
+                $msg['status'] = 1;
+                $msg['url'] = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode("充值成功").'/?callback=/ucenter/account_log');
+            }
+            else
+            {
+                $msg['status'] = 0;
+                $msg['msg'] = '充值失败';
+            }
+        }
+        elseif(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
+        {
+            $order_id = Preorder_Class::updateOrderStatus($orderNo);
+            if($order_id)
+            {
+                $url  = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode("支付成功"));
+                if(IClient::getDevice()=='mobile'){
+                    $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
+                }
+                else{
+                    $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
+                }
+                
+                $msg['status'] = 1;
+                $msg['url'] = $url;
+            }
+            else
+            {
+                $msg['status'] = 0;
+                $msg['msg'] = '充值失败';
+            }
+        }
+        else{
+            $order_id = Order_Class::updateOrderStatus($orderNo, '', '', $pay_level);
+            if($order_id && !is_array($order_id))
+            {
+                $url  = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode("支付成功"));
+                if(IClient::getDevice()=='mobile'){
+                    $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
+                }
+                else{
+                    $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
+                }
+                $msg['status'] = 1;
+                $msg['url'] = $url;
+            }
+            elseif(is_array($order_id))
+            {
+                $url  = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode("支付成功"));
+                $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
+                $msg['status'] = 1;
+                $msg['url'] = $url;
+            }
+            else
+            {
+                $msg['status'] = 0;
+                $msg['msg'] = '充值失败';
+            }
+        }
+        echo JSON::encode($msg);
+    }
 
 	/**
      * @brief 【重要】支付中断处理

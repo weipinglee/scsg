@@ -27,7 +27,7 @@ class CLogFileHandler implements ILogHandler
 	}
 }
 
-class Log
+class Loged
 {
 	private $handler = null;
 	private $level = 15;

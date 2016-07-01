@@ -1514,18 +1514,11 @@ class Order_Class
 
 		//获取支付方式
 		$pay_type = $orderDB->getField('id='.$order_id,'pay_type');
-		
-		if(in_array($pay_type,array(3))){
+		if(in_array($pay_type,array(3,13))){
 			$paymentInstance = Payment::createPaymentInstance($pay_type);
 			$paymentData = Payment::getPaymentInfoForRefund($pay_type,$refundId,$order_id,$amount);
 			if(!$res=$paymentInstance->refund($paymentData)) return false;//验签失败
 		}
-        else if($pay_type == 13)
-        {
-            $paymentInstance = Payment::createPaymentInstance($pay_type);
-            $paymentData = Payment::getPaymentInfoForRefund($pay_type,$refundId,$order_id,$amount);
-            if(!$res=$paymentInstance->refund()) return false;//验签失败
-        }
 		else if($pay_type==1){//预存款付款打入账户余额
 			$obj = new IModel('member');
 			$isSuccess = $obj->addNum('user_id = '.$user_id,array('balance'=>$amount));
@@ -1561,7 +1554,6 @@ class Order_Class
 		);
 		$refundDB->setData($updateData);
 		$refundDB->update('id = '.$refundId);
-		
 		$orderGoodsRow = $orderGoodsDB->getObj('order_id = '.$order_id.' and goods_id = '.$refundsRow['goods_id'].' and product_id = '.$refundsRow['product_id']);
 		$order_goods_id = $orderGoodsRow['id'];
 		

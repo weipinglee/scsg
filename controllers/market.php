@@ -460,7 +460,7 @@ class Market extends IController
                 }
             }
             $this->area = $area;
-            if($promotionRow['goods_id'] <> 'all')
+            if($promotionRow['goods_id'] && $promotionRow['goods_id'] <> 'all')
             {
                 $goods = new IModel('goods');
                 $goodsList = $goods->query('id in ('.$promotionRow['goods_id'].')', 'id as goods_id,name,img,goods_no');

@@ -103,15 +103,26 @@ class unionpay extends paymentPlugin
 	{
 		if (isset ( $callbackData['signature'] ))
 		{
-            $pay_level   = isset($callbackData['pay_level']) ? $callbackData['pay_level'] : 2;
+            $pay_level = 0;
+            if(isset($callbackData['pay_level']))
+            {
+                $pay_level = $callbackData['pay_level'] ? $callbackData['pay_level'] : 2;
+            }
 			if (Common::verify ( $callbackData ))
 			{
 				$orderNo = $callbackData['orderId'];//订单号
 				if(isset($callbackData['queryId'])){
-					$this->recordTradeNo($orderNo,$callbackData['queryId']);
+					$this->recordTradeNo($orderNo,$callbackData['queryId'],$pay_level);
 				}
 				self::addTradeData($callbackData);//添加交易记录
-				return array('result' => true, 'pay_level' => $pay_level);
+                if($pay_level)
+                {
+                    return array('result' => true, 'pay_level' => $pay_level);
+                }
+                else
+                {
+                    return true;
+                }
 			}
 			else
 			{
@@ -132,14 +143,26 @@ class unionpay extends paymentPlugin
 	{
 		if (isset ( $callbackData['signature'] ))
 		{
+            $pay_level = 0;
+            if(isset($callbackData['pay_level']))
+            {
+                $pay_level = $callbackData['pay_level'] ? $callbackData['pay_level'] : 2;
+            }
 			if (Common::verify ( $callbackData ))
 			{
 				$orderNo = $callbackData['orderId'];//订单号
 				if(isset($callbackData['queryId'])){
-					$this->recordTradeNo($orderNo,$callbackData['queryId']);
+					$this->recordTradeNo($orderNo,$callbackData['queryId'],$pay_level);
 				}
 				self::addTradeData($callbackData,1);//添加交易记录
-				return 1;
+				if($pay_level)
+                {
+                    return array('result' => true, 'pay_level' => $pay_level);
+                }
+                else
+                {
+                    return true;
+                }
 			}
 			else
 			{
@@ -220,7 +243,10 @@ class unionpay extends paymentPlugin
 		
 		// 签名
 		Common::sign ( $return );
-		$return['pay_level'] = isset($payment['pay_level']) ? $payment['pay_level'] : 2;
+        if(isset($payment['pay_level']))
+        {
+            $return['pay_level'] = $payment['pay_level'] ? $payment['pay_level'] : 2;
+        }
         return $return;
 	}
 

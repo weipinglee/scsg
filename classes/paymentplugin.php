@@ -17,7 +17,8 @@ abstract class paymentPlugin
 	public $name                = null;  //支付插件名称
 	public $version             = 1.0;   //版本
 	public $callbackUrl         = '';    //支付完成后，同步回调地址
-	public $serverCallbackUrl   = '';    //异步通知地址
+    public $serverCallbackUrl   = '';    //异步通知地址
+	public $wecheatCallbackUrl   = '';    //微信支付回调地址
 	public $merchantCallbackUrl ='';	 //支付中断返回
 	public $serverCallbackUrlForRefund = '';
 
@@ -30,7 +31,9 @@ abstract class paymentPlugin
 		//回调函数地址
 		$this->callbackUrl         = IUrl::getHost().IUrl::creatUrl("/block/callback/_id/".$payment_id);
 		//回调业务处理地址
-		$this->serverCallbackUrl   = IUrl::getHost().IUrl::creatUrl("/block/server_callback/_id/".$payment_id);
+        $this->serverCallbackUrl   = IUrl::getHost().IUrl::creatUrl("/block/server_callback/_id/".$payment_id);
+        //微信支付回调地址
+		$this->wecheatCallbackUrl   = IUrl::getHost().IUrl::creatUrl("plugins/payments/pay_scan_wechat/notify.php");
 		//退款回调地址
 		$this->serverCallbackUrlForRefund = IUrl::getHost().IUrl::creatUrl("/block/server_callback_refund/_id/".$payment_id);
 		//中断支付返回
@@ -47,7 +50,7 @@ abstract class paymentPlugin
 	 * @param $tradeNo string 交易流水号
 	 * @return boolean
 	 */
-	protected function recordTradeNo($orderNo,$tradeNo)
+	protected function recordTradeNo($orderNo,$tradeNo, $pay_level = 2)
 	{
 		if(stripos($orderNo,'recharge') !== false){//充值
 			$orderDB = new IModel('online_recharge');
@@ -63,9 +66,19 @@ abstract class paymentPlugin
 			return $orderDB->update('order_no = "'.$orderNo.'"');
 		}
 		else{
-			$orderDB  = new IModel('order');
-			$orderDB->setData(array('trade_no' => $tradeNo));
-			return $orderDB->update('order_no = "'.$orderNo.'"');
+            if($pay_level == 1)
+            {
+                $orderParentDB = new IModel('order_parent');
+                $id = $orderParentDB->getField('order_no = "'.$orderNo.'"', 'id');
+                $where = 'pid='.$id;
+            }
+            else
+            {
+			    $where = 'order_no = "'.$orderNo.'"';
+            }
+            $orderDB  = new IModel('order');
+            $orderDB->setData(array('trade_no' => $tradeNo));
+            return $orderDB->update($where);
 		}
 	}
 	/**
