@@ -127,7 +127,6 @@ class goods_class
 				$goodsUpdateData['down_time'] = null;
 			}
 		}
-
 		//是否存在货品
 		$goodsUpdateData['spec_array'] = '';
 		if(isset($postData['_spec_array']))
@@ -169,6 +168,10 @@ class goods_class
 		unset($goodsUpdateData['product_id']);
 		//处理商品
 		$goodsDB = new IModel('goods');
+        if($goodsDB->getField("sign_code = '{$goodsUpdateData['sign_code']}' and id <> {$id}", 'id'))
+        {
+            die("条形码不能重复");
+        }
 		if($id)
 		{
 			if($this->getSellerId($goodsDB,$id)!=0)$goodsUpdateData['is_share'] = 0;
@@ -226,6 +229,16 @@ class goods_class
 			//创建货品信息
 			foreach($postData['_goods_no'] as $key => $rs)
 			{
+                if($postData['product_id'][$key]){
+                    $p = "sign_code = '{$postData['_sign_code'][$key]}' and id <> {$postData['product_id'][$key]}";
+                }
+                else
+                {
+                    $p = "sign_code = '{$postData['_sign_code'][$key]}'";
+                }
+                if($productsDB->getField($p, 'id')){
+                    die("条形码不能重复");
+                }
 				$productsData = array(
 					'goods_id' => $id,
 					'products_no' => $postData['_goods_no'][$key],

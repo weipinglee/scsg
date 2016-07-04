@@ -123,6 +123,7 @@ class scan_wechat extends paymentPlugin
         $refund_fee = $payment["M_Amount"]*100;
         $input = new WxPayRefund();
         $input->SetOut_trade_no($out_trade_no);
+        $total = $total ? $total : 0;
         $input->SetTotal_fee($total*100);
         $input->SetRefund_fee($refund_fee);
         $input->SetOut_refund_no($M_mchid.date("YmdHis"));

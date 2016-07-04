@@ -86,6 +86,7 @@
 						<%isProduct = true;%>
 						<th><%=templateData[item]['name']%></th>
 						<%}%>
+                        <th>条形码</th>
 						<th>库存</th>
 						<th>市场价格</th>
                         <th>销售价格</th>
@@ -122,6 +123,7 @@
 							<%}%>
 						</td>
 						<%}%>
+                        <td><input class="small" name="_sign_code[<%=i%>]" type="text" value="<%=item['sign_code']%>" /></td>
 						<td><input class="tiny" name="_store_nums[<%=i%>]" type="text" pattern="int" value="<%=item['store_nums']?item['store_nums']:100%>" /></td>
 						<td><input class="tiny" name="_market_price[<%=i%>]" type="text" pattern="float" value="<%=item['market_price']%>" /></td>
 						<td>
