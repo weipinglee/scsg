@@ -42,6 +42,7 @@
     </div>
 </header><div class="inner-section">
 <input type='hidden' name='start' value='{$this->count}'/>
+    {if:$this->pre_list}
     <section class="modle_section">
         <div class="ban_section">
             <ul class="tiems" id="hd_ban_mode2">
@@ -67,6 +68,11 @@
         <p >查看更多</p>
         <img alt="" src="{skin:images/files/loading.gif}">
 	 </div>
+     {else:}
+     <section style="height: 100px;line-height: 100px; width: 100%;text-align: center;">
+    预售活动还未开始，敬请期待~~~
+    </section>
+     {/if}
 	<script type='text/javascript'>
 		function loadPresell(toUrl){
 			$('.loading-imgS img').show();
