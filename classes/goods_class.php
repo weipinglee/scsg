@@ -87,7 +87,6 @@ class goods_class
 				$goodsUpdateData[$key] = IFilter::act($val,'text');
 			}
 		}
-
 		//商家发布商品默认设置
 		if($this->seller_id)
 		{
@@ -159,7 +158,8 @@ class goods_class
 		$goodsUpdateData['store_nums']   = array_sum($postData['_store_nums']);
 		$goodsUpdateData['market_price'] = isset($postData['_market_price']) ? current($postData['_market_price']) : 0;
         $goodsUpdateData['sell_price']   = isset($postData['_sell_price'])   ? current($postData['_sell_price'])   : 0;
-		$goodsUpdateData['combine_price']   = isset($postData['_combine_price'])   ? current($postData['_combine_price'])   : 0;
+        $goodsUpdateData['sign_code']   = isset($postData['_sign_code'])   ? current($postData['_sign_code'])   : '';
+        $goodsUpdateData['combine_price']   = isset($postData['_combine_price'])   ? current($postData['_combine_price'])   : 0;
 		$goodsUpdateData['cost_price']   = isset($postData['_cost_price'])   ? current($postData['_cost_price'])   : 0;   
         $goodsUpdateData['weight']       = isset($postData['_weight'])       ? current($postData['_weight'])       : 0;
         $goodsUpdateData['point']        = isset($postData['_point'])        ? current($postData['_point'])        : 0;
@@ -232,6 +232,7 @@ class goods_class
 					'store_nums' => $postData['_store_nums'][$key],
 					'market_price' => $postData['_market_price'][$key],
 					'sell_price' => $postData['_sell_price'][$key],
+                    'sign_code' => $postData['_sign_code'][$key],
                     'combine_price' => $postData['_combine_price'][$key],
 					'cost_price' => $postData['_cost_price'][$key],
                     'weight' => $postData['_weight'][$key],
