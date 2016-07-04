@@ -520,7 +520,8 @@ class Seller extends IController
 		$account     = IFilter::act(IReq::get('account'));
 		$server_num  = IFilter::act(IReq::get('server_num'));
 		$home_url    = IFilter::act(IReq::get('home_url'));
-		$tax         = IFilter::act(IReq::get('tax'),'float');
+        $tax         = IFilter::act(IReq::get('tax'),'float');
+		$store_num_warning         = IFilter::act(IReq::get('store_num_warning'),'int');
 		$freight_collect = IFilter::act(IReq::get('freight_collect'),'int');
 		$goods_cat = IFilter::act(IReq::get('goods_cat'));
 		$goods_cat = !empty($goods_cat) ? implode(',',$goods_cat) : '';
@@ -545,7 +546,8 @@ class Seller extends IController
 			'area'      => $area,
 			'server_num'=> $server_num,
 			'home_url'  => $home_url,
-			'tax'      => $tax,
+            'tax'      => $tax,
+			'store_num_warning'      => $store_num_warning,
 			'freight_collect'=>$freight_collect,
 			'goods_cat' => $goods_cat,
 		);
@@ -1526,23 +1528,26 @@ class Seller extends IController
         {
             $delivery = new IModel('delivery_extend');
             $data = $delivery->getObj('delivery_id = '.$delivery_id.' and seller_id = '.$this->seller['seller_id']);
+            $data['area_groupid'] = unserialize($data['area_groupid']) ;
+            $area = array();
+            if( $data['area_groupid']){
+                    
+                foreach($data['area_groupid'] as $key=>$val){
+                    $tem_arr = explode(';',$val);
+                    foreach($tem_arr as $v){
+                        if($v!='')
+                            $area[$v] = area::getNameStr($v);
+                    }
+                }
+            }
+            $this->area = $area;
 		}
 		else
 		{
-			die('配送方式');
+			die('配送方式不存在');
 		}
 
-		//获取省份
-		$areaData = array();
-		$areaDB = new IModel('areas');
-		$areaList = $areaDB->query('parent_id = 0');
-		foreach($areaList as $val)
-		{
-			$areaData[$val['area_id']] = $val['area_name'];
-		}
-		$this->areaList  = $areaList;
 		$this->data_info = $data;
-		$this->area      = $areaData;
         $this->redirect('delivery_edit');
 	}
 
@@ -1797,26 +1802,29 @@ class Seller extends IController
         {
             $promotionObj = new IModel('promotion');
             $where = 'id = '.$id;
-            $promotionRow = $promotionObj->getObj($where); 
+            $promotionRow = $promotionObj->getObj($where);
+            $promotionRow['area_groupid'] = unserialize($promotionRow['area_groupid']) ;
+            $area = array();
+            if( $promotionRow['area_groupid']){
+                    
+                foreach($promotionRow['area_groupid'] as $key=>$val){
+                    $tem_arr = explode(';',$val);
+                    foreach($tem_arr as $v){
+                        if($v!='')
+                            $area[$v] = area::getNameStr($v);
+                    }
+                }
+            } 
             $goodsList = array();                             
             if($promotionRow['goods_id'] <> 'all')
             {
                 $goods = new IModel('goods');
                 $goodsList = $goods->query('id in ('.$promotionRow['goods_id'].')', 'id as goods_id,name,img,goods_no');
-            }                       
+            } 
+            $this->area = $area;                      
             $this->goodsList = $goodsList;
             $this->promotionRow = $promotionRow;                          
         }
-        //获取省份
-        $areaData = array();
-        $areaDB = new IModel('areas');
-        $areaList = $areaDB->query('parent_id = 0');
-        foreach($areaList as $val)
-        {
-            $areaData[$val['area_id']] = $val['area_name'];
-        }
-        $this->areaList  = $areaList;
-        $this->area      = $areaData;
         $this->redirect('pro_rule_edit');
     }
 

@@ -1,5 +1,7 @@
 {set:$data=$this->data_info}
+{set:$type=isset($this->data_info['deli_type']) ? $this->data_info['deli_type'] : 0} 
 {js:artTemplate}
+<script type='text/javascript' src='{theme:javascript/artTemplate/area_select.js}'></script>
 <article class="module width_full">
 	<header>
 		<h3 class="tabs_involved">物流配送编辑</h3>
@@ -16,38 +18,38 @@
                     <label class='attr'><input name="deli_type" type="radio" value="2" {if: $data && $data['deli_type'] == 2} checked {/if} />数量计算</label> 
                 </div>
             </fieldset>
-			<fieldset class="js_set" id="js_set_1" {if: $data && $data['deli_type'] <> 1} style="display: none;" {/if}>
+			<fieldset class="js_set" id="js_set_1" {if: $type <> 1} style="display: none;" {/if}>
 				<label>重量设置</label>
 				<div class="box">
 					首重重量
-                    <input type="text" class='tiny' name="first_weight" pattern='int' {if: $data && $data['deli_type'] == 1} value="{$data['first_weight']}" {/if}>克
+                    <input type="text" class='tiny' name="first_weight" pattern='int' {if: $type == 1} value="{$data['first_weight']}" {/if}>克
 
 					首重费用
-                    <input class='tiny' name="first_price" {if: $data && $data['deli_type'] == 1} value="{$data['first_price']}" {/if} pattern="float" alt="该项必填且只允许填写数字金额" type="text">元，
+                    <input class='tiny' name="first_price" {if: $type == 1} value="{$data['first_price']}" {/if} pattern="float" alt="该项必填且只允许填写数字金额" type="text">元，
 
 					续重重量
-                    <input type="text" class='tiny' name="second_weight" pattern='int' {if: $data && $data['deli_type'] == 1} value="{$data['second_weight']}" {/if} >克
+                    <input type="text" class='tiny' name="second_weight" pattern='int' {if: $type == 1} value="{$data['second_weight']}" {/if} >克
 
 					续重费用
-					<input class='tiny' name="second_price" {if: $data && $data['deli_type'] == 1} value="{$data['second_price']}" {/if} pattern="float" alt="该项必填且只允许填写数字金额" type="text">元
+					<input class='tiny' name="second_price" {if: $type == 1} value="{$data['second_price']}" {/if} pattern="float" alt="该项必填且只允许填写数字金额" type="text">元
 				</div>
 				<label class="tip">根据重量来计算运费，当物品不足《首重重量》时，按照《首重费用》计算，超过部分按照《续重重量》和《续重费用》乘积来计算</label>
 			</fieldset>
             
-            <fieldset class="js_set" id="js_set_2" {if: $data && $data['deli_type'] <> 2} style="display: none;" {/if}>
+            <fieldset class="js_set" id="js_set_2" {if: $type <> 2} style="display: none;" {/if}>
                 <label>个数设置</label>
                 <div class="box">
                     首数计数
-                    <input type="text" class='tiny' name="first_num" pattern='int' {if: $data && $data['deli_type'] == 2} value="{$data['first_weight']}" {/if}>
+                    <input type="text" class='tiny' name="first_num" pattern='int' {if: $type == 2} value="{$data['first_weight']}" {/if}>
 
                     首数费用
-                    <input class='tiny' name="first_num_price" {if: $data && $data['deli_type'] == 2} value="{$data['first_price']}" {/if} pattern="float" alt="该项必填且只允许填写数字金额" type="text">元，
+                    <input class='tiny' name="first_num_price" {if: $type == 2} value="{$data['first_price']}" {/if} pattern="float" alt="该项必填且只允许填写数字金额" type="text">元，
 
                     增加个数
-                    <input type="text" class='tiny' name="second_num" pattern='int' {if: $data && $data['deli_type'] == 2} value="{$data['second_weight']}" {/if} >
+                    <input type="text" class='tiny' name="second_num" pattern='int' {if: $type == 2} value="{$data['second_weight']}" {/if} >
 
                     增加费用
-                    <input class='tiny' name="second_num_price" {if: $data && $data['deli_type'] == 2} value="{$data['second_price']}" {/if} pattern="float" alt="该项必填且只允许填写数字金额" type="text">元
+                    <input class='tiny' name="second_num_price" {if: $type == 2} value="{$data['second_price']}" {/if} pattern="float" alt="该项必填且只允许填写数字金额" type="text">元
                 </div>
                 <label class="tip">根据个数来计算运费，超过部分按照《增加个数》和《增加费用》乘积来计算</label>
             </fieldset>
@@ -96,15 +98,13 @@
                     <div id="deliveryAreaBox"></div>
 
                     <!--地域设定模板-->
-                    <script type='text/html' id='areaTemplate'>
-					<div style='padding:6px;border: 1px solid #BBBBBB;margin-bottom:10px;'>
+                    <script type='text/html' id='deliveryTemplate'>
+					<div class="content_box" style='padding:6px;border: 1px solid #BBBBBB;margin-bottom:10px;'>
 						<input type='hidden' name='area_groupid[]' value='<%=area_groupid%>' />
 						选择地区：
-						<select class="auto">
-							{foreach:items = $this->areaList}
-								<option value="{$item['area_id']}">{$item['area_name']}</option>
-							{/foreach}
-						</select>
+                           <div name='area_box' style='display:inline'>
+                                
+                            </div>    
 						<button type="button" class="btn" onclick='addProvince(this);'><span class="add">添加</span></button>
 						<label><span class="js_desc_text_1">首重费用</span>：<input class="tiny" name="firstprice[]" value="<%=firstprice%>" pattern="float" alt="该项必填且只允许填写数字金额" type="text" /></label>
 						<label><span class="js_desc_text_2">续重费用</span>：<input class="tiny" name="secondprice[]" value="<%=secondprice%>" pattern="float" alt="该项必填且只允许填写数字金额" type="text" /></label>
@@ -131,16 +131,11 @@
 $(function()
 {
     //设置计费方式
-    {if: $data}
-    var id = {$data['deli_type']};
-    {else:}
-    var id = 0;
-    {/if}
+    var id = {$type}; 
     $('#js_set_'+id).show();
     $('#js_set_'+id).find('input').removeAttr('disabled');
     $('#js_set_'+id).siblings('.js_set').hide();
     $('#js_set_'+id).siblings('.js_set').find('input').attr('disabled', 'disabled');
-    
     $('input[name=deli_type]').each(function(){
         $(this).click(function(){
             var _id = $(this).val();
@@ -179,10 +174,9 @@ $(function()
 
 	//具有特殊省份设置
 	{if:isset($data['area_groupid']) && $data['area_groupid']!=''}
-	var area_groupid = {echo:JSON::encode(unserialize($data['area_groupid']))};
+	var area_groupid = {echo:JSON::encode($data['area_groupid'])};
 	var firstprice   = {echo:JSON::encode(unserialize($data['firstprice']))};
 	var secondprice  = {echo:JSON::encode(unserialize($data['secondprice']))};
-
     for(var index in area_groupid)
     {
     	var areaname = [];
@@ -194,10 +188,15 @@ $(function()
     			areaname.push(getAreaName(idArray[i]));
     		}
     	}
-		var areaHtml = template.render('areaTemplate',{"area_groupid":area_groupid[index],"areaname":areaname.join(','),"firstprice":firstprice[index],"secondprice":secondprice[index]});
+		var areaHtml = template.render('deliveryTemplate',{"area_groupid":area_groupid[index],"areaname":areaname.join(','),"firstprice":firstprice[index],"secondprice":secondprice[index]});
 		$('#deliveryAreaBox').append(areaHtml);
     }
+    $('[name=area_box]').append($('.area').eq(0).clone(true).css('display','inline'));
 	{/if}
+    
+    //初始化地域联动
+    template.compile("areaTemplate",areaTemplate);
+    createAreaSelect('province',0,'');
     
     if(id == 2)
     {
@@ -212,13 +211,58 @@ $(function()
         $('.js_desc_text_3').html('《重量设置》');
     }
 });
+/**
+ * 生成地域js联动下拉框
+ * @param name
+ * @param parent_id
+ * @param select_id
+ * @param next 直钉下一个变化的select
+ */
+function createAreaSelect(name,parent_id,select_id,next)
+{
+    //生成地区
+    $.getJSON("{url:/block/area_child}",{"aid":parent_id,"random":Math.random()},function(json)
+    {
+        if(next){
+            next.html(template.render('areaTemplate',{"select_id":select_id,"data":json}));
+        }else
+        $('[name="'+name+'"]').html(template.render('areaTemplate',{"select_id":select_id,"data":json}));
+    });
+}
+
+/**
+ * 切换城市地区
+ * @param _self 地域对象
+ */
+function areaChangeCallback_more(_self)
+{
+    var parent_id = _self.value;
+    var childName = $(_self).attr('child');
+    var next = $(_self).next('select');
+
+    if(!childName)
+    {
+        return;
+    }
+
+    //拆分子对象
+    var childArray = childName.split(',');
+    for(var index in childArray)
+    {
+        $(_self).parent().find('select[name="'+childArray[index]+'"]').empty();
+    }
+
+    //生成js联动菜单
+    createAreaSelect(childArray[0],parent_id,'',next);
+}
 
 //添加地域项
 function addArea()
 {
-	var areaHtml = template.render('areaTemplate',{});
+	var areaHtml = template.render('deliveryTemplate',{});
     var deli_type =  $("input[name='deli_type']:checked").val();
 	$('#deliveryAreaBox').append(areaHtml);
+    $('#deliveryAreaBox').find('.content_box:last').find('[name=area_box]').append($('.area').eq(0).clone(true).css('display','inline'));
     if(deli_type == 2)
     {
         $('.js_desc_text_1').html('首数费用');
@@ -240,35 +284,54 @@ function getAreaName(provinceId)
 	return areaNameList[provinceId];
 }
 
-//添加省份
+//添加省份城市区域
 function addProvince(_self)
 {
-	var parentObject = $(_self).parent();
-	var selectObj    = parentObject.find('select');
+    var parentObject = $(_self).parent();
+    var selectObj    = parentObject.find('select');
+    var selectPro = parentObject.find('select[name=province]');
+    var selectCity = parentObject.find('select[name=city]');
+    var selectArea = parentObject.find('select[name=area]');
+    var selectAreaId = '';
+    if(selectArea.val()){
+        selectAreaId = selectArea.val();
+    }else if(selectCity.val()){
+        selectAreaId = selectCity.val();
+    }else if(selectPro.val()){
+        selectAreaId = selectPro.val();
+    }
+    if(selectAreaId=='')return false;
+    
+    //当前选中的地区ID
+    var areaGroupId = parentObject.find('input[name="area_groupid[]"]').val();
 
-	//当前选中的地区ID
-	var areaGroupId = parentObject.find('input[name="area_groupid[]"]').val();
+    //当前选中的地区NAME
+    var areaGroupName = parentObject.find('textarea[name="areaName"]').val();
 
-	//当前选中的地区NAME
-	var areaGroupName = parentObject.find('textarea[name="areaName"]').val();
+    //填写areaId
+    if(areaGroupId == '')
+    {
+        parentObject.find('input[name="area_groupid[]"]').val(";" + selectAreaId + ";");
+    }
+    else if(areaGroupId.indexOf(";" + selectAreaId + ";") == -1)
+    {
+        parentObject.find('input[name="area_groupid[]"]').val(areaGroupId + selectAreaId + ";");
+    }
+    else
+    {
+        alert('该区域已经添加，不要重复添加');
+        return;
+    }
 
-	//填写areaId
-	if(areaGroupId == '')
-	{
-		parentObject.find('input[name="area_groupid[]"]').val(";" + selectObj.val() + ";");
-	}
-	else if(areaGroupId.indexOf(";" + selectObj.val() + ";") == -1)
-	{
-		parentObject.find('input[name="area_groupid[]"]').val(areaGroupId + selectObj.val() + ";");
-	}
-	else
-	{
-		alert('省份已经添加，不要重复添加');
-		return;
-	}
-
-	//添加areaName
-	areaGroupName = areaGroupName == '' ? selectObj.find('option:selected').text() : areaGroupName + "," + selectObj.find('option:selected').text();
-	parentObject.find('textarea[name="areaName"]').val(areaGroupName);
+    //添加areaName
+    areaGroupName = areaGroupName == '' ? selectObj.find('option:selected').text() : areaGroupName + "," + selectObj.find('option:selected').text();
+    areaGroupName = areaGroupName.replace(/请选择/g,'');
+    parentObject.find('textarea[name="areaName"]').val(areaGroupName);
 }
+
 </script>
+<div class='area ' style='display:none'>
+    <select class="auto" name="province" child="city,area" onchange="areaChangeCallback_more(this);"></select>
+<select class="auto" name="city" child="area" parent="province" onchange="areaChangeCallback_more(this);"></select>
+<select class="auto" name="area" parent="city"></select>
+</div>

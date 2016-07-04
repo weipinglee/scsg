@@ -97,10 +97,15 @@
 				<label class="tip">在商家主页或者商品详情中会出现此联系方式</label>
 			</fieldset>
 
+            <fieldset>
+                <label>发票税率(百分制)：</label>
+                <input name="tax" class="small" type="text" empty value="" pattern="float" />%
+                <label class="tip">当买家需要发票的时候就要增加<商品金额>*<税率>的费用</label>
+            </fieldset>
 			<fieldset>
-				<label>发票税率(百分制)：</label>
-				<input name="tax" class="small" type="text" empty value="" pattern="float" />%
-				<label class="tip">当买家需要发票的时候就要增加<商品金额>*<税率>的费用</label>
+				<label>库存预警数量：</label>
+				<input name="store_num_warning" class="small" type="text" empty value="" pattern="int" />
+				<label class="tip">当商品数量少于X件时，会在系统管理首页<库存预警>显示</label>
 			</fieldset>
 			<fieldset>
 				<label>企业logo：</label>

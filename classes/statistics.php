@@ -166,6 +166,17 @@ class statistics
 		$db->where  = 'pay_status = 1';
 		return self::ParseCondition($db,'time',$start,$end);
 	}
+    
+    /**
+     * @brief 获取商家库存预警数量
+     * @param int $seller_id 商家ID
+     */
+    public static function getStoreNumWarning($seller_id)
+    {
+        $seller = new IModel('seller');
+        $num = $seller->getField('id='.$seller_id, 'store_num_warning');
+        return $num ? $num : 20;
+    }
 
 	/**
 	 * @brief 获取商家销售额统计数据
