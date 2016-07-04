@@ -1016,7 +1016,8 @@ class Market extends IController
         preg_match("/\d+(.\d{1,4})?/", $n, $t);
         if($t)
         {
-            $billRow['amount'] = $t[0];
+            $amount = $t[0];
+            $billRow['amount'] = $amount.' 元';
         }
         $p = explode('，', $billRow['log']);
         array_pop($p);
