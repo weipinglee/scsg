@@ -105,20 +105,20 @@ class Ucenter_ajax extends IController
 			}
 			
 			$order_data[$k]['num']=0;
+            if($v['seller_id'])
+            {
+                $seller_name = API::run('getSellerInfo',$v['seller_id'],'true_name');
+                $seller_logo = API::run('getSellerInfo',$v['seller_id'],'logo_img');
+                $order_data[$k]['seller_name'] = $seller_name['true_name'];
+                $order_data[$k]['seller_logo'] = $seller_logo['logo_img'];
+            }
+            else
+            {
+                $order_data[$k]['seller_name'] = '平台自营';
+            }
 			foreach($order_goods_data as $key=>$val){
 				if($val['order_id']==$v['id']){
-					$order_goods_data[$key]['can_refund'] = $v['type']!=4 && (Refunds_Class::order_goods_refunds(array_merge($v,$val)) || Refunds_Class::order_goods_chg(array_merge($v,$val))) ? 1 : 0;        
-                    if($val['seller_id'] <> 0)
-                    {
-                        $seller_name = API::run('getSellerInfo',$val['seller_id'],'true_name');
-                        $seller_logo = API::run('getSellerInfo',$val['seller_id'],'logo_img');
-                        $order_goods_data[$key]['seller_name'] = $seller_name['true_name'];
-                        $order_goods_data[$key]['seller_logo'] = $seller_logo['logo_img'];
-                    }
-                    else
-                    {
-                        $order_goods_data[$key]['seller_name'] = '平台自营';
-                    }
+					$order_goods_data[$key]['can_refund'] = $v['type']!=4 && (Refunds_Class::order_goods_refunds(array_merge($v,$val)) || Refunds_Class::order_goods_chg(array_merge($v,$val))) ? 1 : 0;    
                     $order_data[$k]['goods_data'][] = $order_goods_data[$key];
 					$order_data[$k]['num'] +=$val['goods_nums'];
 				}
@@ -129,7 +129,7 @@ class Ucenter_ajax extends IController
                 unset($order_data[$k]);
             }
 		}
-		unset($order_goods_data);
+        unset($order_goods_data);
 		echo JSON::encode($order_data);
 	} 
 	/**

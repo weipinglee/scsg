@@ -1018,6 +1018,9 @@ class Market extends IController
         {
             $billRow['amount'] = $t[0];
         }
+        $p = explode('，', $billRow['log']);
+        array_pop($p);
+        $billRow['log'] = implode('，', $p);
         $this->billRow = $billRow;
 		$this->redirect('bill_edit');
 	}
