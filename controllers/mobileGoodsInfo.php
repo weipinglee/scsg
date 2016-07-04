@@ -203,13 +203,13 @@ class mobileGoodsInfo extends IController{
 		$commentImgObj=new IQuery('comment_photo as cp');
 		if(!empty($goods_info['comment'])){
 			foreach($goods_info['comment'] as $k=>$v){
-				$goods_info['comment'][$k]['head_ico']='http://192.168.2.9/iweb2/'.$v['head_ico'];
+				$goods_info['comment'][$k]['head_ico']='http://v.yqrtv.com:8080/app/'.$v['head_ico'];
 				$commentImgObj->where='comment_id='.$v['id'];
 				$commentImgObj->fields='cp.id,cp.img';
 				$commentImgs=$commentImgObj->find();
 				if($commentImgs) {
 					foreach ($commentImgs as $kk => $vv) {
-						$commentImgs[$kk]['img'] = 'http://192.168.2.9/iweb2/' . $vv['img'];
+						$commentImgs[$kk]['img'] = 'http://v.yqrtv.com:8080/app/' . $vv['img'];
 					}
 				}
 				$goods_info['comment'][$k]['img']=$commentImgs;

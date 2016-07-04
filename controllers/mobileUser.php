@@ -251,7 +251,7 @@ class MobileUser extends IController
 	 */
 	public function getHelpCat(){
 		$helpCat=new IQuery('help_category');
-		$helpCat->fields='id,name';
+		$helpCat->fields='id,name,image';
 		$helpCat->order='`sort` asc';
 		$helpCatList=$helpCat->find();
 		$helpObj=new IQuery('help');
@@ -260,7 +260,7 @@ class MobileUser extends IController
 		$helpObj->order='`sort` asc';
 		foreach($helpCatList as $k=>$v){
 			$helpObj->where=' cat_id ='.$v['id'];
-
+			$res[$k]['img']='http://http://v.yqrtv.com:8080/app/'.$v['image'];
 			$res[$k]['data']=$helpList=$helpObj->find();
 			$res[$k]['id']=$v['id'];
 			$res[$k]['name']=$v['name'];
