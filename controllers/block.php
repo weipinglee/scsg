@@ -435,8 +435,8 @@ class Block extends IController
                     elseif($count > 1)
                     {
                         $sendData = $paymentInstance->getSendDataMerge(Payment::getPaymentInfoMerge($payment_id,implode(',', $order_ids)),true);
-                         
                         $paymentInstance->doPay($sendData);
+                        exit;
                     }
                     else
                     {
@@ -593,6 +593,47 @@ class Block extends IController
 				}
 				IError::show(403,'充值失败');
 			}
+            elseif(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
+            {
+                $order_id = Preorder_Class::updateOrderStatus($orderNo);
+                if($order_id)
+                {
+                    $url  = '/site/success/message/'.urlencode("支付成功");
+                    if(IClient::getDevice()=='mobile'){
+                        $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
+                    }
+                    else{
+                        $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
+                    }
+                    
+                    $this->redirect($url);
+                    exit;
+                }
+                IError::show(403,'订单修改失败');
+            }
+            else{
+                $order_id = Order_Class::updateOrderStatus($orderNo, '', '');
+                if($order_id && !is_array($order_id))
+                {
+                    $url  = '/site/success/message/'.urlencode("支付成功");
+                    if(IClient::getDevice()=='mobile'){
+                        $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
+                    }
+                    else{
+                        $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
+                    }
+                    $this->redirect($url);
+                    exit;
+                }
+                elseif(is_array($order_id))
+                {
+                    $url  = '/site/success/message/'.urlencode("支付成功");
+                    $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
+                    $this->redirect($url);
+                    exit;
+                }
+                IError::show(403,'订单修改失败');
+            }
 		}
         elseif(is_array($return))
         {
