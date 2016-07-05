@@ -163,7 +163,7 @@ class mobileGoods extends IController {
 	}
 	//每个分类下面的商品
 	public function getCatGoods() {
-		$id = IFilter::act(IReq::get('cat_id')) ? IFilter::act(IReq::get('cat_id')) : 2;
+		$id = IFilter::act(IReq::get('cat_id','post')) ? IFilter::act(IReq::get('cat_id','post')) : 2;
 		$m_category = new IQuery('category');
 		$m_category->fields = 'id,parent_id';
 		//$m_goods->where='id='.$id;
@@ -515,9 +515,51 @@ class mobileGoods extends IController {
 		echo JSON::encode($likeList);
 
 	}
-	public function goodsSearch() {
-		$search_list = search_goods::find()->find();
-
+	//获取团购列表的数据
+	public function getRegimentList(){
+		$topList=array();
+		$brandList=array();
+		$onTimeList=array();
+		$tuan=new IQuery('regiment as r');
+		//Top
+		$tuan->join='left join goods as g on r.goods_id=g.id';
+		$tuan->fields='r.*';
+		$tuan->where='r.is_close=0 and now() between r.start_time and r.end_time and g.is_del=0 and r.type=0';
+		$tuan->order='r.sort desc';
+		//$tuan->limit='';
+		$topList=$tuan->find();
+		if($topList) {
+			foreach ($topList as $k => $v) {
+				$data = Comment_Class::get_comment_info($v['goods_id']);
+				$topList[$k]['comment_num']=$data['comment_total'];
+				$topList[$k]['comment_tate']=$data['comment_total']?(round($data['point_grade']['good']/$data['comment_total'],4))*100:0;
+			}
+		}
+		//品牌团
+		$tuan->join='left join goods as g on r.goods_id=g.id';
+		$tuan->fields="r.*";
+		$tuan->where='r.is_close=0 and now() between r.start_time and r.end_time and g.is_del=0 and r.type=1';
+		$tuan->order='r.sort desc';
+		$brandList=$tuan->find();
+		if($brandList) {
+			foreach ($brandList as $k => $v) {
+				$data = Comment_Class::get_comment_info($v['goods_id']);
+				$brandList[$k]['comment_num']=$data['comment_total'];
+				$brandList[$k]['comment_tate']=$data['comment_total']?(round($data['point_grade']['good']/$data['comment_total'],4))*100:0;
+			}
+		}
+		//整点团
+		$tuan->where='r.is_close=0 and now() between r.start_time and end_time and g.is_del=0 and r.type=2';
+		$onTimeList=$tuan->find();
+		if($onTimeList){
+			foreach($onTimeList as $k=>$v){
+				$data=Comment_Class::get_comment_info($v['goods_id']);
+				$onTimeList[$k]['comment_num']=$data['comment_total'];
+				$onTimeList[$k]['comment_tate']=$data['comment_total']?(round($data['point_grade']['good']/$data['comment_total'],4))*100:0;
+			}
+		}
+		$res=['topList'=>$topList,'brandList'=>$brandList,'onTimeList'=>$onTimeList];
+		echo JSON::encode($res);
 	}
 
 }
