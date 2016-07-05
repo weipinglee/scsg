@@ -418,7 +418,6 @@ class Block extends IController
                 $orderDB  = new IModel('order');
             }
 			$orderRow = $orderDB->getObj('id = '.$order_id);
-
 			if(empty($orderRow))
 			{
 				IError::show(403,'要支付的订单信息不存在');
@@ -428,7 +427,6 @@ class Block extends IController
 
 		//获取支付方式类库
 		$paymentInstance = Payment::createPaymentInstance($payment_id);
-        
 		//在线充值
 		if($recharge !== null)
 		{
@@ -445,7 +443,14 @@ class Block extends IController
 		//订单支付
 		else if($order_id)
 		{
-			$sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id, $pay_level));
+            if($payment_id == 13)
+            {
+                $sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id, $pay_level));
+            }
+			else
+            {
+                $sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id));
+            }
 		}
 		else
 		{
