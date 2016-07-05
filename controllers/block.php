@@ -381,43 +381,16 @@ class Block extends IController
 		if($order_id)
 		{
 			//获取订单信息
-            if($payment_id == 13)
+            if($pay_level == 1)
             {
-                if($pay_level == 1)
-                {
-                    $orderDB  = new IModel('order_parent');
-                }
-                else
-                {
-                    $orderDB  = new IModel('order');
-                }
+			    $orderDB  = new IModel('order_parent');
             }
             else
             {
-                if($pay_level == 1)
-                {
-                    $orderObj = new IModel('order');
-                    $order_ids = $orderObj->getFields(array('pid' => $order_id), 'id');
-                    $count = $order_ids ? count($order_ids) : 0;
-                    if($count == 1)
-                    {
-                        $order_id = $order_ids[0];
-                    }
-                    elseif($count > 1)
-                    {
-                        $paymentInstance = Payment::createPaymentInstance($payment_id);
-                        $sendData = $paymentInstance->getSendDataMerge(Payment::getPaymentInfoMerge($payment_id,implode(',', $order_ids)),true);
-                         
-                        $paymentInstance->doPay($sendData);
-                    }
-                    else
-                    {
-                        IError::show(403,'要支付的订单信息不存在');
-                    }
-                }
                 $orderDB  = new IModel('order');
             }
 			$orderRow = $orderDB->getObj('id = '.$order_id);
+
 			if(empty($orderRow))
 			{
 				IError::show(403,'要支付的订单信息不存在');
@@ -427,6 +400,7 @@ class Block extends IController
 
 		//获取支付方式类库
 		$paymentInstance = Payment::createPaymentInstance($payment_id);
+        
 		//在线充值
 		if($recharge !== null)
 		{
@@ -445,10 +419,30 @@ class Block extends IController
 		{
             if($payment_id == 13)
             {
-                $sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id, $pay_level));
+			    $sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id, $pay_level));
             }
-			else
+            else
             {
+                if($pay_level == 1)
+                {
+                    $orderObj = new IModel('order');
+                    $order_ids = $orderObj->getFields(array('pid' => $order_id), 'id');
+                    $count = $order_ids ? count($order_ids) : 0;
+                    if($count == 1)
+                    {
+                        $order_id = $order_ids[0];
+                    }
+                    elseif($count > 1)
+                    {
+                        $sendData = $paymentInstance->getSendDataMerge(Payment::getPaymentInfoMerge($payment_id,implode(',', $order_ids)),true);
+                         
+                        $paymentInstance->doPay($sendData);
+                    }
+                    else
+                    {
+                        IError::show(403,'要支付的订单信息不存在');
+                    }
+                }
                 $sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id));
             }
 		}
