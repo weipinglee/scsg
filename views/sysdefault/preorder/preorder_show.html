@@ -19,7 +19,8 @@
 	<div class="content">
 		<table class="list_table">
 			<colgroup>
-				<col width="380px" />
+                <col width="380px" />
+				<col width="150px" />
 				<col width="80px" />
 				<col width="80px" />
 				<col width="80px" />
@@ -31,7 +32,8 @@
 
 			<thead>
 				<tr>
-					<th>商品名称</th>
+                    <th>商品名称</th>
+					<th>条形码</th>
 					<th>运费</th>
 					<th>保价</th>
 					<th>税金</th>
@@ -48,6 +50,7 @@
 						{set:$goodsRow = JSON::decode($item['goods_array'])}
 						{$goodsRow['name']} &nbsp;&nbsp; {$goodsRow['value']}
 					</td>
+                    <td>{$item['sign_code']}</td>
 					<td>￥{$item['delivery_fee']}</td>
 					<td>￥{$item['save_price']}</td>
 					<td>￥{$item['tax']}</td>

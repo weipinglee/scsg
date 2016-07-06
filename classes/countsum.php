@@ -167,7 +167,7 @@ class CountSum
     		    //购物车中的商品数据
     		    $goodsIdStr = join(',',$buyInfo['goods']['id']);
     		    $goodsObj   = new IModel('goods as go');
-    		    $goodsList  = $goodsObj->query('go.id in ('.$goodsIdStr.')','go.name,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,go.delivery_id,go.combine_price,go.type');
+    		    $goodsList  = $goodsObj->query('go.id in ('.$goodsIdStr.')','go.name,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,go.delivery_id,go.combine_price,go.type,go.sign_code');
     		    //开始优惠情况判断
     		    foreach($goodsList as $key => $val)
     		    {
@@ -248,7 +248,7 @@ class CountSum
     		    $productIdStr = join(',',$buyInfo['product']['id']);
     		    $productObj   = new IQuery('products as pro,goods as go');
     		    $productObj->where  = 'pro.id in ('.$productIdStr.') and go.id = pro.goods_id';
-    		    $productObj->fields = 'pro.sell_price,pro.weight,pro.id as product_id,pro.spec_array,pro.goods_id,pro.store_nums,pro.products_no as goods_no,go.name,pro.point,pro.combine_price,go.exp,go.img,go.seller_id,go.delivery_id,go.type';
+    		    $productObj->fields = 'pro.sell_price,pro.weight,pro.id as product_id,pro.spec_array,pro.goods_id,pro.store_nums,pro.products_no as goods_no,go.name,pro.point,pro.combine_price,go.exp,go.img,go.seller_id,go.delivery_id,go.type,pro.sign_code';
     		    $productList  = $productObj->find();
     		    //开始优惠情况判断
     		    foreach($productList as $key => $val)

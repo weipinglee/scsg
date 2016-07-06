@@ -729,7 +729,8 @@ class Order_Class
 				    $goodsArray['save_price']  = $val['insuredPrice'];
                     $goodsArray['tax']         = $val['taxPrice'];
                     $goodsArray['seller_id']   = $val['seller_id'];
-				    $goodsArray['combine_id']   = $val['combine_id'];
+                    $goodsArray['combine_id']   = $val['combine_id'];
+				    $goodsArray['sign_code']   = $val['sign_code'];
 				    $orderGoodsObj->setData($goodsArray);
 				    $insert_id = $orderGoodsObj->add(true);
                     $temp = $good->getField('id = '.$val['goods_id'], 'store_type');
