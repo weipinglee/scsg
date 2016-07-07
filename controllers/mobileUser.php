@@ -425,6 +425,40 @@ class MobileUser extends IController
 		}
 
 	}
+	//修改密码接口
+	public function editPassWord(){
+		$token=IFilter::act(IReq::get('token','post'));
+		$tokenObj=new IModel('token');
+		$user=$tokenObj->getObj('token=\''.$token.'\'');
+		if(!$user){
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
+		$password=IFilter::act(IReq::get('password','post'));
+		if(!IValidate::required($password)){
+			die(JSON::encode(['code'=>0,'info'=>'原密码不能为空']));
+		}
+		$newPassWord=IFilter::act(IReq::get('newpassword','post'));
+		if(!IValidate::required($newPassWord)){
+			die(JSON::encode(['code'=>0,'info'=>'新密码不能为空']));
+		}
+		$userObj=new IModel('user');
+		$userInfo=$userObj->getObj("id={$user['user_id']}");
+
+		if($userInfo['password']!=md5($password)){
+			die(JSON::encode(['code'=>0,'info'=>'密码不正确']));
+		}
+		$data=[
+			'password'=>md5($newPassWord)
+		];
+		$userObj->setData($data);
+		if($userObj->update('id='.$user['user_id'])){
+			die(JSON::encode(['code'=>1,'info'=>'修改成功']));
+		}else{
+			die(JSON::encode(['code'=>0,'info'=>'修改失败']));
+		}
+
+
+	}
 
 }
 

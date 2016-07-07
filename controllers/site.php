@@ -1155,6 +1155,7 @@ class Site extends IController
 	{
 		$id = intval(IReq::get("id"));
 		$tb_help = new IModel("help");
+		$this->device=IFilter::act(IReq::get('device'));
 		$help_row = $tb_help->query("id={$id}");
 		if(!$help_row || !is_array($help_row))
 		{
