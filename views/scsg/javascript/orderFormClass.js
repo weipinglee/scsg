@@ -367,25 +367,6 @@ function orderFormClass()
 	}
 
 	/**
-	 * delivery模式切换
-	 */
-	/*this.deliveryInit = function(defaultDeliveryId)
-	{
-		if(defaultDeliveryId > 0)
-		{
-			this.deliveryActiveId = defaultDeliveryId;
-			var defaultDeliveryItem = $('input[type="radio"][name="delivery_id"][value="'+defaultDeliveryId+'"]');
-			defaultDeliveryItem.trigger('click');
-
-			//默认配送方式
-			if($('#paymentBox:hidden').length == 1 && this.paytype == 0)
-			{
-				this.deliverySave();
-			}
-		}
-	}*/
-
-	/**
 	 * delivery选中
 	 * @param jsonData Object 配送方式数对象
 	 */
@@ -401,53 +382,12 @@ function orderFormClass()
 	}       */
 
 	/**
-	 * delivery保存
-	 */
-	/*this.deliverySave = function()
-	{
-
-		this.paytype          = $('input:radio[name="delivery_id"]:checked').attr('paytype');
-		this.deliveryActiveId = $('input:radio[name="delivery_id"]:checked').val();
-		//自提点选择判断
-		if( this.paytype == 2 && $('[name="takeself"]').val() == 0)
-		{
-			tips('请选择自提点');
-			return;
-		}                        
-
-		//在线支付与货到付款
-		if(this.paytype == 1)
-		{
-			$('#paymentBox').hide('slow');
-			this.paymentPrice = 0;
-
-			//开启订单金额
-			$('#amountBox').show('slow');
-		}
-		else
-		{
-			$('#paymentBox').show('slow');
-		}
-		
-		//计算运费
-		//get_delivery();
-
-		//计算金额
-		this.doAccount();
-		
-		//设置配送信息
-		//this.deliverySelected(this.deliveryConf);
-		
-	}*/
-
-	/**
 	 * payment模式切换
 	 */
 	this.paymentModToggle = function()
 	{
 		//要切换的模式
 		var toggleMod = this.paymentMod == 'exit' ? 'edit' : 'exit';
-
 		switch(toggleMod)
 		{
 			case "edit":
@@ -482,7 +422,11 @@ function orderFormClass()
 		
 		//选择担保交易时提醒退款到支付宝界面
 		if(this.paymentActiveId==7)
-			$('#paymentShowBox').append('<tr><th></th><td class="red">由于您使用的是支付宝第三方担保交易，“确认收货、退款”等相关操作结束后需前往支付宝界面再次操作</td></tr>');
+            if($('#paymentShowBox').find('td.red').length == 0)
+            {
+                $('#paymentShowBox').append('<tr><th></th><td class="red">由于您使用的是支付宝第三方担保交易，“确认收货、退款”等相关操作结束后需前往支付宝界面再次操作</td></tr>');
+            }
+			
 		//修改模式
 		$('#payment_form').toggle();
 		$('#payment_save_button').toggle();
@@ -536,7 +480,6 @@ function orderFormClass()
 
 		this.paymentActiveId = $('input:radio[name="payment"]:checked').val();
 		this.paymentModToggle();
-
 		//支付金额
 		this.paymentPrice = $('input:radio[name="payment"]:checked').attr('alt');
 
