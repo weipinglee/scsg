@@ -84,7 +84,7 @@ class Seller extends IController
         $delivery->fields = 'd.id,d.name';
         $this->delivery = $delivery->find(); */
         $delivery = new IModel('delivery');
-        $list = $delivery->query("is_delete=0", 'id,name','sort','asc');
+        $list = $delivery->query("is_delete=0 and status=1", 'id,name','sort','asc');
         $this->delivery = $list;
 		$this->setRenderData($data);
 		$this->redirect('goods_edit');
@@ -2080,5 +2080,299 @@ class Seller extends IController
             die('请选择要删除的数据');
         }
         $this->redirect("combine_list");
+    }
+    
+    //[权限管理][角色] 删除
+    function role_del()
+    {
+        $id = IFilter::act( IReq::get('id'),'int' );
+
+        if(!empty($id))
+        {
+            $obj   = new IModel('admin_role');
+            $obj->del('id='.$id.' and seller_id='.$this->seller['seller_id']);
+            $this->redirect('role_list');
+        }
+        else
+        {
+            $this->redirect('role_list',false);
+            Util::showMessage('请选择要操作的角色ID');
+        }
+    }
+
+    //[权限管理][角色] 角色修改,添加 [单页]
+    function role_edit()
+    {
+        $id = IFilter::act( IReq::get('id'),'int' );
+        if($id)
+        {
+            $adminObj = new IModel('admin_role');
+            $where = 'id = '.$id.' and seller_id = '.$this->seller['seller_id'];
+            $this->roleRow = $adminObj->getObj($where);
+            if(!$this->roleRow)
+            {
+                die('无权限修改');
+            }
+        }
+        
+        //获取权限码分组形势
+        $rightObj  = new IModel('right_seller');
+        $rightData = $rightObj->query('is_del = 0','*','name','asc');
+
+        $rightArray     = array();
+        $rightUndefined = array();
+        foreach($rightData as $key => $item)
+        {
+            preg_match('/\[.*?\]/',$item['name'],$localPre);
+            if(isset($localPre[0]))
+            {
+                $arrayKey = trim($localPre[0],'[]');
+                $rightArray[$arrayKey][] = $item;
+            }
+            else
+            {
+                $rightUndefined[]      = $item;
+            }
+        }
+
+        $this->rightArray     = $rightArray;
+        $this->rightUndefined = $rightUndefined;
+        $this->redirect('role_edit');
+    }
+
+    //[权限管理][角色] 角色修改,添加 [动作]
+    function role_edit_act()
+    {
+        $id = IFilter::act( IReq::get('id','post') );
+        $roleObj = new IModel('admin_role');
+        $seller_id = $this->seller['seller_id'];
+        //要入库的数据
+        $dataArray = array(
+            'id'     => $id,
+            'name'   => IFilter::string( IReq::get('name','post') ),
+            'is_del'   => IFilter::act( IReq::get('is_del','post'), 'int'),
+            'seller_id'=> $seller_id,
+            'rights' => null,
+        );
+        
+        //检查是否是该商家的角色
+        if($id)
+        {
+            if(!$roleObj->getObj('id='.$id.' and seller_id='.$seller_id, 'id'))
+            {
+                $this->roleRow = $dataArray;
+                $this->redirect('role_edit',false);
+                Util::showMessage('无权限修改');
+            }
+        }
+        
+        //检查权限码是否为空
+        $rights = IFilter::act( IReq::get('right','post') );
+        if(empty($rights) || $rights[0]=='')
+        {
+            $this->roleRow = $dataArray;
+            $this->redirect('role_edit',false);
+            Util::showMessage('请选择要分配的权限');
+        }
+
+        //拼接权限码
+        $rightsArray = array();
+        $rightObj    = new IModel('right_seller');
+        $rightList   = $rightObj->query('id in ('.join(",",$rights).')','`right`');
+        foreach($rightList as $key => $val)
+        {
+            $rightsArray[] = trim($val['right'],',');
+        }
+
+        $dataArray['rights'] = empty($rightsArray) ? '' : ','.join(',',$rightsArray).',';
+        $roleObj->setData($dataArray);
+        if($id)
+        {
+            $where = 'id = '.$id;
+            $roleObj->update($where);
+        }
+        else
+        {
+            $roleObj->add();
+        }
+        $this->redirect('role_list');
+    }
+    
+    //[权限管理][管理员]管理员添加，修改[单页]
+    function admin_edit()
+    {
+        $id =IFilter::act( IReq::get('id'),'int' );
+        if($id)
+        {
+            $adminObj = new IModel('admin_seller');
+            $where = 'id = '.$id.' and seller_id='.$this->seller['seller_id'];
+            $this->adminRow = $adminObj->getObj($where);
+            if(!$this->adminRow)
+            {
+                die('无权限操作该管理员');
+            }
+        }
+        $this->redirect('admin_edit');
+    }
+    
+    //[权限管理][管理员]检查admin_user唯一性
+    function check_admin($name = null,$id = null)
+    {
+        //php校验$name!=null , ajax校验 $name == null
+        $admin_name = ($name==null) ? IReq::get('admin_name','post') : $name;
+        $admin_id   = ($id==null)   ? IReq::get('admin_id','post')   : $id;
+        $admin_name = IFilter::act($admin_name);
+        $admin_id = intval($id);
+        $seller_id = $this->seller['seller_id'];
+
+        $adminObj = new IModel('admin_seller');
+        $where = 'seller_id = '.$seller_id;
+        if($admin_id)
+        {
+            $where .= ' and admin_name = "'.$admin_name.'" and id != '.$admin_id;
+        }
+        else
+        {
+            $where .= ' and admin_name = "'.$admin_name.'"';
+        }
+
+        $adminRow = $adminObj->getObj($where);
+
+        if(!empty($adminRow))
+        {
+            if($name != null)
+            {
+                return false;
+            }
+            else
+            {
+                echo '-1';
+            }
+        }
+        else
+        {
+            if($name != null)
+            {
+                return true;
+            }
+            else
+            {
+                echo '1';
+            }
+        }
+    }
+
+    //[权限管理][管理员]管理员添加，修改[动作]
+    function admin_edit_act()
+    {
+        $id = IFilter::act( IReq::get('id','post') );
+        $seller_id = $this->seller['seller_id'];
+        $adminObj = new IModel('admin_seller');
+
+        //错误信息
+        $message = null;
+
+        $dataArray = array(
+            'id'         => $id,
+            'admin_name' => IFilter::string( IReq::get('admin_name','post') ),
+            'role_id'    => IFilter::act( IReq::get('role_id','post') ),
+            'email'      => IFilter::string( IReq::get('email','post') ),
+            'is_del'     => IFilter::act( IReq::get('is_del','post'),'int' ),
+            'seller_id'  => $seller_id
+        );
+
+        //检查管理员name唯一性
+        $isPass = $this->check_admin($dataArray['admin_name'],$id);
+        if($isPass == false)
+        {
+            $message = $dataArray['admin_name'].'管理员已经存在,请更改名字';
+        }
+
+        //提取密码 [ 密码设置 ]
+        $password   = IReq::get('password','post');
+        $repassword = IReq::get('repassword','post');
+
+        //修改操作
+        if($id)
+        {
+            if($password != null || $repassword != null)
+            {
+                if($password == null || $repassword == null || $password != $repassword)
+                {
+                    $message = '密码不能为空,并且二次输入的必须一致';
+                }
+                else
+                    $dataArray['password'] = md5($password);
+            }
+
+            //有错误
+            if($message != null)
+            {
+                $this->adminRow = $dataArray;
+                $this->redirect('admin_edit',false);
+                Util::showMessage($message);
+            }
+            else
+            {
+                $where = 'id = '.$id;
+                $adminObj->setData($dataArray);
+                $adminObj->update($where);
+
+                //修改为自身密码时
+                if($id == $this->admin['admin_id'])
+                {
+                    //同步更新safe
+                    ISafe::set('admin_name',$dataArray['admin_name']);
+                    if(isset($dataArray['password'])){
+                        ISafe::set('admin_pwd',$dataArray['password']);
+                    }
+                
+                }
+            }
+        }
+        //添加操作
+        else
+        {
+            if($password == null || $repassword == null || $password != $repassword)
+            {
+                $message = '密码不能为空,并且二次输入的必须一致';
+            }
+            else
+                $dataArray['password'] = md5($password);
+
+            if($message != null)
+            {
+                $this->adminRow = $dataArray;
+                $this->redirect('admin_edit',false);
+                Util::showMessage($message);
+            }
+            else
+            {
+                $dataArray['create_time'] = ITime::getDateTime();
+                $adminObj->setData($dataArray);
+                $adminObj->add();
+            }
+        }
+        $this->redirect('seller_list');
+    }
+
+    //[权限管理][管理员]删除
+    function admin_del()
+    {
+        $id = IFilter::act( IReq::get('id') ,'int' );
+
+        if(!empty($id))
+        {
+            $obj   = new IModel('admin_seller');
+            $where = 'id='.$id.' and seller_id='.$this->seller['seller_id'];
+
+            $obj->del($where);
+            $this->redirect('seller_list');
+        }
+        else
+        {
+            $this->redirect('seller_list',false);
+            Util::showMessage('请选择要操作的管理员ID');
+        }
     }
 }

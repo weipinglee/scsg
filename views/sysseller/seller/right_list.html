@@ -1,0 +1,26 @@
+<article class="module width_full">
+	<header>
+		<h3 class="tabs_involved">权限列表</h3>
+	</header>
+
+	<table class="tablesorter" cellspacing="0">
+		<colgroup>
+			<col />
+		</colgroup>
+
+		<thead>
+			<tr>
+				<th>名字</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1}
+			{query:name=right_seller  where=is_del eq 0}
+			<tr>
+				<td>{$item['name']}</td>
+			</tr>
+			{/query}
+		</tbody>
+	</table>
+</article>

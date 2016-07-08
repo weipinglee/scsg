@@ -28,7 +28,7 @@
 			<col />
 
 			<tbody>
-				{query: name=admin_role where=is_del eq 0}
+				{query: name=admin_role where=is_del eq 0 and seller_id eq 0}
 				<tr>
 					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
 					<td>{$item['name']}</td>

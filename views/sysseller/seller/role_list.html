@@ -1,0 +1,40 @@
+<article class="module width_full">
+    <header>
+        <h3 class="tabs_involved">角色列表</h3>
+        <ul class="tabs">
+            <li><input type="button" class="alt_btn" onclick="window.location.href='{url:/seller/role_edit}';" value="添加角色" /></li>
+        </ul>
+    </header>
+
+    <form action="" method="post" name="goodsForm">
+        <table class="tablesorter" cellspacing="0">
+            <colgroup>
+                <col width="25%" />
+                <col width="25%" />
+                <col />
+            </colgroup>
+
+            <thead>
+                <tr>
+                    <th>名字</th>    
+                    <th>状态</th>    
+                    <th>操作</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {set:$seller_id = $this->seller['seller_id']}
+                {query: name=admin_role where=seller_id eq $seller_id}
+                <tr>
+                    <td>{$item['name']}</td>
+                    <td>{if:$item['is_del'] == 0}开启{else:}关闭{/if}</td>
+                    <td>
+                        <a href="{url:/seller/role_edit/id/$item[id]}"><img src="{skin:images/main/icn_edit.png}" title="编辑" /></a>
+                        <a href="javascript:delModel({link:'{url:/seller/role_del/id/$item[id]}'})"><img src="{skin:images/main/icn_del.png}" title="删除" /></a>
+                    </td>
+                </tr>
+                {/query}
+            </tbody>
+        </table>
+    </form>
+</article>

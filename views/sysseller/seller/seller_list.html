@@ -1,0 +1,52 @@
+<article class="module width_full">
+    <header>
+        <h3 class="tabs_involved">管理员列表</h3>
+        <ul class="tabs">
+            <li><input type="button" class="alt_btn" onclick="window.location.href='{url:/seller/admin_edit}';" value="添加管理员" /></li>
+        </ul>
+    </header>
+
+    <form action="" method="post" name="goodsForm">
+        <table class="tablesorter" cellspacing="0">
+            <colgroup>
+                <col width="150px" />
+                <col width="100px" />
+                <col width="200px" />
+                <col width="80px" />
+                <col width="150px" />
+                <col width="150px" />
+                <col />
+            </colgroup>
+
+            <thead>
+                <tr>
+                    <th>用户名</th>    
+                    <th>角色</th>    
+                    <th>Email</th>
+                    <th>状态</th>
+                    <th>上次登录ip</th>
+                    <th>上次登录时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {set:$seller_id = $this->seller['seller_id']}
+                {query: name=admin_seller as a join = left join admin_role as b on a.role_id eq b.id fields=a.*,b.name as role_name where=a.is_del eq 0 and a.seller_id eq $seller_id}
+                <tr>
+                    <td>{$item['admin_name']}</td>
+                    <td>{echo:$item['role_name'] ? $item['role_name'] : '超级管理员'}</td>
+                    <td>{$item['email']}</td>
+                    <td>{if:$item['is_del']}禁用{else:}启用{/if}</td>
+                    <td>{$item['last_ip']}</td>
+                    <td>{$item['last_time']}</td>
+                    <td>
+                        <a href="{url:/seller/admin_edit/id/$item[id]}"><img src="{skin:images/main/icn_edit.png}" title="编辑" /></a>
+                        <a href="javascript:delModel({link:'{url:/seller/admin_del/id/$item[id]}'})"><img src="{skin:images/main/icn_del.png}" title="删除" /></a>
+                    </td>
+                </tr>
+                {/query}
+            </tbody>
+        </table>
+    </form>
+</article>
