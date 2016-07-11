@@ -39,13 +39,25 @@ class mobileGoodsInfo extends IController{
 		foreach($goods_info['content'][1] as $k=>$v){
 			$goods_info['content'][1][$k]='http://v.yqrtv.com:8080/app/'.$v;
 		}
+		if($goods_info['spec_array']!=""){
+			$goods_info['spec_array']=json_decode($goods_info['spec_array']);
+			foreach($goods_info['spec_array'] as $k=>$v){
+				$f=$v->value;
+				/*var_dump($goods_info['spec_array']->$k->value);
+                echo $f;*/
+				$goods_info['spec_array']->$k->value=explode(',',$f);
+			}
+		}
 		//团购
 		$regiment_db = new IModel('regiment');
 		$goods_info['regiment'] = $regiment_db->getObj('goods_id='.$goods_id.' and is_close=0 and  TIMESTAMPDIFF(second,start_time,NOW()) >=0 and TIMESTAMPDIFF(second,end_time,NOW())<0');
 		//关联货品表获得商品的规格，库存
 		$product_db = new IModel('products');
-		$goods_info['product'] = $product_db->query('goods_id='.$goods_info['id'],'id,spec_array,store_nums');
-		//$goods_info['product'] = $goods_info['product'];
+		$goods_info['product'] = $product_db->query('goods_id='.$goods_info['id'],'id,spec_array,store_nums,sell_price');
+		$goods_info['product'] = $goods_info['product'];
+		foreach($goods_info['product'] as $k=>$v){
+			$goods_info['product'][$k]['spec_array']=json_decode($v['spec_array']);
+		}
 		//获取品牌信息
 		if($goods_info['brand_id'])
 		{

@@ -164,6 +164,7 @@ class mobileGoods extends IController {
 	//每个分类下面的商品
 	public function getCatGoods() {
 		$id = IFilter::act(IReq::get('cat_id','post')) ? IFilter::act(IReq::get('cat_id','post')) : 2;
+		$page=IFilter::act(IReq::get('page','post'))?IFilter::act(IReq::get('page','post')):1;
 		$m_category = new IQuery('category');
 		$m_category->fields = 'id,parent_id';
 		//$m_goods->where='id='.$id;
@@ -181,10 +182,17 @@ class mobileGoods extends IController {
 		$m_goods->distinct='1';
 
 		$m_goods->where = 'c.category_id in (' . $all_id . ') AND (go.is_del=0 or go.is_del=4) ';
-		$m_goods->fields='go.id as goods_id,go.sale,go.sell_price,go.img,go.name';
+		$m_goods->fields='go.id as goods_id,go.name,go.is_del,go.comments,go.grade,go.goods_no,go.sell_price,go.market_price,go.store_nums,go.img,go.sale,go.seller_id,go.sale,go.grade,go.up_time';
 		$m_goods->join = 'left join category_extend as c on go.id=c.goods_id';
+		$m_goods->page=$page;
+		$m_goods->order='go.sort asc';
 		$result = $m_goods->find();
+		$totalPage=$m_goods->paging->getTotalPage();
+		if($totalPage<$page){
+			die(JSON::encode([]));
+		}
 		foreach ($result as $k => $v) {
+			$result[$k]['up_time']=strtotime($v['up_time']);
 			$result[$k]['img'] = 'http://v.yqrtv.com:8080/app/' . $v['img'];
 
 		}

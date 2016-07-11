@@ -260,6 +260,7 @@ class MobileUser extends IController
 		$helpObj->order='`sort` asc';
 		foreach($helpCatList as $k=>$v){
 			$helpObj->where=' cat_id ='.$v['id'];
+			$helpObj->limit=6;
 			$res[$k]['img']='http://http://v.yqrtv.com:8080/app/'.$v['image'];
 			$res[$k]['data']=$helpList=$helpObj->find();
 			$res[$k]['id']=$v['id'];
@@ -456,10 +457,101 @@ class MobileUser extends IController
 		}else{
 			die(JSON::encode(['code'=>0,'info'=>'修改失败']));
 		}
-
+	}
+	//更改绑定手机
+	public function editPhoneFirst(){
+		$token=IFilter::act(IReq::get('token'),'post');
+		$tokenObj=new IModel('token');
+		if($tokenInfo=$tokenObj->getObj('token=\''.$token.'\'')){
+			$userObj=new IModel('user');
+			$userInfo=$userObj->getObj('id='.$tokenInfo['user_id']);
+			if($userInfo['phone']==""){
+				die(JSON::encode(['code'=>0,'info'=>'没有绑定手机']));
+			}
+			//发送验证码
+			$mobileCode=rand(100000,999999);
+			$codeObj=new IModel('mobile_code');
+			$mobileRes=$codeObj->getObj('phone='.$userInfo['phone']);
+			if(!$mobileRes){
+				$data=[
+					'phone'=>$userInfo['phone'],
+					'code'=>$mobileCode,
+					'time'=>ITime::getDateTime()
+				];
+				$codeObj->setData($data);
+				$codeObj->add();
+			}else{
+				$data=[
+					'code'=>$mobileCode,
+					'time'=>ITime::getDateTime()
+				];
+				$codeObj->setData($data);
+				$codeObj->upDate('phone='.$userInfo['phone']);
+			}
+			die(JSON::encode(['code'=>1,'info'=>'发送成功']));
+		}else{
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
 
 	}
+	//更换绑定手机验证第一步
+	public function checkFirstCode(){
+		$token=IFilter::act(IReq::get('token','post'));
+		$tokenObj=new IModel('token');
+		$code=IFilter::act(IReq::get('code','post'));
+		if($tokenInfo=$tokenObj->getObj('token=\''.$token.'\'')){
+			$userObj=new IModel('user');
+			$userInfo=$userObj->getObj('id='.$tokenInfo['user_id']);
+			if($userInfo['phone']==""){
+				die(JSON::encode(['code'=>0,'info'=>'没有绑定手机']));
+			}
+			$checkRes=$this->checkMobileValidateCode($userInfo['phone'],$code);
+			die(JSON::encode($checkRes));
+		}else{
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
+	}
+	//更换手机验证第二步
+	public function checkSecondCode(){
+		$token=IFilter::act(IReq::get('token','post'));
+		$tokenObj=new IModel('token');
+		if(!$tokenInfo=$tokenObj->getObj('token=\''.$token.'\'')){
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
+		$code=IFilter::act(IReq::get('code','post'));
+		$phone=IFilter::act(IReq::get('phone','post'));
+		$userObj=new IModel('user');
+		if($userObj->getObj('phone='.$phone)){
+			die(JSON::encode(['code'=>0,'info'=>'手机号码已经存在']));
+		}
+		$checkRes=$this->checkMobileValidateCode($phone,$code);
+		if($checkRes['code']==0){
+			die(JSON::encode($checkRes));
+		}
+		//$userInfo=$userObj->getObj('id='.$tokenInfo['user_id']);
+		$userObj->setData(
+			['phone'=>$phone]
+		);
 
+		if($userObj->upDate('id='.$tokenInfo['user_id'])){
+			die(JSON::encode(['code'=>1,'info'=>'修改成功']));
+		}else{
+			die(JSON::encode(['code'=>0,'info'=>'修改失败']));
+		}
+	}
+	public function getExplain(){
+		$name=IFilter::act(IReq::get('name','post'));
+		$name=IFilter::act(IReq::get('name'));
+		//$name='积分说明';
+		$helpObj=new IModel('help');
+		$helpInfo=$helpObj->getObj('name=\''.$name.'\'');
+		if(!$helpInfo){
+			die(json_encode(['url'=>'']));
+		}
+		$url=IUrl::getHost().IUrl::creatUrl('/site/help?id='.$helpInfo['id'].'&device=android&cat_id='.$helpInfo['cat_id']);
+		//echo $url;
+		die(JSON::encode(['url'=>$url]));
+	}
 }
 
 
