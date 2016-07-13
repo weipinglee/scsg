@@ -719,7 +719,6 @@ class Block extends IController
 		//支付成功
 		if($return && !is_array($return))
 		{
-			
 			//充值方式
 			if(stripos($orderNo,'recharge') !== false)
 			{
@@ -730,6 +729,26 @@ class Block extends IController
 					exit;
 				}
 			}
+            elseif(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
+            {
+                $order_id = Preorder_Class::updateOrderStatus($orderNo);
+                if($order_id)
+                {
+                    $paymentInstance->notifyStop();
+                    exit;
+                }
+                IError::show(403,'订单修改失败');
+            }
+            else
+            {
+                
+                $order_id = Order_Class::updateOrderStatus($orderNo, '', '', $return['pay_level']);
+                if($order_id)
+                {
+                    $paymentInstance->notifyStop();
+                    exit;
+                }
+            }
         }
         elseif(is_array($return))
         {
