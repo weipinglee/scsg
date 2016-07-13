@@ -38,7 +38,7 @@
 			<col />
 			<tbody>
 				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
-				{query: name=admin as a join=left join admin_role as b on a.role_id eq b.id fields=a.*,b.name as role_name where=a.is_del eq 1 page=$page pagesize=20}
+				{query: name=admin as a join=left join admin_role as b on a.role_id eq b.id fields=a.*,b.name as role_name where=a.is_del eq 1 and b.seller_id eq 0 page=$page pagesize=20}
 				<tr>
 					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
 					<td>{$item['admin_name']}</td>
