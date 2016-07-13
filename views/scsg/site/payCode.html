@@ -43,12 +43,12 @@
     function updata_native_state()
     {
         sum++;
-        if(sum > 120)
+        if(sum > 600)
         {
             window.clearInterval(t1);
             return false;
         }
-        if(sum > 60)
+        if(sum > 180)
         {
             m = sum % 3;
             if(m != 0){return false;}
