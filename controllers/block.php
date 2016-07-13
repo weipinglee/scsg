@@ -612,7 +612,7 @@ class Block extends IController
                 IError::show(403,'订单修改失败');
             }
             else{
-                $order_id = Order_Class::updateOrderStatus($orderNo, '', '');
+                $order_id = Order_Class::updateOrderStatus($orderNo);
                 if($order_id && !is_array($order_id))
                 {
                     $url  = '/site/success/message/'.urlencode("支付成功");
@@ -717,7 +717,7 @@ class Block extends IController
  
 		
 		//支付成功
-		if($return && !is_array($return))
+		if($return)
 		{
 			//充值方式
 			if(stripos($orderNo,'recharge') !== false)
@@ -742,7 +742,7 @@ class Block extends IController
             else
             {
                 
-                $order_id = Order_Class::updateOrderStatus($orderNo, '', '', $return['pay_level']);
+                $order_id = Order_Class::updateOrderStatus($orderNo);
                 if($order_id)
                 {
                     $paymentInstance->notifyStop();
@@ -750,30 +750,6 @@ class Block extends IController
                 }
             }
         }
-        elseif(is_array($return))
-        {
-			if(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
-			{
-				$order_id = Preorder_Class::updateOrderStatus($orderNo);
-				if($order_id)
-				{
-					$paymentInstance->notifyStop();
-					exit;
-				}
-				IError::show(403,'订单修改失败');
-			}
-			else
-			{
-				
-				$order_id = Order_Class::updateOrderStatus($orderNo, '', '', $return['pay_level']);
-				if($order_id)
-				{
-					$paymentInstance->notifyStop();
-					exit;
-				}
-			}
-			
-		}
 		//支付失败
 		else
 		{
