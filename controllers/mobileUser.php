@@ -208,6 +208,9 @@ class MobileUser extends IController
 					$memberObj->setData($dataArray);
 					$memberObj->update('user_id = ' . $userRow["id"]);
 				}
+				$data['username']=$userRow['username'];
+				$data['head_ico']='http://v.yqrtv.com:8080/app/'.$userRow['head_ico'];
+				$data['phone']=$userRow['phone'];
 			} else {
 
 					$M = new Imodel('user');
@@ -276,17 +279,29 @@ class MobileUser extends IController
 		$token=IFilter::act(IReq::get('token','post'));
 		if($token){
 			$tokenObj=new IModel('token');
-			if($res=$tokenObj->getObj('token ='.'\''.$token.'\'')){
+			if($res=$tokenObj->getObj('token=\''.$token.'\'')){
 				$addId=IFilter::act(IReq::get('add_id','post'),'int');
 				$accept_name=IFilter::act(IReq::get('accept_name','post'));
-				$address=IFilter::act(IReq::get('$address','post'));
+				$address=IFilter::act(IReq::get('address','post'));
 				$mobile = IFilter::act(IReq::get('mobile','post'));
 				$zip=IFilter::act(IReq::get('zip','post'),'int');
+				$province=IFilter::act(IReq::get('province','post'),'int');
+				$city=IFilter::act(IReq::get('city','post'),'int');
+				$area=IFilter::act(IReq::get('area','post','int'));
 				if(!$accept_name){
 					die(JSON::encode(['code'=>0,'info'=>'请填写收货人姓名']));
 				}
+				if(!$province){
+					die(JSON::encode(['code'=>0,'info'=>'请填写省份']));
+				}
+				if(!$city){
+					die(JSON::encode(['code'=>0,'info'=>'请填写城市']));
+				}
+				if(!$area){
+					die(JSON::encode(['code'=>0,'info'=>'请填写地址']));
+				}
 				if(!$address){
-					die(JSON::encode(['code'=>0,'info'=>'请输入地址']));
+					die(JSON::encode(['code'=>0,'info'=>'请输入详细地址']));
 				}
 				if(!IValidate::phone($mobile)){
 					die(JSON::encode(['code'=>0,'info'=>'请输入手机号']));
@@ -299,25 +314,24 @@ class MobileUser extends IController
 				$data['address']=$address;
 				$data['mobile']=$mobile;
 				$data['zip']=$zip;
-				$data['default']=IFilter::act(IReq::get('default','post'),'int')?IFilter::act(IReq::get('default','post'),'int'):0;
-				$data['province']=0;
-				$data['city']=0;
-				$data['area']=0;
+				$data['default']=IFilter::act(IReq::get('default','pos t'),'int')?IFilter::act(IReq::get('default','post'),'int'):0;
+				$data['province']=$province;
+				$data['city']=$city;
+				$data['area']=$area;
+				$data['user_id']=$res['user_id'];
 				if($addId){
-					$oldAddData=$addObj->getObj('id='.$addId);
-					$data['province']=$oldAddData['province'];
-					$data['city']=$oldAddData['city'];
-					$data['area']=$oldAddData['area'];
-					if($addObj->setData($data)->update('id='.$addId)){
+					$addObj->setData($data);
+					if($addObj->update('id='.$addId)){
 						die(JSON::encode(['code'=>1,'info'=>'修改成功']));
 					}else{
 						die(JSON::encode(['code'=>0,'info'=>'修改失败']));
 					}
 				}else{
-					if($addObj->setData($data)->add()){
-						die(JSON::encode(['code'=>0,'info'=>'添加成功']));
+					$addObj->setData($data);
+					if($addObj->add()){
+						die(JSON::encode(['code'=>1,'info'=>'添加成功']));
 					}else{
-						die(JSON::encode(['code'=>1,'info'=>'添加失败']));
+						die(JSON::encode(['code'=>0,'info'=>'添加失败']));
 					}
 				}
 			}else{
@@ -356,7 +370,7 @@ class MobileUser extends IController
 
 				if($isSuss !== false)
 				{
-					die(JSON::encode(['code'=>1,'info'=>$photo['attach']['img']]));
+					die(JSON::encode(['code'=>1,'info'=>'http://http://v.yqrtv.com:8080/app/'.$photo['attach']['img']]));
 
 				}
 				else
@@ -539,6 +553,7 @@ class MobileUser extends IController
 			die(JSON::encode(['code'=>0,'info'=>'修改失败']));
 		}
 	}
+	//获得说明
 	public function getExplain(){
 		$name=IFilter::act(IReq::get('name','post'));
 		$name=IFilter::act(IReq::get('name'));
@@ -551,6 +566,57 @@ class MobileUser extends IController
 		$url=IUrl::getHost().IUrl::creatUrl('/site/help?id='.$helpInfo['id'].'&device=android&cat_id='.$helpInfo['cat_id']);
 		//echo $url;
 		die(JSON::encode(['url'=>$url]));
+	}
+	//积分接口
+	public function getPointList(){
+		$token=IFilter::act(IReq::get('token','post'));
+		$tokenObj=new IModel('token');
+		if(!$tokenInfo=$tokenObj->getObj('token=\''.$token.'\'')){
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
+		$query = new IQuery('point_log');
+		$query->where  = "user_id = ".$tokenInfo['user_id'];
+		$query->fields='datetime,value,intro,id';
+		$query->order= "id desc";
+		$res=$query->find();
+		die(JSON::encode($res));
+	}
+	//地址
+	public function getArea(){
+		$areaObj=new IQuery('areas');
+		$areaObj->where='parent_id=0';
+		//ini_set('max_execution_time',3000);
+		$areaObj->order='sort asc';
+		//$areaObj->where='find_in_set(area_id,getTreeCategory(321000))';
+		//$areaObj->limit=100000;
+		$province=$areaObj->find();
+		foreach($province as $k=>$v){
+			$areaObj->where='parent_id='.$v['area_id'];
+			$city=$areaObj->find();
+			$province[$k]['nested']=$city;
+			foreach($province[$k]['nested'] as $kk=>$vv){
+				if(!empty($city)){
+					$areaObj->where='parent_id='.$vv['area_id'];
+					$county=$areaObj->find();
+					$province[$k]['nested'][$kk]['nested']=$county;
+				}
+
+			}
+		}
+		die(JSON::encode($province));
+	}
+	//获得地址列表
+	public function getUserAddress(){
+		$token=IFilter::act(IReq::get('token'));
+		$tokenObj=new IModel('token');
+		if(!$tokenInfo=$tokenObj->getObj('token=\''.$token.'\'')){
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
+		$addObj=new IQuery('address');
+		$addObj->where='user_id='.$tokenInfo['user_id'];
+		$userAddList=$addObj->find();
+		die(JSON::encode($userAddList));
+
 	}
 }
 
