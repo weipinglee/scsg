@@ -7,6 +7,7 @@
  */
 class Seller extends IController
 {
+    public $checkRight  = array('check' => 'all','uncheck' => array('index','chg_pass','seller_pass'));
 	public $layout = 'seller';
 
 	/**
@@ -1528,7 +1529,7 @@ class Seller extends IController
         {
             $delivery = new IModel('delivery_extend');
             $data = $delivery->getObj('delivery_id = '.$delivery_id.' and seller_id = '.$this->seller['seller_id']);
-            $data['area_groupid'] = unserialize($data['area_groupid']) ;
+            $data['area_groupid'] = isset($data['area_groupid']) ? unserialize($data['area_groupid']) : '' ;
             $area = array();
             if( $data['area_groupid']){
                     
@@ -1664,15 +1665,27 @@ class Seller extends IController
 		if($new_pass != $new_pass2){
 			$errorMsg = '两次密码不一致！';
 		}
+		$id = IReq::get('id');
+        if($id)
+        {
+            $seller = new IModel('admin_seller');
+            if($seller->getObj('id='.$id.' AND password = "'.md5($old_pass).'"')){
+                $seller->setData(array('password'=>md5($new_pass)));
+                $seller->update('id='.$id);
+                $this->redirect('index');
+            }else $errorMsg = '原密码不正确！';
+        }
+		else
+        {
+            $seller = new IModel('seller');
+            $sellerid = $this->seller['seller_id'];
+            if($seller->getObj('id='.$sellerid.' AND password = "'.md5($old_pass).'"')){
+                $seller->setData(array('password'=>md5($new_pass)));
+                $seller->update('id='.$sellerid);
+                $this->redirect('seller_edit');
+            }else $errorMsg = '原密码不正确！';
+        }
 		
-		
-		$seller = new IModel('seller');
-		$sellerid = $this->seller['seller_id'];
-		if($seller->getObj('id='.$sellerid.' AND password = "'.md5($old_pass).'"')){
-			$seller->setData(array('password'=>md5($new_pass)));
-			$seller->update('id='.$sellerid);
-			$this->redirect('seller_edit');
-		}else $errorMsg = '原密码不正确！';
 			
 		//操作失败表单回填
 		if(isset($errorMsg))

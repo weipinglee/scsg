@@ -76,20 +76,28 @@ class CheckRights extends IInterceptorBase
 	public static function getSeller()
 	{
 		$seller = array(
-			'seller_id'   => ISafe::get('seller_id'),
+            'seller_id'   => ISafe::get('seller_id'),
+			'admin_seller_id'   => ISafe::get('admin_seller_id') ? ISafe::get('admin_seller_id') : 0,
 			'seller_name' => ISafe::get('seller_name'),
-			'seller_pwd'  => ISafe::get('seller_pwd'),
+            'seller_pwd'  => ISafe::get('seller_pwd'),
+			'admin_role_seller_name'  => ISafe::get('admin_role_seller_name'),
 		);
 
 		if(self::isValidSeller($seller['seller_name'],$seller['seller_pwd']))
 		{
 			return $seller;
 		}
+        elseif(self::isValidSellerAdmin($seller['seller_name'],$seller['seller_pwd']))
+        {
+            return $seller;
+        }
 		else
 		{
 			ISafe::clear('seller_id');
+            ISafe::clear('admin_seller_id');
 			ISafe::clear('seller_name');
-			ISafe::clear('seller_pwd');
+            ISafe::clear('seller_pwd');
+			ISafe::clear('admin_role_seller_name');
 			return null;
 		}
 	}
@@ -193,8 +201,8 @@ class CheckRights extends IInterceptorBase
 		//2,其余action检测
 		else
 		{
-			$object->seller = self::getSeller();
-			if(!$object->seller)
+			$seller = self::getSeller();
+			if(!$seller)
 			{
                 $url = '/'.$controllerId.'/'.$actionId;
                 $temp = $_GET;
@@ -209,6 +217,25 @@ class CheckRights extends IInterceptorBase
                 $object->callbackUrl = $url;
                 $object->redirect("/systemseller/index?callback={$url}");
 			}
+            
+            //获取管理员数据
+            $sellerRow = self::isValidSeller($seller['seller_name'],$seller['seller_pwd']);
+            //非超管角色
+            if($sellerRow['role_id'] != 0)
+            {
+                $roleObj = new IModel('admin_role');
+                $where   = 'id = '.$sellerRow["role_id"].' and is_del = 0';
+                $roleRow = $roleObj->getObj($where);
+
+                //角色权限校验
+                if(self::checkRight($roleRow['rights']) == false)
+                {
+                    IError::show('503','no permission to access');
+                    exit;
+                }
+            }
+
+            $object->seller = $seller;
 		}
 	}
 
@@ -347,20 +374,57 @@ class CheckRights extends IInterceptorBase
 		return false;
 	}
 
+    /**
+     * @brief 验证卖家身份信息
+     * @param string $login_info 登录信息
+     * @param string $password 登录密码
+     * @param array or false
+     */
+    private static function isValidSeller($login_info,$password)
+    {
+        $login_info = IFilter::act($login_info);
+        $password   = IFilter::act($password);
+
+        $sellerObj = new IModel('seller');
+        $where     = "seller_name = '{$login_info}' and is_del = 0 and is_lock = 0";
+        $sellerRow = $sellerObj->getObj($where);
+
+        if($sellerRow && ($sellerRow['password'] == $password))
+        {
+            $sellerRow['role_id'] = 0;
+            return $sellerRow;
+        }
+        else
+        {
+            $adminsellerObj = new IQuery('admin_seller as a');
+            $adminsellerObj->join = 'join seller as s on a.seller_id = s.id';
+            $adminsellerObj->where = 'admin_name = "'.$login_info.'" and a.is_del = 0 and s.is_del = 0 and s.is_lock = 0';
+            $adminsellerObj->fields = 'a.*';
+            $sellerRow = $adminsellerObj->getObj();
+            if($sellerRow && ($sellerRow['password'] == $password))
+            {
+                return $sellerRow;
+            }
+            return false;
+        }
+    }
+    
 	/**
-	 * @brief 验证卖家身份信息
+	 * @brief 验证卖家管理员身份信息
 	 * @param string $login_info 登录信息
 	 * @param string $password 登录密码
 	 * @param array or false
 	 */
-	private static function isValidSeller($login_info,$password)
+	private static function isValidSellerAdmin($login_info,$password)
 	{
 		$login_info = IFilter::act($login_info);
 		$password   = IFilter::act($password);
 
-		$sellerObj = new IModel('seller');
-		$where     = "seller_name = '{$login_info}' and is_del = 0 and is_lock = 0";
-		$sellerRow = $sellerObj->getObj($where);
+        $adminsellerObj = new IQuery('admin_seller as a');
+        $adminsellerObj->join = 'join seller as s on a.seller_id = s.id';
+        $adminsellerObj->where = 'admin_name = "'.$login_info.'" and a.is_del = 0 and s.is_del = 0 and s.is_lock = 0';
+		$adminsellerObj->fields = 'a.*';
+        $sellerRow = $adminsellerObj->getObj();
 
 		if($sellerRow && ($sellerRow['password'] == $password))
 		{

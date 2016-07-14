@@ -6,6 +6,8 @@
 	</header>
 	
 	<form action="{url:/seller/seller_pass}" method="post" name="chg_pass" enctype='multipart/form-data'>
+    {set:$id = IReq::get('id');}
+    <input type="hidden" name="id" value="{$id}">
 		<div class="module_content">
 			<fieldset>
 				<label>原密码：</label>
