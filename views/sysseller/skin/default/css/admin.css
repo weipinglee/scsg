@@ -11,6 +11,7 @@ padding: 0;
 font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 background: #F8F8F8;
 font-size: 12px;
+list-style: none;
 }
 img{
 border:none;
@@ -952,7 +953,11 @@ ul.select{list-style:none;height:236px;overflow: scroll ;overflow-x:hidden;borde
 	clear:both;
 	margin-left:10px;
 }
-
+fieldset .box ul li{
+    list-style-type: none;
+    width:220px;
+    float:left;
+}
 .box>label{
 	font-weight: normal;
 }
