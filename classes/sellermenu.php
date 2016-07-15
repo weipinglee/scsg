@@ -87,6 +87,10 @@ class SellerMenu
 			'/seller/shan_list'=>'闪购&icn_view_users',
 			'/seller/regiment_list'=>'团购&icon_pc_tg'
 		),
+        '代金券管理'=>array(
+            '/seller/ticket_list'       => '代金券列表',
+            '/seller/ticket_excel_list' => '代金券文件列表',
+        ),
 		'配置模块'=>array(
             '/seller/delivery' => '物流配送&icon_pc_wl',
             '/seller/ship_info_list' => '发货地址&icon_pc_fhdz',
@@ -153,7 +157,7 @@ class SellerMenu
                 }
                 $tem = explode('&', $v);
                 $class = isset($tem[1]) ? $tem[1] : '';
-                $item['list'][] = array('title' => $tem[0], 'class' => $class, 'link' => $k);
+                $item['list'][] = array('title' => $tem[0], 'class' => $class, 'link' => IUrl::creatUrl($k));
 			}
 			$result[] = $item;
 		}

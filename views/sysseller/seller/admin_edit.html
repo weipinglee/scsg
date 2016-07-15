@@ -47,6 +47,7 @@
                 <label>
                     <select class='small' name='role_id' pattern='required' alt='请选择一个角色'>
                         <option value=''>请选择</option>
+                        <option value="0">超级管理员</option>
                         {query:name=admin_role where=is_del eq 0 and seller_id eq $seller_id}
                         <option value='{$item['id']}'>{$item['name']}</option>
                         {/query}

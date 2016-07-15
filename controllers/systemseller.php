@@ -44,7 +44,7 @@ class SystemSeller extends IController
 				$sellerObj->update($where);
 
 				//存入私密数据
-                ISafe::set('admin_role_seller_name','超级管理员');
+                ISafe::set('admin_role_seller_name','商家');
 				ISafe::set('seller_id',$sellerRow['id']);
 				ISafe::set('seller_name',$sellerRow['seller_name']);
 				ISafe::set('seller_pwd',$sellerRow['password']);

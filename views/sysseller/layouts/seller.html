@@ -1,4 +1,4 @@
-{set:$seller =$this->seller; $seller_id = $seller['seller_id'];$seller_name = $seller['seller_name'];}
+{set:$seller =$this->seller; $seller_id = $seller['seller_id'];$seller_name = $seller['seller_name'];$role_name = $seller['admin_role_seller_name']}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -54,7 +54,7 @@
 	<!--面包屑导航 开始-->
 	<section id="secondary_bar">
 		<div class="user">
-			<p>{$seller_name}</p>
+			<p>{$seller_name} <span style="color: red;">({$role_name})</span></p>
 		</div>
 	</section>
 	<!--面包屑导航 结束-->
