@@ -35,7 +35,7 @@
 			<td>{echo:($item['size']>=1024) ? ($item['size']>>10).'KB' : $item['size'].'B'}</td>
 			<td>
 				<a href='{url:/seller/ticket_excel_download/file/$item[name]}' target='_blank'>
-					<img class="operator" src="{skin:images/main/icn_jump_back.png}" alt="下载" title="下载" />
+					<img class="operator" src="{skin:images/main/dowload.png}" alt="下载" title="下载" />
 				</a>
 
 				<a href='javascript:void(0)' onclick="delModel({link:'{url:/seller/ticket_excel_del/id/$item[name]}'});">

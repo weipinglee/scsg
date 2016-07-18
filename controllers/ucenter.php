@@ -1458,7 +1458,8 @@ class Ucenter extends IController
                         'ticket_condition' => $ticketRow['condition'],
 						'start_time'    => $ticketRow['start_time'],
 						'end_time'      => $ticketRow['end_time'],
-						'is_send'       => 1,
+                        'is_send'       => 1,
+						'seller_id'       => $ticketRow['seller_id'],
 					);
 					$propObj = new IModel('prop');
 					$propObj->setData($dataArray);

@@ -973,7 +973,6 @@ class Simple extends IController
                 }
     		}
     	}
-
 		//获取用户的道具红包和用户的习惯方式
 		$this->prop = array();
 		$memberObj = new IModel('member');
@@ -982,12 +981,23 @@ class Simple extends IController
 			if(isset($memberRow['prop']) && ($propId = trim($memberRow['prop'],',')))
 			{
 				$propObj = new IModel('prop');
-                $prop = $propObj->query('id in ('.$propId.') and NOW() between start_time and end_time and type = 0 and is_close = 0 and is_userd = 0 and is_send = 1', 'id,name,value,card_name,ticket_condition');
+                $prop = $propObj->query('id in ('.$propId.') and NOW() between start_time and end_time and type = 0 and is_close = 0 and is_userd = 0 and is_send = 1', 'id,name,value,card_name,ticket_condition,seller_id');
                 foreach($prop as $k => $v)
                 {
                     if($v['ticket_condition'] && $v['ticket_condition'] > $result['sum'])
                     {
                         unset($prop[$k]);
+                    }
+                    else if($v['seller_id'])
+                    {
+                        if(!array_key_exists($v['seller_id'], $result['extend']))
+                        {
+                            unset($prop[$k]);
+                        }
+                        else if($v['ticket_condition'] && $v['ticket_condition'] > $result['extend'][$v['seller_id']]['sum'])
+                        {
+                            unset($prop[$k]);
+                        }
                     }
                 }
                 $this->prop = $prop;

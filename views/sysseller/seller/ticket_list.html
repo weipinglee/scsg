@@ -44,13 +44,13 @@
                 <td>{$item['start_time']} ～ {$item['end_time']}</td>
                 <td>
                     <a href='{url:/seller/ticket_edit/id/$item[id]}'><img src="{skin:images/main/icn_edit.png}" title="编辑" /></a>
-                    <a href='{url:/seller/ticket_more_list/ticket_id/$item[id]}'><img class="operator" src="{skin:images/main/icn_settings.png}" alt="查看详情" title="查看详情" /></a>
+                    <a href='{url:/seller/ticket_more_list/ticket_id/$item[id]}'><img class="operator" src="{skin:images/main/edit.png}" alt="查看详情" title="查看详情" /></a>
 
-                    <a href='javascript:create_dialog("{$item['id']}");'><img class="operator" src="{skin:images/main/icn_new_article.png}" alt="生成实体代金券" title="生成实体优惠券" /></a>
+                    <a href='javascript:create_dialog("{$item['id']}");'><img class="operator" src="{skin:images/main/creat.png}" alt="生成实体代金券" title="生成实体优惠券" /></a>
 
                     {if:$ticket_num > 0}
                     <a href='javascript:void(0)' onclick="delModel({msg:'是否要生成excel表格？',link:'{url:/seller/ticket_excel/id/$item[id]}'});">
-                        <img class="operator" src="{skin:images/main/icn_jump_back.png}" alt="生成EXCEL" title="生成EXCEL" />
+                        <img class="operator" src="{skin:images/main/excel.png}" alt="生成EXCEL" title="生成EXCEL" />
                     </a>
                     {/if}
                     <a href='javascript:void(0)' onclick="delModel({link:'{url:/seller/ticket_del/id/$item[id]}'});"><img src="{skin:images/main/icn_del.png}" title="删除" /></a>
