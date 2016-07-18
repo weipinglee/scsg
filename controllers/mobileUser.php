@@ -307,19 +307,25 @@ class MobileUser extends IController
 					die(JSON::encode(['code'=>0,'info'=>'请输入手机号']));
 				}
 				if(!IValidate::zip($zip)){
-					die(JSON::encode(['code'=>0,'info'=>'请输入邮箱']));
+					die(JSON::encode(['code'=>0,'info'=>'请输入邮编']));
 				}
 				$addObj=new IModel('address');
 				$data['accept_name']=$accept_name;
 				$data['address']=$address;
 				$data['mobile']=$mobile;
 				$data['zip']=$zip;
-				$data['default']=IFilter::act(IReq::get('default','pos t'),'int')?IFilter::act(IReq::get('default','post'),'int'):0;
+				$data['default']=IFilter::act(IReq::get('default','post'),'int')?IFilter::act(IReq::get('default','post'),'int'):0;
+				if($data['default']==1){
+					$addObj->setData(['default'=>0]);
+					$addObj->update('user_id='.$res['user_id']);
+				}
 				$data['province']=$province;
 				$data['city']=$city;
 				$data['area']=$area;
 				$data['user_id']=$res['user_id'];
-				if($addId){
+				if($addId!=""){
+					$addInfo=$addObj->getObj('id='.$addId);
+					$data['default']=$addInfo['default'];
 					$addObj->setData($data);
 					if($addObj->update('id='.$addId)){
 						die(JSON::encode(['code'=>1,'info'=>'修改成功']));
@@ -404,7 +410,7 @@ class MobileUser extends IController
 		$userObj->setData(['username'=>$userName]);
 		$res=$userObj->update('id='.$user['user_id']);
 		if($res){
-			die(JSON::encode(['code'=>1,'info'=>'修改成功']));
+			die(JSON::encode(['code'=>1,'info'=>'修改成功','username'=>$userName]));
 		}else{
 			die(JSON::encode(['code'=>0,'info'=>'修改失败']));
 		}
@@ -607,16 +613,55 @@ class MobileUser extends IController
 	}
 	//获得地址列表
 	public function getUserAddress(){
-		$token=IFilter::act(IReq::get('token'));
+		$token=IFilter::act(IReq::get('token','post'));
 		$tokenObj=new IModel('token');
 		if(!$tokenInfo=$tokenObj->getObj('token=\''.$token.'\'')){
 			die(JSON::encode(['code'=>0,'info'=>'请登录']));
 		}
 		$addObj=new IQuery('address');
+		$addObj->fields='id,zip,accept_name,mobile,address,`default` as type';
 		$addObj->where='user_id='.$tokenInfo['user_id'];
 		$userAddList=$addObj->find();
 		die(JSON::encode($userAddList));
-
+	}
+	//设置默认地址
+	public function setDefaultAdd(){
+		$token=IFilter::act(IReq::get('token','post'));
+		$tokenObj=new IModel('token');
+		if(!$tokenInfo=$tokenObj->getObj('token=\''.$token.'\'')){
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
+		$addId=IFilter::act(IReq::get('add_id','post'),'int');
+		if($addId==""){
+			die(JSON::encode(['code'=>0,'info'=>'数据不合法']));
+		}
+		$addObj=new IModel('address');
+		$addObj->setData(['default'=>0]);
+		$addObj->update('user_id='.$tokenInfo['user_id']);
+		$addObj->setData(['default'=>1]);
+		if($addObj->update('id='.$addId)){
+			die(JSON::encode(['code'=>1,'info'=>'设置成功']));
+		}else{
+			die(JSON::encode(['code'=>0,'info'=>'设置失败']));
+		}
+	}
+	//删除收获地址
+	public function delAddress(){
+		$token=IFilter::act(IReq::get('token','post'));
+		$tokenObj=new IModel('token');
+		if(!$tokenInfo=$tokenObj->getObj('token=\''.$token.'\'')){
+			die(JSON::encode(['code'=>0,'info'=>'请登录']));
+		}
+		$addId=IFilter::act(IReq::get('add_id','post'),'int');
+		if($addId==""){
+			die(JSON::encode(['code'=>0,'info'=>'数据不合法']));
+		}
+		$addObj=new IModel('address');
+		if($addObj->del('id='.$addId)){
+			die(JSON::encode(['code'=>1,'info'=>'删除成功']));
+		}else{
+			die(JSON::encode(['code'=>0,'info'=>'删除失败']));
+		}
 	}
 }
 

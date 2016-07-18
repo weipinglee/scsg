@@ -523,7 +523,7 @@ class mobileGoods extends IController {
 		echo JSON::encode($likeList);
 
 	}
-	//获取团购列表的数据
+	//获得团购列表(今日团，品牌团，整点团 )
 	public function getRegimentList(){
 		$topList=array();
 		$brandList=array();
@@ -535,37 +535,44 @@ class mobileGoods extends IController {
 		$tuan->where='r.is_close=0 and now() between r.start_time and r.end_time and g.is_del=0 and r.type=0';
 		$tuan->order='r.sort desc';
 		//$tuan->limit='';
-		$topList=$tuan->find();
-		if($topList) {
-			foreach ($topList as $k => $v) {
+		$topList['data']=$tuan->find();
+
+		if($topList['data']) {
+			foreach ($topList['data'] as $k => $v) {
 				$data = Comment_Class::get_comment_info($v['goods_id']);
-				$topList[$k]['comment_num']=$data['comment_total'];
-				$topList[$k]['comment_tate']=$data['comment_total']?(round($data['point_grade']['good']/$data['comment_total'],4))*100:0;
+				$topList['data'][$k]['comment_num']=$data['comment_total'];
+				$topList['data'][$k]['comment_tate']=$data['comment_total']?(round($data['point_grade']['good']/$data['comment_total'],4))*100:0;
 			}
 		}
+		$topList['name']='今日团';
+		$topList['time']='';
 		//品牌团
 		$tuan->join='left join goods as g on r.goods_id=g.id';
 		$tuan->fields="r.*";
 		$tuan->where='r.is_close=0 and now() between r.start_time and r.end_time and g.is_del=0 and r.type=1';
 		$tuan->order='r.sort desc';
-		$brandList=$tuan->find();
-		if($brandList) {
-			foreach ($brandList as $k => $v) {
+		$brandList['data']=$tuan->find();
+		if($brandList['data']) {
+			foreach ($brandList['data'] as $k => $v) {
 				$data = Comment_Class::get_comment_info($v['goods_id']);
-				$brandList[$k]['comment_num']=$data['comment_total'];
-				$brandList[$k]['comment_tate']=$data['comment_total']?(round($data['point_grade']['good']/$data['comment_total'],4))*100:0;
+				$brandList['data'][$k]['comment_num']=$data['comment_total'];
+				$brandList['data'][$k]['comment_tate']=$data['comment_total']?(round($data['point_grade']['good']/$data['comment_total'],4))*100:0;
 			}
 		}
+		$brandList['name']='品牌团';
 		//整点团
 		$tuan->where='r.is_close=0 and now() between r.start_time and end_time and g.is_del=0 and r.type=2';
-		$onTimeList=$tuan->find();
-		if($onTimeList){
-			foreach($onTimeList as $k=>$v){
+		$onTimeList['data']=$tuan->find();
+		$onTimeList['time']='';
+		if($onTimeList['data']){
+			foreach($onTimeList['data'] as $k=>$v){
 				$data=Comment_Class::get_comment_info($v['goods_id']);
 				$onTimeList[$k]['comment_num']=$data['comment_total'];
 				$onTimeList[$k]['comment_tate']=$data['comment_total']?(round($data['point_grade']['good']/$data['comment_total'],4))*100:0;
+				$onTimeList['time']=$v['start_time'];
 			}
 		}
+		$onTimeList['name']='整点团';
 		$res=['topList'=>$topList,'brandList'=>$brandList,'onTimeList'=>$onTimeList];
 		echo JSON::encode($res);
 	}
