@@ -20,7 +20,7 @@ class SellerMenu
 	public function __construct($seller)
 	{
 		$sellerObj = new IModel('seller');
-		$sellerRow = $sellerObj->getObj('seller_name = "'.$seller['seller_name'].'" and is_lock = 0');
+		$sellerRow = $sellerObj->getObj('seller_name = "'.$seller['seller_name'].'" and is_lock = 0 and id = '.$seller['seller_id']);
 		if($sellerRow && (isset($seller['seller_pwd']) && $sellerRow['password'] == $seller['seller_pwd']) && ($sellerRow['is_del'] == 0))
 		{
             //根据角色分配权限
@@ -30,7 +30,7 @@ class SellerMenu
         {
             $adminsellerObj = new IQuery('admin_seller as a');
             $adminsellerObj->join = 'join seller as s on a.seller_id = s.id';
-            $adminsellerObj->where = 'admin_name = "'.$seller['seller_name'].'" and a.is_del = 0 and s.is_del = 0 and s.is_lock = 0';
+            $adminsellerObj->where = 'admin_name = "'.$seller['seller_name'].'" and a.seller_id = '.$seller['seller_id'].' and a.is_del = 0 and s.is_del = 0 and s.is_lock = 0';
             $adminsellerObj->fields = 'a.*';
             $sellerRow = $adminsellerObj->getObj();
             if($sellerRow['role_id'] == 0)

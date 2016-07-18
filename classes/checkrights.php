@@ -83,11 +83,11 @@ class CheckRights extends IInterceptorBase
 			'admin_role_seller_name'  => ISafe::get('admin_role_seller_name'),
 		);
 
-		if(self::isValidSeller($seller['seller_name'],$seller['seller_pwd']))
+		if($seller['admin_role_seller_name'] == '商家' && self::isValidSeller($seller['seller_name'],$seller['seller_pwd']))
 		{
 			return $seller;
 		}
-        elseif(self::isValidSellerAdmin($seller['seller_name'],$seller['seller_pwd']))
+        elseif(self::isValidSellerAdmin($seller['seller_name'],$seller['seller_pwd'],$seller['seller_id']))
         {
             return $seller;
         }
@@ -394,19 +394,7 @@ class CheckRights extends IInterceptorBase
             $sellerRow['role_id'] = 0;
             return $sellerRow;
         }
-        else
-        {
-            $adminsellerObj = new IQuery('admin_seller as a');
-            $adminsellerObj->join = 'join seller as s on a.seller_id = s.id';
-            $adminsellerObj->where = 'admin_name = "'.$login_info.'" and a.is_del = 0 and s.is_del = 0 and s.is_lock = 0';
-            $adminsellerObj->fields = 'a.*';
-            $sellerRow = $adminsellerObj->getObj();
-            if($sellerRow && ($sellerRow['password'] == $password))
-            {
-                return $sellerRow;
-            }
-            return false;
-        }
+        return false;
     }
     
 	/**
@@ -415,14 +403,14 @@ class CheckRights extends IInterceptorBase
 	 * @param string $password 登录密码
 	 * @param array or false
 	 */
-	private static function isValidSellerAdmin($login_info,$password)
+	private static function isValidSellerAdmin($login_info,$password,$seller_id)
 	{
 		$login_info = IFilter::act($login_info);
 		$password   = IFilter::act($password);
 
         $adminsellerObj = new IQuery('admin_seller as a');
         $adminsellerObj->join = 'join seller as s on a.seller_id = s.id';
-        $adminsellerObj->where = 'admin_name = "'.$login_info.'" and a.is_del = 0 and s.is_del = 0 and s.is_lock = 0';
+        $adminsellerObj->where = 'admin_name = "'.$login_info.'" and a.seller_id = '.$seller_id.' and a.is_del = 0 and s.is_del = 0 and s.is_lock = 0';
 		$adminsellerObj->fields = 'a.*';
         $sellerRow = $adminsellerObj->getObj();
 
