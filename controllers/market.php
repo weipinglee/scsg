@@ -331,7 +331,7 @@ class Market extends IController
 		$dirRes   = opendir($this->ticketDir);
 		while($fileName = readdir($dirRes))
 		{
-			if(!in_array($fileName,IFile::$except))
+			if(!in_array($fileName,IFile::$except) && is_file($this->ticketDir.'/'.$fileName))
 			{
 				$dirArray[$fileName]['name'] = $fileName;
 				$dirArray[$fileName]['size'] = filesize($this->ticketDir.'/'.$fileName);
@@ -382,10 +382,13 @@ class Market extends IController
 
 		if($file != null)
 		{
+            ob_end_clean();    
 			header('Content-Description: File Transfer');
 			header('Content-Length: '.filesize($this->ticketDir.'/'.$file));
 			header('Content-Disposition: attachment; filename='.basename($file));
-			readfile($this->ticketDir.'/'.$file);
+			readfile($this->ticketDir.'/'.$file); 
+            flush();
+            ob_flush();
 		}
 	}
 
@@ -427,7 +430,7 @@ class Market extends IController
 	function getTicketList()
 	{
 		$ticketObj  = new IModel('ticket');
-		$ticketList = $ticketObj->query();
+		$ticketList = $ticketObj->query('seller_id = 0');
 		foreach($ticketList as $key=>$v){
 			$ticketList[$key]['expire'] = 0;
 			if(time()>strtotime($v['end_time'])){

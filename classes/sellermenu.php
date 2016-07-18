@@ -88,8 +88,8 @@ class SellerMenu
 			'/seller/regiment_list'=>'团购&icon_pc_tg'
 		),
         '代金券管理'=>array(
-            '/seller/ticket_list'       => '代金券列表',
-            '/seller/ticket_excel_list' => '代金券文件列表',
+            '/seller/ticket_list'       => '代金券列表&icon_pc_bkfp',
+            '/seller/ticket_excel_list' => '代金券文件列表&icn_pc_list',
         ),
 		'配置模块'=>array(
             '/seller/delivery' => '物流配送&icon_pc_wl',

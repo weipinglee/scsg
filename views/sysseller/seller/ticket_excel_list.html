@@ -1,0 +1,50 @@
+<article class="module width_full">
+    <header>
+        <h3 class="tabs_involved">代金券文件列表</h3>
+        <ul class="tabs">
+            <li><input type="button" class="alt_btn" onclick="event_link('{url:/seller/ticket_edit}');" value="添加代金券" /></li>
+            <li><input type="button" class="alt_btn" onclick="selectAll('id[]');" value="全选" /></li>
+            <li><input type="button" class="alt_btn" onclick="document.forms[0].action='{url:/seller/ticket_excel_pack}';delModel({msg:'确定要打包下载么？'});" value="打包下载" /></li>
+            <li><input type="button" class="alt_btn" onclick="document.forms[0].action='{url:/seller/ticket_excel_del}';delModel({msg:'确定要删除么？'});" value="批量删除" /></li>
+        </ul>
+    </header>
+    <form method='post' action='{url:/seller/ticket_excel_del}'>
+    <table class="tablesorter" cellspacing="0">
+    <colgroup>
+		<col width="40px" />
+		<col width="200px" />
+		<col width="200px" />
+		<col width="100px" />
+		<col />
+    </colgroup>
+	<thead>
+		<tr>
+			<th>选择</th>
+			<th>文件名</th>
+			<th>生成时间</th>
+			<th>文件大小</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		{foreach:items=$this->dirArray}
+		<tr>
+			<td><input type='checkbox' name='id[]' value='{$item['name']}' /></td>
+			<td>{$item['name']}</td>
+			<td>{$item['time']}</td>
+			<td>{echo:($item['size']>=1024) ? ($item['size']>>10).'KB' : $item['size'].'B'}</td>
+			<td>
+				<a href='{url:/seller/ticket_excel_download/file/$item[name]}' target='_blank'>
+					<img class="operator" src="{skin:images/main/icn_jump_back.png}" alt="下载" title="下载" />
+				</a>
+
+				<a href='javascript:void(0)' onclick="delModel({link:'{url:/seller/ticket_excel_del/id/$item[name]}'});">
+					<img class="operator" src="{skin:images/main/icn_del.png}" alt="删除" title="删除" />
+				</a>
+			</td>
+		</tr>
+		{/foreach}
+	</tbody>
+    </table>
+    </form>
+</article>

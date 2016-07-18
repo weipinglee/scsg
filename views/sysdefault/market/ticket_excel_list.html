@@ -4,7 +4,7 @@
 		<a href="javascript:void(0)" onclick="event_link('{url:/market/ticket_edit}')"><button class="operating_btn" type="button"><span class="addition">添加代金券</span></button></a>
 		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
 		<a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_excel_pack}';delModel({msg:'确定要打包下载么？'});"><button class="operating_btn" type="button"><span class="download">打包下载</span></button></a>
-		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_excel_del}';delModel({msg:'确定要删除么？'});"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
 	</div>
 	<div class="field">
 		<table class="list_table">

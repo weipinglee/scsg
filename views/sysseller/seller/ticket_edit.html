@@ -1,0 +1,101 @@
+{js:my97date}
+<article class="module width_full">
+    <header>
+        <h3>{if:isset($this->ticketRow['id'])}编辑{else:}添加{/if}代金券</h3>
+    </header>
+    <form action="{url:/seller/ticket_edit_act}" name='ticket_edit'  method="post">
+        <div class="module_content">
+			<input type='hidden' name='id' />
+			<fieldset>
+				<label>代金券名称：</label>
+                <div class="box">
+				    <input type='text' name='name' class='normal' pattern='required' alt='请填写代金券名称' />
+				    <label class="tip">* 请为此组代金券命名</label>
+                </div>
+			</fieldset>
+            <fieldset>
+                <label>代金券面额：</label>
+                <div class="box">
+                    <input type='text' class='small' pattern='float' alt='必须填写数字' name='value' />元
+                    <label class="tip">* 请填写此组代金券所能抵销的金额</label>
+                </div>
+            </fieldset>
+			<fieldset>
+				<label>代金券类型：</label>
+                <div class="box">
+                    <label class='attr'><input type='radio' name='type' value='1' />阳券</label>
+                    <label class='attr'><input type='radio' name='type' value='2' />泉券</label>
+                </div>
+			</fieldset>
+            <fieldset style="display: none;">
+                <label>购物车总金额条件：</label>
+                <div class="box">
+                    <input type='text' name='condition' class='small' pattern='float' alt='请填写一个金额数字' />元 
+                    <label class="tip">* 当购物车总金额达到所填写的现金额度时规则生效</label>
+                </div>
+            </fieldset>
+			<fieldset>
+				<label>有效时间段：</label>
+                <div class="box">
+					<input type='text' name='start_time' class='normal' pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' /> ～
+					<input type='text' name='end_time' class='normal' pattern='datetime' readonly=true onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' />
+					<label class="tip">* 此组代金券的使用时间段</label>
+				</div>
+			</fieldset>
+			<fieldset>
+				<label>兑换所需积分：</label>
+                <div class="box">
+				    <input type='text' class='small' pattern='int' empty alt='必须填写数字' name='point' />
+                    <label class="tip">设置兑换此代金券所需要的积分，如果为空或0则表示此优惠券不支持积分兑换</label>
+                </div>
+			</fieldset>
+	    </div>
+        <footer>
+            <div class="submit_link">
+                <input type="submit" class="alt_btn" value="确 定" />
+                <input type="reset" value="重 置" />
+            </div>
+        </footer>
+    </form>
+</article>
+
+<script type='text/javascript'>
+	//表单回填
+	var formObj = new Form('ticket_edit');
+	formObj.init
+	({
+		'id':'{$this->ticketRow['id']}',
+		'name':'{$this->ticketRow['name']}',
+		'start_time':'{$this->ticketRow['start_time']}',
+		'end_time':'{$this->ticketRow['end_time']}',
+		'value':'{$this->ticketRow['value']}',
+        'point':'{$this->ticketRow['point']}',
+        'type':'{$this->ticketRow['type']}',
+		'condition':'{$this->ticketRow['condition']}'
+	});
+    $(function(){
+        js_change({$this->ticketRow['type']});
+    })
+
+	//当修改操作时禁止修改金额
+	if($('[name="id"]').val())
+	{
+		$('[name="value"]').attr('readonly',true);
+		$('[name="value"]').css('background','#bbb');
+	}
+    $('input[name=type]').click(function(){
+        var _id = $(this).val();
+        js_change(_id);
+    })
+    function js_change(id)
+    {
+        if(id == 1)
+        {
+            $('input[name=condition]').attr('disabled', 'disabled').parents('fieldset').hide();
+        }
+        else
+        {
+            $('input[name=condition]').removeAttr('disabled').parents('fieldset').show();
+        }
+    }
+</script>

@@ -63,7 +63,7 @@
                         <option value='1'>当购物车金额满 M 元时,优惠 N 元</option>
                         <option value='2'>当购物车金额满 M 元时,优惠 N% </option>
                         <option value='3'>当购物车金额满 M 元时,赠送 N 个积分</option>
-                        <!--<option value='4'>当购物车金额满 M 元时,赠送一张面值 N 元的代金券</option>-->
+                        <option value='4'>当购物车金额满 M 元时,赠送一张面值 N 元的代金券</option>
                         <option value='6'>当购物车金额满 M 元时,免运费</option>
                         <option value='7'>当购物车金额满 M 元时,赠送 N 经验值</option>
                     </select>
@@ -390,14 +390,14 @@
             }
             break;
 
-            /*case "4":
+            case "4":
             {
                 html = "<label>设置代金券：</label>"
                         +"<div class='box'><select class='normal' name='award_value' pattern='required'><option value=''>请选择</option></select></div>"
                         +"<label class='tip'>* 选择一个代金券</label>";
 
                 //异步获取代金券
-                $.getJSON('{url:/market/getTicketList}',function(content){
+                $.getJSON('{url:/seller/getTicketList}',function(content){
                     for(pro in content)
                     {
                         var expire = content[pro]['expire'] ? '(已过期)' : '';
@@ -408,7 +408,7 @@
                     formObj.setValue('award_value',"{$value}");
                 });
             }
-            break;*/
+            break;
 
             case "5":
             {

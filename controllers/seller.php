@@ -9,6 +9,7 @@ class Seller extends IController
 {
     public $checkRight  = array('check' => 'all','uncheck' => array('index','chg_pass','seller_pass'));
 	public $layout = 'seller';
+    private $ticketDir = 'backup/ticket';
 
 	/**
 	 * @brief 初始化检查
@@ -2387,5 +2388,464 @@ class Seller extends IController
             $this->redirect('seller_list',false);
             Util::showMessage('请选择要操作的管理员ID');
         }
+    }
+    
+    //修改代金券状态is_close和is_send
+    function ticket_status()
+    {
+        $status    = IFilter::act(IReq::get('status'));
+        $id        = IFilter::act(IReq::get('id'),'int');
+        $ticket_id = IFilter::act(IReq::get('ticket_id'));
+
+        if(!empty($id) && $status != null && $ticket_id != null)
+        {
+            $ticketObj = new IModel('prop');
+            if(is_array($id))
+            {
+                foreach($id as $val)
+                {
+                    $where = 'id = '.$val;
+                    $ticketRow = $ticketObj->getObj($where,$status);
+                    if($ticketRow[$status]==1)
+                    {
+                        $ticketObj->setData(array($status => 0));
+                    }
+                    else
+                    {
+                        $ticketObj->setData(array($status => 1));
+                    }
+                    $ticketObj->update($where);
+                }
+            }
+            else
+            {
+                $where = 'id = '.$id;
+                $ticketRow = $ticketObj->getObj($where,$status);
+                if($ticketRow[$status]==1)
+                {
+                    $ticketObj->setData(array($status => 0));
+                }
+                else
+                {
+                    $ticketObj->setData(array($status => 1));
+                }
+                $ticketObj->update($where);
+            }
+            $this->redirect('ticket_more_list/ticket_id/'.$ticket_id);
+        }
+        else
+        {
+            $this->ticket_id = $ticket_id;
+            $this->redirect('ticket_more_list',false);
+            Util::showMessage('请选择要修改的id值');
+        }
+    }
+
+    //[代金券]获取代金券数量
+    function getTicketCount($propObj,$id)
+    {
+        $where     = '`condition` = "'.$id.'"';
+        $propCount = $propObj->getObj($where,'count(*) as count');
+        return $propCount['count'];
+    }
+
+    //[代金券]添加,修改[单页]
+    function ticket_edit()
+    {
+        $id = IFilter::act(IReq::get('id'),'int');
+        if($id)
+        {
+            $ticketObj       = new IModel('ticket');
+            $where           = 'id = '.$id;
+            $this->ticketRow = $ticketObj->getObj($where);
+        }
+        $this->redirect('ticket_edit');
+    }
+
+    //[代金券]添加,修改[动作]
+    function ticket_edit_act()
+    {
+        $id        = IFilter::act(IReq::get('id'),'int');
+        $ticketObj = new IModel('ticket');
+
+        $dataArray = array(
+            'name'      => IFilter::act(IReq::get('name','post')),
+            'value'     => IFilter::act(IReq::get('value','post')),
+            'start_time'=> IFilter::act(IReq::get('start_time','post')),
+            'end_time'  => IFilter::act(IReq::get('end_time','post')),
+            'point'     => IFilter::act(IReq::get('point','post')),
+            'type'     => IFilter::act(IReq::get('type','post'), 'int'),
+            'condition'     => IReq::get('condition','post') ? IFilter::act(IReq::get('condition','post'), 'int') : 0,
+        );
+        if(IFilter::act(IReq::get('start_time','post')) >= IFilter::act(IReq::get('end_time','post')))
+        {
+            die('请填写正确的时间');       
+        }
+        if($id)
+        {
+            if($ticketObj->getField('id = '.$id, 'seller_id') <> $this->seller['seller_id'])
+            {
+                die('无权限操作');
+            }
+            $where = 'id = '.$id;
+            $ticketObj->setData($dataArray);
+            $ticketObj->update($where);
+        }
+        else
+        {
+            $dataArray['seller_id'] = $this->seller['seller_id'];
+            $ticketObj->setData($dataArray);
+            $ticketObj->add();
+        }
+        $this->redirect('ticket_list');
+    }
+
+    //[代金券]生成[动作]
+    function ticket_create()
+    {
+        $propObj   = new IModel('prop');
+        $prop_num  = intval(IReq::get('num'));
+        $ticket_id = intval(IReq::get('ticket_id'));
+
+        if($prop_num && $ticket_id)
+        {
+            $prop_num  = ($prop_num > 5000) ? 5000 : $prop_num;
+            $ticketObj = new IModel('ticket');
+            $where     = 'id = '.$ticket_id;
+            $ticketRow = $ticketObj->getObj($where);
+
+            if($ticketRow['seller_id'] <> $this->seller['seller_id'])
+            {
+                die('无权限操作');
+            }
+            for($item = 0; $item < intval($prop_num); $item++)
+            {
+                $dataArray = array(
+                    'condition' => $ticket_id,
+                    'name'      => $ticketRow['name'],
+                    'card_name' => 'T'.IHash::random(8),
+                    'card_pwd'  => IHash::random(8),
+                    'value'     => $ticketRow['value'],
+                    'ticket_condition' => $ticketRow['condition'],
+                    'start_time'=> $ticketRow['start_time'],
+                    'end_time'  => $ticketRow['end_time'],
+                    'seller_id'  => $ticketRow['seller_id'],
+                );
+
+                //判断code码唯一性
+                $where = 'card_name = \''.$dataArray['card_name'].'\'';
+                $isSet = $propObj->getObj($where);
+                if(!empty($isSet))
+                {
+                    $item--;
+                    continue;
+                }
+                $propObj->setData($dataArray);
+                $propObj->add();
+            }
+            $logObj = new Log('db');
+            $logObj->write('operation',array("管理员:".$this->seller['seller_name'],"生成了代金券","面值：".$ticketRow['value']."元，数量：".$prop_num."张"));
+        }
+        $this->redirect('ticket_list');
+    }
+
+    //[代金券]删除
+    function ticket_del()
+    {
+        $id = IFilter::act(IReq::get('id'),'int');
+        if(!empty($id))
+        {
+            $ticketObj = new IModel('ticket');
+            $propObj   = new IModel('prop');
+            $propRow   = $propObj->getObj(" `type` = 0 and `condition` = {$id} and (now() between start_time and end_time) and (is_close = 2 or (is_userd = 0 and is_send = 1)) ");
+
+            if($propRow)
+            {
+                $this->redirect('ticket_list',false);
+                Util::showMessage('无法删除代金券，其下还有正在使用的代金券');
+                exit;
+            }
+            if($propRow['seller_id'] <> $this->seller['seller_id'])
+            {
+                $this->redirect('ticket_list',false);
+                Util::showMessage('无权限删除代金券');
+                exit;
+            }
+            $where = "id = {$id} ";
+            $ticketRow = $ticketObj->getObj($where);
+            if($ticketObj->del($where))
+            {
+                $where = " `type` = 0 and `condition` = {$id} ";
+                $propObj->del($where);
+
+                $logObj = new Log('db');
+                $logObj->write('operation',array("管理员:".$this->seller['seller_name'],"删除了一种代金券","代金券名称：".$ticketRow['name']));
+            }
+            $this->redirect('ticket_list');
+        }
+        else
+        {
+            $this->redirect('ticket_list',false);
+            Util::showMessage('请选择要删除的id值');
+        }
+    }
+
+    //[代金券详细]删除
+    function ticket_more_del()
+    {
+        $id        = IFilter::act(IReq::get('id'),'int');
+        $ticket_id = IFilter::act(IReq::get('ticket_id'),'int');
+        if($id)
+        {
+            $ticketObj = new IModel('ticket');
+            $ticketRow = $ticketObj->getObj('id = '.$ticket_id);
+            if($ticketRow['seller_id'] <> $this->seller['seller_id'])
+            {
+                $this->redirect('ticket_more_list/ticket_id/'.$ticket_id,false);
+                Util::showMessage('无权限删除代金券');
+                exit;
+            }
+            $logObj    = new Log('db');
+            $propObj   = new IModel('prop');
+            if(is_array($id))
+            {
+                $idStr = join(',',$id);
+                $where = ' id in ('.$idStr.')';
+                $logObj->write('operation',array("管理员:".$this->seller['seller_name'],"批量删除了实体代金券","代金券名称：".$ticketRow['name']."，数量：".count($id)));
+            }
+            else
+            {
+                $where = 'id = '.$id;
+                $logObj->write('operation',array("管理员:".$this->seller['seller_name'],"删除了1张实体代金券","代金券名称：".$ticketRow['name']));
+            }
+            $propObj->del($where);
+            $this->redirect('ticket_more_list/ticket_id/'.$ticket_id);
+        }
+        else
+        {
+            $this->ticket_id = $ticket_id;
+            $this->redirect('ticket_more_list',false);
+            Util::showMessage('请选择要删除的id值');
+        }
+    }
+
+    //[代金券详细] 列表
+    function ticket_more_list()
+    {
+        $this->ticket_id = IFilter::act(IReq::get('ticket_id'),'int');
+        $this->redirect('ticket_more_list');
+    }
+
+    //[代金券] 输出excel表格
+    function ticket_excel()
+    {
+        //代金券excel表存放地址
+        $fileName = $this->ticketDir.'/'.$this->seller['seller_id'].'/t'.date('YmdHis').IHash::random(8).'.xls';
+        $ticket_id = IFilter::act(IReq::get('id'));
+        $ticket_id_array = array();
+
+        if(!empty($ticket_id))
+        {
+            $excelStr = '<table><tr><th>名称</th><th>卡号</th><th>密码</th><th>面值</th>
+            <th>已被使用</th><th>是否关闭</th><th>是否发送</th><th>开始时间</th><th>结束时间</th><th>商家</th></tr>';
+
+            $propObj = new IModel('prop');
+            $where   = 'type = 0';
+            if(is_array($ticket_id))
+            {
+                $ticket_id_array = $ticket_id;
+            }
+            else
+            {
+                $ticket_id_array[] = $ticket_id;
+            }
+
+            //当代金券数量没有时不允许备份excel
+            foreach($ticket_id_array as $key => $tid)
+            {
+                if($this->getTicketCount($propObj,$tid) == 0)
+                {
+                    unset($ticket_id_array[$key]);
+                }
+            }
+
+            if($ticket_id_array)
+            {
+                $id_num_str = join('","',$ticket_id_array);
+            }
+            else
+            {
+                $this->redirect('ticket_list',false);
+                Util::showMessage('实体代金券数量为0张，无法备份');
+                exit;
+            }
+
+            $where.= ' and `condition` in("'.$id_num_str.'")';
+
+            $propList = $propObj->query($where,'*','`condition`','asc','10000');
+            $seller = new IModel('seller');
+            foreach($propList as $key => $val)
+            {
+                if($val['seller_id'] == $this->seller['seller_id'])
+                {
+                    if($this->seller['admin_role_seller_name'] == '商家')
+                    {
+                        $seller_name = $this->seller['seller_name'];
+                    }
+                    else
+                    {
+                        $seller_name = $seller->getField('id='.$this->seller['seller_id'], 'seller_name');
+                    }
+                    $is_userd = ($val['is_userd']=='1') ? '是':'否';
+                    $is_close = ($val['is_close']=='1') ? '是':'否';
+                    $is_send  = ($val['is_send']=='1') ? '是':'否';
+
+                    $excelStr.='<tr>';
+                    $excelStr.='<td>'.$val['name'].'</td>';
+                    $excelStr.='<td>'.$val['card_name'].'</td>';
+                    $excelStr.='<td>'.$val['card_pwd'].'</td>';
+                    $excelStr.='<td>'.$val['value'].' 元</td>';
+                    $excelStr.='<td>'.$is_userd.'</td>';
+                    $excelStr.='<td>'.$is_close.'</td>';
+                    $excelStr.='<td>'.$is_send.'</td>';
+                    $excelStr.='<td>'.$val['start_time'].'</td>';
+                    $excelStr.='<td>'.$val['end_time'].'</td>';
+                    $excelStr.='<td>'.$seller_name.'</td>';
+                    $excelStr.='</tr>';
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            $excelStr.='</table>';
+
+            $fileObj = new IFile($fileName,'w+');
+            $fileObj->write($excelStr);
+            $this->ticket_excel_list();
+        }
+        else
+        {
+            $this->redirect('ticket_list',false);
+            Util::showMessage('请选择要操作的文件');
+        }
+    }
+
+    //[代金券] 展示excel文件
+    function ticket_excel_list()
+    {
+        IFile::mkdir($this->ticketDir.'/'.$this->seller['seller_id']);
+
+        $dirArray = array();
+        $dirRes   = opendir($this->ticketDir.'/'.$this->seller['seller_id']);
+        while($fileName = readdir($dirRes))
+        {
+            if(!in_array($fileName,IFile::$except))
+            {
+                $dirArray[$fileName]['name'] = $fileName;
+                $dirArray[$fileName]['size'] = filesize($this->ticketDir.'/'.$this->seller['seller_id'].'/'.$fileName);
+                $dirArray[$fileName]['time'] = date('Y-m-d',fileatime($this->ticketDir.'/'.$this->seller['seller_id'].'/'.$fileName));
+            }
+        }
+        $this->dirArray = $dirArray;
+        $this->redirect('ticket_excel_list',false);
+    }
+
+    //[代金券] excel文件删除
+    function ticket_excel_del()
+    {
+        $id = IFilter::act(IReq::get('id'));
+        if($id)
+        {
+            if(is_array($id))
+            {
+                foreach($id as $val)
+                {
+                    IFile::unlink($this->ticketDir.'/'.$this->seller['seller_id'].'/'.$val);
+                }
+            }
+            else
+            {
+                IFile::unlink($this->ticketDir.'/'.$this->seller['seller_id'].'/'.$id);
+            }
+            $this->ticket_excel_list();
+        }
+        else
+        {
+            $this->ticket_excel_list();
+            Util::showMessage('请选择要删除的文件');
+        }
+    }
+
+    //[代金券] excel文件下载
+    function ticket_excel_download($fileName = null)
+    {
+        if($fileName==null)
+        {
+            $file = IFilter::act(IReq::get('file'),'filename');
+        }
+        else
+        {
+            $file = $fileName;
+        }
+
+        if($file != null)
+        {
+            ob_end_clean();
+            header('Content-Description: File Transfer');
+            header('Content-Length: '.filesize($this->ticketDir.'/'.$this->seller['seller_id'].'/'.$file));
+            header('Content-Disposition: attachment; filename='.basename($file));
+            readfile($this->ticketDir.'/'.$this->seller['seller_id'].'/'.$file);
+            flush();
+            ob_flush();
+        }
+    }
+
+    //[代金券] excel打包
+    function ticket_excel_pack()
+    {
+        if(class_exists('ZipArchive'))
+        {
+            //获取要打包的文件数组
+            $fileArray = IFilter::act(IReq::get('id'));
+            if(!empty($fileArray))
+            {
+                $fileName = 'T_'.date('YmdHis').IHash::random(8).'.zip';
+                $zip = new ZipArchive();
+                $zip->open($this->ticketDir.'/'.$this->seller['seller_id'].'/'.$fileName,ZIPARCHIVE::CREATE);
+                foreach($fileArray as $file)
+                {
+                    $attachfile = $this->ticketDir.'/'.$this->seller['seller_id'].'/'.$file;
+                    $zip->addFile($attachfile,basename($attachfile));
+                }
+                $zip->close();
+                $this->ticket_excel_download($fileName);
+                @unlink($this->ticketDir.'/'.$this->seller['seller_id'].'/'.$fileName);
+            }
+            else
+            {
+                $this->ticket_excel_list();
+                Util::showMessage('请选择要打包的文件');
+            }
+        }
+        else
+        {
+            $this->ticket_excel_list();
+            Util::showMessage('您的php环境没有打包工具类库');
+        }
+    }
+
+    //[代金券]获取代金券数据
+    function getTicketList()
+    {
+        $ticketObj  = new IModel('ticket');
+        $ticketList = $ticketObj->query('seller_id = '.$this->seller['seller_id']);
+        foreach($ticketList as $key=>$v){
+            $ticketList[$key]['expire'] = 0;
+            if(time()>strtotime($v['end_time'])){
+                $ticketList[$key]['expire'] = 1;
+            }
+        }
+        echo JSON::encode($ticketList);
     }
 }
