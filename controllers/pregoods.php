@@ -443,11 +443,11 @@ class Pregoods extends IController
                 $porpObj = new IQuery('prop as p');
                 $porpObj->join = 'join ticket as t on p.condition = t.id';
                 $porpObj->where = 'p.id in ('.$propId.') and NOW() between p.start_time and p.end_time and p.type = 0 and p.is_close = 0 and p.is_userd = 0 and p.is_send = 1';
-                $porpObj->fields = 'p.id,p.name,p.value,p.card_name,t.type,t.condition';
+                $porpObj->fields = 'p.id,p.name,p.value,p.card_name,t.type,t.condition,p.seller_id';
                 $prop = $porpObj->find();
                 foreach($prop as $k => $v)
                 {
-                    if($v['type'] == 2 && $v['condition'] > $result['sum'])
+                    if(($v['type'] == 2 && $v['condition'] > $result['sum']) || ($v['seller_id'] && !array_key_exists($v['seller_id'], $result['extend'])))
                     {
                         unset($prop[$k]);
                     }

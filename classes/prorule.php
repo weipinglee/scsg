@@ -413,10 +413,12 @@ class ProRule
 							    'name'      => $ticketRow['name'],
 							    'card_name' => 'T'.IHash::random(8),
 							    'card_pwd'  => IHash::random(8),
+                                'ticket_condition' => $ticketRow['condition'],
 							    'value'     => $ticketRow['value'],
 							    'start_time'=> $ticketRow['start_time'],
 							    'end_time'  => $ticketRow['end_time'],
 							    'is_send'   => 1,
+                                'seller_id' => $ticketRow['seller_id']
 						    );
 						    $propObj = new IModel('prop');
 						    $propObj->setData($dataArray);
