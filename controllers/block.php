@@ -417,7 +417,34 @@ class Block extends IController
 		//订单支付
 		else if($order_id)
 		{
-			$sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id, $pay_level));
+            if($payment_id == 13)
+            {
+			    $sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id, $pay_level));
+            }
+            else
+            {
+                if($pay_level == 1)
+                {
+                    $orderObj = new IModel('order');
+                    $order_ids = $orderObj->getFields(array('pid' => $order_id), 'id');
+                    $count = $order_ids ? count($order_ids) : 0;
+                    if($count == 1)
+                    {
+                        $order_id = $order_ids[0];
+                    }
+                    elseif($count > 1)
+                    {
+                        $sendData = $paymentInstance->getSendDataMerge(Payment::getPaymentInfoMerge($payment_id,implode(',', $order_ids)),true);
+                        $paymentInstance->doPay($sendData);
+                        exit;
+                    }
+                    else
+                    {
+                        IError::show(403,'要支付的订单信息不存在');
+                    }
+                }
+                $sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id));
+            }
 		}
 		else
 		{
@@ -566,6 +593,47 @@ class Block extends IController
 				}
 				IError::show(403,'充值失败');
 			}
+            elseif(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
+            {
+                $order_id = Preorder_Class::updateOrderStatus($orderNo);
+                if($order_id)
+                {
+                    $url  = '/site/success/message/'.urlencode("支付成功");
+                    if(IClient::getDevice()=='mobile'){
+                        $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
+                    }
+                    else{
+                        $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
+                    }
+                    
+                    $this->redirect($url);
+                    exit;
+                }
+                IError::show(403,'订单修改失败');
+            }
+            else{
+                $order_id = Order_Class::updateOrderStatus($orderNo);
+                if($order_id && !is_array($order_id))
+                {
+                    $url  = '/site/success/message/'.urlencode("支付成功");
+                    if(IClient::getDevice()=='mobile'){
+                        $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
+                    }
+                    else{
+                        $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
+                    }
+                    $this->redirect($url);
+                    exit;
+                }
+                elseif(is_array($order_id))
+                {
+                    $url  = '/site/success/message/'.urlencode("支付成功");
+                    $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
+                    $this->redirect($url);
+                    exit;
+                }
+                IError::show(403,'订单修改失败');
+            }
 		}
         elseif(is_array($return))
         {
@@ -649,9 +717,8 @@ class Block extends IController
  
 		
 		//支付成功
-		if($return && !is_array($return))
+		if($return)
 		{
-			
 			//充值方式
 			if(stripos($orderNo,'recharge') !== false)
 			{
@@ -662,31 +729,27 @@ class Block extends IController
 					exit;
 				}
 			}
+            elseif(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
+            {
+                $order_id = Preorder_Class::updateOrderStatus($orderNo);
+                if($order_id)
+                {
+                    $paymentInstance->notifyStop();
+                    exit;
+                }
+                IError::show(403,'订单修改失败');
+            }
+            else
+            {
+                
+                $order_id = Order_Class::updateOrderStatus($orderNo);
+                if($order_id)
+                {
+                    $paymentInstance->notifyStop();
+                    exit;
+                }
+            }
         }
-        elseif(is_array($return))
-        {
-			if(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
-			{
-				$order_id = Preorder_Class::updateOrderStatus($orderNo);
-				if($order_id)
-				{
-					$paymentInstance->notifyStop();
-					exit;
-				}
-				IError::show(403,'订单修改失败');
-			}
-			else
-			{
-				
-				$order_id = Order_Class::updateOrderStatus($orderNo, '', '', $return['pay_level']);
-				if($order_id)
-				{
-					$paymentInstance->notifyStop();
-					exit;
-				}
-			}
-			
-		}
 		//支付失败
 		else
 		{

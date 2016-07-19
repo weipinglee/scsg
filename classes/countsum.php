@@ -678,7 +678,7 @@ class CountSum
                         if($v['goods_id'] == 'all')
                         {
                             $goods = new IModel('goods');
-                            $gId = $goods->getFields(array('seller_id' => $v['seller_id']), 'id');
+                            $gId = $goods->getFields(array('seller_id' => $v['seller_id'], 'id' => $val['goods_id']), 'id');
                             $goodsList .= $gId  ? ','.implode(',', $gId) : '';
                         }
                         elseif(!empty($v['goods_id']))

@@ -107,9 +107,9 @@ OEF;
 					foreach($sendData as $key => $item)
 					{
 echo <<< OEF
-					<input type='hidden' name='{$key}' value='{$item}' />
+                        <input type='hidden' name='{$key}' value='{$item}' />
 OEF;
-					}
+                    }
 echo <<< OEF
 				</form>
 			</body>

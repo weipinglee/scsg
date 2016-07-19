@@ -238,7 +238,7 @@ class ProRule
             if($v['goods_id'] == 'all')
             {
                 $goods = new IModel('goods');
-                $gId = $goods->getFields(array('seller_id' => $v['seller_id']), 'id');
+                $gId = $goods->getFields(array('seller_id' => $v['seller_id'], 'id' => implode(',', $temp)), 'id');
             }                             
             elseif($v['goods_id'])
             {
@@ -264,7 +264,7 @@ class ProRule
             {   
                 $proList[$k]['hide'] = 1;
             }      
-        }                                                                             
+        }                                                                            
         if($area)
         {
             $proListTemp = $proList;
