@@ -78,20 +78,33 @@ class Member extends IController
 		{
 			$errorMsg = '两次输入的密码不一致！';
 		}
-        if(!IValidate::email($email))
+        if(!empty($email) && !IValidate::email($email))
         {
             $errorMsg = '邮箱格式不正确！';
         }
-        if(!IValidate::phone($mobile))
+        else if(empty($email))
+        {
+            $errorMsg = '邮箱不能为空！';
+        }
+        if(!empty($mobile) && !IValidate::phone($mobile))
         {
             $errorMsg = '请输入正确的手机号码！';
-        }                  
-        $userDB   = new IModel("user");
-           
-        if(empty($user_id) && !!$userDB->getObj("email = '{$email}' || phone = '{$mobile}'",'id')){
-            $errorMsg = '该邮箱或手机号码已被注册！';
         }
-
+        else if(empty($mobile))
+        {
+            $errorMsg = '手机号码不能为空！';
+        }                 
+        $userDB   = new IModel("user");
+        if(!isset($errorMsg))
+        {   
+            if(!!$userDB->getObj("email = '{$email}' and id <> ".$user_id,'id')){
+                $errorMsg = '该邮箱已被注册！';
+            }
+            if(!!$userDB->getObj("phone = '{$mobile}' and id <> ".$user_id,'id'))
+            {
+                $errorMsg = '改手机号码已被注册';
+            }
+        }
 		//操作失败表单回填
 		if(isset($errorMsg))
 		{
