@@ -988,7 +988,7 @@ class Simple extends IController
                     {
                         unset($prop[$k]);
                     }
-                    else if($v['seller_id'])
+                    else
                     {
                         if(!array_key_exists($v['seller_id'], $result['extend']))
                         {

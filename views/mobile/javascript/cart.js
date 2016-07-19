@@ -1,36 +1,21 @@
 $(function(){
 	$('[type=checkbox]').prop('checked',false);
-	$('.check_alls').off('click');
 	$(".check_alls").click(function () {
-			var checked = $(this).prop('checked');
-			if(!checked) {
-					$('.checkbox').removeClass("checked");
-					$("input[name^='sub']").attr('checked',false);
-					 $('#origin_price').text(0);
-					 $('#discount_price').text(0);	
+			var checked = $(this).attr('checked');
+			if(typeof(checked) == 'string') {
+                    $('#list .checkbox').addClass("checked").attr("checked", true).trigger('click');
 			}else{
-					$('.checkbox').addClass("checked");
-					$("input[name^='sub']").attr('checked',true);
-					var total_price = total_discount = 0;
-					$("input[name^='sub']").each(function(i){
-						var json = JSON.parse($(this).attr('data-json'));
-						var num = $('#'+json.type+'_count_'+json.id).val();
-						total_price +=mathMul(parseFloat(json.sell_price),num);
-						total_discount += mathMul(parseFloat(json.reduce),num);
-					})
-					$('#origin_price').text(total_price);
-					 $('#discount_price').text(total_discount);	
-					
+					$('#list .checkbox').removeClass("checked").removeAttr('checked').trigger('click');
 			}
 			prom_ajax();
 	});
 	$("input[name^='sub']").click(function(){
-			$(this).toggleClass("checked");//伪复选
+            $(this).toggleClass("checked");//伪复选
 				if ($("#list .checkbox").length == $("#list .checked").length){
 					$('.check_alls').addClass('checked').attr('checked',true);
 					
 				}else{
-				$("#check_all,#box_all").removeClass("checked").attr('checked',false);
+				$(".check_alls").removeClass("checked").attr('checked',false);
 			}
 			check_goods(this);
 	});

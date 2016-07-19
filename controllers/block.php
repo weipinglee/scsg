@@ -912,7 +912,14 @@ class Block extends IController
 
     	$ticket_num = IFilter::act(IReq::get('ticket_num'));
         $ticket_pwd = IFilter::act(IReq::get('ticket_pwd'));
-    	$final_num = IFilter::act(IReq::get('num'));
+        $final_num = IFilter::act(IReq::get('num'));
+        $dataArrKey = IReq::get('dataArrKey');
+    	$dataArrVal = IReq::get('dataArrVal');
+        $dataArr = array();
+        foreach($dataArrKey as $k => $v)
+        {
+            $dataArr[$v] = $dataArrVal[$k];
+        }
 
     	$propObj = new IModel('prop');
     	$propRow = $propObj->getObj('card_name = "'.$ticket_num.'" and card_pwd = "'.$ticket_pwd.'" and type = 0 and is_userd = 0 and is_send = 1 and is_close = 0 and NOW() between start_time and end_time');
@@ -921,6 +928,14 @@ class Block extends IController
     	{
     		$message = '代金券不可用，请确认代金券的卡号密码并且此代金券从未被使用过';
     	}
+        else if(!array_key_exists($propRow['seller_id'], $dataArr))
+        {
+            $message = '指定商家才能使用该代金券';
+        }
+        else if($propRow['ticket_condition'] && $propRow['ticket_condition'] > $dataArr[$propRow['seller_id']])
+        {
+            $message = '指定商家消费达到'.$propRow['ticket_condition'].'才能使用该代金券';
+        }
     	else
     	{
             if($propRow['ticket_condition'] && $propRow['ticket_condition'] > $final_num)

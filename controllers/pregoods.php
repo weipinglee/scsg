@@ -447,7 +447,7 @@ class Pregoods extends IController
                 $prop = $porpObj->find();
                 foreach($prop as $k => $v)
                 {
-                    if(($v['type'] == 2 && $v['condition'] > $result['sum']) || ($v['seller_id'] && !array_key_exists($v['seller_id'], $result['extend'])))
+                    if(($v['type'] == 2 && $v['condition'] > $result['sum']) || !array_key_exists($v['seller_id'], $result['extend']))
                     {
                         unset($prop[$k]);
                     }

@@ -159,8 +159,15 @@ function add_ticket()
 		alert('请填写卡号和密码');
 		return '';
 	}
-
-	$.getJSON('{url:/block/add_download_ticket}',{"ticket_num":ticket_num,"ticket_pwd":ticket_pwd,'num':final_num},function(content){
+    var dataArrKey = [];
+    var dataArrVal = [];
+    $('.js_seller_diff').each(function(){
+        var _k = $(this).attr('js_data')
+            ,_v = $(this).attr('js_sum_data');
+        dataArrKey.push(_k);
+        dataArrVal.push(_v);
+    })
+	$.getJSON('{url:/block/add_download_ticket}',{"ticket_num":ticket_num,"ticket_pwd":ticket_pwd,'num':final_num,'dataArrKey':dataArrKey,'dataArrVal':dataArrVal},function(content){
 		if(content.isError == false)
 		{
 			is_success = true;
@@ -435,7 +442,7 @@ function selectTakeself(deliveryId)
 					</div>
                         {foreach:items=$this->goodsList key=$buy item=$goods}
 						{foreach:items=$goods item=$value}
-						<table width="100%" class="cart_table t_c" >
+						<table width="100%" class="cart_table t_c js_seller_diff" js_data="{$key}" js_sum_data="{$value['total_price']}">
 							<colgroup>
 								<col width="115px" />
 								<col />
