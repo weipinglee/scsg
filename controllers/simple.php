@@ -2193,17 +2193,18 @@ class Simple extends IController
             $user_id = $oauthUserObj->getField("oauth_user_id = '{$result['openid']}' and oauth_id = 5", 'user_id');
             if(!empty($user_id))
             {
-                $userRow = CheckRights::isValidUser($result['openid'].'@qq.com',md5($result['openid']));
-
+                $userObj = new IModel('user');
+                $tempRow = $userObj->getObj("id = '{$user_id}'");
+                $userRow = CheckRights::isValidUser($tempRow['username'],$tempRow['password']);
                 CheckRights::loginAfter($userRow);
             }
             else
             {
                 $userObj = new IModel('user');
-                $temp = mt_rand();
+                $temp = uniqid();
                 $userArray = array(
-                        'email'    => $result['openid'].'@qq.com',
-                        'password' => md5($result['openid']),
+                        'username'    => 'V'.$temp,
+                        'password' => md5($temp),
                 );
                 $userObj->setData($userArray);
                 $user_id = $userObj->add();
@@ -2215,7 +2216,7 @@ class Simple extends IController
                 $memberObj  = new IModel('member');
                 $memberData = array(
                     'user_id'   => $user_id,
-                    'true_name' => '微信用户'.$temp,
+                    'true_name' => 'V'.$temp,
                     'last_login'=> ITime::getDateTime(),
                     'sex'       => 1,
                     'time'      => ITime::getDateTime(),
@@ -2236,7 +2237,7 @@ class Simple extends IController
                 $oauthUserObj->setData($oauthUserData);
                 $oauthUserObj->add();
                 $oauthUserObj->commit();  
-                $userRow = CheckRights::isValidUser($userArray['email'],$userArray['password']);
+                $userRow = CheckRights::isValidUser($userArray['username'],$userArray['password']);
                 CheckRights::loginAfter($userRow);
             }
         }
