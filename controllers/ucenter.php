@@ -32,6 +32,7 @@ class Ucenter extends IController
     	$order_db->fields = 'o.*';
     	$this->order_db = $order_db;
         $this->initPayment();
+        $this->sign = ISafe::get('scsgCodeSign');
         $this->redirect('index');
     }
 
@@ -1004,6 +1005,7 @@ class Ucenter extends IController
 	    	$where              = 'id = '.$this->memberRow['group_id'];
 	    	$this->userGroupRow = $userGroupObj->getObj($where);
 		}
+        $this->sign = ISafe::get('scsgCodeSign');
     	$this->redirect('info');
     }
 	/**

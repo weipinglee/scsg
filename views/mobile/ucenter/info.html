@@ -68,14 +68,22 @@
 			<em class="fav">设置用户名</em>
 		</a>
 		{/if}
+        {if:empty($this->sign)}
 		<a role="menuitem" class="menuitem" href="{url:/ucenter/password}">
 			<!-- <i>暂无积分</i> -->
 			<em class="tuan">修改密码</em>
 		</a>
+        {/if}
+        {if:$this->userRow['phone']}
 		<a role="menuitem" class="menuitem" href="{url:/ucenter/toChgPhone1}">
 			<i>{echo:user_like::getSecretPhone($this->userRow['phone'])}</i> 
 			<em class="ershou">换绑手机</em>
 		</a>
+        {else:}
+        <a role="menuitem" class="menuitem" href="{url:/ucenter/toBindPhone1}">
+            <em class="ershou">绑定手机</em>
+        </a>
+        {/if}
 	
 	</div>
 

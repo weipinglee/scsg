@@ -2197,23 +2197,33 @@ class Simple extends IController
         $result = json_decode($response,true);
         unset($url);
         unset($response);
-        if(isset($result['openid']) && $result['openid'])
+        $getUserInfoUrl = "https://api.weixin.qq.com/sns/userinfo?access_token={$result['access_token']}&openid=wx245f90eb0759be3a&lang=zh_CN ";
+        unset($result);
+        $response = $this->get_contents($getUserInfoUrl);
+        $result = json_decode($response,true);
+        unset($url);
+        unset($response);
+        if(isset($result['unionid']) && $result['unionid'])
         {
             $oauthUserObj = new IModel('oauth_user');
-            $user_id = $oauthUserObj->getField("oauth_user_id = '{$result['openid']}' and oauth_id = 5", 'user_id');
+            $user_id = $oauthUserObj->getField("oauth_user_id = '{$result['unionid']}' and oauth_id = 5", 'user_id');
+            $userObj = new IModel('user');
             if(!empty($user_id))
             {
-                $userRow = CheckRights::isValidUser($result['openid'].'@qq.com',md5($result['openid']));
-
+                $tempRow = $userObj->getObj("id = '{$user_id}'");
+                $userRow = CheckRights::isValidUser($tempRow['username'],$tempRow['password']);
                 CheckRights::loginAfter($userRow);
             }
             else
-            {
-                $userObj = new IModel('user');
-                $temp = mt_rand();
+            {      
+                $temp = uniqid();          
+                $user = $userObj->getField("username = '{$result['nickname']}'",'username');
+
+                //没有重复的用户名
+                $username = $user ? 'V'.$temp : $result['nickname'];
                 $userArray = array(
-                        'email'    => $result['openid'].'@qq.com',
-                        'password' => md5($result['openid']),
+                        'username'    => $username,
+                        'password' => md5('123456'),
                 );
                 $userObj->setData($userArray);
                 $user_id = $userObj->add();
@@ -2225,9 +2235,9 @@ class Simple extends IController
                 $memberObj  = new IModel('member');
                 $memberData = array(
                     'user_id'   => $user_id,
-                    'true_name' => '微信用户'.$temp,
+                    'true_name' => isset($result['nickname']) ? $result['nickname'] : '',
                     'last_login'=> ITime::getDateTime(),
-                    'sex'       => 1,
+                    'sex'       => (isset($result['sex']) && $result['sex']) ? $result['sex'] : 1,
                     'time'      => ITime::getDateTime(),
                 );
                 if($group_id)$memberData['group_id']=$group_id;
@@ -2238,7 +2248,7 @@ class Simple extends IController
 
                 //插入关系表
                 $oauthUserData = array(
-                    'oauth_user_id' => $result['openid'],
+                    'oauth_user_id' => $result['unionid'],
                     'oauth_id'      => 5,
                     'user_id'       => $user_id,
                     'datetime'      => ITime::getDateTime(),
@@ -2246,10 +2256,11 @@ class Simple extends IController
                 $oauthUserObj->setData($oauthUserData);
                 $oauthUserObj->add();
                 $oauthUserObj->commit();  
-                $userRow = CheckRights::isValidUser($userArray['email'],$userArray['password']);
+                $userRow = CheckRights::isValidUser($userArray['username'],$userArray['password']);
                 CheckRights::loginAfter($userRow);
             }
         }
+        ISafe::set('scsgCodeSign', 'V');
         $this->redirect('/site/index/client/mobile');
     }
     
@@ -2302,6 +2313,7 @@ class Simple extends IController
 
     		CheckRights::loginAfter($userRow);
 
+            ISession::set('oauth_id',$oauthId);
 			//自定义跳转页面
 			$callback = ISafe::get('callback');
 

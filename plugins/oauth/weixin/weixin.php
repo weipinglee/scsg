@@ -45,8 +45,7 @@ class Weixin extends OauthBase
 	//获取进入令牌
 	public function getAccessToken($parms)
 	{
-        $code = $parms['code'];
-        $state = $parms['state'];     
+        $code = $parms['code'];   
         $url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->apiId}&secret={$this->AppSecret}&code={$code}&grant_type=authorization_code";
         $response = $this->get_contents($url);
         $result = json_decode($response,true);
@@ -134,7 +133,7 @@ class Weixin extends OauthBase
        $info_data = $this->get_contents($info_url);
 
        $arr = json_decode($info_data, TRUE);
-        $userInfo['id']   = ISession::get('openid');
+        $userInfo['id']   = $arr['unionid'];
         $userInfo['name'] = isset($arr['nickname']) ? $arr['nickname'] : '';
         return $userInfo;
     }
