@@ -168,7 +168,7 @@ class goods_class
 		unset($goodsUpdateData['product_id']);
 		//处理商品
 		$goodsDB = new IModel('goods');
-        if($goodsDB->getField("sign_code = '{$goodsUpdateData['sign_code']}' and id <> {$id}", 'id'))
+        if($goodsUpdateData['sign_code'] && $goodsDB->getField("sign_code = '{$goodsUpdateData['sign_code']}' and id <> {$id}", 'id'))
         {
             die("条形码不能重复");
         }
@@ -236,7 +236,7 @@ class goods_class
                 {
                     $p = "sign_code = '{$postData['_sign_code'][$key]}'";
                 }
-                if($productsDB->getField($p, 'id')){
+                if($postData['_sign_code'][$key] && $productsDB->getField($p, 'id')){
                     die("条形码不能重复");
                 }
 				$productsData = array(

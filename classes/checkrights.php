@@ -217,9 +217,15 @@ class CheckRights extends IInterceptorBase
                 $object->callbackUrl = $url;
                 $object->redirect("/systemseller/index?callback={$url}");
 			}
-            
             //获取管理员数据
-            $sellerRow = self::isValidSeller($seller['seller_name'],$seller['seller_pwd']);
+            if($seller['admin_seller_id'])
+            {
+                $sellerRow = self::isValidSellerAdmin($seller['seller_name'],$seller['seller_pwd'],$seller['seller_id']);
+            }
+            else
+            {
+                $sellerRow = self::isValidSeller($seller['seller_name'],$seller['seller_pwd']);
+            }
             //非超管角色
             if($sellerRow['role_id'] != 0)
             {

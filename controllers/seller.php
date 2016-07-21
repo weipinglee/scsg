@@ -2565,14 +2565,14 @@ class Seller extends IController
                 Util::showMessage('无法删除代金券，其下还有正在使用的代金券');
                 exit;
             }
-            if($propRow['seller_id'] <> $this->seller['seller_id'])
+            $where = "id = {$id} ";
+            $ticketRow = $ticketObj->getObj($where);
+            if($ticketRow['seller_id'] <> $this->seller['seller_id'])
             {
                 $this->redirect('ticket_list',false);
                 Util::showMessage('无权限删除代金券');
                 exit;
             }
-            $where = "id = {$id} ";
-            $ticketRow = $ticketObj->getObj($where);
             if($ticketObj->del($where))
             {
                 $where = " `type` = 0 and `condition` = {$id} ";
