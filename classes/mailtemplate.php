@@ -16,7 +16,7 @@ class mailTemplate
 	public static function findPassword($param)
 	{
 		$siteConfig = new Config("site_config");
-		$templateString = "您好，您在{$siteConfig->name}申请找回密码的操作，点击下面这个链接进行密码重置：<a href='{url}'>{url}</a>。<br />如果不能点击，请您把它复制到地址栏中打开。";
+		$templateString = "<a href = 'http://www.yqtvt.com' target='_blank'><img style='width:170px;' src='http://www.yqtvt.com/views/scsg/skin/black/images/logo.png' /></a><br /> <br /><p style='margin-left:70px;'>您好，您在{$siteConfig->name}申请找回密码的操作，点击下面这个链接进行密码重置：<a href='{url}'>{url}</a>。<br />如果不能点击，请您把它复制到地址栏中打开。</p>";
 		return strtr($templateString,$param);
 	}
 
@@ -28,7 +28,7 @@ class mailTemplate
 	public static function checkMail($param)
 	{
 		$siteConfig = new Config("site_config");
-		$templateString = "感谢您注册{$siteConfig->name}服务，点击下面这个链接进行邮箱验证并激活您的帐号：<a href='{url}'>{url}</a>。<br />如果不能点击，请您把它复制到地址栏中打开。";
+		$templateString = "<a href = 'http://www.yqtvt.com' target='_blank'><img style='width:170px;' src='http://www.yqtvt.com/views/scsg/skin/black/images/logo.png' /></a><br /> <br /><p style='margin-left:70px;'>感谢您注册{$siteConfig->name}服务，点击下面这个链接进行邮箱验证并激活您的帐号：<a href='{url}'>{url}</a>。<br />如果不能点击，请您把它复制到地址栏中打开。</p>";
 		return strtr($templateString,$param);
 	}
 
@@ -39,14 +39,14 @@ class mailTemplate
 	 */
 	public static function notify($param)
 	{
-		$templateString = "尊敬的用户，您需要购买的 <{goodsName}> 现已全面到货，机不可失，从速购买！ <a href='{url}' target='_blank'>立即购买</a>";
+		$templateString = "<a href = 'http://www.yqtvt.com' target='_blank'><img style='width:170px;' src='http://www.yqtvt.com/views/scsg/skin/black/images/logo.png' /></a><br /> <br /><p style='margin-left:70px;'>尊敬的用户，您需要购买的 <{goodsName}> 现已全面到货，机不可失，从速购买！ <a href='{url}' target='_blank'>立即购买</a></p>";
 		return strtr($templateString,$param);
 	}
 	/**
 	 * @brief 邮件验证码模板
 	 */
 	public static function emailCode($param){
-		$templateString = "尊敬的用户，您修改邮箱的验证码 {code},该验证码30分钟有效";
+		$templateString = "<a href = 'http://www.yqtvt.com' target='_blank'><img style='width:170px;' src='http://www.yqtvt.com/views/scsg/skin/black/images/logo.png' /></a><br /> <br /><p style='margin-left:70px;'>尊敬的用户，您修改邮箱的验证码 {code},该验证码30分钟有效</p>";
 		return strtr($templateString,$param);
 	}
 }
