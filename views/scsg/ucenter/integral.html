@@ -49,9 +49,13 @@
 					{set:$nowtime = ITime::getDateTime();$isHasTicket = false;}
 					{foreach:items=Api::run('getTicketList',array('#nowtime#',$nowtime),20)}
 					{set:$isHasTicket = true;}
+                    {if:$item['seller_id']}
+                        {set:$sellerObj = new IModel('seller')}
+                        {set:$seller_name = $sellerObj->getField('id='.$item['seller_id'], 'seller_name')}
+                    {/if}
 					<tr>
 						<td></td>
-						<td><b class="gray"><label class='attr'><input class="radio" type="radio" name='ticket_id' value="{$item['id']}" />{$item['name']}：{$item['value']}元 <span style="color: red;">{if:$item['type'] == 1}全场通用{else:}满{$item['condition']}可用{/if}</span>（需要{$item['point']}积分）</b></td><td><label>有效日期：{$item['start_time']}至{$item['end_time']}</label></label></td>
+						<td><b class="gray"><label class='attr'><input class="radio" type="radio" name='ticket_id' value="{$item['id']}" />{$item['name']}：{$item['value']}元 <span style="color: red;">{if:$item['seller_id']}商家 <span style="color: red;">{$seller_name}</span> {else:}<span style="color: red;">平台商品</span> {/if}{if:$item['type'] == 1}全场通用{else:}满{$item['condition']}可用{/if}</span>（需要{$item['point']}积分）</b></td><td><label>有效日期：{$item['start_time']}至{$item['end_time']}</label></label></td>
 					</tr>
 					{/foreach}
 					{if:$isHasTicket == false}

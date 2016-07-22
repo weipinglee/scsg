@@ -43,11 +43,9 @@ class Seller extends IController
 	{
 		//获得配置文件中的数据
 		$config = new Config("site_config");
-
 	 	//调用文件上传类
 		$photoObj = new PhotoUpload();
 		$photo    = current($photoObj->run());
-
 		//判断上传是否成功，如果float=1则成功
 		if($photo['flag'] == 1)
 		{
@@ -372,10 +370,6 @@ class Seller extends IController
 			$data = $order_show->getOrderShow($order_id);
 			if($data)
 			{
-				//获得折扣前的价格
-			 	$rule = new ProRule($data['real_amount']);
-			 	$this->result = $rule->getInfo();
-
 		 		//获取地区
 		 		$data['area_addr'] = join('&nbsp;',area::name($data['province'],$data['city'],$data['area']));
 

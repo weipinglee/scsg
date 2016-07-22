@@ -17,7 +17,7 @@
 					<td>商品总数量：<a href="{url:/seller/goods_list}">{echo:statistics::goodsCount($this->seller['seller_id'])} 件</a></td>
                     <td>库存预警：{query:name=goods fields=count(id) as countNums where=store_nums l $store_num_warning and seller_id eq $seller_id}<a href="javascript:formSubmit('storeNumWarning');">{$item['countNums']}</a>个{/query}</td>
 					<td>待回复咨询：<a href="{url:/seller/refer_list}">{echo:statistics::referWaitCount($this->seller['seller_id'])} 条</a></td>
-					<td>商品评论数：<a href="{url:/seller/comment_list}">{echo:statistics::commentCount($this->seller['seller_id'])} 条</a></td>
+					<td>待回复评论：<a href="{url:/seller/comment_list}">{echo:statistics::commentCount($this->seller['seller_id'])} 条</a></td>
 					<td>退款申请：<a href="{url:/seller/refundment_list}">{echo:statistics::refundsCount($this->seller['seller_id'])} 条</a></td>
 					<td>总销售量：{echo:statistics::sellCountSeller($this->seller['seller_id'])} 件</td>
 					<td>信用评分：{echo:statistics::gradeSeller($this->seller['seller_id'])} 分</td>

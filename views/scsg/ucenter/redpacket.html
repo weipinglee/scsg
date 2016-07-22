@@ -24,7 +24,7 @@
             {set:$seller_name = $sellerObj->getField('id='.$item['seller_id'], 'seller_name')}
         {/if}
             <tr>
-                <td>{$item['card_name']}</td><td>{$item['value']}元</td><td>{if:$item['seller_id']}商家 <span style="color: red;">{$seller_name}</span>{/if} {if:$item['ticket_condition'] > 0}满{$item['ticket_condition']}元使用{else:}全场通用{/if}<td>{echo:substr($item['end_time'],0,10)}</td><td class="blue">{if:$item['is_userd']==1}<span class="bold orange">已使用</span>{elseif:$item['is_close']==1}<span class="bold gray">已禁用</span>{elseif:$item['is_close']==2}<span class="bold gray">临时锁定</span>{elseif:(strtotime('now')-strtotime($item['end_time']))>0}<span class="bold light_gray">已过期</span>{else:}<span class="bold green">可使用</span>{/if}</td>
+                <td>{$item['card_name']}</td><td>{$item['value']}元</td><td>{if:$item['seller_id']}商家 <span style="color: red;">{$seller_name} </span>{else:}<span style="color: red;">平台商品</span>{/if} {if:$item['ticket_condition'] > 0}满{$item['ticket_condition']}元使用{else:}全场通用{/if}<td>{echo:substr($item['end_time'],0,10)}</td><td class="blue">{if:$item['is_userd']==1}<span class="bold orange">已使用</span>{elseif:$item['is_close']==1}<span class="bold gray">已禁用</span>{elseif:$item['is_close']==2}<span class="bold gray">临时锁定</span>{elseif:(strtotime('now')-strtotime($item['end_time']))>0}<span class="bold light_gray">已过期</span>{else:}<span class="bold green">可使用</span>{/if}</td>
             </tr>
         {/foreach}
         </tbody>

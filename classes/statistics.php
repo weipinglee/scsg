@@ -266,14 +266,14 @@ class statistics
 	 */
 	public static function commentCount($seller_id = '')
 	{
-		$where = "co.status <> 1 and co.goods_id = go.id and co.recomment_time<=0";
+		$where = "status<>0 and pid = 0 and recomment_time<=0";
 		if($seller_id)
 		{
-			$where .= " and go.seller_id = {$seller_id}";
+			$where .= " and sellerid = {$seller_id}";
 		}
-		$goodsDB = new IModel('comment as co,goods as go');
-		$data = $goodsDB->getObj($where,'count(*) as num');
-		return isset($data['num']) ? $data['num'] : 0;
+		$DB = new IModel('comment');
+        $data = $DB->query($where, 'id');
+        return count($data);
 	}
     
     public static function commentCountDiff($plat = 1)

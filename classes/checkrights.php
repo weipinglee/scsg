@@ -462,7 +462,14 @@ class CheckRights extends IInterceptorBase
 	//商家商品图片上传校验
 	public static function sellerImageUpload()
 	{
-		$result = self::isValidSeller(IReq::get('admin_name'),IReq::get('admin_pwd'));
+        if(ISafe::get('admin_role_seller_name') == '商家')
+        {
+		    $result = self::isValidSeller(IReq::get('admin_name'),IReq::get('admin_pwd'));
+        }
+        else
+        {
+            $result = self::isValidSellerAdmin(IReq::get('admin_name'),IReq::get('admin_pwd'),ISafe::get('seller_id'));
+        }
 		if($result == false)
 		{
 			die('the sellerImageUpload is stoped');
