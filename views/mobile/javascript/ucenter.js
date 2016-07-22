@@ -42,8 +42,9 @@ function checkMobileNow(){
 function checkMobileNew(){
 	var code = $('input[name=code]').val();
 	var newPhone = $('input[name=newPhone]').val();
+    var sign = $('input[name=sign]').val();
 	
-	$.post(checkMobileUrl2,{code:code,newPhone:newPhone},
+	$.post(checkMobileUrl2,{code:code,newPhone:newPhone,sign:sign},
 		function(data){
 			if(data.errorCode==0){
 			location.href=data.next;

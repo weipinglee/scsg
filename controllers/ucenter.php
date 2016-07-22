@@ -1751,7 +1751,16 @@ class Ucenter extends IController
      * 修改手机号第二步
      */
     public function toChgPhone2(){
-    	$firstCheck = $this->checkFirstStep();
+        $sign = IReq::get('stipStep');
+        if($sign)
+        {
+            $firstCheck = true;
+        }
+        else
+        {
+            $firstCheck = $this->checkFirstStep();
+        }
+        $this->sign = $sign;
     	if($firstCheck){
 			$this->safeCode = ISafe::getSafeCode();
     		$this->redirect('toChgPhone2');
@@ -1776,7 +1785,8 @@ class Ucenter extends IController
      */
     public function checkMobile2(){
     	$newPhone = IFilter::act(IReq::get('newPhone','post'));
-    	$code =IFilter::act(IReq::get('code','post'));
+        $code =IFilter::act(IReq::get('code','post'));
+    	$sign =IFilter::act(IReq::get('sign','post'));
     	$res = array('errorCode'=>0);
     	if(!IValidate::phone($newPhone)){
     		$res['errorCode']=2;
@@ -1794,7 +1804,7 @@ class Ucenter extends IController
     				$where         = 'id = '.$user_id;
     				$res['id'] = $user_id;
     				$userObj->setData(array('phone'=>$newPhone));
-    				if($userObj->getObj('phone="'.$newPhone.'"')){
+    				if($userObj->getObj('phone="'.$newPhone.'" and id != '.$user_id)){
     					$res['errorCode']=9;//没有验证码
     					$res['mess']='该手机号码已注册';
     				}
@@ -1802,7 +1812,15 @@ class Ucenter extends IController
     					ISafe::clear('mobileValidate');
     					ISafe::clear('mobileValidRes');
     					ISafe::set('phone',$newPhone);
-    					$res['next']=IUrl::getHost().IUrl::creatUrl("/ucenter/toChgPhone3");
+                        if($sign)
+                        {
+                            $nextUrl = IUrl::getHost().IUrl::creatUrl("/ucenter/toChgPhone3/sign/".$sign);
+                        }
+                        else
+                        {
+                            $nextUrl = IUrl::getHost().IUrl::creatUrl("/ucenter/toChgPhone3");
+                        }
+    					$res['next']=$nextUrl;
     				}else{
     					$res['errorCode']=6;//更新失败
     					$res['mess']='手机号码更新失败';
