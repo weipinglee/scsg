@@ -2203,10 +2203,11 @@ class Simple extends IController
         $result = json_decode($response,true);
         unset($url);
         unset($response);
-        if(isset($result['unionid']) && $result['unionid'])
+        if((isset($result['unionid']) && $result['unionid']) || (isset($result['openid']) && $result['openid']))
         {
+            $sign = isset($result['unionid']) ? $result['unionid'] : $result['openid'];
             $oauthUserObj = new IModel('oauth_user');
-            $user_id = $oauthUserObj->getField("oauth_user_id = '{$result['unionid']}' and oauth_id = 5", 'user_id');
+            $user_id = $oauthUserObj->getField("oauth_user_id = '{$sign}' and oauth_id = 5", 'user_id');
             $userObj = new IModel('user');
             if(!empty($user_id))
             {
@@ -2248,7 +2249,7 @@ class Simple extends IController
 
                 //插入关系表
                 $oauthUserData = array(
-                    'oauth_user_id' => $result['unionid'],
+                    'oauth_user_id' => $sign,
                     'oauth_id'      => 5,
                     'user_id'       => $user_id,
                     'datetime'      => ITime::getDateTime(),
