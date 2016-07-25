@@ -2184,7 +2184,7 @@ class Simple extends IController
     //微信商城入口
     public function wecheatshop()
     {
-        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx245f90eb0759be3a&redirect_uri=".urlencode('http://www.yqtvt.com/simple/wecheatshoplogin')."&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx245f90eb0759be3a&redirect_uri=".urlencode('http://v.yqrtv.com:8080/scsg/simple/wecheatshoplogin')."&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
         echo "<script language='javascript' type='text/javascript'>";
         echo "window.location.href='{$url}'";
         echo "</script>";
