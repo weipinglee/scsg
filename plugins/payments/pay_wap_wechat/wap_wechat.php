@@ -87,17 +87,16 @@ class wap_wechat extends paymentPlugin
         $input->SetOpenid($openId);
         $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
-
         //获取共享收货地址js函数参数
         $editAddress = $tools->GetEditAddressParameters(); 
         if(isset($payment['pay_level']))
         {
             $pay_level = $payment['pay_level'] ? $payment['pay_level'] : 2;
-            return(array('jsApiParameters' => $jsApiParameters,'editAddress' => $editAddress,'pay_level' => $pay_level));
+            return(array('jsApiParameters' => $jsApiParameters,'pay_level' => $pay_level));
         }
         else
         {
-            return(array('jsApiParameters' => $jsApiParameters,'editAddress' => $editAddress));
+            return(array('jsApiParameters' => $jsApiParameters));
         }
     }
     

@@ -1,16 +1,37 @@
 <!doctype html>
 <html lang="en">
-{set:$jsApiParameters=IReq::get('jsApiParameters');$editAddress=IReq::get('editAddress');$pay_level=IReq::get('pay_level');}
+{set:$jsApiParameters=IReq::get('jsApiParameters');$pay_level=IReq::get('pay_level');}
 <head>
 	<meta charset="UTF-8">
 	<title>微信支付</title>
     <script type="text/javascript">
-    //调用微信JS api 支付
-    function jsApiCall()
-    {
+ /*   function onBridgeReady(){
         WeixinJSBridge.invoke(
             'getBrandWCPayRequest',
             {$jsApiParameters},
+            function(res){     
+                if(res.err_msg == "get_brand_wcpay_request：ok" ) {}  
+            }
+        ); 
+     }
+    if (typeof WeixinJSBridge == "undefined"){
+        if( document.addEventListener ){
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+        }else if (document.attachEvent){
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+        }
+     }else{
+        onBridgeReady();
+     } */
+    
+    //调用微信JS api 支付
+    function jsApiCall()
+    {
+        var data = '{$jsApiParameters}';
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            data,
             function(res){
                 alert(res)
                 WeixinJSBridge.log(res.err_msg);
@@ -19,8 +40,9 @@
         );
     }
 
-    function callpay()
+    window.onload = function()
     {
+        alert('aa');
         if (typeof(WeixinJSBridge) == "undefined"){
             if( document.addEventListener ){
                 document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
@@ -31,43 +53,10 @@
         }else{
             jsApiCall();
         }
-    }
-    //获取共享地址
-    function editAddress()
-    {
-        WeixinJSBridge.invoke(
-            'editAddress',
-            {$editAddress},
-            function(res){
-                var value1 = res.proviceFirstStageName;
-                var value2 = res.addressCitySecondStageName;
-                var value3 = res.addressCountiesThirdStageName;
-                var value4 = res.addressDetailInfo;
-                var tel = res.telNumber;
-                
-                alert(value1 + value2 + value3 + value4 + ":" + tel);
-            }
-        );
-    }
-    
-    window.onload = function(){
-        if (typeof WeixinJSBridge == "undefined"){
-            if( document.addEventListener ){
-                document.addEventListener('WeixinJSBridgeReady', editAddress, false);
-            }else if (document.attachEvent){
-                document.attachEvent('WeixinJSBridgeReady', editAddress); 
-                document.attachEvent('onWeixinJSBridgeReady', editAddress);
-            }
-        }else{
-            editAddress();
-        }
-    };
-    
+    }    
     </script>
 </head>
 <body>
-    <div align="center">
-        <button style="width:210px; height:50px; border-radius: 15px;background-color:#FE6714; border:0px #FE6714 solid; cursor: pointer;  color:white;  font-size:16px;" type="button" onclick="callpay()" >立即支付</button>
-    </div>
+    请稍后...
 </body>
 </html>
