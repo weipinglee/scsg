@@ -417,7 +417,7 @@ class Block extends IController
 		//订单支付
 		else if($order_id)
 		{
-            if($payment_id == 13)
+            if(in_array($payment_id, array(12,13)))
             {
 			    $sendData = $paymentInstance->getSendData(Payment::getPaymentInfo($payment_id,'order',$order_id, $pay_level));
             }

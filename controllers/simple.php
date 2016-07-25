@@ -2261,7 +2261,6 @@ class Simple extends IController
                 CheckRights::loginAfter($userRow);
             }
         }
-        ISafe::set('scsgCodeSign', 'V');
         $this->redirect('/site/index/client/mobile');
     }
     

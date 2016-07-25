@@ -68,7 +68,7 @@
 			<em class="fav">设置用户名</em>
 		</a>
 		{/if}
-        {if:empty($this->sign)}
+        {if:$this->sign == false}
 		<a role="menuitem" class="menuitem" href="{url:/ucenter/password}">
 			<!-- <i>暂无积分</i> -->
 			<em class="tuan">修改密码</em>

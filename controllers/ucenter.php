@@ -32,7 +32,7 @@ class Ucenter extends IController
     	$order_db->fields = 'o.*';
     	$this->order_db = $order_db;
         $this->initPayment();
-        $this->sign = ISafe::get('scsgCodeSign');
+        $this->sign = IClient::isWechat();
         $this->redirect('index');
     }
 
@@ -1005,7 +1005,7 @@ class Ucenter extends IController
 	    	$where              = 'id = '.$this->memberRow['group_id'];
 	    	$this->userGroupRow = $userGroupObj->getObj($where);
 		}
-        $this->sign = ISafe::get('scsgCodeSign');
+        $this->sign = IClient::isWechat();
     	$this->redirect('info');
     }
 	/**
@@ -1804,10 +1804,20 @@ class Ucenter extends IController
     				$where         = 'id = '.$user_id;
     				$res['id'] = $user_id;
     				$userObj->setData(array('phone'=>$newPhone));
-    				if($userObj->getObj('phone="'.$newPhone.'" and id != '.$user_id)){
-    					$res['errorCode']=9;//没有验证码
-    					$res['mess']='该手机号码已注册';
-    				}
+                    $userId = $userObj->getField('phone="'.$newPhone, 'id');
+    				if($userId)
+                    {
+                        if($user_id == $userId)
+                        {
+                            $res['errorCode']=8; //新旧手机号一样
+                            $res['mess']='新手机号与旧手机号不能一样';
+                        }
+                        else
+                        {
+    					    $res['errorCode']=9; //手机号码已注册
+    					    $res['mess']='该手机号码已注册';
+                        }
+                    }
     				else if($userObj->update($where)){
     					ISafe::clear('mobileValidate');
     					ISafe::clear('mobileValidRes');

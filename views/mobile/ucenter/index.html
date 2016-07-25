@@ -19,7 +19,7 @@
 		<div class="logo" role="heading">
 			<a href="{url:/site/index}">山城速购</a><em class="nickname">我的山城</em>
 		</div>
-        {if:empty($this->sign)}
+        {if:$this->sign == false}
 		<a href="{url:/simple/logout}" class="login">退出</a>
         {/if}
 
