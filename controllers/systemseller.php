@@ -42,7 +42,7 @@ class SystemSeller extends IController
             {
                 $adminsellerObj = new IQuery('admin_seller as a');
                 $adminsellerObj->join = 'join seller as s on a.seller_id = s.id';
-                $adminsellerObj->where = 'admin_name = "'.$seller_name.'" and s.seller_name = "'.$name.'" and a.is_del = 0 and s.is_del = 0 and s.is_lock = 0';
+                $adminsellerObj->where = 'admin_name = "'.$seller_name.'" and s.true_name = "'.$name.'" and a.is_del = 0 and s.is_del = 0 and s.is_lock = 0';
                 $adminsellerObj->fields = 'a.*';
                 $sellerRow = $adminsellerObj->getObj();
                 if($sellerRow && ($sellerRow['password'] == md5($password)))

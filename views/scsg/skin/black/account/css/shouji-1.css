@@ -15,12 +15,24 @@ ul{ list-style-type:none;}
 .youxiang .kuai ul .yanse.san{ width:259px}
 .youxiang .kuai ul li{ width:260px; height:35px; line-height:35px; float:left; text-align:center; color:#999; font-weight:bold; font-size:12px;}
 
+.youxiang .kuai ul .yansell {
+    color: #FFF;
+    background-image: url(../images/jiaanjiao-1.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+    height: 36px;
+    width: 392px;
+}
+.youxiang .kuai ul .sanjiaoll {
+    width: 393px;
+}
+    
 .youxiang .kuai ul .yanse {
 	color: #FFF;
 	background-image: url(../images/jiaanjiao.jpg);
 	background-repeat: no-repeat;
 	background-position: left center;
-	height: 35px;
+	height: 36px;
 	width: 263px;
 }
 .youxiang .kuai ul .sanjiao img {
@@ -29,6 +41,9 @@ ul{ list-style-type:none;}
 .youxiang .kuai ul .sanjiao p { line-height:35px;
 	float: left;
 	width: 242px;
+}
+.youxiang .kuai ul .sanjiaoll p{
+    width: 375px;
 }
 .youxiang .wenzi{
 	width: 500px;

@@ -25,14 +25,14 @@
 
 	</header>
 		
-		<div>
+		<div style="position: relative;">
 	<a href="{url:/ucenter/info}" class="profile menuitem" role="menuitem"><i>编辑</i>
 			<div class="avatar">
 				{set:$user_ico = $this->user['head_ico']}
 				<img src="{url:/pic/thumb/img/$user_ico/w/50/h/50}" width="50" height="50" alt="头像" onerror="this.src='{skin:images/front/user_ico.gif}'"/>
 			</div>
 			<em class="name">{$this->user['username']}</em>
-          <a href="{url:/ucenter/toChgPhone2/stipStep/1}">您的账号信息尚不完善，请完善账号信息</a>
+          <a id="edituserinfophone" href="{url:/ucenter/toChgPhone2/stipStep/1}">您的账号信息尚不完善，请完善账号信息</a>
 			<span class="rank"></span></a>
 			<!--<span class="rank"><a href="{url:/ucenter/message}"><img class="xximg" src="{skin:css/wap/app_mail_nav.png}"/></a></span>-->
 		</div>

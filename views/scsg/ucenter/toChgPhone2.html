@@ -10,19 +10,23 @@
 		<label class="current"><span>修改绑定手机</span></label>
 	</div>
 	<div class="youxiang">
-	
+	{if:$this->sign}
 	<div class="kuai">
-	   <ul>
-       {if:$this->sign}
-       <li class="yanse">1.输入要绑定的手机号</li>
-      <li class="sanjiao"><p>2.修改手机成功</p><img src="{skin:/account/images/sanjiao_03.jpg}" width="17" height="34" alt="图标"></li>
-       {else:}
-	   <li class="sanjiao"><p>1.验证身份 </p><img src="{skin:/account/images/sanjiao_03.jpg}" width="17" height="34" alt="图标"></li>
-	  <li class="yanse">2.新手机验证</li>
-	  <li class="sanjiao"><p>3.修改手机成功</p><img src="{skin:/account/images/sanjiao_03.jpg}" width="17" height="34" alt="图标"></li>
-	  {/if}
-	   </ul>
-	</div>
+       <ul>
+       
+       <li class="yansell">1.输入要绑定的手机号</li>
+      <li class="sanjiao sanjiaoll"><p>2.修改手机成功</p><img src="{skin:/account/images/sanjiao_03.jpg}" width="17" height="34" alt="图标"></li>
+       </ul>
+    </div>
+    {else:}
+    <div class="kuai">
+       <ul>
+       <li class="sanjiao"><p>1.验证身份 </p><img src="{skin:/account/images/sanjiao_03.jpg}" width="17" height="34" alt="图标"></li>
+      <li class="yanse">2.新手机验证</li>
+      <li class="sanjiao"><p>3.修改手机成功</p><img src="{skin:/account/images/sanjiao_03.jpg}" width="17" height="34" alt="图标"></li>
+       </ul>
+    </div>
+    {/if}
 	<div class="wenzi">
 	<form action="" method="post" name='newPhone'>
         <input type="hidden" name="checkCode" value="{$this->safeCode}"/>
