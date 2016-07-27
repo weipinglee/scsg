@@ -35,7 +35,7 @@
             data,
             function(res){
                 WeixinJSBridge.log(res.err_msg);
-                alert(res.err_code+res.err_desc+res.err_msg);
+                alert(res.err_code+'__'+res.err_desc+'__'+res.err_msg);
             }
         );
     }
@@ -56,6 +56,6 @@
     </script>
 </head>
 <body>
-    请稍后...
+    
 </body>
 </html>
