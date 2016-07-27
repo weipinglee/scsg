@@ -231,11 +231,18 @@
 				</select>
 			</fieldset>
 
+            <fieldset>
+                <label>商品状态</label>
+                <div class="box">
+                    <input type='radio' name='is_del' value='3' checked="checked" />申请上架
+                    <input type='radio' name='is_del' value='2' />下架
+                </div>
+            </fieldset>
 			<fieldset>
-				<label>商品状态</label>
+				<label>是否允许参加平台活动</label>
 				<div class="box">
-					<input type='radio' name='is_del' value='3' checked="checked" />申请上架
-					<input type='radio' name='is_del' value='2' />下架
+					<input type='radio' name='is_share' value='2' />是
+					<input type='radio' name='is_share' value='0' checked />否
 				</div>
 			</fieldset>
 

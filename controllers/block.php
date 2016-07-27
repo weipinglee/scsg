@@ -48,12 +48,12 @@ class Block extends IController
 		$max_price   = IFilter::act( IReq::get('max_price'),'float');
 		$goods_no    = IFilter::act( IReq::get('goods_no'));
 		$is_products = IFilter::act( IReq::get('is_products'),'int');
-		$seller_id   = IFilter::act( IReq::get('seller_id'),'int');
+        $seller_id   = IFilter::act( IReq::get('seller_id'),'int');
+		$is_share   = IFilter::act( IReq::get('is_share'),'int');
         $goods_id    = IFilter::act( IReq::get('goods_id'),'int');
         $exp_presell = IFilter::act( IReq::get('exp_presell'),'int');   //组合销售选择商品时排除预售商品
 		$exp_code = IFilter::act( IReq::get('exp_code'),'int');         //组合销售选择商品时排除虚拟商品
 		//$tb_goods = new IQuery('goods as go');
-		
 		$condition = '&show_num='.$show_num;
 		if($keywords)$condition .= '&keywords='.$keywords;
 		if($cat_id)$condition .= '&category_id='.$cat_id;
@@ -64,19 +64,20 @@ class Block extends IController
 		if($seller_id)$condition .= '&seller_id='.$seller_id;
         if($goods_id)$condition .= '&goods_id='.$goods_id;
         if($exp_presell)$condition .= '&exp_presell='.$exp_presell;
-		if($exp_code)$condition .= '&exp_code='.$exp_code;
+        if($exp_code)$condition .= '&exp_code='.$exp_code;
+		if($is_share)$condition .= '&is_share='.$is_share;
 		//查询条件
 		$table_name = 'goods as go';
         
         $where   = $exp_presell ? ' go.is_del = 0 ' : ' (go.is_del = 0 or go.is_del = 4) ';
 		$where  .= $exp_code ? ' and go.type <> 1 ' : '';
 		$where  .= $goods_id  ? ' and go.id           = '.$goods_id      : '';
-		$where  .= isset($seller_id) ? ' and go.seller_id    = '.$seller_id     : '';//此处做了更改
+		$where  .= $is_share ? ' and (go.seller_id = 0 or go.is_share = '.$is_share.')'  : (isset($seller_id) ? ' and go.seller_id    = '.$seller_id     : '');//此处做了更改
 		$where  .= $goods_no  ? ' and go.goods_no     = "'.$goods_no.'"' : '';
 		$where  .= $min_price ? ' and go.sell_price  >= '.$min_price     : '';
 		$where  .= $max_price ? ' and go.sell_price  <= '.$max_price     : '';
 		$where  .= $keywords  ? ' and go.name like    "%'.$keywords.'%"' : '';
-
+        
 		//分类筛选
 		if($cat_id)
 		{

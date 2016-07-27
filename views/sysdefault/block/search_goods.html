@@ -1,6 +1,7 @@
 {set:$isProducts= IFilter::act(IReq::get('is_products'),'int');}
 {set:$tmpType   = IFilter::act(IReq::get('type'));}
 {set:$seller_id = IFilter::act(IReq::get('seller_id'),'int');}
+{set:$is_share = IFilter::act(IReq::get('is_share'),'int');}
 {set:$exp_presell = IFilter::act(IReq::get('exp_presell'),'int');}
 {set:$exp_code = IFilter::act(IReq::get('exp_code'),'int');}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -20,6 +21,7 @@
 	<form action='{url:/block/goods_list/type/$tmpType}' method='post'>
 		<input type='hidden' name='is_products' value='{$isProducts}' />
         <input type='hidden' name='seller_id' value='{$seller_id}' />
+        <input type='hidden' name='is_share' value='{$is_share}' />
         <input type='hidden' name='exp_presell' value='{$exp_presell}' />
 		<input type='hidden' name='exp_code' value='{$exp_code}' />
 		<table class='form_table'>
