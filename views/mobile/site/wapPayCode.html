@@ -29,11 +29,11 @@
     function jsApiCall()
     {
         var data = '{$jsApiParameters}';
+        alert(data);
         WeixinJSBridge.invoke(
             'getBrandWCPayRequest',
             data,
             function(res){
-                alert(res)
                 WeixinJSBridge.log(res.err_msg);
                 alert(res.err_code+res.err_desc+res.err_msg);
             }
@@ -42,7 +42,6 @@
 
     window.onload = function()
     {
-        alert('aa');
         if (typeof(WeixinJSBridge) == "undefined"){
             if( document.addEventListener ){
                 document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
