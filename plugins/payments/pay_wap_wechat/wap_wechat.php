@@ -71,14 +71,14 @@ class wap_wechat extends paymentPlugin
         $paraData = JSON::decode($payPara);
         $input = new WxPayUnifiedOrder();
         $input->SetBody($payment['R_Name']);
-        $input->SetAttach($payment['R_Name']);
+       // $input->SetAttach($payment['R_Name']);
         $M_mchid = $paraData['M_mchid'] ? $paraData['M_mchid'] : WxPayConfig::MCHID;
         $input->SetOut_trade_no($M_mchid.date("YmdHis"));
         $input->SetTotal_fee($payment['M_Amount']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag('');
-        $input->SetNotify_url($this->wecheatCallbackUrl);
+        $input->SetNotify_url($this->wapWecheatCallbackUrl);
         //$input->SetNotify_url("http://paysdk.weixin.qq.com/example/notify.php");
         $input->SetTrade_type("JSAPI");
         $input->SetProduct_id($payment['M_OrderId']);
