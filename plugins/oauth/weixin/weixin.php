@@ -133,7 +133,8 @@ class Weixin extends OauthBase
        $info_data = $this->get_contents($info_url);
 
        $arr = json_decode($info_data, TRUE);
-        $userInfo['id']   = $arr['unionid'];
+        $userInfo['openid']   = $arr['openid'];
+        $userInfo['unionid']   = $arr['unionid'];
         $userInfo['name'] = isset($arr['nickname']) ? $arr['nickname'] : '';
         return $userInfo;
     }

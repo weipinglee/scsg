@@ -127,6 +127,7 @@ class WxPayDataBase
 	 */
 	public function GetValues()
 	{
+        ksort($this->values);
 		return $this->values;
 	}
 }
