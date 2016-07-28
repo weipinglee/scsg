@@ -760,9 +760,10 @@ class Block extends IController
 	}
     
     //微信支付成功回调函数
-    public function wecheat_callback()
+    public function wecheat_callback($id = null)
     {
-        $paymentInstance = Payment::createPaymentInstance(13);
+        $id = empty($id) ? 13 : $id;
+        $paymentInstance = Payment::createPaymentInstance($id);
 
         if(!is_object($paymentInstance))
         {
@@ -778,7 +779,7 @@ class Block extends IController
                 'trade_no'     => $tradeNo,
                 'trade_type'   => 1,
                 'money'        => $pay_total/100,
-                'pay_type'     => 13,
+                'pay_type'     => $id,
                 'trade_status' => 1,
                 'time'         => date('Y-m-d H:i:s')
             );
