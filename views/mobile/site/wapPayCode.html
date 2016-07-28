@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-{set:$jsApiParameters=IReq::get('jsApiParameters');$para = json_decode($jsApiParameters);$pay_level=IReq::get('pay_level');}
+{set:$jsApiParameters=IReq::get('jsApiParameters');$para = json_decode($jsApiParameters, true);$pay_level=IReq::get('pay_level');}
 <head>
 	<meta charset="UTF-8">
 	<title>微信支付</title>
