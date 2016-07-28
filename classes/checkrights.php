@@ -413,6 +413,10 @@ class CheckRights extends IInterceptorBase
 	{
 		$login_info = IFilter::act($login_info);
 		$password   = IFilter::act($password);
+        if(empty($seller_id))
+        {
+            return false;
+        }
 
         $adminsellerObj = new IQuery('admin_seller as a');
         $adminsellerObj->join = 'join seller as s on a.seller_id = s.id';
