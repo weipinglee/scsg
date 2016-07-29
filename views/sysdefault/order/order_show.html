@@ -335,9 +335,9 @@
 				{query: name=refundment_doc where=order_id eq $order_id items=$refundmentData}
 				
 				{set:$typeName = $item['type']==0 ? '退款' : '换货';}
-				<!--{if:$item['pay_status']==7 && $item['type']==0}
+				{if:$item['pay_status']==7 && $item['type']==0}
 				{set:$show_refunds = 1;}
-				{/if}-->
+				{/if}
 				<tr>
 					<th>{$typeName}商品：</th>
 					<td>
@@ -569,10 +569,7 @@ function initButton()
 	{/if}
 
 	//退款
-	{if:$show_refunds}
-	$('#to_refundment').removeAttr('disabled');
-	$('#to_refundment').removeClass('inactive');
-	{/if}
+	
 }
 
 //选择当前Tab
