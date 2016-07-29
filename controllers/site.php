@@ -1961,11 +1961,14 @@ class Site extends IController
             unset($result);
             $response = $this->get_contents($url);
             $result = json_decode($response,true);
+            var_dump($result);
             if(isset($result['errcode']) && $result['errcode'] == 0)
             {
                 $jsapi_ticket = $result['ticket'];
                 ISafe::set('wxPayJsapiTicket', $jsapi_ticket);
+                var_dump($jsapi_ticket);
                 $str = "jsapi_ticket={$jsapi_ticket}&noncestr={$para['nonceStr']}&timestamp={$para['timeStamp']}&url=http://www.yqtvt.com/test/site/wapPayCode";
+                var_dump($str);
                 $this->signature = sha1($str);
             }
         }
