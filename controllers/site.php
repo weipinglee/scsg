@@ -1966,13 +1966,10 @@ class Site extends IController
             {
                 $jsapi_ticket = $result['ticket'];
                 ISafe::set('wxPayJsapiTicket', $jsapi_ticket);
-                var_dump($jsapi_ticket);
                 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
                 $url1 = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                 $str = "jsapi_ticket={$jsapi_ticket}&noncestr={$para['nonceStr']}&timestamp={$para['timeStamp']}&url={$url1}";
-                var_dump($str);
                 $this->signature = sha1($str);
-                var_dump($this->signature);
             }
         }
         $this->para = $para;
