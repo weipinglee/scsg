@@ -41,26 +41,25 @@
                     var oId = '{$oId}';
                     var pay_level = '{$pay_level}';
                     var pay_total = '{$total}';
-                    alert(pay_total)
                     var id = '{$id}';
-                    alert(id);
                     $.ajax({
                         type:'post',
                         async:false,
-                        data:{oId:oId,pay_level:pay_level,id:id,pay_total:pay_total},
+                        data:{oId:oId,pay_level:pay_level,id:id,pay_total:pay_total,payment_id:12},
                         dataType:'json',
                         url:'{url:/block/wecheat_callback}',
                         beforeSend:function(){
                             
                         },
-                        success:function(res){
-                            if(res.status == 1)
+                        success:function(result){
+                            alert(result.status)
+                            if(result.status == 1)
                             {
-                                window.location = res.url;
+                                window.location = result.url;
                             }
                             else
                             {
-                                alert(res.msg);
+                                alert(result.msg);
                             }
                         },
                         error: function(XMLHttpRequest, textStatus, errorThrown){

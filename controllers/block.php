@@ -760,9 +760,9 @@ class Block extends IController
 	}
     
     //微信支付成功回调函数
-    public function wecheat_callback($id = null)
+    public function wecheat_callback()
     {
-        $id = empty($id) ? 13 : $id;
+        $id = IReq::get('payment_id') ? IReq::get('payment_id') : 13;
         $paymentInstance = Payment::createPaymentInstance($id);
 
         if(!is_object($paymentInstance))
