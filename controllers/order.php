@@ -613,7 +613,7 @@ class Order extends IController
 		$orderGoodsDB      = new IModel('order_goods');
 		$tb_refundment_doc = new IModel('refundment_doc');
 		
-		$orderGoodsRow = $orderGoodsDB->getObj('id = 7');
+		$orderGoodsRow = $orderGoodsDB->getObj('id = '.$order_goods_id);
 		if($amount>$orderGoodsRow['real_price']*$orderGoodsRow['goods_nums']+$orderGoodsRow['delivery_fee']+$orderGoodsRow['save_price']+$orderGoodsRow['tax']){
 			die('<script text="text/javascript">parent.actionCallback("退款金额不得大于实际支付金额");</script>');
 			return false;
