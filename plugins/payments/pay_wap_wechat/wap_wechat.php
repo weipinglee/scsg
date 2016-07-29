@@ -138,7 +138,7 @@ class wap_wechat extends paymentPlugin
                 'orig_trade_no'        => $result['out_trade_no'],
                 'trade_type'   => 2,
                 'money'        => $result['cash_refund_fee']/100,
-                'pay_type'     => 13,
+                'pay_type'     => 12,
                 'trade_status' => 1,
                 'time'         => date('Y-m-d H:i:s')
             );
