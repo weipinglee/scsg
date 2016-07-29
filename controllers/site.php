@@ -1961,7 +1961,6 @@ class Site extends IController
             unset($result);
             $response = $this->get_contents($url);
             $result = json_decode($response,true);
-            var_dump($result);
             if(isset($result['errcode']) && $result['errcode'] == 0)
             {
                 $jsapi_ticket = $result['ticket'];
