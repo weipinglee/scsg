@@ -42,7 +42,6 @@
                     var pay_level = '{$pay_level}';
                     var pay_total = '{$total}';
                     var id = '{$id}';
-                    alert(id);
                     $.ajax({
                         type:'post',
                         async:false,
@@ -64,7 +63,7 @@
                             }
                         },
                         error: function(XMLHttpRequest, textStatus, errorThrown){
-                            console.info(textStatus);
+                            alert(textStatus);
                         }
                     })
                 }else{
