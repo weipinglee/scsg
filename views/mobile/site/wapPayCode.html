@@ -1,25 +1,22 @@
 <!doctype html>
 <html lang="en">
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-{set:$jsApiParameters=IReq::get('jsApiParameters');$para = json_decode($jsApiParameters, true);$pay_level=IReq::get('pay_level');}
+{set:$para = $this->para;$pay_level=$this->pay_level;$signature=$this->signature;}
 <head>
 	<meta charset="UTF-8">
 	<title>微信支付</title>
     <script type="text/javascript">  
-   /* var code = "";  
-    (function($) {
-        $.getUrlParam = function(name) {
-           var reg = newRegExp("(^|&)" + name + "=([^&]*)(&|$)");   
-           var r = window.location.search.substr(1).match(reg);
-           if (r != null) returnunescape(r[2]);
-        }
-    })
-    (jQuery);    code = $.getUrlParam('code');  */
+    wx.config({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+         appId : "{$para['appId']}",     //公众号名称，由商户传入     
+         timeStamp:"{$para['timeStamp']}",         //时间戳，自1970年以来的秒数     
+         nonceStr : "{$para['nonceStr']}",// 必填，生成签名的随机串
+        signature: "{$signature}",// 必填，签名，见附录1
+        jsApiList: ['checkJsApi','chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
     //调用微信JS api 支付
     function jsApiCall()
     {
-        var data = '{$jsApiParameters}';
-        alert(data);
         WeixinJSBridge.invoke(
             'getBrandWCPayRequest',
             {

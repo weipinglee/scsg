@@ -1940,4 +1940,49 @@ class Site extends IController
             }
         }                          
     }
+    
+    //微信公众号支付处理
+    function wapPayCode()
+    {
+        $appId = Payment::getConfigParam(12, 'M_merId');
+        $secret = Payment::getConfigParam(12, 'M_certPwd');
+        $jsApiParameters=IReq::get('jsApiParameters');
+        $para = JSON::decode($jsApiParameters);
+        $pay_level=IReq::get('pay_level');
+        $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$appId}&secret={$secret}";
+        $response = $this->get_contents($url);
+        $result = json_decode($response,true);
+        unset($response);
+        unset($url);
+        if(isset($result['access_token']) && $result['access_token'])
+        {
+            ISafe::set('wxPayAccessToken', $result['access_token']);
+            $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={$result['access_token']}&type=jsapi";
+            unset($result);
+            $response = $this->get_contents($url);
+            $result = json_decode($response,true);
+            if(isset($result['errcode']) && $result['errcode'] == 0)
+            {
+                $jsapi_ticket = $result['ticket'];
+                ISafe::set('wxPayJsapiTicket', $jsapi_ticket);
+                $str = "jsapi_ticket={$jsapi_ticket}&noncestr={$para['nonceStr']}&timestamp={$para['timeStamp']}&url=http://www.yqtvt.com/test/site/wapPayCode";
+                $this->signature = sha1($str);
+            }
+        }
+        $this->para = $para;
+        $this->pay_level = $pay_level;
+        $this->redirect('wapPayCode');
+    }
+    
+    public function get_contents($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        $response =  curl_exec($ch);
+        curl_close($ch);
+
+        return $response;
+    }
 }
