@@ -1970,6 +1970,7 @@ class Site extends IController
                 $str = "jsapi_ticket={$jsapi_ticket}&noncestr={$para['nonceStr']}&timestamp={$para['timeStamp']}&url=http://www.yqtvt.com/test/site/wapPayCode";
                 var_dump($str);
                 $this->signature = sha1($str);
+                var_dump($this->signature);
             }
         }
         $this->para = $para;
