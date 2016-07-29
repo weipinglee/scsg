@@ -18,6 +18,8 @@
     //调用微信JS api 支付
     function jsApiCall()
     {
+        var data = '{$jsApiParameters}';
+        alert(data);
         WeixinJSBridge.invoke(
             'getBrandWCPayRequest',
             {

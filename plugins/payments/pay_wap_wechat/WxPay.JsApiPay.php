@@ -162,7 +162,7 @@ class JsApiPay
 			"signType" => "sha1",
 			"scope" => "jsapi_address",
 			"appId" => WxPayConfig::APPID,
-			"timestamp" => $data["timestamp"],
+			"timeStamp" => $data["timestamp"],
 			"nonceStr" => $data["noncestr"]
 		);
 		$parameters = json_encode($afterData);

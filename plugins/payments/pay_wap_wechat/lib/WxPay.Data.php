@@ -2728,7 +2728,7 @@ class WxPayJsApiPay extends WxPayDataBase
 	**/
 	public function SetTimeStamp($value)
 	{
-		$this->values['timestamp'] = (string)$value;
+		$this->values['timeStamp'] = (string)$value;
 	}
 	/**
 	* 获取支付时间戳的值
@@ -2736,7 +2736,7 @@ class WxPayJsApiPay extends WxPayDataBase
 	**/
 	public function GetTimeStamp()
 	{
-		return $this->values['timestamp'];
+		return $this->values['timeStamp'];
 	}
 	/**
 	* 判断支付时间戳是否存在
@@ -2744,7 +2744,7 @@ class WxPayJsApiPay extends WxPayDataBase
 	**/
 	public function IsTimeStampSet()
 	{
-		return array_key_exists('timestamp', $this->values);
+		return array_key_exists('timeStamp', $this->values);
 	}
 	
 	/**
