@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-{set:$jsApiParameters=IReq::get('jsApiParameters');$para = json_decode($jsApiParameters, true);$pay_level=IReq::get('pay_level');$signature=$this->signature;}
+{set:$id=IReq::get('product_id');$oId=IReq::get('order_id');$total = IReq::get('pay_total');$jsApiParameters=IReq::get('jsApiParameters');$para = json_decode($jsApiParameters, true);$pay_level=IReq::get('pay_level');$signature=$this->signature;}
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <head>
 	<meta charset="UTF-8">
@@ -40,8 +40,43 @@
                 "paySign" : "{$para['paySign']}" //微信签名 
             },
             function(res){
-                if(res.)
-                alert(res.err_code+'__'+res.err_desc+'__'+res.err_msg);
+                if(res.err_msg == "get_brand_wcpay_request：ok" )
+                {
+                    var oId = '{$oId}';
+                    var pay_level = '{$pay_level}';
+                    var pay_total = '{$total}';
+                    $.ajax({
+                        type:'post',
+                        async:false,
+                        data:{oId:oId,pay_level:pay_level,id:id,pay_total:pay_total},
+                        dataType:'json',
+                        url:'{url:/block/wecheat_callback}',
+                        beforeSend:function(){
+                            
+                        },
+                        success:function(res){
+                            if(res.status == 1)
+                            {
+                                window.location = res.url;
+                            }
+                            else
+                            {
+                                alert(res.msg);
+                            }
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown){
+                            console.info(textStatus);
+                        }
+                    })
+                }
+                else if(res.err_msg == "get_brand_wcpay_request：canel" )
+                {
+                    return false;
+                }
+                else
+                {
+                    alert('支付失败');
+                }
             }
         );
     }

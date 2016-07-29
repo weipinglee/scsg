@@ -92,11 +92,11 @@ class wap_wechat extends paymentPlugin
         if(isset($payment['pay_level']))
         {
             $pay_level = $payment['pay_level'] ? $payment['pay_level'] : 2;
-            return(array('jsApiParameters' => $jsApiParameters,'pay_level' => $pay_level));
+            return(array('jsApiParameters' => $jsApiParameters,'pay_level' => $pay_level,'order_id' => $payment['M_OrderNO'], 'product_id' => $M_mchid.date("YmdHis"),'pay_total' => $payment['M_Amount']*100,));
         }
         else
         {
-            return(array('jsApiParameters' => $jsApiParameters));
+            return(array('jsApiParameters' => $jsApiParameters,'order_id' => $payment['M_OrderNO'], 'product_id' => $M_mchid.date("YmdHis"),'pay_total' => $payment['M_Amount']*100,));
         }
     }
     

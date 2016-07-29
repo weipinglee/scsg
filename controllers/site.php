@@ -1948,7 +1948,6 @@ class Site extends IController
         $secret = Payment::getConfigParam(12, 'M_certPwd');
         $jsApiParameters=IReq::get('jsApiParameters');
         $para = JSON::decode($jsApiParameters);
-        $pay_level=IReq::get('pay_level');
         $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$appId}&secret={$secret}";
         $response = $this->get_contents($url);
         $result = json_decode($response,true);
@@ -1972,7 +1971,6 @@ class Site extends IController
             }
         }
         $this->para = $para;
-        $this->pay_level = $pay_level;
         $this->redirect('wapPayCode');
     }
     
