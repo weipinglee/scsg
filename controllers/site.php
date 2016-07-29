@@ -1966,7 +1966,7 @@ class Site extends IController
                 $jsapi_ticket = $result['ticket'];
                 ISafe::set('wxPayJsapiTicket', $jsapi_ticket);
                 $str = "jsapi_ticket={$jsapi_ticket}&noncestr={$para['nonceStr']}&timestamp={$para['timeStamp']}&url=http://www.yqtvt.com/test/site/wapPayCode";
-                $this->signature = md5($str);
+                $this->signature = sha1($str);
             }
         }
         $this->para = $para;

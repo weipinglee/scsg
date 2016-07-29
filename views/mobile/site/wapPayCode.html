@@ -16,16 +16,16 @@
     });   
     wx.ready(function(){
         if (typeof(WeixinJSBridge) == "undefined"){
-                if( document.addEventListener ){
-                    document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
-                }else if (document.attachEvent){
-                    document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
-                    document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
-                }
-            }else{
-                jsApiCall();
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
             }
-        });
+        }else{
+            jsApiCall();
+        }
+    });
     //调用微信JS api 支付
     function jsApiCall()
     {
