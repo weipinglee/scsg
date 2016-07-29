@@ -6,15 +6,27 @@
 	<meta charset="UTF-8">
 	<title>微信支付</title>
     <script type="text/javascript">
-    wx.ready(function(){  
-        wx.config({
-            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-             appId : "{$para['appId']}",     //公众号名称，由商户传入     
-             timeStamp:"{$para['timeStamp']}",         //时间戳，自1970年以来的秒数     
-             nonceStr : "{$para['nonceStr']}",// 必填，生成签名的随机串
-            signature: "{$signature}",// 必填，签名，见附录1
-            jsApiList: ['checkJsApi','chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        });
+      
+    wx.config({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+         appId : "{$para['appId']}",     //公众号名称，由商户传入     
+         timeStamp:"{$para['timeStamp']}",         //时间戳，自1970年以来的秒数     
+         nonceStr : "{$para['nonceStr']}",// 必填，生成签名的随机串
+        signature: "{$signature}",// 必填，签名，见附录1
+        jsApiList: ['checkJsApi','chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+   
+    wx.ready(function(){
+    if (typeof(WeixinJSBridge) == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+            }
+        }else{
+            jsApiCall();
+        }
     });
     //调用微信JS api 支付
     function jsApiCall()
@@ -36,7 +48,7 @@
         );
     }
 
-    window.onload = function()
+   /* window.onload = function()
     {
         if (typeof(WeixinJSBridge) == "undefined"){
             if( document.addEventListener ){
@@ -48,7 +60,7 @@
         }else{
             jsApiCall();
         }
-    } 
+    } */
     /*var data = '{$jsApiParameters}'; 
     wx.config({
         debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
