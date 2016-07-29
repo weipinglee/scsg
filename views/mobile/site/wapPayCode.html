@@ -14,7 +14,7 @@
         signature: "{$signature}",// 必填，签名，见附录1
         jsApiList: ['checkJsApi','chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
     });   
-    //wx.ready(function(){
+    wx.ready(function(){
         if (typeof(WeixinJSBridge) == "undefined"){
             if( document.addEventListener ){
                 document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
@@ -25,7 +25,7 @@
         }else{
             jsApiCall();
         }
-   // });
+    });
     //调用微信JS api 支付
     function jsApiCall()
     {
