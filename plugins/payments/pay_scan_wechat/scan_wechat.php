@@ -77,7 +77,8 @@ class scan_wechat extends paymentPlugin
         $input->SetBody($payment['R_Name']);
         $input->SetAttach($payment['R_Name']);
         $M_mchid = $paraData['M_mchid'] ? $paraData['M_mchid'] : WxPayConfig::MCHID;
-        $input->SetOut_trade_no($M_mchid.date("YmdHis"));
+        $temp = $M_mchid.date("YmdHis");
+        $input->SetOut_trade_no($temp);
         $input->SetTotal_fee($payment['M_Amount']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
@@ -91,11 +92,11 @@ class scan_wechat extends paymentPlugin
         if(isset($payment['pay_level']))
         {
             $pay_level = $payment['pay_level'] ? $payment['pay_level'] : 2;
-            return(array('code_url' => $result["code_url"],'order_id' => $payment['M_OrderNO'], 'product_id' => $M_mchid.date("YmdHis"),'pay_total' => $payment['M_Amount']*100,'pay_level' => $pay_level));
+            return(array('code_url' => $result["code_url"],'order_id' => $payment['M_OrderNO'], 'product_id' => $temp,'pay_total' => $payment['M_Amount']*100,'pay_level' => $pay_level));
         }
         else
         {
-            return(array('code_url' => $result["code_url"],'order_id' => $payment['M_OrderNO'], 'product_id' => $M_mchid.date("YmdHis"),'pay_total' => $payment['M_Amount']*100,'pay_level' => 0));
+            return(array('code_url' => $result["code_url"],'order_id' => $payment['M_OrderNO'], 'product_id' => $temp,'pay_total' => $payment['M_Amount']*100,'pay_level' => 0));
         }
     }
     

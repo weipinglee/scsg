@@ -38,35 +38,20 @@
             package: "{$para['package']}", // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
             signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
             paySign: "{$para['paySign']}", // 支付签名
+            complete: function(){
+                if(success)
+                {
+                    changeOrder();
+                }
+                else
+                {
+                    alert('支付失败！')
+                    window.location = '{url:/ucenter/order}';
+                }
+            },
             success: function (res) {
                 if(res.errMsg == "chooseWXPay:ok" ) {
-                    var oId = '{$oId}';
-                    var pay_level = '{$pay_level}';
-                    var pay_total = '{$total}';
-                    var id = '{$id}';
-                    $.ajax({
-                        type:'post',
-                        async:false,
-                        data:{oId:oId,pay_level:pay_level,id:id,pay_total:pay_total,payment_id:12},
-                        dataType:'json',
-                        url:'{url:/block/wecheat_callback}',
-                        beforeSend:function(){
-                            
-                        },
-                        success:function(result){
-                            if(result.status == 1)
-                            {
-                                window.location = result.url;
-                            }
-                            else
-                            {
-                                alert(result.msg);
-                            }
-                        },
-                        error: function(XMLHttpRequest, textStatus, errorThrown){
-                            alert(textStatus);
-                        }
-                    })
+                    changeOrder();
                 }else{
                     alert(res.errMsg);
                     window.location = '{url:/ucenter/order}';
@@ -77,6 +62,35 @@
                 window.location = '{url:/ucenter/order}';
             }
         });
+    }
+    function changeOrder(){
+        var oId = '{$oId}';
+        var pay_level = '{$pay_level}';
+        var pay_total = '{$total}';
+        var id = '{$id}';
+        $.ajax({
+            type:'post',
+            async:false,
+            data:{oId:oId,pay_level:pay_level,id:id,pay_total:pay_total,payment_id:12},
+            dataType:'json',
+            url:'{url:/block/wecheat_callback}',
+            beforeSend:function(){
+                
+            },
+            success:function(result){
+                if(result.status == 1)
+                {
+                    window.location = result.url;
+                }
+                else
+                {
+                    alert(result.msg);
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown){
+                alert(textStatus);
+            }
+        })
     }
     </script>
 </head>
