@@ -198,9 +198,9 @@
 										{set:$specVal=explode(',',trim($item['value'],','))}
 										{foreach:items=$specVal item=$spec_value}
 										{if:$item['type'] == 1}
-										<div class="item w_27"><a href="javascript:void(0);" onclick="tuan_spec_show.sele_spec(this);get_delivery_fee()" value='{"id":"{$item['id']}","type":"{$item['type']}","value":"{$spec_value}","name":"{$item['name']}"}' >{$spec_value}<span></span></a></div>
+										<div class="item w_27"><a href="javascript:void(0);" onclick="tuan_spec_show.sele_spec(this);get_delivery_fee()" name="{$spec_value}" value='{"id":"{$item['id']}","type":"{$item['type']}","value":"{$spec_value}","name":"{$item['name']}"}' >{$spec_value}<span></span></a></div>
 										{else:}
-										<div class="item"><a href="javascript:void(0);" onclick="tuan_spec_show.sele_spec(this);get_delivery_fee()" value='{"id":"{$item['id']}","type":"{$item['type']}","value":"{$spec_value}","name":"{$item['name']}"}' ><img src="{webroot:$spec_value}" width='30px' height='30px' /><span></span></a></div>
+										<div class="item"><a href="javascript:void(0);" onclick="tuan_spec_show.sele_spec(this);get_delivery_fee()" name="{$spec_value}" value='{"id":"{$item['id']}","type":"{$item['type']}","value":"{$spec_value}","name":"{$item['name']}"}' ><img src="{webroot:$spec_value}" width='30px' height='30px' /><span></span></a></div>
 										{/if}
 										{/foreach}
 									</dd>
