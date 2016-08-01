@@ -191,6 +191,7 @@ class goods_class
 			$goodsUpdateData['create_time'] = $nowDataTime;
 			$goodsDB->setData($goodsUpdateData);
 			$id = $goodsDB->add();
+            $goodsDB->commit();
 		}
 
 		//处理商品属性
@@ -208,6 +209,7 @@ class goods_class
 				);
 				$goodsAttrDB->setData($attrData);
 				$goodsAttrDB->add();
+                $goodsAttrDB->commit();
 			}
 		}
 
