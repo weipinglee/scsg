@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
 {set:$id=IReq::get('product_id');$oId=IReq::get('order_id');$total = IReq::get('pay_total');$jsApiParameters=IReq::get('jsApiParameters');$para = json_decode($jsApiParameters, true);$pay_level=IReq::get('pay_level');$signature=$this->signature;}
-<?php var_dump($para['package'])?>
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <head>
 	<meta charset="UTF-8">
