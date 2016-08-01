@@ -88,7 +88,6 @@ class wap_wechat extends paymentPlugin
         $jsApiParameters = $tools->GetJsApiParameters($order);
         //获取共享收货地址js函数参数
        // $editAddress = $tools->GetEditAddressParameters();
-       var_dump($jsApiParameters);exit;
         if(isset($payment['pay_level']))
         {
             $pay_level = $payment['pay_level'] ? $payment['pay_level'] : 2;
