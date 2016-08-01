@@ -1518,6 +1518,7 @@ class Order_Class
 		if(in_array($pay_type,array(3,12,13))){
 			$paymentInstance = Payment::createPaymentInstance($pay_type);
 			$paymentData = Payment::getPaymentInfoForRefund($pay_type,$refundId,$order_id,$amount);
+            var_dump($paymentData);
 			if(!$res=$paymentInstance->refund($paymentData)) return false;//验签失败
 		}
 		else if($pay_type==1){//预存款付款打入账户余额
@@ -1553,6 +1554,7 @@ class Order_Class
 				'pay_status'   => 2,
 				'dispose_time' => ITime::getDateTime(),
 		);
+        var_dump($updateData);
 		$refundDB->setData($updateData);
 		$refundDB->update('id = '.$refundId);
 		$orderGoodsRow = $orderGoodsDB->getObj('order_id = '.$order_id.' and goods_id = '.$refundsRow['goods_id'].' and product_id = '.$refundsRow['product_id']);
