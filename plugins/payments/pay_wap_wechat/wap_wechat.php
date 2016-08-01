@@ -87,7 +87,8 @@ class wap_wechat extends paymentPlugin
         $order = WxPayApi::unifiedOrder($input);
         $jsApiParameters = $tools->GetJsApiParameters($order);
         //获取共享收货地址js函数参数
-       // $editAddress = $tools->GetEditAddressParameters(); 
+       // $editAddress = $tools->GetEditAddressParameters();
+       var_dump($jsApiParameters);exit;
         if(isset($payment['pay_level']))
         {
             $pay_level = $payment['pay_level'] ? $payment['pay_level'] : 2;
@@ -128,10 +129,7 @@ class wap_wechat extends paymentPlugin
         $input->SetRefund_fee($refund_fee);
         $input->SetOut_refund_no($M_mchid.date("YmdHis"));
         $input->SetOp_user_id($M_mchid);
-        print_r($input);
         $result = WxPayApi::refund($input);
-        print_r($payment);
-        print_r($result);
         if(isset($result['result_code']) && $result['result_code'] == 'SUCCESS')
         {
             $resArr = array(

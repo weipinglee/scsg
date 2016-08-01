@@ -664,7 +664,6 @@ class Order extends IController
 			}
 			Order_Class::get_order_status_refunds($refunds_id,2);
 			Order_Class::ordergoods_status_refunds(2,$orderGoodsRow,0);
-            var_dump($result);exit;
 		if($result)
 		{
 			
