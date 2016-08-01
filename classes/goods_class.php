@@ -219,7 +219,7 @@ class goods_class
 		if(isset($postData['_spec_array']))
 		{
 			$productIdArray = array();
-			if($postData['product_id']){
+			if($postData['product_id'] && array_filter($postData['product_id'])){
 				$product_ids = implode(',',$postData['product_id']);
 				$productsDB->del('goods_id = '.$id.' AND id not in ('.$product_ids.')');
 			}else{
