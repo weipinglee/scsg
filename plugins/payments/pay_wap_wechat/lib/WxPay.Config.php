@@ -58,5 +58,5 @@ class WxPayConfig
 	const REPORT_LEVENL = 1;     
     
     //回调地址
-    const NOTIFY_URL = "http://www.yqtvt.com/test/plugins/payments/pay_wap_wechat/notify.php";
+    const NOTIFY_URL = "http://www.yqtvt.com/plugins/payments/pay_wap_wechat/notify.php";
 }

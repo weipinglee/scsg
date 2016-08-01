@@ -123,6 +123,33 @@ class Seller extends IController
 
 		$callback ? $this->redirect($callback) : $this->redirect("goods_list");
 	}
+    
+    //验证条形码是否重复
+    public function checkSignCode()
+    {
+        $id = IReq::get('id');
+        $sign = IReq::get('sign');
+        $product_id = IReq::get('product_id');
+        $goodsDB = new IModel('goods');
+        if($sign && $goodsDB->getField("sign_code = '{$sign}' and id <> {$id}", 'id'))
+        {
+            echo 0;
+        }
+        else
+        {
+            if($product_id)
+            {
+                $productsDB = new IModel('products');
+                if($sign && $productsDB->getField("sign_code = '{$sign}' and id <> {$product_id}", 'id')){
+                    echo 0;
+                }
+            }
+            else
+            {
+               echo 1; 
+            }
+        }
+    }
 	//商品列表
 	public function goods_list()
 	{
@@ -1345,7 +1372,8 @@ class Seller extends IController
 				unset($val['id'],$val['visit'],$val['favorite'],$val['sort'],$val['comments'],$val['sale'],$val['grade'],$val['is_share']);
 				$val['seller_id'] = $this->seller['seller_id'];
 				$val['goods_no'] .= '-'.$this->seller['seller_id'];
-				$val['content'] = IFilter::addSlash($val['content']);
+                $val['content'] = IFilter::addSlash($val['content']);
+				$val['is_del'] = 3;
 				$goodsDB->setData($val);
 				$goods_id = $goodsDB->add();
 

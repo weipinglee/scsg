@@ -301,6 +301,33 @@ class Goods extends IController
 
 		$callback ? $this->redirect($callback) : ($seller_id ? $this->redirect("goods_list_seller") : $this->redirect("goods_list_plat"));
 	}
+    
+    //验证条形码是否重复
+    public function checkSignCode()
+    {
+        $id = IReq::get('id');
+        $sign = IReq::get('sign');
+        $product_id = IReq::get('product_id');
+        $goodsDB = new IModel('goods');
+        if($sign && $goodsDB->getField("sign_code = '{$sign}' and id <> {$id}", 'id'))
+        {
+            echo 0;
+        }
+        else
+        {
+            if($product_id)
+            {
+                $productsDB = new IModel('products');
+                if($sign && $productsDB->getField("sign_code = '{$sign}' and id <> {$product_id}", 'id')){
+                    echo 0;
+                }
+            }
+            else
+            {
+               echo 1; 
+            }
+        }
+    }
 
 	/**
 	 * @brief 删除商品

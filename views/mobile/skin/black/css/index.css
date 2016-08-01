@@ -88,7 +88,7 @@ body{font-size:62.5%}
 
 #page .banner .homebanner{width:100%}
 
-#page .banner .homebanner li img{width:100%}
+#page .banner .homebanner li img{width:100%;height:230px;}
 
 #page .banner .slider-page{position:absolute;bottom:8px;right:2%}
 
