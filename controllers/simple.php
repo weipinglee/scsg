@@ -2165,7 +2165,7 @@ class Simple extends IController
     	{
     		$oauthObj->getAccessToken($_GET);
 	    	$userInfo = $oauthObj->getUserInfo(); 
-	    	if(isset($userInfo['openid']) && isset($userInfo['name']) && $userInfo['openid'] != '' &&  $userInfo['name'] != '')
+	    	if($userInfo['openid'])
 	    	{
 	    		$this->bindUser($userInfo,$id);
 	    	}
@@ -2280,12 +2280,12 @@ class Simple extends IController
     public function bindUser($userInfo,$oauthId)
     {
     	$oauthUserObj = new IModel('oauth_user');
-        $user_id = $oauthUserObj->getField("oauth_user_id = '{$userInfo['openid']}' and oauth_id = '{$oauthId}' ",'user_id');
+       /* $user_id = $oauthUserObj->getField("oauth_user_id = '{$userInfo['openid']}' and oauth_id = '{$oauthId}' ",'user_id');
         if($user_id)
         {
             $oauthUserObj->setData(array('oauth_user_id' => $userInfo['unionid']));
             $oauthUserObj->update('user_id='.$user_id);
-        }
+        }*/
     	$oauthUserRow = $oauthUserObj->getObj("oauth_user_id = '{$userInfo['unionid']}' and oauth_id = '{$oauthId}' ",'user_id');
 
     	//没有绑定账号

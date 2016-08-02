@@ -127,9 +127,9 @@ class Seller extends IController
     //验证条形码是否重复
     public function checkSignCode()
     {
-        $id = IReq::get('id');
+        $id = IReq::get('id') ? IReq::get('id') : 0;
         $sign = IReq::get('sign');
-        $product_id = IReq::get('product_id');
+        $product_id = IReq::get('product_id') ? IReq::get('product_id') : 0;
         $goodsDB = new IModel('goods');
         if($sign && $goodsDB->getField("sign_code = '{$sign}' and id <> {$id}", 'id'))
         {
@@ -1981,7 +1981,7 @@ class Seller extends IController
                 $handle = new IQuery('goods');
                 $handle->order    = "sort asc,id desc";
                 $handle->fields   = "id,name";
-                $handle->where    = "(is_del = 0 or is_del = 3) and id in (".$this->object['combine'].")";
+                $handle->where    = "is_del = 0 and id in (".$this->object['combine'].")";
                 $this->goods = $handle->find();
             }                                       
         }           
@@ -1989,7 +1989,7 @@ class Seller extends IController
         $goodsHandle = new IQuery('goods');
         $goodsHandle->order = "sort asc,id desc";
         $goodsHandle->fields = "id,name";
-        $where = "(is_del = 0 or is_del = 3) and seller_id=".$seller_id;   
+        $where = "is_del = 0 and seller_id=".$seller_id;   
         if($this->object['combine'])
         {
             $where .=  " and id not in (".$this->object['combine'].")";

@@ -305,9 +305,9 @@ class Goods extends IController
     //验证条形码是否重复
     public function checkSignCode()
     {
-        $id = IReq::get('id');
+        $id = IReq::get('id') ? IReq::get('id') : 0;
         $sign = IReq::get('sign');
-        $product_id = IReq::get('product_id');
+        $product_id = IReq::get('product_id') ? IReq::get('product_id') : 0;
         $goodsDB = new IModel('goods');
         if($sign && $goodsDB->getField("sign_code = '{$sign}' and id <> {$id}", 'id'))
         {
