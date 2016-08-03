@@ -36,7 +36,7 @@ abstract class paymentPlugin
         //微信支付回调地址
         $this->wecheatCallbackUrl   = IUrl::getHost().IUrl::creatUrl("plugins/payments/pay_scan_wechat/notify.php");
         //微信公众号支付回调地址
-		$this->wapWecheatCallbackUrl   = IUrl::getHost().IUrl::creatUrl("test/plugins/payments/pay_wap_wechat/notify.php");
+		$this->wapWecheatCallbackUrl   = IUrl::getHost().IUrl::creatUrl("plugins/payments/pay_wap_wechat/notify.php");
 		//退款回调地址
 		$this->serverCallbackUrlForRefund = IUrl::getHost().IUrl::creatUrl("/block/server_callback_refund/_id/".$payment_id);
 		//中断支付返回
