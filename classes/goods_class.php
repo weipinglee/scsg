@@ -266,6 +266,7 @@ class goods_class
 					$productsDB->setData($productsData);
 					$productIdArray[$key] = $productsDB->add();
 				}
+                $productsDB->commit();
 			}
 		}
 

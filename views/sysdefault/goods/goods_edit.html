@@ -519,6 +519,14 @@ $(function()
             ,sign = _this.val()
             ,_i = $('input[name=id]').val()
             ,_p = _this.closest('tr.td_c').find('input.product_id').val();
+        _this.closest('tr.td_c').siblings('tr.td_c').each(function(){
+            var _t = $(this);
+            if(sign && (_t.find('.js_check_sign').val() == sign))
+            {
+                alert('条形码不能重复');
+                return false;
+            }
+        })
         $.ajax({
           dataType: "json",
           async:false,
