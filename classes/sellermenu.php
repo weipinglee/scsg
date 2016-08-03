@@ -84,7 +84,7 @@ class SellerMenu
 		),
 		'营销模块'=>array(
 			'/seller/pro_rule_list'=>'促销活动列表&icn_view_users',
-			'/seller/shan_list'=>'闪购&icn_view_users',
+			/*'/seller/shan_list'=>'闪购&icn_view_users',*/
 			'/seller/regiment_list'=>'团购&icon_pc_tg'
 		),
         '代金券管理'=>array(
