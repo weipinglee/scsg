@@ -16,7 +16,7 @@ function getData(obj,url, j){
 			if(data==0){
 				$('.loading-imgS p').text('没有更多数据');
 			}else{
-                if(j % 2 === 0)
+                if($('.js_show_cat_ad').find('div').length > 0 && j % 2 === 0)
                 {
                     $('.js_show_cat_ad').clone().show().appendTo('#dataList');
                 }
