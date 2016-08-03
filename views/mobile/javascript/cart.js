@@ -22,9 +22,14 @@ $(function(){
     
     $('.js_goadd').each(function(){
         var _this = $(this)
-            ,id = _this.attr('js_data');
+            ,id = _this.attr('js_data')
+            ,_total = _this.attr('js_total_price');
         $.getJSON(check_delivery ,{id:id},function(content){
             if(content.length == 0)
+            {
+                _this.hide();
+            }
+            else if(_total >= content.condition)
             {
                 _this.hide();
             }

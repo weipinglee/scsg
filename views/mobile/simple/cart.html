@@ -69,7 +69,7 @@
                        {foreach:items = $goods item=$value key=$buy}
 						<ul class="js_seller_diff">
                             <div class="sj"><img {if: isset($value['logo_img'])} src="{webroot:}{$value['logo_img']}" {else:} src="{skin:images/ptlog.png}" {/if} style="width:26px;height:26px;float:left;"/><a style="line-height:28px;margin-left:5px;" herf="javascript:;">{$value['seller_name']}</a></div>
-                            <span style="float: right"><a href="javascript:;" onclick="add_order(this)" class="goadd js_goadd" js_data="{$buy}">去凑单&nbsp;&gt;</a></span>
+                            <span style="float: right"><a href="javascript:;" onclick="add_order(this)" class="goadd js_goadd" js_data="{$buy}" js_total_price="{$value['total_price']}">去凑单&nbsp;&gt;</a></span>
 							{foreach:items=$value key=$in}
 							{if:is_array($item)}
 							{set:$type=isset($item['spec_array'])?'product':'goods'}
