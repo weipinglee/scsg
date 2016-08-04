@@ -9,7 +9,8 @@
 class Sonline
 {
 	
-	private static $qqUrl = 'http://wpa.qq.com/msgrd?v=3&uin={$qqNum}&site=qq&menu=yes';
+    //private static $qqUrl = 'http://wpa.qq.com/msgrd?v=3&uin={$qqNum}&site=qq&menu=yes';
+	private static $qqUrl = 'mqqwpa://im/chat?chat_type=wpa&uin={$qqNum}&version=1&src_type=web&web_src=bjhuli.com';
 	
 	//通过qq号获取临时会话url
 	public static function getChatUrl($qq){
