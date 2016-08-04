@@ -2,7 +2,7 @@
 {set:$search = Util::search(IReq::get('search'));$where = $search ? " and ".$search : "";}
 <article class="module width_full">
 	<header>
-		<h3 class="tabs_involved">退款列表</h3>
+		<h3 class="tabs_involved">换货列表</h3>
 		<ul class="tabs">
 			<li><input type="button" class="alt_btn" onclick="filterResult();" value="检索" /></li>
 		</ul>
@@ -38,7 +38,7 @@
 			{set:$goods = JSON::decode($item['goods_array'])}
 			<tr>
 				<td><a href='{url:/seller/order_show/id/$item[order_id]}'>{$item['order_no']}</a></td>
-				<td><a href='{url:/seller/refundment_show/id/$item[id]}'>{$item['refunds_no']}</a></td>
+				<td><a href='{url:/seller/refundment_chg_show/id/$item[id]}'>{$item['refunds_no']}</a></td>
 				<td>{$item['amount']}</td>
 				<td>{$item['time']}</td>
 				<td><a href="{url:/site/products/id/$item['goods_id']}" target="_blank">{$goods['name']} X {$item['goods_nums']}件</a></td>
