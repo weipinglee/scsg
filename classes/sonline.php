@@ -9,13 +9,20 @@
 class Sonline
 {
 	
-    //private static $qqUrl = 'http://wpa.qq.com/msgrd?v=3&uin={$qqNum}&site=qq&menu=yes';
-	private static $qqUrl = 'mqqwpa://im/chat?chat_type=wpa&uin={$qqNum}&version=1&src_type=web&web_src=bjhuli.com';
+    private static $qqPcUrl = 'http://wpa.qq.com/msgrd?v=3&uin={$qqNum}&site=qq&menu=yes';
+	private static $qqWapUrl = 'mqqwpa://im/chat?chat_type=wpa&uin={$qqNum}&version=1&src_type=web&web_src=bjhuli.com';
 	
 	//通过qq号获取临时会话url
 	public static function getChatUrl($qq){
-		return str_replace('{$qqNum}',$qq,self::$qqUrl);
-	}
+        if(IClient::getDevice()=='pc')
+        {
+            return str_replace('{$qqNum}',$qq,self::$qqPcUrl);
+        }
+		else
+        {
+            return str_replace('{$qqNum}',$qq,self::$qqWapUrl);
+        }
+    }
 	/**
 	 * 获取平台客服数据
 	 * @return array 客服数据数组
