@@ -174,7 +174,7 @@ class goods_class
         }
 		if($id)
 		{
-			if($this->getSellerId($goodsDB,$id)!=0)$goodsUpdateData['is_share'] = 0 ? 0 : 2;
+			if($this->getSellerId($goodsDB,$id)!=0)$goodsUpdateData['is_share'] == 0 ? 0 : 2;
 			$goodsDB->setData($goodsUpdateData);
 
 			$where = " id = {$id} ";
