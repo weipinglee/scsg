@@ -85,15 +85,11 @@
 					<th>下单时间:</th><td align="left">{$create_time}</td>
 				</tr>
 				<tr>
-					<th>配送方式:</th>
-					<td align="left">
-						<select pattern="required" alt="配送方式" disabled="disabled">
-						{query:name=delivery}
-						<option value="{$item['id']}" {if:$distribution==$item['id']}selected{/if}>{$item['name']}</option>
-						{/query}
-						</select>
-					</td>
 					<th>配送费用:</th><td align="left">{$real_freight}</td>
+                    <th></th>
+                    <td align="left">
+                        
+                    </td>
 				</tr>
 				<tr>
 					<th>是否保价:</th><td align="left">{if:$if_insured==0}否{else:}是{/if}</td><th>保价费用:</th><td align="left">￥{$insured}</td>
