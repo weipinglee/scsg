@@ -2184,7 +2184,7 @@ class Simple extends IController
     //微信商城入口
     public function wecheatshop()
     {
-        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx245f90eb0759be3a&redirect_uri=".urlencode('http://www.yqtvt.com/simple/wecheatshoplogin')."&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+        $url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx245f90eb0759be3a&redirect_uri=".urlencode('http://www.yqtvt.com/simple/wecheatshoplogin')."&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
         echo "<script language='javascript' type='text/javascript'>";
         echo "window.location.href='{$url}'";
         echo "</script>";
@@ -2197,12 +2197,7 @@ class Simple extends IController
         $result = json_decode($response,true);
         unset($url);
         unset($response);
-        $getUserInfoUrl = "https://api.weixin.qq.com/sns/userinfo?access_token={$result['access_token']}&openid=wx245f90eb0759be3a&lang=zh_CN ";
-        unset($result);
-        $response = $this->get_contents($getUserInfoUrl);
-        $result = json_decode($response,true);
-        unset($url);
-        unset($response);
+        var_dump($result);exit;
         if((isset($result['unionid']) && $result['unionid']) || (isset($result['openid']) && $result['openid']))
         {
             $sign = isset($result['unionid']) ? $result['unionid'] : $result['openid'];
@@ -2218,10 +2213,9 @@ class Simple extends IController
             else
             {      
                 $temp = uniqid();          
-                $user = $userObj->getField("username = '{$result['nickname']}'",'username');
 
                 //没有重复的用户名
-                $username = $user ? 'V'.$temp : $result['nickname'];
+                $username = 'V'.$temp;
                 $userArray = array(
                         'username'    => $username,
                         'password' => md5('123456'),
@@ -2236,9 +2230,9 @@ class Simple extends IController
                 $memberObj  = new IModel('member');
                 $memberData = array(
                     'user_id'   => $user_id,
-                    'true_name' => isset($result['nickname']) ? $result['nickname'] : '',
+                    'true_name' => '',
                     'last_login'=> ITime::getDateTime(),
-                    'sex'       => (isset($result['sex']) && $result['sex']) ? $result['sex'] : 1,
+                    'sex'       => 1,
                     'time'      => ITime::getDateTime(),
                 );
                 if($group_id)$memberData['group_id']=$group_id;
