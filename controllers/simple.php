@@ -2197,7 +2197,6 @@ class Simple extends IController
         $result = json_decode($response,true);
         unset($url);
         unset($response);
-        var_dump($result);exit;
         if((isset($result['unionid']) && $result['unionid']) || (isset($result['openid']) && $result['openid']))
         {
             $sign = isset($result['unionid']) ? $result['unionid'] : $result['openid'];
