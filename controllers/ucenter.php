@@ -1677,7 +1677,7 @@ class Ucenter extends IController
 					'phone'=>$phone,
 					'time'=>time(),
 					'user_phone'=>$this->user['phone'],
-					'user_id'=>$this->user['id'],
+					'user_id'=>$this->user['user_id'],
 					'user_username'=>$this->user['username']
 				);
 				ISafe::set('mobileValidate',array($sess_arr));
