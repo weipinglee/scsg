@@ -117,6 +117,10 @@ class APIOther
 				{
 					$where .= " and class_name != 'wap_wechat'";
 				}
+                else
+                {
+                    $where .= "and class_name != 'trade_alipay'";
+                }
 			}
 			break;
 
