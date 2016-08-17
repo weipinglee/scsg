@@ -40,20 +40,24 @@ function checkMobileNow(){
 	},'json');
 }
 //验证新手机
-function checkMobileNew(){
-	var code = $('input[name=code]').val();
-	var newPhone = $('input[name=newPhone]').val();
+$( "body" ).on( "click", ".js_checkMobileNew", function(){
+    var code = $('input[name=code]').val();
+    var newPhone = $('input[name=newPhone]').val();
     var sign = $('input[name=sign]').val();
+    
+    $.post(checkMobileUrl2,{code:code,newPhone:newPhone,sign:sign},
+        function(data){
+            if(data.errorCode==0){
+            location.href=data.next;
+        }else{
+            alert(data.mess);
+        }
+        },'json');
+} ) 
+
+/*function checkMobileNew(){
 	
-	$.post(checkMobileUrl2,{code:code,newPhone:newPhone,sign:sign},
-		function(data){
-			if(data.errorCode==0){
-			location.href=data.next;
-		}else{
-			alt(data.mess);
-		}
-		},'json');
-}
+}*/
 //验证新邮箱并注册
 function checkEmailNew(){
 	var newEmail = $.trim($('input[name=newEmail]').val());	
