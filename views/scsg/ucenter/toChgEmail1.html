@@ -24,6 +24,7 @@
  <ul>
  <li>
  	{set:$phone = user_like::getSecretPhone($this->user['phone'])}
+    <input type="hidden" name="checkCode" value="{echo:ISafe::getSafeCode()}"/>
 		{if:$phone}
    <p>您的手机号码：<span>{$phone}</span><input type="button" class='get-code'  name='getMessCode' onclick="getMobileCode({$this->user['phone']});" value="获取短信验证码">
    {/if}
