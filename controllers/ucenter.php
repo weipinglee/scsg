@@ -1804,7 +1804,7 @@ class Ucenter extends IController
     				$where         = 'id = '.$user_id;
     				$res['id'] = $user_id;
     				$userObj->setData(array('phone'=>$newPhone));
-                    $userId = $userObj->getField('phone="'.$newPhone, 'id');
+                    $userId = $userObj->getField('phone="'.$newPhone.'"', 'id');
     				if($userId)
                     {
                         if($user_id == $userId)
