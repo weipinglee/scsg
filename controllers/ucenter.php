@@ -1797,10 +1797,7 @@ class Ucenter extends IController
     	}else{
     		$validData = ISafe::get('mobileValidate');
     		$checkRes = ISafe::get('mobileValidRes');
-            var_dump($checkRes);
-            var_dump($this->user['phone']==$checkRes['phone']);
-            var_dump(time()- $checkRes['time']);
-    		if($checkRes && $this->user['phone']==$checkRes['phone'] &&time()- $checkRes['time']<1800 ){
+    		if(($sign || $checkRes) && $this->user['phone']==$checkRes['phone'] &&time()- $checkRes['time']<1800 ){
     			if($validData['phone']==$newPhone && $validData['code']==$code && time()- $validData['time']<1800){//验证通过
     				$user_id = $this->user['user_id'];
     				$userObj       = new IModel('user');
