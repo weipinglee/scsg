@@ -7,7 +7,7 @@ function getMobileCode(phone){
     var check_code = $('input[name=checkCode]').val();
 	$.post(toUrl,{phone:phone,check_code:check_code},function(data){
 		if(data.errorCode!=0){
-			alt(data.mess);
+			window.realAlert(data.mess);
 		}
 	},'json');
 	
@@ -34,7 +34,7 @@ function checkMobileNow(){
 		if(data.errorCode==0){
 			location.href=data.next;
 		}else{
-			alert(data.mess);
+			window.realAlert(data.mess);
 		}
 		
 	},'json');
@@ -50,7 +50,7 @@ function checkMobileNew(){
 			if(data.errorCode==0){
 			location.href=data.next;
 		}else{
-			alert(data.mess);
+			window.realAlert(data.mess);
 		}
 		},'json');
 }
@@ -63,7 +63,7 @@ function checkEmailNew(){
 	$.post(checkEmailUrl,{code:code,newEmail:newEmail},
 		function(data){//window.realAlert(JSON.stringify(data));
 			if(data.errorCode!=0){
-				alert(data.mess);
+				window.realAlert(data.mess);
 			}else{
 				location.href=data.next;
 			}
@@ -82,7 +82,7 @@ function successTo(successToUrl){
 $(function(){
 	$('#getNew').on('click',function(){
 		var newPhone = $('input[name=newPhone]').val();
-		if(!newPhone)alt('请正确填写手机号');
+		if(!newPhone)window.realAlert('请正确填写手机号');
 		getMobileCode(newPhone);
 	})
 	//发送邮箱验证码
@@ -93,9 +93,9 @@ $(function(){
 		
 		$.post(getCodeUrl,{newEmail:newEmail},function(data){//window.realAlert(JSON.stringify(data));
 			if(data.errorCode!=0){
-				alert(data.mess);
+				window.realAlert(data.mess);
 			}else{
-				alert('邮件已发送，请查收');
+				window.realAlert('邮件已发送，请查收');
 			}
 		},'json');
 		

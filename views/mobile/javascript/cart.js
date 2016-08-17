@@ -329,11 +329,11 @@ function joinCart_ajax(id,url,type)
 	$.getJSON(url,{"goods_id":id,"type":type,"random":Math.random()},function(content){
 		if(content.isError == false)
 		{
-			alt(content.message);
+			alert(content.message);
 		}
 		else
 		{
-			alt(content.message);
+			alert(content.message);
 		}
 	});
 }
