@@ -50,7 +50,7 @@ function checkMobileNew(){
 			if(data.errorCode==0){
 			location.href=data.next;
 		}else{
-			alt(data.mess);
+			alert(data.mess);
 		}
 		},'json');
 }
