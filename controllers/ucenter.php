@@ -1680,7 +1680,7 @@ class Ucenter extends IController
 					'user_id'=>$this->user['user_id'],
 					'user_username'=>$this->user['username']
 				);
-				ISafe::set('mobileValidate',array($sess_arr));
+				ISafe::set('mobileValidate',$sess_arr);
 				$text = smsTemplate::checkCode(array('{mobile_code}'=>$code));
 				if(!hsms::send($phone,$text)){
 					$res['errorCode']=-1;
