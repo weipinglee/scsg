@@ -4,7 +4,8 @@ function getMobileCode(phone){
 	var btn = $('input[name=getMessCode]');
 	var toUrl = getCodeUrl;
 	btnCount(btn);
-	$.post(toUrl,{phone:phone},function(data){
+    var check_code = $('input[name=checkCode]').val();
+	$.post(toUrl,{phone:phone,check_code:check_code},function(data){
 		if(data.errorCode!=0){
 			alt(data.mess);
 		}

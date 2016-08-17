@@ -54,6 +54,7 @@
                         <!--第三种模块开始-->
     <section class="modle_section">
         <form class="ban_section" method="post">
+            <input type="hidden" name="checkCode" value="{$this->safeCode}"/>
             <div class="yj">
 				<p>当前手机号</p>
 				{set:$phone = user_like::getSecretPhone($this->user['phone'])}
