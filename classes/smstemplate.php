@@ -19,7 +19,7 @@ class smsTemplate
 	 */
 	public static function sendGoods($data = null)
 	{
-		$templateString = "您好{user_name},订单号:{order_no},已由{sendor}发货,物流公司:{delivery_company},物流单号:{delivery_no}";
+		$templateString = "您好{user_name},订单号:{order_no},已发货";
 		return strtr($templateString,$data);
 	}
 
