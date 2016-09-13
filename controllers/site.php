@@ -1710,6 +1710,7 @@ class Site extends IController
 	function help()
 	{
 		$id = intval(IReq::get("id"));
+        $this->device=IFilter::act(IReq::get('device'));
 		$tb_help = new IModel("help");
 		$help_row = $tb_help->query("id={$id}");
 		if(!$help_row || !is_array($help_row))

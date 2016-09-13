@@ -35,6 +35,7 @@
 
 
          <header class="wap-header">
+			 {if:$this->device!="android"}
     <div class="wap-topbar" style="">
         <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
         <div class="h-center">
@@ -42,6 +43,7 @@
         </div>
             <a href="{url:site/mail}" class="search_nav_icon_none"><img src="{skin:css/wap/app_mail_nav.png}" style="width:35px;height:35px;"></a>
     </div>
+			 {/if}
     </header>
 
 	
@@ -61,4 +63,6 @@
 
 					<div style="height:70px;color:#fff">1!@#</div>
 
-{include:layouts/footer_1.html}
+	{if:$this->device!="android"}
+	{include:layouts/footer_1.html}
+	{/if}
