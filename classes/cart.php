@@ -36,12 +36,16 @@ class Cart extends IInterceptorBase
 
 	//购物车的存储方式
 	private $saveType    = 'session';
-
+	//用户id
+	private $user_id="";
 	//构造函数
-	function __construct()
+	function __construct($userId='')
 	{
+		$this->user_id=$userId;
 		$cartInfo = $this->getMyCartStruct();
-		$this->setMyCart($cartInfo);
+		if($userId==''){
+			$this->setMyCart($cartInfo);
+		}
 	}
 
 	/**
@@ -105,7 +109,7 @@ class Cart extends IInterceptorBase
                 $cartInfoList[$comId][$type]['id'][] = $gid;
                 $cartInfoList[$comId][$type]['data'][$gid] = $num;
                 $cartInfoList[$comId][$type]['count'] = $num;
-            }			
+            }
 			return $cartInfoList;
 		}
 		else
@@ -125,6 +129,7 @@ class Cart extends IInterceptorBase
 	{
 		//购物车中已经存在此商品
 		$cartInfo = $this->getMyCartStruct();
+
 		if($this->getCartSort($cartInfo, $comId) >= $this->maxCount)
 		{
 			$this->error = '加入购物车失败,购物车中最多只能容纳'.$this->maxCount.'种商品';
@@ -133,6 +138,7 @@ class Cart extends IInterceptorBase
 		else
 		{
 			$cartInfo = $this->getUpdateCartData($cartInfo,$gid,$num,$type,$comId);
+
 			if($cartInfo === false)
 			{
 				return false;
@@ -163,9 +169,14 @@ class Cart extends IInterceptorBase
 	//删除商品
 	public function del($combine_id = 0, $para = '')
 	{
-		$cartInfo = $this->getMyCartStruct();
-		
-        //删除商品数据
+
+		if($this->user_id!='') {
+			$cartInfo = $this->getSqlCartStruct();
+		}else{
+			$cartInfo = $this->getMyCartStruct();
+		}
+		//print_r($cartInfo);
+		//删除商品数据
         if($para == '')
         {
             unset($cartInfo[$combine_id]);
@@ -175,13 +186,28 @@ class Cart extends IInterceptorBase
         {
             $tem = explode('-', $para);
             unset($cartInfo[$combine_id][$tem[0]]['data'][$tem[1]]);
-            $k = array_search($tem[1], $cartInfo[$combine_id][$tem[0]]['id']);
-            if($k !== false)
-            {
-                unset($cartInfo[$combine_id][$tem[0]]['id'][$k]);
-            }
-            $this->setMyCart($cartInfo);
+           $k = array_search($tem[1], $cartInfo[$combine_id][$tem[0]]['id']);
+            if($k !== false) {
+				unset($cartInfo[$combine_id][$tem[0]]['id'][$k]);
+			}
+           $this->setMyCart($cartInfo);
+
         }
+		//die;
+	}
+	public function getSqlCartStruct(){
+		$cartModel=new IModel('cart');
+		$res=$cartModel->getObj("user_id =".$this->user_id,'data');
+		//var_dump($res['data']);
+		if($res) {
+			$cartValue = $res['data'];
+			//echo "<pre>";
+			//print_r($cartValue);
+			$cartValue = JSON::decode(str_replace(array('&','$'),array('"',','),$cartValue));
+			return $cartValue;
+		}else{
+			return false;
+		}
 	}
 	/**
 	 * @brief
@@ -189,6 +215,29 @@ class Cart extends IInterceptorBase
 	 * 
 	 */
 	public function del_many($del_arr){
+		if($this->user_id!=''){
+			//echo "<pre>";
+			$cartInfo=$this-> getSqlCartStruct();
+			//print_r($cartInfo);
+			foreach($del_arr as $k=>$v){
+				if($k!=0){
+					continue;
+				}else{
+					foreach($v as $kk=>$vv){
+						$tem = explode('-', $vv);
+						unset($cartInfo[0][$tem[0]]['data'][$tem[1]]);
+						$k = array_search($tem[1], $cartInfo[0][$tem[0]]['id']);
+						if($k !== false) {
+							unset($cartInfo[0][$tem[0]]['id'][$k]);
+						}
+					}
+				}
+			}
+
+			//print_r($cartInfo);
+			$this->setMyCart($cartInfo);
+			return true;
+		}
 		if(!empty($del_arr)){
 			foreach($del_arr as $key=>$val){
                 if($key <> 0)
@@ -199,6 +248,7 @@ class Cart extends IInterceptorBase
                 {
                     foreach($val as $k => $v)
                     {
+
                         $this->del($key, $v);
                     }
                 }
@@ -246,9 +296,20 @@ class Cart extends IInterceptorBase
 	public function getMyCartStruct()
 	{
 		$cartName  = $this->getCartName();
-		if($this->saveType == 'session')
+		if($this->user_id!=""){
+			$cartModel=new IModel('cart');
+			$res=$cartModel->getObj("user_id =".$this->user_id,'data');
+			$cartValue=null;
+
+			if($res){
+				$cartValue=$res['data'];
+			}
+
+		}elseif($this->saveType == 'session')
 		{
+
 			$cartValue = ISession::get($cartName);
+
 		}
 		else
 		{
@@ -258,6 +319,7 @@ class Cart extends IInterceptorBase
 		if($cartValue == null)
 		{
 			return $this->cartStruct;
+
 		}
 		else
 		{
@@ -273,8 +335,17 @@ class Cart extends IInterceptorBase
 	 */
 	public function getMyCart($cartData=null)
 	{                         
-		$cartName  = $this->getCartName();     
-		if($this->saveType == 'session')
+		$cartName  = $this->getCartName();
+		if($this->user_id!=""){
+			$cartModel=new IModel('cart');
+			$res=$cartModel->getObj('user_id='.$this->user_id);
+			$cartValue=null;
+			if($res) {
+				$cartValue = $res['data'];
+			}
+
+		}
+		elseif($this->saveType == 'session')
 		{
 			$cartValue = ISession::get($cartName);
 		}
@@ -296,6 +367,7 @@ class Cart extends IInterceptorBase
 			}
 			if(is_array($cartValue))
 			{
+
 				return $this->cartFormat($cartValue);
 			}
 			else
@@ -331,7 +403,19 @@ class Cart extends IInterceptorBase
 	{                         
 		$goodsInfo = str_replace(array('"',','),array('&','$'),JSON::encode($goodsInfo));
 		$cartName = $this->getCartName();
-		if($this->saveType == 'session')
+		if($this->user_id!=""){
+			$cartModel=new IModel('cart');
+			$cartModel->del('user_id='.$this->user_id);
+				$data=[
+					'user_id'=>$this->user_id,
+					'data'=>$goodsInfo,
+				];
+				//var_dump($data);
+				$cartModel->setData($data);
+				$cartModel->add();
+				return true;
+		}
+	elseif($this->saveType == 'session')
 		{
 			ISession::set($cartName,$goodsInfo);
 		}
@@ -348,7 +432,7 @@ class Cart extends IInterceptorBase
 	 * @return array : [goods]=>array( ['id']=>商品ID , ['data'] => array( [商品ID]=>array ([name]商品名称 , [img]图片地址 , [sell_price]价格, [count]购物车中此商品的数量 ,[type]类型goods,product , [goods_id]商品ID值 ) ) ) , [product]=>array( 同上 ) , [count]购物车商品和货品数量 , [sum]商品和货品总额 ;
 	 */
 	private function cartFormat($cartValueList)
-	{          
+	{
 		//初始化结果
 		$result = $this->cartExeStruct;
 		$goodsIdArray = array();
@@ -370,6 +454,7 @@ class Cart extends IInterceptorBase
 				    //购物车中的种类数量累加
                     if(isset($result[$com]['count']))
                     {
+
                         $result[$com]['count'] += $cartValue['goods']['data'][$gid];
                     }
                     else
@@ -377,6 +462,9 @@ class Cart extends IInterceptorBase
                         $result[$com]['count'] = $cartValue['goods']['data'][$gid];
                     }
 			    }
+				//echo "<pre>";
+				//print_r($result);
+
 		    }
 
 		    if(isset($cartValue['product']['id']) && $cartValue['product']['id'])
@@ -414,6 +502,7 @@ class Cart extends IInterceptorBase
 		    } 
             if($goodsIdArray) 
             {
+
                 $goodsArray = array();
 
                 $goodsObj   = new IModel('goods');
@@ -454,6 +543,7 @@ class Cart extends IInterceptorBase
                 }
             }
         }
+		//print_r($result);
 		return $result;
 	}
 

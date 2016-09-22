@@ -70,28 +70,5 @@ class mobileSearch extends IController{
         }
 
     }
-    public function test(){
-        $arr=array(
-            'form_title'=>'手术单',
-            'form_desc'=>'说明可以出院了',
-            'formitemlist'=>
-            array(
-                array(
-            'item_type'=>4,
-            'item_title'=>'tt',
-            'item_content'=>array('时间'=>'2015-5-16')
-                  ),
-                array(
-                    'item_type'=>4,
-                    'item_title'=>'tt',
-                    'item_content'=>array('时间'=>'2015-5-16')
-                )
 
-            )
-
-        );
-
-
-
-    }
 }

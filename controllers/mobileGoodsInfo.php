@@ -8,54 +8,6 @@
 			$result=$m_delivery->find();
 			echo JSON::encode($result);
 		}
-		//获得团购详情页面信息
-		public function getRegimentInfo(){
-			$tId=IFilter::act(IReq::get('id'),'int');
-			if($tId==""){
-				die(JSON::encode(['code'=>0,'info'=>'数据不合法']));
-			}
-			$reObj=new IQuery('regiment');
-			$tuanData = Api::run('getRegimentOnTimeRowById',array('#id#',$tId));
-			if($tuanData&&$tuanData['type']<>2&&strtotime($tuanData['start_time']>time())){
-				$tuanData=array();
-			}
-			if(!$tuanData){
-				die(JSON::encode(['code'=>0,'info'=>'团购数据不存在']));
-			}
-			$goodsId=$tuanData['goods_id'];
-			$productId=$tuanData['product_id'];
-			if(!$goodsId){
-				die(JSON::encode(['code'=>0,'info'=>'商品不存在']));
-			}
-			$token=IFilter::act(IReq::get('token','post'));
-			//如果登录添加用户喜欢列表中
-			if($token){
-				$tokenObj=new IModel('token');
-				$tokenInfo=$tokenObj->getObj('token=\''.$token.'\'');
-				if($tokenInfo){
-					user_like::set_user_history($goodsId,$tokenInfo['user_id']);
-				}
-			}
-			$goodsObj=new IModel('goods');
-			$goodsInfo=$goodsObj->getObj('id='.$goodsId);
-			if(!$goodsInfo){
-				die(JSON::encode(['code'=>0,'info'=>'商品不存在或已经下架']));
-			}
-			//$data['sell_price']=$goodsInfo['sell_price'];
-			if($goodsInfo['brand_id']){
-				$brandObj=new IModel('brand');
-				$brandInfo=$brandObj->getObj('id='.$goodsInfo['brand_id']);
-				if($brandInfo){
-					$goodsInfo['brand']=$brandInfo['name'];
-				}
-			}
-			//获取商品分类
-			$categoryObj=new IModel('category_extend as ca,category as c');
-			$categoryRow=$categoryObj->getObj('ca.goods_id='.$goodsId.'and c.id=ca.category_id','c.id,c.name');
-			$goodsInfo['category']=$categoryRow['name'] ? $categoryRow['name'] :'';
-			$goodsInfo['category_id']=$categoryRow['id'] ? $categoryRow['id']:0;
-
-		}
 		//获得评论内容
 		public function getComment(){
 			$id=IFilter::act(IReq::get('id'));
@@ -100,7 +52,7 @@
 			$goods_info['content']=$goods_info['introduce'][1];
 			foreach($goods_info['content'] as $k=>$v){
 				$tmp=array();
-				$tmp['img']='http://192.168.2.9/'.$v;
+				$tmp['img']='http://v.yqrtv.com:8080/app/'.$v;
 				$goods_info['content'][$k]=$tmp;
 			};
 			unset($goods_info['introduce']);
@@ -157,9 +109,9 @@
 				}
 			}
 			$commend = new IModel('commend_goods');
-			//获得当前商品的推荐类型 
+			//获得当前商品的推荐类型
 			$goods_info['commend'] = $commend->getFields(array('goods_id'=>$goods_id),'commend_id');
-			
+
 			//获取商品分类名字
 			$categoryObj = new IModel('category_extend as ca,category as c');
 			$categoryRow = $categoryObj->getObj('ca.goods_id = '.$goods_id.' and ca.category_id = c.id','c.id,c.name');
@@ -182,7 +134,7 @@
 					$goods_info['photo'][$key] = $temp;
 				}
 			}
-		
+
 			$goods_info['img']='http://v.yqrtv.com:8080/app/'.$goods_info['img'];
 			//处理图片地址
 			foreach($goods_info['photo'] as $k=>$v){
@@ -258,7 +210,7 @@
 			$goods_info['minSellPrice']   = '';
 			$goods_info['minMarketPrice'] = '';
 			$goods_info['maxMarketPrice'] = '';
-		
+
 			$product_info = $tb_product->getObj('goods_id='.$goods_id,'max(sell_price) as maxSellPrice ,min(sell_price) as minSellPrice,max(market_price) as maxMarketPrice,min(market_price) as minMarketPrice');
 			if($product_info)
 			{
@@ -283,7 +235,7 @@
 			$tb_tag->fields = 't.name,t.img';
 			$tb_tag->limit = 5;
 			$goods_info['tag_data'] = $tb_tag->find();
-			
+
 			//如果是商家商品，获取商家信息
 			if($goods_info['seller_id'])
 			{
@@ -324,18 +276,7 @@
 			echo JSON::encode($goods_info);
 			//var_dump($goods_info);
 		}
-		public function test2(){
-			//	error_reporting(0);
-			try{
-				$abc=new abc();
-			}catch(Exception $e){
-				echo $e->getMessage();
-			}
-			finally{
-				echo 1;
-			}
 
-		}
 		public function addComment(){
 			$token=IFilter::act(IReq::get('token','post'));
 			$tokenObj=new IModel('token');
@@ -445,14 +386,7 @@
 			$procducts_info['code']=1;
 			die(JSON::encode($procducts_info));
 		}
-		public function test4(){
-			$token=IFilter::act(IReq::get('token','post'));
-			$tokenObj=new IModel('token');
-			if(!$tokenInfo=$tokenObj->getObj('token=\''.$token.'\'')){
-				die(JSON::encode(['code'=>0,'info'=>'请登录']));
-			}
-			echo JSON::encode($_POST);
-		}
+
 		public function getProductInfoIos(){
 			$goods_id=IFilter::act(IReq::get('goods_id','post'),'int');
 			$spec_array=array();
