@@ -201,7 +201,7 @@ $(document).on('click', '.js_hide_big_photo', function(){
     }
 </style>
 <!--滑动面tab标签-->
-	<div class="main f_r" style="overflow:hidden; width:950px;">
+	<div class="main f_r" style="width:950px;">
 
 		<div class="uc_title" name="showButton">
 			<label class="current"><span>商品详情</span></label>
@@ -211,7 +211,30 @@ $(document).on('click', '.js_hide_big_photo', function(){
 			<label id='point'><span>顾客评价({$comment_num})</span></label>
 			<label id='buyHistory'><span>购买记录({$buy_num})</span></label>
 			<label><span>咨询({$refer_num})</span></label>
+            <div class="qr_code">
+                <a href="javascript:;">手机购买
+                    <img src="{skin:images/front/qr_code.png}" width="22" height="22" alt="" />
+                </a>
+                <div class="hide_code">
+                     <img src="{skin:images/front/qr_code.png}" width="110" height="110" alt="" />
+                </div>
+            </div>
 		</div>
+ <script>
+  $(function(){
+    var oShow = $('.container_2 .uc_title .qr_code');
+    var oHide = $('.container_2 .uc_title .qr_code .hide_code');
+    var oAup = $('.container_2 .uc_title .qr_code a');
+    oShow.hover(function(){
+        oHide.show();
+        oAup.addClass('down');
+    },function(){
+        oHide.hide();
+        oAup.removeClass('down');
+    })
+  })
+
+ </script>       
 
 		<div name="showBox">
 			<!-- 商品详情 start -->
