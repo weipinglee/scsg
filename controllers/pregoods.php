@@ -13,6 +13,21 @@ class Pregoods extends IController
 		CheckRights::checkUserRights();
 	}
     
+    //生成二维码
+    function qrcode($url,$file)
+    {
+        // 二维码数据 
+        $url = $url; 
+        // 生成的文件名 
+        $filename = $file.'.png'; 
+        // 纠错级别：L、M、Q、H 
+        $errorCorrectionLevel = 'L';  
+        // 点的大小：1到10 
+        $matrixPointSize = 4;  
+        //创建一个二维码文件 
+        QRcode::png($url, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+    }       
+
     /*将商品列表按商家分开
      * @return array array('seller_name'=>商家名，'weight'=>商品重量,'total_price'=>总价,[0]=>array(商品数据),)
      */
@@ -303,7 +318,11 @@ class Pregoods extends IController
 		}
 		user_like::add_like_cate($goods_id,$this->user['user_id']);
 		$this->setRenderData($goods_info);
-
+        IWeb::autoload('phpqrcode');
+        $url = IUrl::getUrl();
+        $fileName = 'scsgPreproduct_'.$id;
+        $this->qrcode($url, $fileName);
+        $this->codeName = $fileName;
 		$this->redirect('products');
 	}
 	

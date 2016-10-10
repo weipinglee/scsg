@@ -19,7 +19,22 @@ class Site extends IController
 	function init()
 	{
 		CheckRights::checkUserRights();
-	}        
+	} 
+    
+    //生成二维码
+    function qrcode($url,$file)
+    {
+        // 二维码数据 
+        $url = $url; 
+        // 生成的文件名 
+        $filename = $file.'.png'; 
+        // 纠错级别：L、M、Q、H 
+        $errorCorrectionLevel = 'L';  
+        // 点的大小：1到10 
+        $matrixPointSize = 4;  
+        //创建一个二维码文件 
+        QRcode::png($url, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+    }       
 
 	function index()
 	{
@@ -501,6 +516,11 @@ class Site extends IController
         $this->combineList = $combineList;
         $this->goodsImg = current($goods_info['photo']);
         $this->setRenderData($goods_info);
+        IWeb::autoload('phpqrcode');
+        $url = IUrl::getUrl();
+        $fileName = 'scsgTuanproduct_'.$id;
+        $this->qrcode($url, $fileName);
+        $this->codeName = $fileName;
         $this->redirect('tuan_product');
         
     }
@@ -1076,6 +1096,11 @@ class Site extends IController
 	//	print_r($goods_info);
 	//	print_r($specArray);
 		$this->setRenderData($goods_info);
+        IWeb::autoload('phpqrcode');
+        $url = IUrl::getUrl();
+        $fileName = 'scsgproduct_'.$goods_id;
+        $this->qrcode($url, $fileName);
+        $this->codeName = $fileName;
 		$this->redirect('products');
 	}
 	//商品讨论更新
