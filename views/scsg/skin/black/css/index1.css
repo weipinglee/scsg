@@ -388,11 +388,6 @@ a.btn_pay{display:inline-block;width:119px;height:37px;margin-right:20px;backgro
 	.uc_title label.current a{color:#fff}
 .container_2 .uc_title{height:38px;padding:0 0 0 15px;margin:0 0 8px 0;background-position:0 -142px;background-repeat:repeat-x}
 	.container_2 .uc_title label{float:left;margin-top:8px;border:1px solid #c0c0c0;border-bottom:none;background-position:0 -256px}
-		.container_2 .uc_title .qr_code{float: right;position: relative;}
-		.container_2 .uc_title .qr_code a{font-size: 14px;color: #989898;line-height: 40px;padding-right: 22px;display: block;
-			                              background:url(../images/front/up_down.png) no-repeat 92px -16px;padding-left: 6px;}
-		.container_2 .uc_title .qr_code .hide_code{position: absolute;right: 0;top: 37px;z-index: 999; display: none;}
-		.container_2 .uc_title .qr_code a.down{background:url(../images/front/up_down.png) #f9f9f9 no-repeat 92px 16px;}
 		.container_2 .uc_title label span{height:23px;background-position:0 -256px;background-repeat:repeat-x}
 	.container_2 .uc_title label.current{margin-top:1px;border:none;background-position:0 -180px}
 		.container_2 .uc_title label.current span{height:35px;padding-top:2px;line-height:40px;background-position:right -218px;color:#000;background-repeat:no-repeat}
