@@ -503,7 +503,7 @@ class Site extends IController
         $this->setRenderData($goods_info);
         IWeb::autoload('phpqrcode');
         $url = IUrl::getUrl();
-        $fileName = 'scsgproduct_'.$goods_id;
+        $fileName = 'scsgTuanproduct_'.$id;
         MakeCode::qrcode($url, $fileName,15);
         $this->codeName = $fileName;
         $this->redirect('tuan_product');
