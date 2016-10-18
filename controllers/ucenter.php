@@ -305,7 +305,7 @@ class Ucenter extends IController
                 }               
                 $data[$k]['code'] = $filename;
                 $data[$k]['url'] = $url;
-                MakeCode::qrcode($url, $filename, 5);
+                $this->qrcode($url, $filename);
             }
             else
             {
@@ -314,7 +314,23 @@ class Ucenter extends IController
             
         }               
         $this->og_data = $data;   
+        //$h = $this->qrcode();
         $this->redirect('makeCode');
+    }
+    
+    //生成二维码
+    function qrcode($url,$file)
+    {
+        // 二维码数据 
+        $url = $url; 
+        // 生成的文件名 
+        $filename = $file.'.png'; 
+        // 纠错级别：L、M、Q、H 
+        $errorCorrectionLevel = 'L';  
+        // 点的大小：1到10 
+        $matrixPointSize = 4;  
+        //创建一个二维码文件 
+        QRcode::png($url, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
     }
 	
     /**

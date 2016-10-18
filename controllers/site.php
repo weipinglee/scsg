@@ -19,7 +19,22 @@ class Site extends IController
 	function init()
 	{
 		CheckRights::checkUserRights();
-	}      
+	} 
+    
+    //生成二维码
+    function qrcode($url,$file)
+    {
+        // 二维码数据 
+        $url = $url; 
+        // 生成的文件名 
+        $filename = $file.'.png'; 
+        // 纠错级别：L、M、Q、H 
+        $errorCorrectionLevel = 'L';  
+        // 点的大小：1到10 
+        $matrixPointSize = 4;  
+        //创建一个二维码文件 
+        QRcode::png($url, $filename, $errorCorrectionLevel, $matrixPointSize, 2);
+    }       
 
 	function index()
 	{
@@ -504,7 +519,7 @@ class Site extends IController
         IWeb::autoload('phpqrcode');
         $url = IUrl::getUrl();
         $fileName = 'scsgTuanproduct_'.$id;
-        MakeCode::qrcode($url, $fileName,15);
+        $this->qrcode($url, $fileName);
         $this->codeName = $fileName;
         $this->redirect('tuan_product');
         
@@ -1084,7 +1099,7 @@ class Site extends IController
         IWeb::autoload('phpqrcode');
         $url = IUrl::getUrl();
         $fileName = 'scsgproduct_'.$goods_id;
-        MakeCode::qrcode($url, $fileName,15);
+        $this->qrcode($url, $fileName);
         $this->codeName = $fileName;
 		$this->redirect('products');
 	}
