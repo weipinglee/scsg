@@ -103,7 +103,7 @@
 							<button type="button" style="margin-right:30px;" class="increase" onclick='modified(1);'>+</button>
 						</div>
 					
-					</div>库存：<span id='data_storeNums' style='background:#fff;'>{$store_nums}</span>
+					</div>库存：<span id='data_storeNums' style='background:#fff;'>{if:$this->tuanData}{echo:$this->tuanData['store_nums']-$this->tuanData['sum_count']}{else:}{$store_nums}{/if}</span>
 					
 				</div>
 				<div class="tc_le"><input class="submit" name='buyNowButton' type="button" value="确定" /></div>
