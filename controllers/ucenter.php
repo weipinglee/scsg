@@ -214,11 +214,17 @@ class Ucenter extends IController
         	IError::show(403,'订单信息不存在');
         }
         
-        
         //获取退货信息
         $siteConfig = new Config('site_config');
-        $refunds_seller_time=isset($siteConfig->refunds_seller_time) ? intval($siteConfig['refunds_limit_time']) : 7;
-        	
+        
+        if($this->order_info['seller_id'])
+        {
+            $refunds_seller_time=$siteConfig->refunds_seller_time ? intval($siteConfig->refunds_seller_time) : 7;
+        }
+        else
+        {
+            $refunds_seller_time=$siteConfig->refunds_limit_time ? intval($siteConfig->refunds_limit_time) : 7;
+        }
         //获取退款数据
         $refunds_seller_second = $refunds_seller_time*24*3600;
         $tb_refundment = new IQuery('refundment_doc as r');

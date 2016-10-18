@@ -1918,7 +1918,7 @@ class Order_Class
 		if(!$seller_id)$seller_id = 0;
 		$order_goods_db = new IQuery('order_goods as og');
 		$order_goods_db->join = 'left join goods as g on og.goods_id=g.id ';
-		$order_goods_db->where = 'og.order_id='.$goodsOrderRow['order_id'].' and og.id !='.$goodsOrderRow['id'].' and og.is_send=0 and g.seller_id='.$seller_id;
+		$order_goods_db->where = 'og.order_id='.$goodsOrderRow['order_id'].' and og.is_send=0 and g.seller_id='.$seller_id;
 		$order_goods_db->limit = 1;
 		$send_data = $order_goods_db->find();
 		if($goodsOrderRow['delivery_id'] == 0 )
