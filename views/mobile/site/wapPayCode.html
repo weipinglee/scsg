@@ -39,15 +39,9 @@
             signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
             paySign: "{$para['paySign']}", // 支付签名
             complete: function(){
-                if(success)
-                {
-                    changeOrder();
-                }
-                else
-                {
-                    alert('支付失败！')
-                    window.location = '{url:/ucenter/order}';
-                }
+                
+                changeOrder();
+                
             },
             success: function (res) {
                 if(res.errMsg == "chooseWXPay:ok" ) {
