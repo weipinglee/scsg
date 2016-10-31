@@ -24,7 +24,7 @@ class wap_wechat extends paymentPlugin
      */
     public function getSubmitUrl()
     {
-        return 'http://www.yqtvt.com/site/wapPayCode';
+        return 'http://www.yqtvt.com/test/site/wapPayCode';
         //return 'https://api.mch.weixin.qq.com/pay/unifiedorder';
     }
     /*
