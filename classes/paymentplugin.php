@@ -18,8 +18,8 @@ abstract class paymentPlugin
 	public $version             = 1.0;   //版本
 	public $callbackUrl         = '';    //支付完成后，同步回调地址
     public $serverCallbackUrl   = '';    //异步通知地址
-    public $wecheatCallbackUrl   = '';    //微信支付回调地址
-	public $wapWecheatCallbackUrl   = '';    //微信公众号支付回调地址
+    //public $wecheatCallbackUrl   = '';    //微信支付回调地址
+	//public $wapWecheatCallbackUrl   = '';    //微信公众号支付回调地址
 	public $merchantCallbackUrl ='';	 //支付中断返回
 	public $serverCallbackUrlForRefund = '';
 
@@ -34,9 +34,9 @@ abstract class paymentPlugin
 		//回调业务处理地址
         $this->serverCallbackUrl   = IUrl::getHost().IUrl::creatUrl("/block/server_callback/_id/".$payment_id);
         //微信支付回调地址
-        $this->wecheatCallbackUrl   = IUrl::getHost().IUrl::creatUrl("plugins/payments/pay_scan_wechat/notify.php");
+        //$this->wecheatCallbackUrl   = IUrl::getHost().IUrl::creatUrl("plugins/payments/pay_scan_wechat/notify.php");
         //微信公众号支付回调地址
-		$this->wapWecheatCallbackUrl   = IUrl::getHost().IUrl::creatUrl("plugins/payments/pay_wap_wechat/notify.php");
+		//$this->wapWecheatCallbackUrl   = IUrl::getHost().IUrl::creatUrl("plugins/payments/pay_wap_wechat/notify.php");
 		//退款回调地址
 		$this->serverCallbackUrlForRefund = IUrl::getHost().IUrl::creatUrl("/block/server_callback_refund/_id/".$payment_id);
 		//中断支付返回
@@ -227,15 +227,25 @@ OEF;
 	 */
 	abstract public function callback($ExternalData,&$paymentId,&$money,&$message,&$orderNo);
 
+    /**
+     * 异步步支付回调
+     * @param $ExternalData array  支付接口回传的数据
+     * @param $paymentId    int    支付接口ID
+     * @param $money        float  交易金额
+     * @param $message      string 信息
+     * @param $orderNo      string 订单号
+     */
+    abstract public function serverCallback($ExternalData,&$paymentId,&$money,&$message,&$orderNo);
+    
 	/**
-	 * 同步支付回调
+	 * 微信异步支付回调
 	 * @param $ExternalData array  支付接口回传的数据
 	 * @param $paymentId    int    支付接口ID
 	 * @param $money        float  交易金额
 	 * @param $message      string 信息
 	 * @param $orderNo      string 订单号
 	 */
-	abstract public function serverCallback($ExternalData,&$paymentId,&$money,&$message,&$orderNo);
+	public function server_callback($ExternalData,&$paymentId,&$money,&$message,&$orderNo,$pay_level){}
 	
 	public function refund($payment){}
 }

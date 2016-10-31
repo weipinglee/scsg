@@ -707,6 +707,7 @@ class Block extends IController
 		$payment_id      = IFilter::act(IReq::get('_id'),'int');
 		$paymentInstance = Payment::createPaymentInstance($payment_id);
 
+        $pay_level = IFilter::act(IReq::get('pay_level'));
 		if(!is_object($paymentInstance))
 		{
 			die('fail');
@@ -722,7 +723,14 @@ class Block extends IController
 		unset($callbackData['controller']);
 		unset($callbackData['action']);
 		unset($callbackData['_id']);
-		$return = $paymentInstance->serverCallback($callbackData,$payment_id,$money,$message,$orderNo);
+        if($pay_level)
+        {
+            $return = $paymentInstance->serverCallback($callbackData,$payment_id,$money,$message,$orderNo,$pay_level);
+        }
+		else
+        {
+            $return = $paymentInstance->serverCallback($callbackData,$payment_id,$money,$message,$orderNo);
+        }
  
 		
 		//支付成功
@@ -750,8 +758,14 @@ class Block extends IController
             }
             else
             {
-                
-                $order_id = Order_Class::updateOrderStatus($orderNo);
+                if($pay_level)
+                {
+                    $order_id = Order_Class::updateOrderStatus($orderNo,'','',$pay_level);
+                }
+                else
+                {
+                    $order_id = Order_Class::updateOrderStatus($orderNo);
+                }
                 if($order_id)
                 {
                     $paymentInstance->notifyStop();

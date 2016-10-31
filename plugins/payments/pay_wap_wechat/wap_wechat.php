@@ -17,8 +17,16 @@ require_once dirname(__FILE__)."/WxPay.JsApiPay.php";
 class wap_wechat extends paymentPlugin
 {
     //支付插件名称
-    public $name = '微信二维码';
+    public $name = '移动微信支付';
 
+    /**
+     * @see paymentplugin::getSubmitUrl()
+     */
+    public function getSubmitUrl()
+    {
+        return 'http://www.yqtvt.com/site/wapPayCode';
+        //return 'https://api.mch.weixin.qq.com/pay/unifiedorder';
+    }
     /*
      * @param 获取配置参数
      */
@@ -40,14 +48,9 @@ class wap_wechat extends paymentPlugin
     {
         echo "success";
     }
-    
-    /**
-     * @see paymentplugin::getSubmitUrl()
-     */
-    public function getSubmitUrl()
-    {
-        return 'http://www.yqtvt.com/site/wapPayCode';
-    }
+    /*{
+        die("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+    }*/
     
     /**
      * @see paymentplugin::getRefundUrl()
@@ -60,8 +63,60 @@ class wap_wechat extends paymentPlugin
     
     public function serverCallback($callbackData,&$paymentId,&$money,&$message,&$orderNo){}
     
+    public function server_callback($callbackData,&$paymentId,&$money,&$message,&$orderNo,$pay_level)
+    {
+        $postXML      = file_get_contents("php://input");
+        $callbackData = $this->converArray($postXML);
+
+        if(isset($callbackData['return_code']) && $callbackData['return_code'] == 'SUCCESS')
+        {
+            //除去待签名参数数组中的空值和签名参数
+            $para_filter = $this->paraFilter($callbackData);
+
+            //对待签名参数数组排序
+            $para_sort = $this->argSort($para_filter);
+
+            //生成签名结果
+            $mysign = $this->buildMysign($para_sort,Payment::getConfigParam($paymentId,'key'));
+
+            //验证签名
+            if($mysign == $callbackData['sign'])
+            {
+                if($callbackData['result_code'] == 'SUCCESS')
+                {
+                    $orderNo = $callbackData['out_trade_no'];
+                    $money   = $callbackData['total_fee']/100;
+
+                    //记录回执流水号
+                    if(isset($callbackData['transaction_id']) && $callbackData['transaction_id'])
+                    {
+                        $this->recordTradeNo($orderNo,$callbackData['transaction_id'],$pay_level);
+                    }
+                    return true;
+                }
+                else
+                {
+                    $message = $callbackData['err_code_des'];
+                }
+            }
+            else
+            {
+                $message = '签名不匹配';
+            }
+        }
+
+        $message = $message ? $message : $callbackData['message'];
+        return false;
+    }
+    
     public function getSendData($payment)
     { 
+        $notifyUrl = $this->serverCallbackUrl;
+        if(isset($payment['pay_level']))
+        {
+            $pay_level = $payment['pay_level'] ? $payment['pay_level'] : 2;
+            $notifyUrl .= '/pay_level/'.$pay_level;
+        }
         $tools = new JsApiPay();
         $openId = $tools->GetOpenid();
 
@@ -79,7 +134,7 @@ class wap_wechat extends paymentPlugin
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag('');
-        $input->SetNotify_url($this->wapWecheatCallbackUrl);
+        $input->SetNotify_url($notifyUrl);
         $input->SetTrade_type("JSAPI");
         $input->SetProduct_id($payment['M_OrderId']);
         $input->SetAppid($paraData['M_merId']);
@@ -89,9 +144,8 @@ class wap_wechat extends paymentPlugin
         $jsApiParameters = $tools->GetJsApiParameters($order);
         //获取共享收货地址js函数参数
        // $editAddress = $tools->GetEditAddressParameters();
-        if(isset($payment['pay_level']))
+        if(isset($pay_level))
         {
-            $pay_level = $payment['pay_level'] ? $payment['pay_level'] : 2;
             return(array('jsApiParameters' => $jsApiParameters,'pay_level' => $pay_level,'order_id' => $payment['M_OrderNO'], 'product_id' => $temp,'pay_total' => $payment['M_Amount']*100,));
         }
         else
@@ -147,6 +201,104 @@ class wap_wechat extends paymentPlugin
             return true;
         }
         return false;
+    }
+
+    /**
+     * @brief 从xml到array转换数据格式
+     * @param xml $xmlData
+     * @return array
+     */
+    private function converArray($xmlData)
+    {
+        $result = array();
+        $xmlHandle = xml_parser_create();
+        xml_parse_into_struct($xmlHandle, $xmlData, $resultArray);
+
+        foreach($resultArray as $key => $val)
+        {
+            if($val['tag'] != 'XML')
+            {
+                $result[$val['tag']] = $val['value'];
+            }
+        }
+        return array_change_key_case($result);
+    }
+
+    /**
+     * 除去数组中的空值和签名参数
+     * @param $para 签名参数组
+     * return 去掉空值与签名参数后的新签名参数组
+     */
+    private function paraFilter($para)
+    {
+        $para_filter = array();
+        foreach($para as $key => $val)
+        {
+            if($key == "sign" || $key == "sign_type" || $val == "")
+            {
+                continue;
+            }
+            else
+            {
+                $para_filter[$key] = $para[$key];
+            }
+        }
+        return $para_filter;
+    }
+
+    /**
+     * 对数组排序
+     * @param $para 排序前的数组
+     * return 排序后的数组
+     */
+    private function argSort($para)
+    {
+        ksort($para);
+        reset($para);
+        return $para;
+    }
+
+    /**
+     * 生成签名结果
+     * @param $sort_para 要签名的数组
+     * @param $key 支付宝交易安全校验码
+     * @param $sign_type 签名类型 默认值：MD5
+     * return 签名结果字符串
+     */
+    private function buildMysign($sort_para,$key,$sign_type = "MD5")
+    {
+        //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+        $prestr = $this->createLinkstring($sort_para);
+        //把拼接后的字符串再与安全校验码直接连接起来
+        $prestr = $prestr.'&key='.$key;
+        //把最终的字符串签名，获得签名结果
+        $mysgin = md5($prestr);
+        return strtoupper($mysgin);
+    }
+
+    /**
+     * 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+     * @param $para 需要拼接的数组
+     * return 拼接完成以后的字符串
+     */
+    private function createLinkstring($para)
+    {
+        $arg  = "";
+        foreach($para as $key => $val)
+        {
+            $arg.=$key."=".$val."&";
+        }
+
+        //去掉最后一个&字符
+        $arg = trim($arg,'&');
+
+        //如果存在转义字符，那么去掉转义
+        if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc())
+        {
+            $arg = stripslashes($arg);
+        }
+
+        return $arg;
     }
 }
 
