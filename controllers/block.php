@@ -725,7 +725,7 @@ class Block extends IController
 		unset($callbackData['_id']);
         if($pay_level)
         {
-            $return = $paymentInstance->serverCallback($callbackData,$payment_id,$money,$message,$orderNo,$pay_level);
+            $return = $paymentInstance->server_callback($callbackData,$payment_id,$money,$message,$orderNo,$pay_level);
         }
 		else
         {
