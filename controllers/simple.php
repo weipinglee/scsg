@@ -1528,6 +1528,10 @@ class Simple extends IController
         else
         {
             $goodsData     = IFilter::act(IReq::get('goods'));
+            if(!is_array($goodsData))
+            {
+                $goodsData = array($goodsData);
+            }
             if(count($goodsData)==0){$this->redirect('cart');return false;}
             $cartData = array();
             $delCart = array();
