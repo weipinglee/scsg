@@ -235,8 +235,8 @@ class CountSum
 		    	    $this->reduce += $current_reduce_all;
 		    	    $this->count  += $goodsList[$key]['count'];
 		    	    $this->tax    += self::getGoodsTax($goodsList[$key]['sum'],$val['seller_id'],$val['goods_id'],'goods');
-                    $goodsIdList[$val['goods_id']] = array('sum' => $current_sum_all, 'reduce' => $current_reduce_all);
-                    $order_extend[$val['seller_id']]['goodsIdList'][$val['goods_id']] = array('sum' => $current_sum_all, 'reduce' => $current_reduce_all);
+                    $goodsIdList[$val['goods_id']] = array('sum' => $current_sum_all, 'reduce' => $current_reduce_all,'count' => $goodsList[$key]['count']);
+                    $order_extend[$val['seller_id']]['goodsIdList'][$val['goods_id']] = array('sum' => $current_sum_all, 'reduce' => $current_reduce_all,'count' => $goodsList[$key]['count']);
                     $goodsListFinal[$buy][] = $goodsList[$key];
 		        }
     	    }
@@ -314,9 +314,9 @@ class CountSum
 		    	    $this->reduce += $current_reduce_all;
 		    	    $this->count  += $productList[$key]['count'];
 		    	    $this->tax    += self::getGoodsTax($productList[$key]['sum'],$val['seller_id'],$val['product_id'],'product');
-                    $goodsIdList[$val['goods_id']] = array('sum' => $current_sum_all, 'reduce' => $current_reduce_all);
+                    $goodsIdList[$val['goods_id']] = array('sum' => $current_sum_all, 'reduce' => $current_reduce_all,'count' => $productList[$key]['count']);
                     $goodsListFinal[$buy][] = $productList[$key];
-		            $order_extend[$val['seller_id']]['goodsIdList'][$val['goods_id']] = array('sum' => $current_sum_all, 'reduce' => $current_reduce_all);
+		            $order_extend[$val['seller_id']]['goodsIdList'][$val['goods_id']] = array('sum' => $current_sum_all, 'reduce' => $current_reduce_all,'count' => $productList[$key]['count']);
                 }
     	    }
         }

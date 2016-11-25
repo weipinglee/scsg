@@ -86,6 +86,18 @@ class APIOther
             }
             break;
 
+            case "8":
+            {
+                return '满'.$condition.' 件，下一件商品优惠'.$awardValue.'%';
+            }
+            break;
+
+            case "9":
+            {
+                return '满'.$condition.' 件，下一件商品优惠￥'.$awardValue;
+            }
+            break;
+
             default:
             {
                 return null;

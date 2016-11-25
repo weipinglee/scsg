@@ -554,6 +554,7 @@ class Simple extends IController
             $temp = JSON::decode($v);
             $goodsList[$temp['goods_id']]['sum'] = $temp['sum'];
             $goodsList[$temp['goods_id']]['reduce'] = $temp['reduce'];
+            $goodsList[$temp['goods_id']]['count'] = $temp['count'];
         }
     	$final_sum = intval(IReq::get('final_sum'));
     	$proObj = new ProRule($final_sum);

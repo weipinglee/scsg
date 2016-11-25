@@ -48,12 +48,19 @@
                 <label>活动介绍：</label>
                 <div class="box"><textarea name='intro' class='textarea'>{$this->promotionRow['intro']}</textarea></div>
             </fieldset>
-            <fieldset>
+            <fieldset class="js_show_rule_1">
                 <label>购物车总金额条件：</label>
                 <div class="box">
-                <input type='text' name='condition' class='small' pattern='float' alt='请填写一个金额数字' />元 
+                <input type='text' name='condition' value="{$this->promotionRow['condition']}" class='small' pattern='float' alt='请填写一个金额数字' />元 
                 </div>
                 <label class="tip">* 当购物车总金额达到所填写的现金额度时规则生效</label>
+            </fieldset>
+            <fieldset class="js_show_rule_2" style="display: none;">
+                <label>满足活动商品件数：</label>
+                <div class="box">
+                <input type='text' name='condition' value="{$this->promotionRow['condition']}" class='small' pattern='float' alt='请填写一个数字' />件 
+                </div>
+                <label class="tip">* 当购物车参加活动商品单品类件数达到所填写的数量时规则生效</label>
             </fieldset>
             <fieldset>
                 <label>活动规则：</label>
@@ -66,6 +73,8 @@
                         <option value='4'>当购物车金额满 M 元时,赠送一张面值 N 元的代金券</option>
                         <option value='6'>当购物车金额满 M 元时,免运费</option>
                         <option value='7'>当购物车金额满 M 元时,赠送 N 经验值</option>
+                        <option value='8'>当购物车参加活动商品单品类件数达到M件时，以后每增加一件优惠N%</option>
+                        <option value='9'>当购物车参加活动商品单品类件数达到M件时，以后每增加一件优惠N元</option>
                     </select>
                     
                 </div>
@@ -425,6 +434,20 @@
                         +"<label class='tip'>* 赠送的经验</label>";
             }
             break;
+
+            case "8":
+            {
+                html = "<th>优惠百分比：</th>"
+                        +"<td><input type='text' name='award_value' class='small' pattern='float' alt='请填写一个数字' />%"
+                        +"<label>* 优惠的百分比，满足条件后下一件商品单价优惠百分比，如输入9则表示优惠9%</label></td>";
+            }
+            case "9":
+            {
+                html = "<th>优惠金额：</th>"
+                        +"<td><input type='text' name='award_value' class='small' pattern='float' alt='请填写一个金额数字' />元"
+                        +"<label>* 优惠的金额，满足条件后下一件商品单价优惠的金额</label></td>";
+            }
+            break;
         }
         $('#rule_box').html(html);
         $('input[name=award_value]').val({$this->promotionRow['award_value']});
@@ -437,6 +460,16 @@
         {
             $('.js_select_goods').show();
             $('.js_select_area').hide();
+        }
+        if(selectVal == 8 || selectVal == 9)
+        {
+            $('.js_show_rule_1').hide().find('input').attr('disabled', 'disabled');
+            $('.js_show_rule_2').show().find('input').removeAttr('disabled');
+        }
+        else
+        {
+            $('.js_show_rule_2').hide().find('input').attr('disabled', 'disabled');
+            $('.js_show_rule_1').show().find('input').removeAttr('disabled');
         }
     }
 

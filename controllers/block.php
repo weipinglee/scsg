@@ -182,6 +182,7 @@ class Block extends IController
             }
             $minPrice = min($minPrice,$sell_price);
             $goodsList[$goodsId]['reduce'] = $num * ($sell_price - $minPrice);
+            $goodsList[$goodsId]['count'] = $num;
         }
         if($goodsId)
         {
@@ -198,6 +199,7 @@ class Block extends IController
             }
             $minPrice = min($minPrice,$sell_price);
             $goodsList[$goodsId]['reduce'] = $num * ($sell_price - $minPrice);
+            $goodsList[$goodsId]['count'] = $num;
         }                   
         $group_id     = $countSumObj->getGroupId();
         $proObj = new ProRule($final_sum);
@@ -270,6 +272,7 @@ class Block extends IController
             }
             $minPrice = min($minPrice,$sell_price);
             $goodsList[$goodsId]['reduce'] = $num * ($sell_price - $minPrice);
+            $goodsList[$goodsId]['count'] = $num;
         } 
        $data['group_id'] = $countSumObj->getGroupId();
        $data['goodsList'] = $goodsList;               
@@ -289,6 +292,7 @@ class Block extends IController
            {
                $temp[$k]['sum'] = $val['sum'];
                $temp[$k]['reduce'] = $val['reduce'];
+               $temp[$k]['count'] = $val['count'];
            }
        }
        $proObj = new ProRule($final_sum);

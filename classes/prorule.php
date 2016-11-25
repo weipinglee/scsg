@@ -29,7 +29,7 @@ class ProRule
 	public $isGiftOnce = false;
 
 	//现金促销规则奖励方式 1减金额 2奖励折扣
-	private $cash_award_type = array(1,2);
+	private $cash_award_type = array(1,2,8,9);
 
 	//赠品促销规则奖励方式 3赠送积分 4赠送代金券 5赠送赠品 6免运费 7赠送经验值
 	private $gift_award_type = array(3,4,5,6,7);
@@ -171,6 +171,17 @@ class ProRule
 				return '购物满￥'.$condition.' 立加'.$awardValue.'经验';
 			}
 			break;
+            case "8":
+            {
+                return '满'.$condition.' 件，下一件商品优惠'.$awardValue.'%';
+            }
+            break;
+
+            case "9":
+            {
+                return '满'.$condition.' 件，下一件商品优惠￥'.$awardValue;
+            }
+            break;
 
 			default:
 			{
@@ -214,7 +225,7 @@ class ProRule
         $final_sum = $this->sum;
 		$datetime = ITime::getDateTime();
 		$proObj   = new IModel('promotion');
-		$where    = '`condition` between 0 and '.$final_sum.' and type = 0 and is_close = 0 and start_time <= "'.$datetime.'" and end_time >= "'.$datetime.'"';
+		$where    = '((`condition` between 0 and '.$final_sum.') or (award_type = 8 or award_type = 9)) and type = 0 and is_close = 0 and start_time <= "'.$datetime.'" and end_time >= "'.$datetime.'"';
 		//奖励类别分析
 		if($award_type != null)
 		{
@@ -247,17 +258,38 @@ class ProRule
             $common = array_intersect($temp, $gId);
             if($common)
             {
-                $sumNum = 0;
-                $reduceNum = 0;
-                foreach($common as $val)
+                if(in_array($v['award_type'], array(8,9)))
                 {
-                    $sumNum += $goodsIdList[$val]['sum'];
-                    $reduceNum += $goodsIdList[$val]['reduce'];
+                    foreach($common as $v1)
+                    {
+                        if($v['award_value'] >= $goodsIdList[$v1]['count'])
+                        {
+                            $proList[$k]['hide'] = 1;
+                        }
+                        else
+                        {
+                            if(isset($proList[$k]['hide']))
+                            {
+                                unset($proList[$k]['hide']);
+                            }
+                            break;
+                        }
+                    }
                 }
-                $proList[$k]['sum'] = $sumNum - $reduceNum;
-                if(($sumNum - $reduceNum) < $v['condition'])
+                else
                 {
-                    $proList[$k]['hide'] = 1;
+                    $sumNum = 0;
+                    $reduceNum = 0;
+                    foreach($common as $val)
+                    {
+                        $sumNum += $goodsIdList[$val]['sum'];
+                        $reduceNum += $goodsIdList[$val]['reduce'];
+                    }
+                    $proList[$k]['sum'] = $sumNum - $reduceNum;
+                    if(($sumNum - $reduceNum) < $v['condition'])
+                    {
+                        $proList[$k]['hide'] = 1;
+                    }
                 }
             }
             else

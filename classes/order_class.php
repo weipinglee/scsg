@@ -1684,7 +1684,7 @@ class Order_Class
             $goodsList = array();
             foreach($orderGoodsList as $v)
             {
-                $goodsList[$v['goods_id']] = array('sum' => $v['goods_price'] * $v['goods_nums'], 'reduce' => ($v['goods_price']-$v['real_price'])*$v['goods_nums']);
+                $goodsList[$v['goods_id']] = array('sum' => $v['goods_price'] * $v['goods_nums'], 'reduce' => ($v['goods_price']-$v['real_price'])*$v['goods_nums'], 'count' => $v['goods_nums']);
             }
 			$proObj = new ProRule($real_amount,$point_mul);
 			$proObj->setUserGroup($memberRow['group_id']);
