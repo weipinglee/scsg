@@ -13,17 +13,29 @@ class Preorder extends IController
 	public function preorder_show()
 	{
 		//获得post传来的值
-		$order_id = IFilter::act(IReq::get('id'),'int');
+		$order_id = IFilter::act(IReq::get('id'),'int');        
 		$data = array();
 		if($order_id)
 		{
 			$order_show = new Preorder_Class();
-			$data = $order_show->getOrderShow($order_id);
+			$data = $order_show->getOrderShow($order_id); 
 			if($data)
 			{
+                $goodsList = array();
+                $orderGoods = new IModel('order_goods');
+                $where = 'order_id='.$data['id'];
+                if(!is_null($data['seller_id']))
+                {
+                    $where .= ' and seller_id='.$data['seller_id'];
+                }     
+                $temp = $orderGoods->query($where, 'goods_id, goods_price, real_price, goods_nums');
+                foreach($temp as $v)
+                {
+                    $goodsList[$v['goods_id']] = array('sum' => $v['goods_price'] * $v['goods_nums'], 'reduce' => ($v['goods_price']-$v['real_price'])*$v['goods_nums']);
+                }
 				$this->result = '';
-					$rule = new ProRule($data['real_amount']+$data['pro_reduce']);
-					$this->result = $rule->getInfo();
+					$rule = new ProRule($data['real_amount']+$data['pro_reduce']); 
+					$this->result = $rule->getInfo($goodsList, $data['area']);  
 				
 				//获取地区
 				$data['area_addr'] = join('&nbsp;',area::name($data['province'],$data['city'],$data['area']));
