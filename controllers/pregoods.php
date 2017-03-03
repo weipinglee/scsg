@@ -43,50 +43,49 @@ class Pregoods extends IController
         }
         }
         return $goodsListSeller;
-    }
-    
-    //手机端预售列表
-    public function mobilePresell()
-    {
-        $this->logoUrl = 'images/yulogo.png';
-        $this->yushou = 1;
-        $presell_db = new IQuery('presell as p');
-        $presell_db->join = 'left join goods as g on p.goods_id = g.id';
-        $presell_db->where = 'p.is_close=0 and TIMESTAMPDIFF(second,p.yu_end_time,NOW())<0 and  g.is_del=4';
-        $presell_db->fields = 'p.*,(UNIX_TIMESTAMP(p.yu_end_time)- UNIX_TIMESTAMP(now())) as end_timestamp,g.sell_price as price,g.img';
-        $presell_db->limit = 6;
-        $presell_db->order = 'p.id DESC';
-        $this->pre_list = $presell_db->find();
-        $this->count = count($this->pre_list);
-        $this->redirect('presell_list', false);
-        
-    }
+    }   
     
 	//预售列表
 	public function presell_list(){
-		$this->logoUrl = 'images/yulogo.png';
-		$this->yushou = 1;
-		$presell_db = new IQuery('presell as p');
-		$presell_db->join = 'left join goods as g on p.goods_id = g.id';
-		$presell_db->where = 'p.is_close=0 and TIMESTAMPDIFF(second,p.yu_end_time,NOW())<0 and  g.is_del=4';
-		$presell_db->fields = 'p.*,(UNIX_TIMESTAMP(p.yu_end_time)- UNIX_TIMESTAMP(now())) as end_timestamp,g.sell_price as price,g.img';
-		$presell_db->limit = 8;
-		$presell_db->order = 'p.id DESC';
-        $list = $presell_db->find();
-        $topList = array();
-        count($list)>0 ? $topList[] = array_shift($list) : $topList = array();
-        count($list)>0 ? $topList[] = array_shift($list) : $topList = $topList;               
-        if($topList)
+        if(IClient::getDevice() == IClient::PC)
         {
-            foreach($topList as $k => $v)
+		    $this->logoUrl = 'images/yulogo.png';
+		    $this->yushou = 1;
+		    $presell_db = new IQuery('presell as p');
+		    $presell_db->join = 'left join goods as g on p.goods_id = g.id';
+		    $presell_db->where = 'p.is_close=0 and TIMESTAMPDIFF(second,p.yu_end_time,NOW())<0 and  g.is_del=4';
+		    $presell_db->fields = 'p.*,(UNIX_TIMESTAMP(p.yu_end_time)- UNIX_TIMESTAMP(now())) as end_timestamp,g.sell_price as price,g.img';
+		    $presell_db->limit = 8;
+		    $presell_db->order = 'p.id DESC';
+            $list = $presell_db->find();
+            $topList = array();
+            count($list)>0 ? $topList[] = array_shift($list) : $topList = array();
+            count($list)>0 ? $topList[] = array_shift($list) : $topList = $topList;               
+            if($topList)
             {
-                $data = Comment_Class::get_comment_info($v['goods_id']);
-                $topList[$k]['comment_num'] = $data['comment_total'] ;
-                $topList[$k]['comment_rate'] = $data['comment_total'] ? (round($data['point_grade']['good']/$data['comment_total'],4))*100 : 0;
-            }
-        }              
-        $this->topList = $topList;    
-		$this->dataList = $list;               
+                foreach($topList as $k => $v)
+                {
+                    $data = Comment_Class::get_comment_info($v['goods_id']);
+                    $topList[$k]['comment_num'] = $data['comment_total'] ;
+                    $topList[$k]['comment_rate'] = $data['comment_total'] ? (round($data['point_grade']['good']/$data['comment_total'],4))*100 : 0;
+                }
+            }              
+            $this->topList = $topList;    
+		    $this->dataList = $list;
+        }
+        elseif(IClient::getDevice() == IClient::MOBILE)
+        {
+             $this->logoUrl = 'images/yulogo.png';
+            $this->yushou = 1;
+            $presell_db = new IQuery('presell as p');
+            $presell_db->join = 'left join goods as g on p.goods_id = g.id';
+            $presell_db->where = 'p.is_close=0 and TIMESTAMPDIFF(second,p.yu_end_time,NOW())<0 and  g.is_del=4';
+            $presell_db->fields = 'p.*,(UNIX_TIMESTAMP(p.yu_end_time)- UNIX_TIMESTAMP(now())) as end_timestamp,g.sell_price as price,g.img';
+            $presell_db->limit = 6;
+            $presell_db->order = 'p.id DESC';
+            $this->pre_list = $presell_db->find();
+            $this->count = count($this->pre_list);
+        }               
 		$this->redirect('presell_list');
 		
 	}
