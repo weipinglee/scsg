@@ -19,7 +19,9 @@ class Site extends IController
 	function init()
 	{
 		CheckRights::checkUserRights();
-	}        
+	}       
+
+
 
 	function index()
 	{
