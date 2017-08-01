@@ -8,13 +8,21 @@
 			<li class="current_prev"><span>2、填写核对订单信息</span></li>
 			<li class="last_current"><span>3、成功提交订单</span></li>
 		</ul>
-
-		<form action='{url:/simple/docheckPaypass}' method='get' target='_blank'>
-			<input type="text" name="paypass" />
-			<input type="hidden" name="order_id" value="{$this->order_id}"/>
-			<input type="hidden" name="pay_level" value="{$this->pay_level}"/>
-			<input class="submit_pay" type="submit" value="确认支付"  />
-		</form>
+	</div>
+	<div class="confirm_box">
+			<h3>
+				你正在支付订单：<p>食用油</p>
+				<span class="pay_num">支付<b>179.00</b>元</span>
+			</h3>
+			<form action='{url:/simple/docheckPaypass}' method='get' target='_blank'>
+				<span>山城速购支付密码：</span>
+				<input type="password" name="paypass" />
+				<input type="hidden" name="order_id" value="{$this->order_id}"/>
+				<input type="hidden" name="pay_level" value="{$this->pay_level}"/>
+				<input class="submit_pay" type="submit" value="确认支付"  />
+				<a href class="forget_paypass">忘记支付密码？</a>
+			</form>
+				<!-- <a href class="forget_paypass" style="line-height:70px;margin-left:146px;">选择其他方式付款</a> -->
 	</div>
 
 </div>
