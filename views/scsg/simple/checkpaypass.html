@@ -1,0 +1,20 @@
+
+
+<div class="wrapper clearfix">
+	<div class="position mt_10"><span>您当前的位置：</span> <a href="{url:}"> 首页</a> » 成功提交订单</div>
+	<div class="myshopping m_10">
+		<ul class="order_step">
+			<li><span class="first">1、查看购物车</span></li>
+			<li class="current_prev"><span>2、填写核对订单信息</span></li>
+			<li class="last_current"><span>3、成功提交订单</span></li>
+		</ul>
+
+		<form action='{url:/simple/docheckPaypass}' method='get' target='_blank'>
+			<input type="text" name="paypass" />
+			<input type="hidden" name="order_id" value="{$this->order_id}"/>
+			<input type="hidden" name="pay_level" value="{$this->pay_level}"/>
+			<input class="submit_pay" type="submit" value="确认支付"  />
+		</form>
+	</div>
+
+</div>
