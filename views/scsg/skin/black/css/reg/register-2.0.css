@@ -121,6 +121,8 @@ body{background:#FAFAFA;}
 
 .regist_form li .form_item label{display:inline-block;width:70px;vertical-align:middle;color:#666;}
 
+.regist_form li .form_item .light_gray{line-height: 50px;}
+
 .regist_form li .form_item .ipt{width:230px;height:24px;padding-left:3px;border:0 none;line-height:24px;vertical-align:middle;font-family:"Microsoft YaHei";}
 
 
@@ -847,4 +849,3 @@ body{background:#FAFAFA;}
 .tips{visibility:hidden;opacity:.6;filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=1,StartColorStr='#80000000',EndColorStr='#80000000');position:absolute;top:50%;left:50%;z-index:88;line-height:20px;padding:10px 20px;-webkit-border-radius:5px;border-radius:5px;text-align:center;background-color:#000;background-color:rgba(0,0,0,0.6);color:#fff;white-space:nowrap;-webkit-transform:translate3d(-50%,-50%,0);-ms-transform:translate3d(-50%,-50%,0);transform:translate3d(-50%,-50%,0);-webkit-transition:opacity .1s linear;transition:opacity .1s linear;z-index:985;}
 
 .tips.show{visibility:visible;opacity:1;}
-

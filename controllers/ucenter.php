@@ -943,6 +943,65 @@ class Ucenter extends IController
         echo $msg->writeMessage($id,1);
     }
 
+	function paysecret()
+	{
+		$user_id    = $this->user['user_id'];
+		$userObj    = new IModel('user');
+		$where      = 'id = '.$user_id;
+		$userRow    = $userObj->getObj($where);
+		$this->oldSecret = $userRow['pay_secret'];
+		$this->redirect('paysecret');
+	}
+
+	//修改支付密码动作
+	function paysecret_edit(){
+		$user_id    = $this->user['user_id'];
+		$fpassword = IReq::get('old');
+		$password = IReq::get('new');
+		$repassword = IReq::get('renew');
+
+		$message = '';
+		$userObj    = new IModel('user');
+		$where      = 'id = '.$user_id;
+		$userRow    = $userObj->getObj($where);
+
+		if(!preg_match('|\w{6,32}|',$password))
+		{
+			$message = '密码格式不正确，请重新输入';
+		}
+		else if($password != $repassword)
+		{
+			$message  = '二次密码输入的不一致，请重新输入';
+		}
+		else if($userRow['pay_secret']!='' && sha1($fpassword) != $userRow['pay_secret'])
+		{
+			$message  = '原始密码输入错误';
+		}
+		else
+		{
+			$passwordSha1 = sha1($password);
+			$dataArray = array(
+					'pay_secret' => $passwordSha1,
+			);
+
+			$userObj->setData($dataArray);
+			$result  = $userObj->update($where);
+			if($result)
+			{
+				$this->redirect('/site/success?message=密码修改成功');
+
+			}
+			else
+			{
+				$this->redirect('/site/error?msg=密码修改失败');
+			}
+		}
+
+		if($message!=''){
+			$this->redirect('/site/error?msg='.$message);
+		}
+
+	}
     //[修改密码]修改动作
     function password_edit()
     {
@@ -987,7 +1046,7 @@ class Ucenter extends IController
 	    		$this->redirect('/site/error?msg=密码修改失败');
 	    	}
 		}
-		$this->redirect('/site/error?msg=密码修改失败');
+		$this->redirect('/site/error?msg='.$message);
     	//$this->redirect('/ucenter/info');
     }
 

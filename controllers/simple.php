@@ -1065,6 +1065,38 @@ class Simple extends IController
         $this->param = $param;
     	$this->redirect('cart2');
     }
+
+	//验证支付密码的页面
+	function checkPaypass()
+	{
+		if($this->user['user_id']==null)$this->redirect('login');
+
+		$this->order_id = IFilter::act(IReq::get('order_id'), 'int');
+		$this->pay_level = IFilter::act(IReq::get('pay_level'), 'int');
+		$this->redirect('checkPaypass');
+	}
+
+	//验证支付密码动作
+	function docheckPaypass()
+	{
+		if($this->user['user_id']==null)$this->redirect('login');
+		$order_id = IFilter::act(IReq::get('order_id'), 'int');
+		$pay_level = IFilter::act(IReq::get('pay_level'), 'int');
+		$pass = IFilter::act(IReq::get('paypass'));
+
+		$user_id = $this->user['user_id'];
+
+		$zhifu = new zhifu();
+		if($zhifu->checkPayPass($pass,$user_id)){
+			$this->redirect('/block/doPay/order_id/'.$order_id.'/pay_level/'.$pay_level);
+		}
+		else
+			$this->redirect('/simple/checkPaypass/order_id/'.$order_id.'/pay_level/'.$pay_level);
+	}
+
+
+
+
 	//手机端选择收货地址
     function address(){
     	if($this->user['user_id']==null)$this->redirect('login');
@@ -1486,6 +1518,7 @@ class Simple extends IController
         $order_type    = 0;
         $invoice       = isset($_POST['taxes']) ? 1 : 0;
         $dataArray     = array();
+		$this->payment_id = $payment;
         //防止表单重复提交
         if(IReq::get('timeKey') != null)
         {
@@ -1794,8 +1827,8 @@ class Simple extends IController
         $this->payment     = $paymentName;
         $this->paymentType = $paymentType;
         $this->finalData = $finalData;
-       
-        //订单金额为0时，订单自动完成
+
+		//订单金额为0时，订单自动完成
         if($this->final_sum <= 0)
         {
             $this->redirect('update_order_status/order_no/'.$dataArray['order_no']);
