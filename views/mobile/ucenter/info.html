@@ -61,7 +61,14 @@
 
 <h1 class="h1">账号设置</h1>
 	<div class="account-menu menu" role="menu">
-		
+		<!-- 增加设置头像和性别设置 -->
+		<a role="menuitem" class="menuitem" href="header_img">
+			<em class="fav">设置头像</em>
+		</a>
+		<a role="menuitem" class="menuitem" href="user_sex">
+			<em class="fav">性别</em>
+		</a>
+		<!-- 增加设置头像和性别设置 end -->
 		
 		{if:!$this->userRow['username']}
 		<a role="menuitem" class="menuitem" href="username">
