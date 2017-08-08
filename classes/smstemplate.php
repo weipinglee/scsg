@@ -90,4 +90,6 @@ class smsTemplate
 		$templateString = "您的订单号:{orderNo},已付款成功,稍后我们会尽快为您服务";
 		return strtr($templateString,$data);
 	}
+
+
 }

@@ -17,15 +17,15 @@
 						<tbody>
 							<tr>
 								<th>登陆用户名：</th>
-								<td><input class="normal" name="seller_name" type="text" value="" pattern="required" alt="用户名不能为空" /><label>* 用户名称（必填）</label></td>
+								<td><input class="normal" name="seller_name" type="text" value="" pattern="required" alt="用户名不能为空" /><label>* 用户名称（必填）支持中文、字母、数字、“-”“_”的组合，4-20个字符</label></td>
 							</tr>
 							<tr>
-								<th>密码：</th><td><input class="normal" name="password" type="password" alt='请输入6-12位字符' bind='repassword' pattern="^[\S]{6,12}$" /><label>* 登录密码</label></td>
+								<th>密码：</th><td><input class="normal" name="password" type="password" alt='请输入6-12位字符' bind='repassword' pattern="^[\S]{6,12}$" /><label>* 登录密码（必填）建议使用字母、数字和符号两种及以上的组合，6-20个字符</label></td>
 							</tr>
 							<tr>
-								<th>确认密码：</th><td><input class="normal" name="repassword" alt='请输入6-12位字符' type="password" bind='password' pattern="^[\S]{6,12}$" /><label>* 重复确认密码</label></td>
+								<th>确认密码：</th><td><input class="normal" name="repassword" alt='请再次输入密码' type="password" bind='password' pattern="^[\S]{6,12}$" /><label>* 请再次输入密码</label></td>
 							</tr>
-							
+
 							<tr>
 								<th>商户真实全称：</th>
 								<td><input class="normal" name="true_name" type="text" value="" pattern="required" /></td>
@@ -36,7 +36,7 @@
 								<input type='file' name='logo_img' />
 								</td>
 							</tr>
-							
+
 							<tr>
 								<th>商户资质材料：</th>
 								<td>

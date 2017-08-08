@@ -2258,5 +2258,108 @@ class Ucenter extends IController
         }               
         echo JSON::encode($reply);
     }
+
+	//修改性别页面
+	public function user_sex(){
+		$user_id   = $this->user['user_id'];
+
+		$memberObj = new IModel('member');
+		$where     = 'user_id = '.$user_id;
+
+		$data = $memberObj->getObj($where);
+		$this->setRenderData($data);
+		$this->redirect('user_sex');
+	}
+
+	//用户性别修改
+	public function user_sex_edit(){
+		$user_id   = $this->user['user_id'];
+
+		$memberObj = new IModel('member');
+		$where     = 'user_id = '.$user_id;
+
+		$dataArray       = array(
+				//'true_name'    => IFilter::act( IReq::get('true_name') ,'string'),
+				'sex'          => IFilter::act( IReq::get('sex'),'int' ),
+				//'birthday'     => IFilter::act( IReq::get('birthday') ),
+			//	'zip'          => IFilter::act( IReq::get('zip') ,'string' ),
+			/*'msn'          => IFilter::act( IReq::get('msn') ,'string' ),*/
+				//'qq'           => IFilter::act( IReq::get('qq') , 'string' ),
+			//	'contact_addr' => IFilter::act( IReq::get('contact_addr'), 'string'),
+			//	'telephone'    => IFilter::act( IReq::get('telephone'),'string'),
+			//	'area'         => $areaStr,
+		);
+
+		$memberObj->setData($dataArray);
+		$memberObj->update($where);
+		$this->info();
+	}
+
+	//[用户头像]上传  手机端
+	function user_img_edit()
+	{
+		$result = array(
+				'isError' => true,
+		);
+
+		$ico = IFilter::act( IReq::get('ico'),'string' );
+		if(isset($_FILES['attach']['name']) && $_FILES['attach']['name'] != '')
+		{
+			$photoObj = new PhotoUpload();
+			$photo    = $photoObj->run();
+
+			if($photo['attach']['img'])
+			{
+				$user_id   = $this->user['user_id'];
+				$user_obj  = new IModel('user');
+				$dataArray = array(
+						'head_ico' => $photo['attach']['img'],
+				);
+				$user_obj->setData($dataArray);
+				$where  = 'id = '.$user_id;
+				$isSuss = $user_obj->update($where);
+
+				if($isSuss !== false)
+				{
+					$result['isError'] = false;
+					$result['data'] = IUrl::creatUrl().$photo['attach']['img'];
+					ISafe::set('head_ico',$dataArray['head_ico']);
+				}
+				else
+				{
+					$result['message'] = '上传失败';
+				}
+			}
+			else
+			{
+				$result['message'] = '上传失败';
+			}
+		}
+		else if($ico!=''){
+			$this->redirect('info');
+		}
+		else
+		{
+			$result['message'] = '请选择图片';
+		}
+
+		if(isset($result['message']) && $result['message']!=''){
+			IError::show(403,$result['message']);
+		}
+		else{
+			$this->redirect('info');
+		}
+	}
+
+	public function header_img(){
+		$user_id   = $this->user['user_id'];
+
+		$memberObj = new IModel('user');
+		$where     = 'id = '.$user_id;
+
+		$this->data = $memberObj->getObj($where);
+
+		$this->redirect('header_img');
+	}
  
 }

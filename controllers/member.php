@@ -809,6 +809,15 @@ class Member extends IController
 		//编辑会员
 		else
 		{
+
+			//会员状态由锁定改为未锁定，给商家发送短信提示
+			$userData = $sellerDB->getObj("id = {$seller_id}");
+			if($userData['is_lock']!=$sellerRow['is_lock'] && isset($sellerRow['mobile']) && $sellerRow['mobile'])
+			{
+				$result = $sellerRow['is_lock'] == 0 ? "审核通过" : "锁定";
+				$content = smsTemplate::sellerCheck(array('{result}' => $result));
+				 Hsms::send($sellerRow['mobile'],$content);
+			}
 			//修改密码
 			if($password)
 			{
@@ -817,6 +826,8 @@ class Member extends IController
 
 			$sellerDB->setData($sellerRow);
 			$sellerDB->update("id = ".$seller_id);
+
+
 		}
 		$this->redirect('seller_list');
 	}

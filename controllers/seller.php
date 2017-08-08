@@ -1827,7 +1827,7 @@ class Seller extends IController
 		);
 		$db_fa->setData($data);
 		$db_fa->update('id='.$id);
-		$this->redirect('fapiao_apply');
+		$this->redirect('fapiao_list');
 	}
     
     //[促销活动] 添加修改 [单页]

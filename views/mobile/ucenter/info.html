@@ -24,8 +24,9 @@
 		
 		<div>
 	<div class="profile menuitem" role="menuitem" style="background:none;"><!-- <i>编辑</i> -->
+		{set:$user_ico = $this->userRow['head_ico']}
 			<div class="avatar">
-				<img src="{skin:css/wap/scer.jpg}" width="50" height="50" alt="头像" />
+				<img src="{webroot:$user_ico}" width="50" height="50" alt="头像" onerror="this.src='{skin:images/front/user_ico.gif}'" />
 			</div>
 			{if:$this->userRow['username']}
 			<em class="name">{$this->userRow['username']}</em>
