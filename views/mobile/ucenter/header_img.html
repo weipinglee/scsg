@@ -53,10 +53,17 @@
     <section class="modle_section">
         <div class="ban_section">
             <div class="yj">
-				<form method="post" action="{url:/ucenter/username_add}">
+                {set:$user_ico = $this->data['head_ico']}
+
+				<form method="post" action="{url:/ucenter/user_img_edit}" enctype="multipart/form-data">
+                    <input type="hidden" name="ico" value="{$user_ico}" />
 					<p>选择头像</p>
-					<p> <input type="file" onchange="previewImage(this)">     </p>
-                    <p><div id="preview"><img id="imghead" width="100%" height="auto" border="0" src="{skin:css/wap/scer.jpg}"/></div></p>
+					<p> <input type="file" name="attach" onchange="previewImage(this)">     </p>
+                    <p>
+                    <div id="preview">
+                        <img id="imghead" width="100%" height="auto" border="0" src="{if:$user_ico==''}{skin:css/wap/scer.jpg}{else:}{webroot:$user_ico}{/if}"/>
+                     </div>
+                    </p>
 					<p><input class="butt" type="submit" value="保存"/></p>
 				</form>
 			</div>
