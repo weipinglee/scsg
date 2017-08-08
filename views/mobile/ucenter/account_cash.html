@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)http://m.b5m.com/activelistings/198 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="http://static-web.b5m.com/wap/img/collect-logo/b5m-collect-logo.png">
+        <title>用户充值</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+       <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+        <script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+
+    
+    </head>
+        
+    <body>
+        <div id="page">
+            <header class="wap-header">
+    <div class="wap-topbar">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回"></a></div>
+        <div class="h-center">
+            <h1>提现申请</h1>
+        </div>
+
+    </div>
+    </header>
+
+<div class="container">        
+    <form action='#' method='post' name='withdraw' noComplate="true" class="js_validate_form">
+    <div class="tab_container tab_txsq">  
+        <div class="checked_on"> 
+            <span style="margin-right: 10px; color: red;">提示：提现需要收取提现金额的{$withdrawAccount}%做为手续费</span>
+         
+             <ul>
+                <li class="time">持卡人姓名</li>
+                <li><input name='name' pattern='required' alt='请填写真实的持卡人姓名' type="text" placeholder="请输入持卡人姓名"></li>
+            </ul>          
+            <ul>
+                <li class="time">提现金额</li>
+                <li><input type="text" placeholder="请输入提现金额" name='amount' pattern='float' max_value="{$this->memberRow['balance']}" alt='填写提现金额' maxalt="提现金额不能大于账户余额"></li>
+            </ul>
+            <ul>
+                <li class="time">开户银行</li>
+                <li><input type="text" placeholder="请输入开户银行" name='bank' pattern='required' alt='填写开户银行'></li>
+            </ul>
+            <ul>
+                <li class="time">银行账户</li>
+                <li><input type="text" placeholder="请输入银行账户" name='account' pattern='required' alt='填写银行账号'></li>
+            </ul>
+            <ul>
+                <li class="time">备注说明</li>
+                <li><input name='note' type="text" placeholder="请输入备注说明"></li>
+            </ul>
+        </div>
+        <input type="submit" class="del_but" id="del_but" onclick="setTimeout(payPass, 1000)" value="申请提现">
+        <div class="clear"></div>
+    </div> 
+    </form> 
+  
+</div> 
+
+<div class="mask" id="mask"></div>
+<!-- 支付密码 strat-->
+<div class="w_paswd">
+    <div class="ps_title">
+        <div class="close" id="type_close"></div>
+        <span><strong>请输入支付密码</strong></span>
+    </div>
+    <div class="passwd_cont ">
+        <div class="pass clear">
+        <input class="pas_tex" name="js_payPass" type="password">
+        </div>   
+        <div class="pas_but clear">
+            <button class="pas_qr" id="pas_qd">确定</button>
+            <button class="pas_qx" id="pas_xq">取消</button>
+        </div>
+    </div>
+</div>
+        <div class="mask" id="mask"></div>
+        <!-- 支付密码 end-->
+</div>
+<script type="text/javascript">  
+$(document).ready(function() {  
+    $("#pas_xq,#mask").click(function(){ 
+        var mask=$(".mask");
+        var w_paswd=$(".w_paswd");
+        w_paswd.animate({bottom: '-240px'},"slow");
+        mask.fadeOut(300);
+    });
+}); 
+function payPass()
+{
+    if($('.invalid-text').length == 0)
+    {
+        var w_paswd=$(".w_paswd")
+        var mask=$(".mask");
+        w_paswd.animate({bottom: '0rem'},"slow");
+        mask.fadeIn(300);
+        $('#pas_qd').click(function(){
+            var data = 'pay_pwd='+$('input[name=js_payPass]').val()+'&'+$('.js_validate_form').serialize();
+            $.getJSON("{url:/ucenter/withdraw_act}",data,function(content){
+                if(content.result == false)
+                {
+                    alert(content.msg);
+                    return;
+                }
+                window.location.href='{url:/ucenter/withdraw_list}';
+            });
+        })
+    }
+}
+</script>  
+</body>
+<!-- 支付密码 end-->

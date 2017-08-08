@@ -1,0 +1,63 @@
+
+{set:$queryWithdrawList = Api::run('getWithdrawList',$this->user['user_id'])}
+{set:$items = $queryWithdrawList->find()}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0, maximum-scale=1.0">
+<meta content="telephone=no" name="format-detection" />
+<title>山城速购</title>
+
+<script type="text/javascript" src="{theme:javascript/js/jquery-1.9.1.min.js}"></script>
+<link rel="stylesheet" href="{skin:css/common.css}" type="text/css">               
+
+
+</head>
+<body>
+<header class="wap-header">
+    <div class="wap-topbar" style="">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
+        <div class="h-center">
+            <h1>账单明细</h1>
+        </div>
+    
+    </div>
+</header>
+
+<div class="container">  
+      
+    <ul class="tabs">  
+        <li><a href="{url:ucenter/account_list}">交易记录</a></li>  
+        <li class="active"><a >提现记录</a></li>  
+    </ul>  
+    <div class="tab_container">  
+         
+          
+        <div id="tab4" class="tab_content" style="display: block; ">  
+            {if:$items}
+            {foreach:items = $items}
+            <div class="content_list">
+            
+            <div class="checked_on"> 
+                <a href="{url:/ucenter/withdraw_detail/id/$item['id']}">              
+                <ul>
+                    <li>{$item['note']}</li>
+                    <li>{$item['amount']}</li>
+                </ul>
+                    <div class="clear"></div>
+                <ul>
+                    <li class="time">{$item['time']}</li>
+                    <li class="time">{echo:AccountLog::getWithdrawStatus($item['status'])}</li>
+                </ul>
+                </a> 
+            </div>
+            <div class="clear"></div>
+            </div>
+            {/foreach}
+           
+            {/if}
+        </div>  
+    </div>  
+  
+</div> </body>
