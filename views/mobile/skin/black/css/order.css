@@ -317,3 +317,84 @@ padding: 0 10px;
 	margin-right: 3px;
 }
 /*订单详情结束*/
+
+/*支付密码*/
+.mask{
+	position: fixed;
+	left:0;
+	top:0;
+	height:100%;
+	width: 100%;
+    background: black;
+    opacity: 0.4;
+    z-index: 5;
+    display: none;
+}
+.pay{
+	position: fixed;
+	height:240px;
+    width:100%;
+    background: #fff;
+    border-top:1px solid #dedede;
+    bottom:-240px;
+    z-index: 12;
+}
+.pay .zf_password_tit span{
+	display: block;
+	text-align: center;
+	font-size: 18px;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #dedede;
+}
+.pay .pay_cont{
+	padding-top:10px; 
+}
+.pay .pay_cont p{
+	height:25px;
+	line-height: 25px;
+	text-align: center;
+}
+.pay .pay_cont p:nth-child(2){
+	overflow:hidden;
+	text-overflow:ellipsis; 
+	 white-space: nowrap;
+	padding-right: 30px;
+    padding-left: 30px;
+   
+}
+.pay .pay_cont .text_input{
+	padding:10px 20px;
+}
+.pay .pay_cont .text_input input{
+	height: 35px;
+	line-height: 35px;
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #dedede;
+	border-radius: 10px;
+}
+.pay .but{
+	padding:10px 20px;
+	border-top:1px solid #DEDEDE;
+	height: 50px; 
+}
+.pay .but a{
+	display: block;
+    float: left;
+    width: 44%;
+    text-align: center;
+    border: 1px solid #dedede;
+    height: 35px;
+    line-height: 35px;
+    border-radius: 10px;
+}
+.pay .but a.but_ok{
+	margin-right: 12%;
+	background: #c0c0c0;
+    color: #eee;
+}
+.pay .but a.but_qx{
+	background: #eee;
+}
+/*支付密码 end*/
