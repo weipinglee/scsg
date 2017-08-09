@@ -367,7 +367,7 @@ if($('#floor_text_show').text().length == 4)
 					<!--在线客服pannel-->
 					<div style="visibility: hidden;" class="J-content toolbar-panel tbar-panel-chat">
 						<h3 class="tbar-panel-header J-panel-header">
-							<a href="#" target="_blank" class="title"> 
+							<a href="#" target="_blank" class="title">
 								<i></i> 
 								<em class="title">在线客服</em>
 							</a> 
@@ -376,9 +376,13 @@ if($('#floor_text_show').text().length == 4)
 						<div class="tbar-panel-main">
 							<div style="height: 943px;" class="tbar-panel-content J-panel-content">
 								<div class="jt-online-wrap" style='padding-left:20px'>
+
 									<div class="n_bk">
-									<div id="BDBridgeFixedWrap" style='display:none;'></div>
+										{foreach:items=unserialize($siteConfig->service_online)}
+										<a href="http://wpa.qq.com/msgrd?v=3&uin={$item['qq']}&site=qq&menu=yes">{$item['name']}</a></br>
+										{/foreach}
 									</div>
+
 									
 								</div>
 							</div>
@@ -406,7 +410,10 @@ if($('#floor_text_show').text().length == 4)
 							class="tab-sub J-count hide">0</span>
 					</div>
 					<div class=" toolbar-tab tbar-tab-chat ">
-						<i class="tab-ico"></i><img src="{skin:images/ic2.png}"> <em class="tab-text">客服</em> <span
+						<i class="tab-ico"></i>
+						<img src="{skin:images/ic2.png}"> <em class="tab-text">客服</em>
+
+							<span
 							class="tab-sub J-count hide">0</span>
 					</div>
 
@@ -458,6 +465,5 @@ _mvq.push(['$logConversion']);
 
 </script>
 </body>
-<script type="text/javascript"> var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://"); document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F0885aeaf12e11e6a4919f3317c26942a' type='text/javascript'%3E%3C/script%3E")) </script>
-								
+
 </html>
