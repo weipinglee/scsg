@@ -446,3 +446,348 @@ body{font-size:14px;font-family:'\5FAE\8F6F\96C5\9ED1';-webkit-overflow-scrollin
 #show345{display:none;}
 
 .js_show_cat_ad .ad_box{height: 270px;}
+
+/* 账户余额 */
+.user_icon {
+    display: block;
+    margin: 10px auto;
+    text-align: center;
+}
+.user_ico{
+    width: 70px;
+    height: 70px;
+    margin: 10px 0;
+    border-radius: 50%;
+}
+.user_icon .user_name{
+    margin-top: 10px;
+    display: block;
+}
+.my_account {
+    padding-bottom: 35px;
+    background: #fff;
+    color: #656565;
+    text-align: center;
+    border-bottom: 1px solid #f9f9f9;
+}
+.my_account strong {
+    font-weight: normal;
+    font-size: 14px;
+    display: inline-block;
+}
+.my_account em {
+    font-size: 20px;
+    margin-top: 10px;
+    display: inline-block;
+    font-weight: bold;
+    color: #EF4933;
+}
+.account_oper li{
+    display: block;
+    float: left;
+    width: 50%;    
+}
+.account_oper li a{
+    display: block;
+}
+.account_oper li img{
+    width: 100%;
+    display: block;
+    border: 1px solid #e6e6e6;
+}
+
+
+/*账户明细*/
+ul.tabs {
+margin: 0;
+padding: 0;
+float: left;
+list-style: none;
+height: 51px;
+width: 100%;
+border-bottom: 1px solid #eee;
+}
+ul.tabs li {
+float: left;
+margin: 0;
+padding: 0;
+height: 50px;
+line-height: 50px;
+border-left: none;
+background: #fff;
+overflow: hidden;
+position: relative;
+width: 50%;
+text-align: center;
+}
+ul.tabs li.active a{
+color: #f77804;
+}
+ul.tabs li a {
+text-decoration: none;
+color: #000;
+display: block;
+font-size: 14px;
+width: 100%;
+border: 1px solid #fff;
+outline: none;
+}
+.tab_container {
+border-top: none;
+clear: both;
+float: left;
+width: 100%;
+background: #fff;
+-moz-border-radius-bottomright: 5px;
+-khtml-border-radius-bottomright: 5px;
+-webkit-border-bottom-right-radius: 5px;
+-moz-border-radius-bottomleft: 5px;
+-khtml-border-radius-bottomleft: 5px;
+-webkit-border-bottom-left-radius: 5px;
+}
+.tab_content {
+padding:0;
+font-size: 13px;
+}
+.tab_content ul{
+}
+.tab_content ul li{
+    line-height: 30px
+}
+.tab_content ul li:first-child{
+    float: left;
+    width: 60%;
+}
+.tab_content ul li:nth-child(2){
+    float: right;
+    width: 40%;
+    text-align: right;
+}
+.tab_content ul li.time{
+    color: #aaa;
+}
+.tab_content .content_list{
+    border-bottom: 1px solid #eee;
+    margin-bottom:10px; 
+    padding:0.1rem 0; 
+    position: relative;
+}
+.tab_content .content_list p.checked{
+    display: block;
+    position: absolute;
+    top:40%;
+    left: 2%;
+}
+.tab_content .content_list .checked_on{
+       width: 100%;
+    float: right;
+    padding: 0px 10px;
+}
+.clear{
+	clear:both;
+}
+/*提现申请*/
+.tab_txsq{
+	padding: 20px;
+}
+.tab_txsq .checked_on ul li:nth-child(2) input{
+	margin: 10px 0px;
+	height: 30px;
+	line-height: 30px;
+	padding: 5px 10px;
+	border:1px solid #eee;
+	width: 100%
+}
+.tab_txsq .del_but{
+	width: 100%;
+	height:35px;
+	line-height: 35px;
+	text-align: center;
+	background:#f77804;
+	color: #fff;
+}
+/*支付密码*/
+.mask{
+	position: fixed;
+	left:0;
+	top:0;
+	height:100%;
+	width: 100%;
+    background: black;
+    opacity: 0.4;
+    z-index: 5;
+    display: none;
+}
+.w_paswd{
+	position: fixed;
+	height:240px;
+    width:100%;
+    background: #fff;
+    border-top:1px solid #dedede;
+    bottom:-240px;
+    z-index: 12;
+}
+.w_paswd .ps_title span{
+	display: block;
+	text-align: center;
+	font-size: 18px;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #dedede;
+}
+.w_paswd .passwd_cont {
+    padding: 15px;
+}
+.w_paswd .passwd_cont .pass .pas_tex {
+    border: 1px solid #D3D3D3;
+    width: 98%;
+    height: 40px;
+    padding: 0 1%;
+    font-size: 15px;
+    text-align: center;
+}
+.w_paswd .passwd_cont .pas_but {
+	height: 40px;
+	margin-top:20px; 
+}
+
+.w_paswd .passwd_cont .pas_but button {
+    display: block;
+    padding: 10px 15px;
+    text-align: center;
+    border-radius: 2px;
+    border: 0px;
+    width: 38%;
+}
+.w_paswd .passwd_cont .pas_but .pas_qr {
+    float: left;
+    background: #f77804;
+    color: #fff;
+}
+.w_paswd .passwd_cont .pas_but .pas_qx {
+    float: right;
+    background: #CACACA;
+    color: #7b7b7b;
+}
+/*支付密码 end*/
+
+/* 账户余额 end */
+
+/*商家商品页面*/
+.wap-header .top_title{
+	height: 41px;
+	border-bottom: 1px solid #eee;
+}
+.wap-header .top_title a{
+	display: block;
+	float: left;
+	width: 50%;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+}
+.wap-header .top_title a.on{
+	color: #f77804;
+}
+/*商家商品页面 end*/
+/*商家介绍界面*/
+.home_deal{
+    
+    border-bottom: 1px solid #E6E6E6;
+  
+}
+.seller_info{
+   padding: 15px;
+   background: #fff;
+}
+.seller_info .info ul li{
+    float: left;
+}
+.seller_info .info ul li:nth-child(1){
+    width: 25%;
+    padding: 2%;
+    border: 1px solid #E6E6E6;
+}
+.seller_info .info ul li:nth-child(1) img{
+    width: 100%;
+}
+.seller_info .info ul li:nth-child(2){
+    width: 50%;
+    margin: 0 3%;
+}
+.seller_info .info ul li:nth-child(3){
+    width: 13%;
+    text-align: center;
+    border-left: 1px solid #e6e6e6;
+    height: 40px;
+    line-height: 40px;
+}
+.seller_info .info ul li:nth-child(3) i{
+    display: block;
+    width: 97%;
+    height: 40px;
+    line-height: 60px;
+    background: url("../image/top/kefu@2x.png") no-repeat 23pxr 3px;
+    padding-left: 0.1rem;
+}
+.seller_info ul li.seller_name h3{
+    font-size: 15px;
+    padding-top: 15px;
+    position: relative;
+}
+.seller_info ul li.seller_name h3 .vip_logo{
+    bottom: 3px;
+    position: relative;
+    left: 3px; 
+}
+.seller_info ul li.seller_name p{
+   color: #656565;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    overflow: hidden;
+    padding-top: 10px;
+    line-height: 18px;
+    font-weight: normal;
+    font-size: 13px;
+}
+.seller_info .sellers_xl{
+    color: #AAAAAA;
+    height: 25px;
+    line-height: 25px;
+    position: relative;
+    top: 10px;
+}
+.sellers_xl .xl3 em{
+    color: #656565;
+}
+.home_t{
+   
+    height: 40px;
+    line-height: 40px;
+    padding: 0 10px;
+    font-size: 15px;
+    border-top: 1px solid #eee;
+}
+.home_t .t_name{
+    float: left;
+    color: #656565;
+}
+.home_t .t_dz{
+    float: right;
+    color: #9C9C9C;
+}
+.vip_logo {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    bottom: 15px;
+    right: 15px;
+    
+}
+/*商家介绍界面 end*/
+.clear:after {
+    display: block;
+    content: "";
+    clear: both;
+}

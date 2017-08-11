@@ -4,7 +4,7 @@
  * @authors kenny.wang (398188662@qq.com)
  * @date    2014-04-07 21:49:46
  */
-	table td{border:1px solid #000;line-height:30px; height:30px;}
+	table td{/* border:1px solid #000;line-height:30px; height:30px; */}
 .detailsHead{margin: 10px;}
 .detailsHead img{width: 100%;}
 .detailsHead h1{font-size: 17px;font-weight: normal;padding: 5px 0 5px 0}
