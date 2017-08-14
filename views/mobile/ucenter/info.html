@@ -82,6 +82,10 @@
 			<em class="tuan">修改密码</em>
 		</a>
         {/if}
+		<a role="menuitem" class="menuitem" href="{url:/ucenter/paysecret}">
+			<!-- <i>暂无积分</i> -->
+			<em class="tuan">修改支付密码</em>
+		</a>
         {if:$this->userRow['phone']}
 		<a role="menuitem" class="menuitem" href="{url:/ucenter/toChgPhone1}">
 			<i>{echo:user_like::getSecretPhone($this->userRow['phone'])}</i> 
