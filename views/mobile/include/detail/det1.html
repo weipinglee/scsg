@@ -68,7 +68,7 @@
 	<!-- infor beigin -->
 	<section class="infor book_infor" style=" clear:both;">
 			{if:isset($seller)}
-				<p class="shop"><span class="bg_shop">商家</span>{$seller['true_name']}</p>
+				<p class="shop"><span class="bg_shop">商家</span><a href="{url:/site/seller}">{$seller['true_name']}</a></p>
 			{/if}
 			<p>
 			{if:isset($group_price)}
