@@ -6,9 +6,9 @@ function hideErrInfo(){
 }
 function showPhoneTipWhenBlur(){
 	var phone = $('#mobile').val();
-	var a = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,18}$/;
+	var a = /^1[0-9]{10}$/;
     if (!a.test(phone)) {
-        showErrInfo('密码请至少包含字母和数字组合不少于6位');
+        showErrInfo('请输入正确的手机号码');
 
     } else {
         hideErrInfo();
@@ -22,8 +22,12 @@ function showPhoneTipWhenBlur(){
             success: function(e) {
 				if(e.checkResult==1){//手机号码已注册
 					showErrInfo('该手机号码已注册');
+					$('#getCode').attr("disabled",true);
+					$('#getCode').css("background","#ccc");
 				}else{
 					$('input[name=password]').removeAttr('disabled');
+					$('#getCode').attr("disabled",false);
+					$('#getCode').css("background","#ff5e00");
 				}
 			}
 		})
@@ -111,7 +115,7 @@ function registerByPhoneSubmit(){
 	var phone = $('#mobile').val();
 	var a = /^1[0-9]{10}$/;
     if (!a.test(phone)) {
-		showErrInfo('手机格式错误');
+		showErrInfo('手机号码格式错误');
 		return false;
 	}
 	var num = $('#code').val();
@@ -120,10 +124,10 @@ function registerByPhoneSubmit(){
 		showErrInfo('验证码格式错误');
 		return false;
 	}
-	var c = /^[\S]{6,20}$/;
+	var c = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,18}$/;
 	var pwd = $('input[name=password]').val();
 	if(!c.test(pwd)){
-		showErrInfo('密码6-20位的非空字符');
+		showErrInfo('密码请至少包含字母和数字组合不少于6位');
 		return false;
 	}
 	if(!$('#protocol').prop('checked')){
