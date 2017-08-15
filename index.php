@@ -3,6 +3,7 @@ $iweb = dirname(__FILE__)."/lib/iweb.php";
 $config = dirname(__FILE__)."/config/config.php";
 require($iweb);
 require dirname(__FILE__)."/lib/function.php";
+session_set_cookie_params(7*24*3600);
 define('REQUEST_METHOD',$_SERVER['REQUEST_METHOD']);
 define('IS_GET',        REQUEST_METHOD =='GET' ? true : false);
 define('IS_POST',       REQUEST_METHOD =='POST' ? true : false);
