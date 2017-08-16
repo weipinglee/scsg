@@ -468,8 +468,8 @@ class Order_Class
 
 	 		$areaData = area::name($data['province'],$data['city'],$data['area']);
 	 		$data['province_str'] = $areaData[$data['province']];
-	 		$data['city_str']     = $areaData[$data['city']];
-	 		$data['area_str']     = $areaData[$data['area']];
+	 		$data['city_str']     = isset($areaData[$data['city']]) ? $areaData[$data['city']] : '';
+	 		$data['area_str']     = isset($areaData[$data['area']]) ? $areaData[$data['area']] : '';
 
 	        //物流单号
 	    	$tb_delivery_doc = new IQuery('delivery_doc as dd');
@@ -645,9 +645,9 @@ class Order_Class
 		$takeselfRow = $takeselfObj->getObj('id = '.$id);
 
 		$temp = area::name($takeselfRow['province'],$takeselfRow['city'],$takeselfRow['area']);
-		$takeselfRow['province_str'] = $temp[$takeselfRow['province']];
-		$takeselfRow['city_str']     = $temp[$takeselfRow['city']];
-		$takeselfRow['area_str']     = $temp[$takeselfRow['area']];
+		$takeselfRow['province_str'] = isset($temp[$takeselfRow['province']]) ? $temp[$takeselfRow['province']] : '';
+		$takeselfRow['city_str']     = isset($temp[$takeselfRow['city']]) ? $temp[$takeselfRow['city']] : '';
+		$takeselfRow['area_str']     = isset($temp[$takeselfRow['area']]) ? $temp[$takeselfRow['area']] : '';
 		return $takeselfRow;
 	}
 
