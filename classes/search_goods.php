@@ -285,7 +285,7 @@ class search_goods
 					}
 
 					//商品分类检索
-					if($key == 'category_extend')
+					if($key == 'category_extend' && $val!='')
 					{
 						$currentCatGoods    = array();
 						$categoryExtendObj  = new IModel('category_extend');

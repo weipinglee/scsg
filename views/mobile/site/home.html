@@ -55,10 +55,13 @@
 		     <a href="{echo:search_goods::searchUrl('show_type','list')}" class="search_nav_icon_none"><img src="{skin:css/wap/app_mode.png}" style="width:35px;height:35px;"></a>
    		{/if}
     </div>
-    
+
+	  {set:$seller_id = IFilter::act(IReq::get('id'),'int')}
+	  {set:$sellerRow=Api::run('getSellerInfo',$seller_id)}
+
     <div class="top_title">
         <a class="sj_de on">商家介绍</a>
-        <a class="sj_good ">全部商品</a>
+        <a class="sj_good " >全部商品</a>
     </div>
     
 </header>
@@ -86,42 +89,14 @@
 		</div>
 
 
-		<div class="s-item">
-	        <div>
-	        	<a href="/ducong/scsg/site/products/id/19" class="s-img">
-	                <div class="goods-one-img"><img src="/ducong/scsg/upload/2017/07/27/20170727125753187.jpg" onerror="#"></div>
-				</a>
-			</div>
-	        <div>
-	        	<a href="/ducong/scsg/site/products/id/19" class="s-text">嗯嗯</a>
-			</div>
-         
-	        <div class="am">
-	            <span class="price">¥ 10.00</span>
-	            <span class="sales">销量:1</span>
-	        </div>
-    	</div>
-    	<div class="s-item">
-	        <div>
-	        	<a href="/ducong/scsg/site/products/id/19" class="s-img">
-	                <div class="goods-one-img"><img src="/ducong/scsg/upload/2017/07/27/20170727125753187.jpg" onerror="#"></div>
-				</a>
-			</div>
-	        <div>
-	        	<a href="/ducong/scsg/site/products/id/19" class="s-text">嗯嗯</a>
-			</div>
-         
-	        <div class="am">
-	            <span class="price">¥ 10.00</span>
-	            <span class="sales">销量:1</span>
-	        </div>
-    	</div>
+
 
 
 	</section>
 		   		<input type='hidden' name='order' value='{$order}'/>
 			   	<input name='page' type='hidden' value='1' />
-				<input name='childCat' type='hidden' value='{$this->childId}'/>
+				<input name='childCat' type='hidden' value=''/>
+				<input name="sellerId" type="hidden" value="{$_GET['id']}" />
 	            <div class="loading-ctn loading-imgS">
 	            <p >下拉查看更多</p>
 	            <img alt="" src="{skin:images/files/loading.gif}">
@@ -132,30 +107,34 @@
    <div class="seller_info">
         <div class="info clear">
             <ul>
-                <li class="seller_photo"><img src="/nzw/pic/thumb/img/upload@_@2016@_@11@_@24@_@20161124100033381.jpg@_@w@_@60@_@h@_@60"></li>
+                <li class="seller_photo">
+					<img src="{webroot:$sellerRow['logo_img']}">
+				</li>
                 <li class="seller_name">
-                    <h3>上海通达科技有限公司                                        <img src="/nzw/views/mobile/skin/default/image/sellerVip.png" class="vip_logo"></h3>
-                                        <p>主营：</p>
-                    <p>所在地：上海市 市辖区 浦东新区 唐镇上丰路977号涛飞国际广场B区8楼</p>
+                    <h3>{$sellerRow['true_name']}
+						<img src="/nzw/views/mobile/skin/default/image/sellerVip.png" class="vip_logo"></h3>
+
+                    <p>所在地：{echo:join(' ',area::name($sellerRow['province'],$sellerRow['city'],$sellerRow['area']))} {$sellerRow['address']}</p>
                 </li>
                 <li class="kf_a">
-                    <a href="mqqwpa://im/chat?chat_type=wpa&amp;uin=&amp;version=1&amp;src_type=web&amp;web_src=bjhuli.com"><i>客服</i></a>
+                    <a href="mqqwpa://im/chat?chat_type=wpa&amp;uin={$sellerRow['server_num']}&amp;version=1&amp;src_type=web&amp;web_src=bjhuli.com"><i>客服</i></a>
                 </li>
             </ul>
         </div>
         <div class="sellers_xl">
-            <span class="xl1">销量23</span>
-            <span class="xl2">共3件宝贝</span>
-            <span class="xl3">评分：<em>0</em></span>
+			{set:$ave = statistics::getSellerGrade($sellerRow['id']);}
+            <span class="xl1">销量{echo:statistics::sellCountSeller($sellerRow['id'])}</span>
+
+            <span class="xl3">评分：<em>{$ave}</em></span>
         </div>
    </div> 
    <div class="home_t">
         <div class="t_name">进入官网</div>
-        <div class="t_dz"><a href="http://tongda.com" target="_blank">http://tongda.com</a></div>
+        <div class="t_dz"><a href="{$sellerRow['home_url']}" target="_blank">{$sellerRow['home_url']}</a></div>
    </div>
    <div class="home_t">
         <div class="t_name">客服热线</div>
-        <div class="t_dz"><a href="tel:02160459865">02160459865</a></div>
+        <div class="t_dz"><a href="tel:{$sellerRow['phone']}">{$sellerRow['phone']}</a></div>
    </div>
 </div>
     	<script type="text/javascript" src="{theme:javascript/searchlist.js}" charset="UTF-8"></script>
@@ -199,7 +178,7 @@
 	</script>
 	<script type='text/javascript' >
         var i = 1;
-        var _t = '{$type}';
+        var _t = '1';
 		window.onscroll = function(){
 			 if ($(document).scrollTop() >= $(document).height() - $(window).height()){
 					showMorePro(i);

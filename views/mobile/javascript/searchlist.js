@@ -2,7 +2,7 @@
 function getData(obj,url, j){
 	$('.loading-imgS img').show();
 	$('.loading-imgS p').hide();
-	
+
 	$.ajax({
 		type:'post',
 		async:false,
@@ -10,9 +10,9 @@ function getData(obj,url, j){
 		dataType:'json',
 		url:url,
 		beforeSend:function(){
-			
+
 		},
-		success:function(data){
+		success:function(data){//window.realAlert(JSON.stringify(data));
 			if(data==0){
 				$('.loading-imgS p').text('没有更多数据');
 			}else{
@@ -31,19 +31,27 @@ function getData(obj,url, j){
 			$('.loading-imgS img').hide();
 			$('.loading-imgS p').show();
 		},
-		timeout:1000,
+		timeout:1000
 	})
 }
 //获取更多产品
 function showMorePro(i){
-	
+
 	var page = parseInt($('input[name=page]').val());
 	var childCat = $('input[name=childCat]').val();
+	var sellerId = parseInt($('input[name=sellerId]').val());
 	var order = $('input[name=order]').val();
+
 	var obj = {
-		page:page,childCat:childCat,order:order
+		page:page,order:order
 	};
-	
+	if(childCat){
+		obj.childCat = childCat;
+	}
+	if(sellerId){
+		obj.sellerId = sellerId;
+	}
+
 	getData(obj,getMoreUrl, i);
 }
 //获取更多搜索产品
