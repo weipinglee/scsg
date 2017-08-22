@@ -318,8 +318,8 @@ padding: 0 10px;
 }
 /*订单详情结束*/
 
-/*支付密码*/
-.mask{
+/*支付密码弹窗改页面*/
+/*.mask{
 	position: fixed;
 	left:0;
 	top:0;
@@ -396,5 +396,5 @@ padding: 0 10px;
 }
 .pay .but a.but_qx{
 	background: #eee;
-}
+}*/
 /*支付密码 end*/
