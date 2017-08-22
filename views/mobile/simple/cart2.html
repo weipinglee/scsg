@@ -36,7 +36,7 @@
      </head>
 <body style="background:#efefef;">
 <script type='text/html' id='takeselfRowTemplate'>
-	<option value="<%=id%>"><%=name%></option>
+	<option value="<%=item['id']%>"><%=item['name']%></option>
 </script>
 <script type='text/javascript'>
 var _url = "{url:/block/order_delivery_count}";
@@ -47,7 +47,7 @@ orderFormInstance = new orderFormClass();
 
 //DOM加载完毕
 jQuery(function(){
-	
+
 	//使用红包按钮
 	(function()
 	{
@@ -168,7 +168,7 @@ function getTakeselfData(typeVal,id)
 		dataType:'json',
 		url:"{url:/block/getTakeselfList}",
 		beforeSend:function(){
-			
+
 		},
 		success:function(jsonData){
 			switch(typeVal)
@@ -180,7 +180,7 @@ function getTakeselfData(typeVal,id)
 				{
 					var item = jsonData[index];
 					$('[name="city"]').append('<option value="'+item['city']+'">'+item['city_str']+'</option>');
-					
+
 				}
 			}
 			break;
@@ -200,7 +200,7 @@ function getTakeselfData(typeVal,id)
 				for(var index in jsonData)
 				{
 					var item = jsonData[index];
-					var takeselfHtml = template.render('takeselfRowTemplate',item);
+					var takeselfHtml = template.render('takeselfRowTemplate',{"item":item});
 					$('select[name=takeself]').append(takeselfHtml);
 				}
 			}
@@ -352,7 +352,7 @@ $(".sj img").css("height","27px")
 			<div class="qrdds_zf">
             {if:!$this->good_type}
 		     	<h4>代收点:</h4>
-					<select style="">
+					<select style="" name="takeself">
 		     		<option>请选择代收点（可空）</option>
 		     		</select>
 		    {/if}
