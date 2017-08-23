@@ -1,4 +1,4 @@
-{set:$param = $this->param} 
+{set:$param = $this->param}
 {foreach:items=$this->addressList}
 	{if:$item['id']==$this->defaultAddressId}
 	{set:$defaultAddress = $item;}
@@ -6,7 +6,7 @@
 {/foreach}
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta charset="utf-8">        
+        <meta charset="utf-8">
         <link rel="apple-touch-icon-precomposed" href="http://static-web.b5m.com/wap/img/collect-logo/b5m-collect-logo.png">
         <title>确认订单</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
@@ -47,7 +47,7 @@ orderFormInstance = new orderFormClass();
 
 //DOM加载完毕
 jQuery(function(){
-	
+
 	//使用红包按钮
 	(function()
 	{
@@ -59,7 +59,7 @@ jQuery(function(){
 		}
 		var ticketHtml = template.render('ticketInputTemplate',{});
 			$('#ticket_show_box').append(ticketHtml);
-	
+
 
 	})();
 	getTakeselfData('area','{$defaultAddress["area"]}');
@@ -73,7 +73,7 @@ jQuery(function(){
 	//初始化自提点数据(自添)
 	takeselfInit("{$this->custom['takeself']}");
 	$('select[name=payment]').val('-1');
-    
+
     //计算运费
     $(function(){
         orderFormInstance.get_delivery();
@@ -152,7 +152,7 @@ function submit_check(){
      			var mask = $(".mask")
      			pay.animate({bottom:'0px'},"slow");
      			mask.fadeIn(300);
-	
+
 }
 
 //获取自提点数据
@@ -168,7 +168,7 @@ function getTakeselfData(typeVal,id)
 		dataType:'json',
 		url:"{url:/block/getTakeselfList}",
 		beforeSend:function(){
-			
+
 		},
 		success:function(jsonData){
 			switch(typeVal)
@@ -180,7 +180,7 @@ function getTakeselfData(typeVal,id)
 				{
 					var item = jsonData[index];
 					$('[name="city"]').append('<option value="'+item['city']+'">'+item['city_str']+'</option>');
-					
+
 				}
 			}
 			break;
@@ -227,7 +227,7 @@ function selectProtect(obj)
 </script>
 <script type="text/javascript">
 $(document).ready(function(){
-$(".sj img").css("height","27px")  
+$(".sj img").css("height","27px")
 });
 </script>
 
@@ -274,7 +274,7 @@ $(".sj img").css("height","27px")
                  	</p>
                  	<p><i class="icon-map-marker" style="font-size: 18px;"></i>
                  		<span>
-                 			{$defaultAddress['province_val']} {$defaultAddress['city_val']} 
+                 			{$defaultAddress['province_val']} {$defaultAddress['city_val']}
                  			{$defaultAddress['area_val']} {$defaultAddress['address']}
                  		</span>
                  	</p>
@@ -286,13 +286,13 @@ $(".sj img").css("height","27px")
         {foreach:items=$this->goodsList key=$buy item=$goods}
      	<div class="qrdd qrdds">
      		<!-- 商品详情-->
-            
+
             {foreach:items=$goods item=$value}
             <div class="js_seller_diff" js_data="{$key}" js_sum_data="{$value['total_price']}">
      		<div class="sj"><img {if: isset($value['logo_img'])} src="{webroot:}{$value['logo_img']}" {else:} src="{skin:images/ptlog.png}" {/if} style="width:27px;height:27px;float:left;position:absolute;top:-5px;"/>
-                <span style='float:right;margin:0px 2% 0 0;'><span>配送费用：</span><span id='deliveryfee_{$value[0]["seller_id"]}_{$value["weight"]}_{$value["total_price"]}'>￥{$value['delivery']}</span></span> 
+                <span style='float:right;margin:0px 2% 0 0;'><span>配送费用：</span><span id='deliveryfee_{$value[0]["seller_id"]}_{$value["weight"]}_{$value["total_price"]}'>￥{$value['delivery']}</span></span>
      			<a herf="javascript:;">{$value['seller_name']}</a></div>
-                
+
 				<input type='hidden' value='{$value[0]["seller_id"]}' name='seller_id[]' />
 				{foreach:items = $value $key=$k}
 				{if:is_array($item)}
@@ -323,7 +323,7 @@ $(".sj img").css("height","27px")
 				     			单价：<span>￥{$item['sell_price']}</span>
 								优惠：<span>￥{$item['reduce']}</span>
 				     			数量：<span>x{$item['count']}</span>
-								
+
 				     		</p>
 							<p style='color:red; text-align:right;padding-right:15px;'>
 								小计：<b >￥{$item['sum']}</b>
@@ -340,10 +340,10 @@ $(".sj img").css("height","27px")
                 </div>
                 <div style="clear: both;height:15px;"></div>
             {/foreach}
-            
+
 			<div style="height:23px;" ></div>
      		<!-- 商品详情结束 -->
-     		
+
      	</div>
         {/foreach}
 
@@ -360,7 +360,7 @@ $(".sj img").css("height","27px")
 		</div>
 		<div class="qrdd qrdds">
 			<div class="qrdds_zf">
-		     	<h4><i>*</i>支付方式:</h4>	
+		     	<h4><i>*</i>支付方式:</h4>
 		     	<select style="" name="payment" onchange='orderFormInstance.paymentSave()' pattern='int'>
 		     		<option value='-1'>请选择支付方式</option>
 						{set:$paymentList=Api::run('getPaymentList')}
@@ -375,18 +375,18 @@ $(".sj img").css("height","27px")
      		</div>
 		</div>
 		<div class="qrdd qrdds">
-		    <div class="qrdds_zf">		
+		    <div class="qrdds_zf">
 		    	<h4>买家留言:</h4>
 		     	<input  class="xt" style="width:65%" type="text" name='message' placeholder="买家留言"/>
 		    </div>
-		</div>	
+		</div>
 		{if:!empty($this->promotion)}
 		<div class="qrdd qrdds">
 	     	<span class="yhj">满足的优惠活动</span>
 			{foreach:items = $this->promotion}
 	     	<div class="fapiao">
 	     		<span class="indent fa_tit js_data_{$item['type']}" id="js_data_{$item['id']}" {if:$item['hide']} style="display:none;" {/if}>{$item['plan']}，{$item['info']}</span>
-	     	</div>		
+	     	</div>
      		{/foreach}
      	</div>
 		{/if}
@@ -398,15 +398,15 @@ $(".sj img").css("height","27px")
 	     		<span class="fa_tit">发票抬头</span>
 				<input type='hidden' name='type' value='0' />
 	     		<input name='taitou' class="xt" type="text" placeholder="普通"/>
-	     	</div>		
+	     	</div>
      	</div>
         {if:!isset($this->prop_not)}
      	<div class="qrdd qrdds">
      		<span class="yhj">代金券使用</span>
      		<span id="ticket_a" class="yhj_check" onclick='orderFormInstance.ticket(this)'></span>
-			
+
 			<div class="fapiao hide" id='ticket_show_box'>
-	     	</div>	
+	     	</div>
 			<!--代金券模板-->
 			<script type='text/html' id='ticketTrTemplate'>
 			<div >
