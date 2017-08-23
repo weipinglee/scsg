@@ -10,8 +10,9 @@ class Sonline
 {
 	
     private static $qqPcUrl = 'http://wpa.qq.com/msgrd?v=3&uin={$qqNum}&site=qq&menu=yes';
-	private static $qqWapUrl = 'mqqwpa://im/chat?chat_type=wpa&uin={$qqNum}&version=1&src_type=web&web_src=bjhuli.com';
-	
+	//private static $qqWapUrl = 'mqqwpa://im/chat?chat_type=wpa&uin={$qqNum}&version=1&src_type=web&web_src=bjhuli.com';
+	private static $qqWapUrl = 'http://wpa.qq.com/msgrd?v=3&uin={$qqNum}&site=qq&menu=yes';
+
 	//通过qq号获取临时会话url
 	public static function getChatUrl($qq){
         if(IClient::getDevice()=='pc')
