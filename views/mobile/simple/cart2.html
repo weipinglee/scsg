@@ -148,11 +148,17 @@ function submit_check(){
         alert('请选择支付方式')
         return false;
     }
-    var pay=$(".pay")
+   $('form[name=order_form]').submit();
+    /*var  pay=$(".pay")
      			var mask = $(".mask")
      			pay.animate({bottom:'0px'},"slow");
+<<<<<<< HEAD
      			mask.fadeIn(300);
 
+=======
+     			mask.fadeIn(300);*/
+	
+>>>>>>> 74b0e31a3a5351acd5f44ca125031f0212657d2e
 }
 
 //获取自提点数据
@@ -242,7 +248,7 @@ $(".sj img").css("height","27px")
 	   		 </div>
 		</header>
      	<div style=""> </div>
-		<form action='{url:/simple/cart3}' method='post' name='order_form' callback='orderFormInstance.isSubmit();'>
+		<form action='{url:/simple/pay}' method='post' name='order_form' callback='orderFormInstance.isSubmit();'>
 			<input type='hidden' name='timeKey' value='{echo:time()}' />
 			<input type='hidden' name='direct_gid' value='{$this->gid}' />
 			<input type='hidden' name='direct_type' value='{$this->type}' />
@@ -445,13 +451,13 @@ $(".sj img").css("height","27px")
 			</div>
      	</div>
      	<!-- 支付密码strat -->
-     	<div class="pay">
+     	<!-- <div class="pay">
 		   <div class="zf_password_tit">
 	          <span>支付密码</span>
 	          <div class="close" id="type_close"></div>
 		   </div>
 		   <div class="pay_cont">
-			  <p>￥{$this->final_sum}</p>
+			  <p >￥<span id="final_sum2">{$this->final_sum}</span></p>
 			  <p class="goods_name">{$goods['name']}</p>
 			  <div class="text_input"><input type="text" name="" placeholder="请输入支付密码"></div>
 			  <div class="but">
@@ -460,11 +466,11 @@ $(".sj img").css("height","27px")
 			  </div>
 		   </div>
      	</div>
-     	<div class="mask" id="mask"></div>
+     	<div class="mask" id="mask"></div> -->
      	<!-- 支付密码end -->
      	</form>
      </div>
-     <script type="text/javascript">
+    <!--  <script type="text/javascript">
      	$(document).ready(function(){
      		$("#mask,#but_qx").click(function(){
      			var pay=$(".pay")
@@ -483,6 +489,6 @@ $(".sj img").css("height","27px")
      	    })
 
      	})
-     </script>
+     </script> -->
   </body>
 </html>
