@@ -19,6 +19,7 @@
 		{/if}
 	<ul>
     {foreach:items=$this->finalData}
+		{set:$orderSum = $item['final_sum']}
 	<!-- <li class="huise"><span>基本信息</span> </li> -->
 	<li style="margin:12px;0px;"><span>订单编号</span><a href="javascript:;">{$item['order_no']}</a> </li>
 	<li style="margin:12px;0px;"><span>下单时间</span><a href="javascript:;">{$create_time}</a></li>
@@ -32,9 +33,15 @@
 	{/if}
 	{if:$this->deliveryType != 1 && $this->paymentType == 1}
 	{set:$tmpId=$this->order_id;}
-	<form action='{url:/block/doPay/order_id/$tmpId/pay_level/1}' method='post' >
+		{if:$this->payment_id==1}
+	<form action='{url:/simple/checkPaypass/order_id/$tmpId/pay_level/1/sum/$orderSum}' method='post' >
 		<li class="annu one"><input type='submit' class="secsed" href="javascript:void(0);" style="width:96%;height:35px;" value='立即支付' ></li>
 	</form>
+		{else:}
+		<form action='{url:/block/doPay/order_id/$tmpId/pay_level/1/sum/$orderSum}' method='post' target='_blank'>
+			<input class="submit_pay" type="submit" value="立即支付" onclick="return dopay();" />
+		</form>
+		{/if}
 	{/if}
 	</ul>
 	

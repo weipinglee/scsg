@@ -45,18 +45,20 @@
     <section class="modle_section">
         <div class="ban_section">
             <div class="yj">
-				<form method="post" action="{url:/simple/cart3}">
+				<form method="get" action="{url:/simple/docheckPaypass}">
+                    <input type="hidden" name="order_id" value="{$this->order_id}"/>
+                    <input type="hidden" name="pay_level" value="{$this->pay_level}"/>
 					<div class="pay_cont">
                         {if:$this->user['user_id']}
                             {set:$tmpId=$this->order_id;}
                         {/if}
 
-                      <p>￥<span id="final_sum2">{$item['final_sum']}</span></p>
-                      <p class="goods_name">{$goods['name']}</p>
+                      <p>￥<span id="final_sum2">{$this->sum}</span></p>
+                      <p class="goods_name">{$this->orderData['order_no']}</p>
 
-                      <div class="text_input"><input type="text" name="" placeholder="请输入支付密码"></div>
+                      <div class="text_input"><input type="password" name="paypass" placeholder="请输入支付密码"></div>
                       <div class="but">
-                        <a class="but_ok" >确认</a>
+                          <input class="submit_pay" type="submit" value="确认支付"  />
                         <a class="but_qx" id="but_qx">取消</a>
                       </div>
                    </div>
