@@ -1,0 +1,72 @@
+
+<link rel="stylesheet" href="{skin:css/seller.css}">
+<script src="{theme:javascript/turn_page.js}"></script>
+<script type='text/javascript'>
+/*$(function(){
+    //排序字段
+    {set:$orderValue = IReq::get('order') ?  IFilter::act(IReq::get('order')) : 'default'}
+    {if:$orderValue}
+    $('#order_{$orderValue}').addClass('color').find('a').css('color', '#FFF');
+    {/if}
+})*/
+</script>
+<div style="background:#f6f6f6;padding-bottom:50px;">
+<section class="web">
+    <div class="screen">
+        <ul>
+                        <li id="order_default" class="color">
+                <a href="/site/search_list_seller?order=default&amp;by=asc" style="color: rgb(255, 255, 255);">默认排序</a>
+            </li>
+                        <li id="order_sale">
+                <a href="/site/search_list_seller?order=sale&amp;by=asc">销量</a>
+            </li>
+                        <li id="order_grade">
+                <a href="/site/search_list_seller?order=grade&amp;by=asc">信用</a>
+            </li>
+                        <!--<li class="color">默认排序</li>
+            <li>销量</li>
+            <li>信用</li>-->
+        </ul>
+    </div>
+    <div class="merch_list">
+                                        <ul>
+                       
+                       
+
+                 
+
+                        <li>
+                <div class="merch_left">
+                    <a href="/site/home/id/78"><img src="/" alt="盂县城东综合市场东鹏瓷砖门市">
+                                        </a>
+
+                </div>
+                <div class="merch_right">
+                    <dl>
+                        <dt>盂县城东综合市场东鹏瓷砖门市</dt>
+                        <!--<dd>主营：林业家具</dd>-->
+                        <dd>山西省 阳泉市 盂县</dd>
+                        <dd>主营商品：</dd>
+                    </dl>
+                </div>
+                <div class="bottom_word">
+                    <span>销量0</span>   
+                    <span>共37件宝贝</span>
+                    <p class="star_box"><strong class="item">评分：</strong><span class="star stat_0"></span></p>
+                    
+                </div>
+            </li>
+
+
+                    </ul>
+            </div>
+        <div class="turn_page"> 
+    <div class="pages_bar"><a href="/site/search_list_seller?page=1">首页</a><a class="current_page" href="/site/search_list_seller?page=1">1</a><a href="/site/search_list_seller?page=2">2</a><a href="/site/search_list_seller?page=2">尾页</a><span>当前第1页/共2页</span></div>    </div>
+     
+            
+
+</section>
+</div>
+
+
+
