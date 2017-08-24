@@ -11,8 +11,8 @@
 	</div>
 	<div class="confirm_box">
 			<h3>
-				你正在支付订单：<p>食用油</p>
-				<span class="pay_num">支付<b>179.00</b>元</span>
+				你正在支付订单：<p>{$this->orderData['order_no']}</p>
+				<span class="pay_num">支付<b>{$this->sum}</b>元</span>
 			</h3>
 			<form action='{url:/simple/docheckPaypass}' method='get' target='_blank'>
 				<span>山城速购支付密码：</span>

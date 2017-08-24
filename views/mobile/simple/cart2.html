@@ -36,7 +36,7 @@
      </head>
 <body style="background:#efefef;">
 <script type='text/html' id='takeselfRowTemplate'>
-	<option value="<%=id%>"><%=name%></option>
+	<option value="<%=item['id']%>"><%=item['name']%></option>
 </script>
 <script type='text/javascript'>
 var _url = "{url:/block/order_delivery_count}";
@@ -152,13 +152,9 @@ function submit_check(){
     /*var  pay=$(".pay")
      			var mask = $(".mask")
      			pay.animate({bottom:'0px'},"slow");
-<<<<<<< HEAD
-     			mask.fadeIn(300);
 
-=======
      			mask.fadeIn(300);*/
-	
->>>>>>> 74b0e31a3a5351acd5f44ca125031f0212657d2e
+
 }
 
 //获取自提点数据
@@ -206,7 +202,7 @@ function getTakeselfData(typeVal,id)
 				for(var index in jsonData)
 				{
 					var item = jsonData[index];
-					var takeselfHtml = template.render('takeselfRowTemplate',item);
+					var takeselfHtml = template.render('takeselfRowTemplate',{"item":item});
 					$('select[name=takeself]').append(takeselfHtml);
 				}
 			}
@@ -248,7 +244,7 @@ $(".sj img").css("height","27px")
 	   		 </div>
 		</header>
      	<div style=""> </div>
-		<form action='{url:/simple/pay}' method='post' name='order_form' callback='orderFormInstance.isSubmit();'>
+		<form action='{url:/simple/cart3}' method='post' name='order_form' callback='orderFormInstance.isSubmit();'>
 			<input type='hidden' name='timeKey' value='{echo:time()}' />
 			<input type='hidden' name='direct_gid' value='{$this->gid}' />
 			<input type='hidden' name='direct_type' value='{$this->type}' />
@@ -358,7 +354,7 @@ $(".sj img").css("height","27px")
 			<div class="qrdds_zf">
             {if:!$this->good_type}
 		     	<h4>代收点:</h4>
-					<select style="">
+					<select style="" name="takeself">
 		     		<option>请选择代收点（可空）</option>
 		     		</select>
 		    {/if}

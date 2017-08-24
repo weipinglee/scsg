@@ -1073,6 +1073,11 @@ class Simple extends IController
 
 		$this->order_id = IFilter::act(IReq::get('order_id'), 'int');
 		$this->pay_level = IFilter::act(IReq::get('pay_level'), 'int');
+		$this->sum = IFilter::act(IReq::get('sum'));
+
+		$orderModel = new IModel('order');
+		$res = $orderModel->getObj('id='.$this->order_id);
+		$this->orderData = $res;
 		$this->redirect('checkPaypass');
 	}
 
@@ -1082,6 +1087,7 @@ class Simple extends IController
 		if($this->user['user_id']==null)$this->redirect('login');
 		$order_id = IFilter::act(IReq::get('order_id'), 'int');
 		$pay_level = IFilter::act(IReq::get('pay_level'), 'int');
+		$sum = IFilter::act(IReq::get('sum'));
 		$pass = IFilter::act(IReq::get('paypass'));
 
 		$user_id = $this->user['user_id'];
@@ -1091,7 +1097,7 @@ class Simple extends IController
 			$this->redirect('/block/doPay/order_id/'.$order_id.'/pay_level/'.$pay_level);
 		}
 		else
-			$this->redirect('/simple/checkPaypass/order_id/'.$order_id.'/pay_level/'.$pay_level);
+			$this->redirect('/simple/checkPaypass/order_id/'.$order_id.'/pay_level/'.$pay_level.'/sum/'.$sum);
 	}
 
 
