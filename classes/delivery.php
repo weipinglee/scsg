@@ -56,6 +56,17 @@ class Delivery
     }
 
     /**
+     * 同商家相同配送方式的多个商品合并计算运费
+     * @param $area int 区域的ID
+     * @param $delivery_id int 配送方式ID
+     * @param array $goodsArray 商品数据，二维数组，内含goods_id,product_id,num三个字段
+     *
+     */
+    public static function getDeliverys($area,$delivery_id,$goodsArray=array())
+    {
+        return 5;
+    }
+    /**
      * @brief 配送方式计算管理模块
      * @param $area    int 区域的ID
      * @param $delivery_id int 配送方式ID

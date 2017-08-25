@@ -160,6 +160,7 @@ class CountSum
 		//获取商品或货品数据
 		/*Goods 拼装商品优惠价的数据*/
         $goodsListFinal = array();
+		$deliveryInfo = array();
         foreach($buyInfoList as $buy=>$buyInfo)
         {
     	    if(isset($buyInfo['goods']['id']) && $buyInfo['goods']['id'])
@@ -168,7 +169,8 @@ class CountSum
     		    $goodsIdStr = join(',',$buyInfo['goods']['id']);
     		    $goodsObj   = new IModel('goods as go');
     		    $goodsList  = $goodsObj->query('go.id in ('.$goodsIdStr.')','go.name,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,go.delivery_id,go.combine_price,go.type,go.sign_code');
-    		    //开始优惠情况判断
+
+    		     //开始优惠情况判断
     		    foreach($goodsList as $key => $val)
     		    {
                     $order_extend[$val['seller_id']]['sum'] = isset($order_extend[$val['seller_id']]['sum']) ? $order_extend[$val['seller_id']]['sum'] : 0;
@@ -209,12 +211,15 @@ class CountSum
                     $goodsList[$key]['combine_id'] = $buy;
                     
                     //计算运费
-                    $delivery = Delivery::getDelivery(0, $val['delivery_id'], $val['goods_id'], $val['product_id'], $goodsList[$key]['count']);
+                  //  $delivery = Delivery::getDelivery(0, $val['delivery_id'], $val['goods_id'], $val['product_id'], $goodsList[$key]['count']);
+					$deliveryInfo[$val['seller_id']][$val['delivery_id']][] =
+							array('goods_id'=>$val['goods_id'],'product_id'=>$val['product_id'],'num'=>$goodsList[$key]['count']);
+
                     $goodsList[$key]['delivery'] = 0;
-                    if(isset($delivery['price']))
-                    {
-                       $goodsList[$key]['delivery']  += $delivery['price']; 
-                    }
+//                    if(isset($delivery['price']))
+//                    {
+//                       $goodsList[$key]['delivery']  += $delivery['price'];
+//                    }
                     
     			    $current_sum_all           = $goodsList[$key]['sell_price'] * $goodsList[$key]['count'];
     			    $current_reduce_all        = $goodsList[$key]['reduce']     * $goodsList[$key]['count'];
@@ -293,12 +298,15 @@ class CountSum
     			    $productList[$key]['sum']    = $current_sum_all - $current_reduce_all;
 
                     //计算运费
-                    $delivery = Delivery::getDelivery(0, $val['delivery_id'], $val['goods_id'], $val['product_id'], $productList[$key]['count']);
-                    $productList[$key]['delivery'] = 0;
-                    if(isset($delivery['price']))
-                    {
-                       $productList[$key]['delivery']  += $delivery['price']; 
-                    }
+                  //  $delivery = Delivery::getDelivery(0, $val['delivery_id'], $val['goods_id'], $val['product_id'], $productList[$key]['count']);
+					$deliveryInfo[$val['seller_id']][$val['delivery_id']][] =
+							array('goods_id'=>$val['goods_id'],'product_id'=>$val['product_id'],'num'=>$productList[$key]['count']);
+
+					$productList[$key]['delivery'] = 0;
+//                    if(isset($delivery['price']))
+//                    {
+//                       $productList[$key]['delivery']  += $delivery['price'];
+//                    }
                     $order_extend[$val['seller_id']]['sum'] += $current_sum_all;
                     $order_extend[$val['seller_id']]['weight'] += $val['weight'] * $productList[$key]['count'];
                     $order_extend[$val['seller_id']]['point'] += $val['point']  * $productList[$key]['count'];
@@ -321,6 +329,25 @@ class CountSum
     	    }
         }
 		$final_sum = $this->sum - $this->reduce;
+
+		//计算相同商家相同配送方式运费，生成键为‘商家id-配送id’的数组
+		$deliveryTemp = array();
+		foreach($deliveryInfo as $seller_id=>$val){
+			foreach($val as $delivery_id=>$v){
+				$deliveryTemp[$seller_id.'-'.$delivery_id] = Delivery::getDeliverys($area,$delivery_id,$v);
+			}
+
+		}
+
+		//同一商家相同配送方式第一个商品费用计算为综合费用，其余配送费记为0
+		foreach($goodsListFinal as $buy => $goodList){
+			foreach($goodList as $k=>$goodInfo){
+				$goodsListFinal[$buy][$k]['delivery']
+						= $deliveryTemp[$goodInfo['seller_id'].'-'.$goodInfo['delivery_id']];
+				$deliveryTemp[$goodInfo['seller_id'].'-'.$goodInfo['delivery_id']] = 0;
+			}
+		}
+		//print_r($goodsListFinal);
     	//总金额满足的促销规则
     	if($user_id&&$prom)
     	{

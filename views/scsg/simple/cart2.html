@@ -442,6 +442,7 @@ function selectTakeself(deliveryId)
 					</div>
                         {foreach:items=$this->goodsList key=$buy item=$goods}
 						{foreach:items=$goods item=$value}
+
 						<table width="100%" class="cart_table t_c js_seller_diff" js_data="{$key}" js_sum_data="{$value['total_price']}">
 							<colgroup>
 								<col width="115px" />
