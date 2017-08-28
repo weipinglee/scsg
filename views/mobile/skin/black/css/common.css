@@ -834,7 +834,14 @@ font-size: 13px;
     line-height: 35px;
    /* border-radius: 10px;*/
 }
-.pay_cont .but a.but_ok{
+.pay_cont .but .but_ok{
+	display: block;
+    float: left;
+    width: 44%;
+    text-align: center;
+    border: 1px solid #dedede;
+    height: 35px;
+    line-height: 35px;
 	margin-right: 12%;
 	background: #F15A24;
     color: #eee;
@@ -842,3 +849,46 @@ font-size: 13px;
 .pay_cont .but a.but_qx{
 	background: #eee;
 }
+/*支付密码页面*/
+/*商家列表界面*/
+.search_nav_top{
+	height: 40px;
+}
+.search_nav_top ul li {
+    float: left;
+    line-height: 40px;
+    width: 33.33%;
+    text-align: center;
+    font-size: 1em;
+    background: #fff;
+    border-bottom: 1px solid #cfcfcf;
+}
+.search_nav_top ul li a.on{
+	color: #F15A24
+}
+.seller_infor{
+	padding: 10px 10px;
+	border-bottom: 1px solid #eee;
+}
+.seller_infor .merch_left{
+	float: left;
+}
+.seller_infor .merch_left img{
+	width: 100px;
+	height: 100px;
+}
+.seller_infor .merch_right{
+	float: left;
+	margin-left:10px;
+}
+.seller_infor .merch_right dl dt{
+	color: #F15A24;
+	font-size: 16px;
+}
+.seller_infor .merch_right dl dd{
+	padding-top: 10px;
+}
+.bottom_word{
+	clear: both;
+}
+/*商家列表界面 end*/
