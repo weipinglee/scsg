@@ -212,8 +212,9 @@ class CountSum
                     
                     //计算运费
                   //  $delivery = Delivery::getDelivery(0, $val['delivery_id'], $val['goods_id'], $val['product_id'], $goodsList[$key]['count']);
-					$deliveryInfo[$val['seller_id']][$val['delivery_id']][] =
-							array('goods_id'=>$val['goods_id'],'product_id'=>$val['product_id'],'num'=>$goodsList[$key]['count']);
+					$deliveryInfo[$val['seller_id']][] =
+							array('goods_id'=>$val['goods_id'],'product_id'=>$val['product_id'],
+									'num'=>$goodsList[$key]['count'],'delivery_id'=>$val['delivery_id']);
 
                     $goodsList[$key]['delivery'] = 0;
 //                    if(isset($delivery['price']))
@@ -299,8 +300,9 @@ class CountSum
 
                     //计算运费
                   //  $delivery = Delivery::getDelivery(0, $val['delivery_id'], $val['goods_id'], $val['product_id'], $productList[$key]['count']);
-					$deliveryInfo[$val['seller_id']][$val['delivery_id']][] =
-							array('goods_id'=>$val['goods_id'],'product_id'=>$val['product_id'],'num'=>$productList[$key]['count']);
+					$deliveryInfo[$val['seller_id']][] =
+							array('goods_id'=>$val['goods_id'],'product_id'=>$val['product_id'],
+									'num'=>$productList[$key]['count'],'delivery_id'=>$val['delivery_id']);
 
 					$productList[$key]['delivery'] = 0;
 //                    if(isset($delivery['price']))
@@ -330,21 +332,18 @@ class CountSum
         }
 		$final_sum = $this->sum - $this->reduce;
 
-		//计算相同商家相同配送方式运费，生成键为‘商家id-配送id’的数组
+		//计算相同商家运费，生成键为[商家id][配送id]的数组
 		$deliveryTemp = array();
 		foreach($deliveryInfo as $seller_id=>$val){
-			foreach($val as $delivery_id=>$v){
-				$deliveryTemp[$seller_id.'-'.$delivery_id] = Delivery::getDeliverys($area,$delivery_id,$v);
-			}
-
+				$deliveryTemp[$seller_id] = Delivery::getDeliverys($area,$val);
 		}
 
 		//同一商家相同配送方式第一个商品费用计算为综合费用，其余配送费记为0
 		foreach($goodsListFinal as $buy => $goodList){
 			foreach($goodList as $k=>$goodInfo){
 				$goodsListFinal[$buy][$k]['delivery']
-						= $deliveryTemp[$goodInfo['seller_id'].'-'.$goodInfo['delivery_id']];
-				$deliveryTemp[$goodInfo['seller_id'].'-'.$goodInfo['delivery_id']] = 0;
+						= $deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']];
+				$deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']] = 0;
 			}
 		}
 		//print_r($goodsListFinal);

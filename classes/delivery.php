@@ -58,13 +58,19 @@ class Delivery
     /**
      * 同商家相同配送方式的多个商品合并计算运费
      * @param $area int 区域的ID
-     * @param $delivery_id int 配送方式ID
-     * @param array $goodsArray 商品数据，二维数组，内含goods_id,product_id,num三个字段
+     * @param array $goodsArray 商品数据，二维数组，内含goods_id,product_id,num,delivery_id四个字段
      *
      */
-    public static function getDeliverys($area,$delivery_id,$goodsArray=array())
+    public static function getDeliverys($area,$goodsArray=array())
     {
-        return 5;
+        $delivery    = new IModel('delivery');
+        //没有配送方式则使后台设置的默认运费模板
+        $delivery_id_d = $delivery->getField('is_delete = 0 and status = 1 and is_default = 1', 'id');
+
+
+
+
+        return array('16'=>5);
     }
     /**
      * @brief 配送方式计算管理模块

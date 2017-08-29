@@ -188,7 +188,7 @@ function orderFormClass()
                             _g.push(content.goodsList);
                             _group = content.group_id;
                         },
-                        timeout:1000,
+                        timeout:1000
                     })
                     _in++;
             })
@@ -203,7 +203,7 @@ function orderFormClass()
                     if(!jsonData.isFreeFreight)
                     {
                         orderFormInstance.deliveryPrice += parseFloat(price);
-                        
+
                         _this.html('￥'+parseFloat(price).toFixed(2));
                     }
                     else
@@ -216,7 +216,7 @@ function orderFormClass()
                         _this.html('免运费');
                     }
                 }
-            })        
+            })
         })
         if(_d.length > 0)
         {
