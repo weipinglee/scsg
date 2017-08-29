@@ -1,0 +1,116 @@
+.clear:after{
+	display: block;
+	content: "";
+	clear: both;
+}
+.breakfast_region{
+	border:1px solid #eee;
+	margin-top: 20px;
+}
+.breakfast_region .breakfast_nav{
+	
+	background: #f6f6f6;
+	padding: 30px 0px;
+		
+
+}
+.breakfast_nav .break_nav_select .select_title, .break_nav_lately .lately_span{
+    font-size: 14px;
+    font-family: '微软雅黑';
+    padding-left: 40px;
+}
+.breakfast_nav .break_nav_select select{
+	padding: 5px;
+		width: 120px;
+}
+.search_text{
+	padding: 4px;
+}
+.breakfast_nav .break_nav_select .button_ok{
+	padding:4px 10px;
+	background: #ea3e01;
+	border:0px;
+	color: #fff;
+}
+.break_nav_lately{
+	padding: 20px 0;
+	border-bottom: 1px solid #eee;
+}
+.break_nav_lately .lately_info{
+	font-size: 14px;
+	font-family: '微软雅黑';
+	padding-left: 10px;
+	color:#ea3e01;
+	cursor: pointer;
+}
+.break_center{
+	padding:20px 40px;
+
+}
+.break_center .break_center_p{
+	font-size: 14px;
+	font-family: '微软雅黑';
+	background: #ea3e01;
+	color: #fff;
+	padding:5px 10px;
+	position: relative;
+}
+.jt_icon{
+	position: absolute;
+	top:24px;
+	left: 20px;
+	display: block;
+	width: 16px;
+	height: 16px;
+	background:url("../images/breakfast/jantou.png") no-repeat;
+}
+.break_center .region_a{
+	padding-top: 30px;
+	font-size: 14px;
+	font-family: '微软雅黑';
+}
+.break_center .region_a .region_a_left{
+	    float: left;
+    height: 30px;
+    line-height: 30px;
+    width: 70px;
+    font-weight: bold;
+}
+.break_center .region_a .region_a_right{
+	float: left;
+    width: 1038px;
+}
+.break_center .region_a a{
+	float: left;
+	height: 30px;
+	line-height: 30px;
+	color: #ea3e01;
+	margin-right: 10px;
+	display: block;
+	padding: 0 5px;
+	cursor: pointer;
+
+}
+.break_center .region_a a:hover{
+	background: #ea3e01;
+	color: #fff;
+}
+/*早餐商品列表*/
+.breakfast_list_top{
+	padding: 20px 0px;
+}
+.breakfast_list_top .breakfast_list_span{
+    height: 31px;
+    line-height: 30px;
+    padding-left: 15px;
+    color: #404040;
+    background-position: 0 -29px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.breakfast_list_top .qh_a{
+	border:1px solid #eee;
+	padding: 5px 10px;
+	margin-left: 10px;
+
+}

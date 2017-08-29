@@ -419,7 +419,15 @@ a.btn_pay{display:inline-block;width:119px;height:37px;margin-right:20px;backgro
 /* piclist_2 style start */
 ul.piclist_2{padding:5px 11px}
 
-	ul.piclist_2 li{padding:1px;border:1px solid #d6a474;float:left;width:162px;height:162px;margin:14px 7px 24px}
+	ul.piclist_2 li{padding:1px;border:1px solid #d6a474;float:left;width:162px;margin:14px 7px 24px}
+	ul.piclist_2 li .seller_logo img{
+		width: 100%;
+		height: 114px;
+	}
+ul.piclist_2 li .titles{
+	font-weight: bold;
+    padding-top: 10px;
+}
 	ul.piclist_2 li.category{width:108px;height:108px;padding:0;border:1px solid #dfdfdf;margin:14px 15px 24px}
 		ul.piclist_2 li a.pic{display:block;height:124px}
 		ul.piclist_2 li h3{height:38px;line-height:38px;color:#b45a01;background:#e8e4da}
@@ -485,6 +493,29 @@ dl.sorting{ position:relative;border-bottom:1px solid #e5e5e5;padding:5px 60px 3
 	.c_box dl{margin-bottom:15px;padding-bottom:14px;border-bottom:1px solid #e0e0e0}
 		.c_box dt{float:left;margin-right:25px}
 	.c_box p{margin:0 5px 15px;line-height:16px}
+	.c_box .seller_zz_img .zz_img_div{
+		position: relative;
+		float: left;
+	}
+.c_box .seller_zz_img .zz_img_a1 img.img1{
+	width: 50px;
+	height: 50px;
+	padding:0px 10px 5px 0px;
+}
+.c_box .seller_zz_img .zz_img_a2 img.img2{
+	display: none;
+}
+.c_box .seller_zz_img .zz_img_a1{
+	cursor: pointer;
+}
+.c_box .seller_zz_img .zz_img_div:hover .zz_img_a2 img.img2{
+	display: block;
+	position: absolute;
+	top:-30px;
+	left: 60px;
+	z-index: 1;
+}
+
 /* c_box style end */
 /* display_title style start */
 .display_title{position:relative;z-index:10;height:38px;padding-left:5px;background:url(../images/front/sprites_2.gif) 0 -141px repeat-x;_width:745px;overflow:hidden}
