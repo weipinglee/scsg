@@ -48,6 +48,7 @@
 				<form method="get" action="{url:/simple/docheckPaypass}">
                     <input type="hidden" name="order_id" value="{$this->order_id}"/>
                     <input type="hidden" name="pay_level" value="{$this->pay_level}"/>
+                    <input type="hidden" name="toUrl" value="{$this->toUrl}"/>
 					<div class="pay_cont">
                         {if:$this->user['user_id']}
                             {set:$tmpId=$this->order_id;}
