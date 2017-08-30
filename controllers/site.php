@@ -1075,7 +1075,7 @@ class Site extends IController
         $this->goodsImg = current($goods_info['photo']);
 	//	print_r($goods_info);
 	//	print_r($specArray);
-		$this->setRenderData($goods_info);
+		$this->setRenderData($goods_info);print_r($goods_info);
 		$this->redirect('products');
 	}
 	//商品讨论更新
