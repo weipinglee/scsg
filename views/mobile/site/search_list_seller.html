@@ -40,54 +40,54 @@
      </div>
     </div>
 
-    <div class="search_nav_top">
+   <!--  <div class="search_nav_top">
         <ul>
           <li><a href="?&amp;show_type=win&amp;order=price" class="on"><span>默认</span></a></li>
           <li><a href="?&amp;show_type=win&amp;order=sale" class=""><span>销量</span></a></li>
           <li><a href="?&amp;show_type=win&amp;order=cpoint" class=""><span>信用</span></a></li>
                                                                                      
         </ul>
-     </div> 
+     </div>  -->
 </header>
+{set:$queryObj=Api::run('getSellerList');$resultData=$queryObj->find()}
+        {if:$resultData}
 <div class="seller_list_center">
+{foreach:items=$resultData}
     <div class="seller_infor clear">
        <div class="merch_left">
-          <a href="/site/home/id/78"><img src="/" alt="盂县城东综合市场东鹏瓷砖门市">
+          <a href="{url:/site/home/id/$item[id]}"><img src="{skin:images/23274638-1_b.jpg}" alt="{$item['true_name']}">
           </a>
         </div>
         <div class="merch_right">
           <dl>
-            <dt>盂县城东综合市场东鹏瓷砖门市</dt>
+            <dt><a href="{url:/site/home/id/$item['id']}" target="_blank">{$item['true_name']}</a></dt>
                         <!--<dd>主营：林业家具</dd>-->
-            <dd>山西省 阳泉市 盂县</dd>
-            <dd>主营商品：</dd>
+            <dd><strong class="item">评分：</strong><span class="grade">
+              <i style="width:{echo:Common::gradeWidth(statistics::gradeSeller($item['id']))}px"></i>
+              </span></dd>
+            <dd>销量：{echo:statistics::sellCountSeller($item['id'])} 件</dd>
           </dl>
         </div>
-        <div class="bottom_word">
+
+       <!--  <div class="bottom_word">
           <span>销量0</span>   
           <span>共37件宝贝</span>
           <p class="star_box"><strong class="item">评分：</strong><span class="star stat_0"></span></p>        
-        </div>
+        </div> -->
     </div>
-    <div class="seller_infor clear">
-       <div class="merch_left">
-          <a href="/site/home/id/78"><img src="/" alt="盂县城东综合市场东鹏瓷砖门市">
-          </a>
-        </div>
-        <div class="merch_right">
-          <dl>
-            <dt>盂县城东综合市场东鹏瓷砖门市</dt>
-                        <!--<dd>主营：林业家具</dd>-->
-            <dd>山西省 阳泉市 盂县</dd>
-            <dd>主营商品：</dd>
-          </dl>
-        </div>
-        <div class="bottom_word">
-          <span>销量0</span>   
-          <span>共37件宝贝</span>
-          <p class="star_box"><strong class="item">评分：</strong><span class="star stat_0"></span></p>        
-        </div>
-    </div>
-</div>
+{/foreach}
+   
+</div> 
+<input type='hidden' name='order' value='{$order}'/>
+          <input name='page' type='hidden' value='1' />
+        <input name='childCat' type='hidden' value=''/>
+        <input name="sellerId" type="hidden" value="{$_GET['id']}" />
+              <div class="loading-ctn loading-imgS">
+              <p >下拉查看更多</p>
+              <img alt="" src="{skin:images/files/loading.gif}">
+          </div>
+{else:}
+
 <div class="loading-ctn loading-imgS"><p>没有更多数据</p></div>
+{/if}
 </body>

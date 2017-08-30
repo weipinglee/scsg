@@ -776,6 +776,25 @@ font-size: 13px;
 .home_t .t_dz{
     float: right;
     color: #9C9C9C;
+    width: 75%
+}
+.sh_zz{padding-bottom: 10px;}
+.sh_zz img{
+  float: left;
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+}
+.home_t .t_dz a{
+	display: block;
+	height: 40px;
+	line-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
 }
 .vip_logo {
     position: absolute;
@@ -890,5 +909,16 @@ font-size: 13px;
 }
 .bottom_word{
 	clear: both;
+}
+span.grade {
+    display: inline-block;
+    width: 70px;
+    height: 15px;
+    background: url(../images/front/grade_bg.gif) 0 -16px no-repeat;
+}
+span.grade i {
+    display: inline-block;
+    height: 15px;
+    background: url(../images/front/grade_bg.gif) 0 2px no-repeat;
 }
 /*商家列表界面 end*/
