@@ -54,7 +54,10 @@
                         {/if}
 
                       <p>￥<span id="final_sum2">{$this->sum}</span></p>
-                      <p class="goods_name">{$this->orderData['order_no']}</p>
+                        {foreach:$items=$this->orderData}
+                        <p class="goods_name">{$item['order_no']}</p>
+                        {/foreach}
+
 
                       <div class="text_input"><input type="password" name="paypass" placeholder="请输入支付密码"></div>
                       <div class="but">

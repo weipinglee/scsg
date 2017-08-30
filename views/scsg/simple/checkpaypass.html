@@ -11,7 +11,10 @@
 	</div>
 	<div class="confirm_box">
 			<h3>
-				你正在支付订单：<p>{$this->orderData['order_no']}</p>
+				你正在支付订单：
+				{foreach:$items=$this->orderData}
+				<p>{$item['order_no']}</p>
+				{/foreach}
 				<span class="pay_num">支付<b>{$this->sum}</b>元</span>
 			</h3>
 			<form action='{url:/simple/docheckPaypass}' method='get' target='_blank'>

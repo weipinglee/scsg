@@ -1074,9 +1074,17 @@ class Simple extends IController
 		$this->order_id = IFilter::act(IReq::get('order_id'), 'int');
 		$this->pay_level = IFilter::act(IReq::get('pay_level'), 'int');
 		$this->sum = IFilter::act(IReq::get('sum'));
+		$oId = $this->order_id;
+		if($this->pay_level==1){
+			$orderModel = new IModel('order');
+			$res = $orderModel->select(array('pid'=>$oId),'order_no');
+		}
+		else{
+			$orderModel = new IModel('order');
+			$res = $orderModel->select(array('id'=>$oId),'order_no');
+		}
 
-		$orderModel = new IModel('order');
-		$res = $orderModel->getObj('id='.$this->order_id);
+
 		$this->orderData = $res;
 		$this->redirect('checkPaypass');
 	}
