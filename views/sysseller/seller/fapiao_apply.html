@@ -36,7 +36,7 @@
 				<td>{if:$item['type']==0}{$item['taitou']}{else:}{$item['com']}{/if}</td>
 				<td>{echo:Order_Class::getFapiaoStatus($item['status'])}</td>
 				<td>{$item['username']}</th>
-				<td><a href="{url:/seller/fapiao_show/id/$item[id]}"><img class="operator" src="{skin:images/main/icn_settings.png}" title="查看" /></a></td>
+				<td><a href="{url:/seller/fapiao_show/id/$item[id]}?redirect=fapiao_apply"><img class="operator" src="{skin:images/main/icn_settings.png}" title="查看" /></a></td>
 			</tr>
 		{/foreach}
 		</tbody>

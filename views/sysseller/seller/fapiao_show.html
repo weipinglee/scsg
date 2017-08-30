@@ -1,3 +1,4 @@
+{set:$redirect=IReq::get('redirect') ? IReq::get('redirect') : 'fapiao_list';}
 <article class="module width_full">
 	<header>
 		<h3 class="tabs_involved">补开发票详情</h3>
@@ -5,6 +6,7 @@
 
 	<form action="{url:/seller/fapiao_show_save}" name="refundForm" method="post">
 		<input type='hidden' name='id' value='{$id}'/>
+		<input type="hidden" name="redirect" value="{$redirect}"/>
 		<div class="module_content">
 			<fieldset>
 				<label>状态:</label>
