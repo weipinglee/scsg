@@ -103,7 +103,7 @@ body{font-size:14px;font-family:'\5FAE\8F6F\96C5\9ED1';-webkit-overflow-scrollin
 
 .h-center h1{font-size:20px;color:#333}
 
-.h-center .header-search-btn{width:17px;height:17px;vertical-align:middle;background:url(../css/wap/search-btn.png?t=201508142148);background-size:100% 100%;border:0;outline:0;float:right;margin:8px 5px 8px -18px;position:relative;z-index:1}
+.h-center .header-search-btn{left:15px;width:17px;height:17px;vertical-align:middle;background:url(../css/wap/search-btn.png?t=201508142148);background-size:100% 100%;border:0;outline:0;float:right;margin:8px 5px 8px -18px;position:relative;z-index:1}
 
 .reg-lt-outer,.reg-lt-inner{position:absolute;top:12px;width:0;height:0;line-height:0;font-size:0;overflow:hidden;border:13px dashed transparent;border-right-style:solid}
 
@@ -221,7 +221,7 @@ body{font-size:14px;font-family:'\5FAE\8F6F\96C5\9ED1';-webkit-overflow-scrollin
 
 .wap-header .h-center{display:-webkit-box;display:flex;justify-content:center;-webkit-align:center;-webkit-box-align:center;-webkit-box-pack:center}
 
-.wap-header .h-center .h-search{border:1px solid #e1e1e1;font-size:14px;height:30px;position:relative;border-radius:5px;padding:0 5px;float:left}
+.wap-header .h-center .h-search{left:22px;border:1px solid #e1e1e1;font-size:14px;height:30px;position:relative;border-radius:5px;padding:0 5px;float:left}
 
 .wap-header .h-centers{position:relative;margin:0 70px 0 64px;background:#F0F0F0;border-radius:5px}
 
@@ -922,3 +922,52 @@ span.grade i {
     background: url(../images/front/grade_bg.gif) 0 2px no-repeat;
 }
 /*商家列表界面 end*/
+/*首页搜索增加商户/商家搜索*/
+.search_xz {
+    position: absolute;
+    z-index: 10;
+    border-right: 0;
+    width: 56px;
+    top: 9px;
+    left: 66px;
+}
+.search_xz .search_select {
+    outline: none;
+    height: 30px;
+    padding: 0 5px 0 10px;
+    border: 0;
+    color: #999;
+    width: 60px;
+    background: url(../images/up.png) no-repeat 42px center #f7f7f7;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid #eee;
+    border-right: none;
+    text-align: left;
+}
+#search_list {
+    width: 60px;
+    margin: 0 auto;
+    border: 1px solid #c3c1c1;
+    border-top: none;
+    display: none;
+    overflow: hidden;
+    position: absolute;
+    top: 30px;
+}
+#search_list li {
+    /* padding: 0 0 0 15px; */
+    color: #999;
+    background: #FFF;
+    width: 58px;
+    height: 25px;
+    line-height: 25px;
+    clear: both;
+    text-align: center;
+}
+.search_xz .search_select.down {
+    background: url(../images/down.png) no-repeat 42px center #f7f7f7;
+}
+
+/*首页搜索增加商户/商家搜索 end*/
