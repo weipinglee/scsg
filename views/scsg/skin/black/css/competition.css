@@ -1,0 +1,102 @@
+*{
+	padding: 0px;
+	margin: 0px;
+	color: #333;
+}
+a{
+	cursor: pointer;
+}
+.clear:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.compet_center{
+	width: 1200px;
+	margin: 0 auto;
+}
+.compet_center .compet_winning{
+	width: 1200px;
+	height: 650px;
+	background: url("../images/competition/back_com.png") no-repeat center bottom;
+	/* margin-top: 214px; */
+	position: relative;
+}
+.compet_winning .compet-coin .compet_two_coin{
+	position: absolute;
+	left: 200px;
+	top: 160px;
+}
+.compet_winning .compet-coin .compet_one_coin{
+	position: absolute;
+	top: 5px;
+	left: 448px;
+}
+.compet_winning .compet-coin .compet_three_coin{
+	position: absolute;
+	top: 215px;
+	right: 200px;
+}
+a.blue{
+	color: #06a6e1;
+}
+.compet_text .compet_two{
+	position: absolute;
+	width: 310px;
+	text-align: center;
+	top: 415px;
+	left: 138px;
+}
+.compet_text .compet_one{
+	position: absolute;
+	width: 310px;
+	text-align: center;
+	top: 310px;
+	left: 448px;
+}
+.compet_text .compet_three{
+	position: absolute;
+	width: 310px;
+	text-align: center;
+	top: 485px;
+	left: 748px;
+}
+.compet_ranking{
+	
+	width: 935px;
+	margin: 30px auto; 
+}
+.compet_ranking table.table-striped,.compet_ranking table.table-striped th{
+	text-align: center;
+}
+.compet_ranking table.table-striped .captain{
+	position: relative;
+}
+.compet_ranking table.table-striped .captain .team_member{
+	position: absolute;
+    right: -10px;
+    border: 1px solid #fc550b;
+    width: 110px;
+    border-radius: 5px; 
+    background: #fff;
+    display: none;
+    top:0px;
+    z-index: 1;
+}
+.captain .team_member .member_title{
+	height: 30px;
+	line-height: 30px;
+	background: #fc550b;
+	color: #fff;
+	text-align: left;
+	padding-left: 10px;
+	border-radius:3px 3px 0px 0px;
+}
+.captain .team_member .member_title .esc_icon{
+	float: right;
+	padding-right: 5px;
+	color: #fff; 
+}
+.captain .team_member .member_ul{
+	padding: 10px 0px;
+}

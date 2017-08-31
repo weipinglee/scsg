@@ -17,7 +17,7 @@
 .search_wrap .search_title .search_nav_icon{position:absolute;right:3px;top:14px;width:35px;height:35px;}
 
 .search_wrap .search_title .search_nav_icon_none{position:absolute;right:3px;top:14px;width:35px;height:35px;
-/*å¢žåŠ */
+/*Ã¥Â¢Å¾Ã¥Å Â */
 /* z-index:-1; */
 }
 
@@ -79,9 +79,9 @@ body{font-size:62.5%}
 #page{background:#eee}
 
 #page section{background:#fff}
-/*¶¥²¿ËÑË÷À¸¼Ó±³¾°É«*/
+/*Â¶Â¥Â²Â¿Ã‹Ã‘Ã‹Ã·Ã€Â¸Â¼Ã“Â±Â³Â¾Â°Ã‰Â«*/
 #page .search_wrap{background:#fff;}
-/*¶¥²¿ËÑË÷À¸¼Ó±³¾°É«½áÊø*/
+/*Â¶Â¥Â²Â¿Ã‹Ã‘Ã‹Ã·Ã€Â¸Â¼Ã“Â±Â³Â¾Â°Ã‰Â«Â½Ã¡ÃŠÃ¸*/
 #page img{border:0;vertical-align:middle}
 
 #page .banner{position:relative}
