@@ -1075,7 +1075,7 @@ class Site extends IController
         $this->goodsImg = current($goods_info['photo']);
 	//	print_r($goods_info);
 	//	print_r($specArray);
-		$this->setRenderData($goods_info);print_r($goods_info);
+		$this->setRenderData($goods_info);
 		$this->redirect('products');
 	}
 	//商品讨论更新
@@ -1984,5 +1984,19 @@ class Site extends IController
         curl_close($ch);
 
         return $response;
+    }
+
+    //获取商家列表
+    public function seller_list()
+    {
+        $this->word = IFilter::act(IReq::get('word'),'text');
+
+        if(!$this->word){
+            $where='';
+        }
+        else
+            $where = 'true_name like "'.$this->word.'%"';
+        $this->queryObj = Api::run('getSellerList',$where);
+        $this->redirect('seller_list');
     }
 }

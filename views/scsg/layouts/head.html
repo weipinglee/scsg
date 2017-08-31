@@ -350,10 +350,10 @@ if($("#actionimg").length>0){
 			</div>
 			<div class="search_xz">
 				<input type="button" class="search_select" value="商品">
-				<input type="hidden" name="type">
+
 				<ul id="search_list">
-                    <li js_data="1">商品</li>
-					<li js_data="2">商家</li>
+                    <li js_data="search_list">商品</li>
+					<li js_data="seller_list">商家</li>
 				</ul>
 			</div>
 			<script>
@@ -380,7 +380,7 @@ if($("#actionimg").length>0){
 									,_v = _t.attr('js_data');
 							_t.click(function(){
 								$('.search_select').val(_t.text());
-								$('input[name=type]').val(_v);
+								$('input[name=action]').val(_v);
 								$('#search_list').hide();
 								$(".search_select").removeClass('down');
 							})
