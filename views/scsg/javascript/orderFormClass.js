@@ -38,7 +38,9 @@ function orderFormClass()
 	this.weight       = 0;//商品总重量
 	
 	this.deliveryConf = {};//记录配送信息的json对象
-	
+
+	this.getTakeselfUrl = '';//根据区域id获取自提点信息
+	this.selectTaseself = false;//是否必须选择自提点，默认可不选
 	/*
 	 * 选择配送方式时调用，设置deliveryConf
 	 */
@@ -140,11 +142,26 @@ function orderFormClass()
         var province = $('[name="province"]').val();
         var city     = $('[name=city]').val();
         var area     = $('[name=area]').val();
-          
+		var _this = this;
         if(!area)
         {
             return;
         }
+
+		//验证该收获区域是否有自提点,如果有自提点，设置selectTaseself属性为true,提交订单时必须选择自提点
+		_this.selectTaseself = false;
+		$.ajax({
+			type:'post',
+			data:{"type":'area',"id":area},
+			dataType:'json',
+			url:_this.getTakeselfUrl,
+			success:function(data){
+				$.each(data,function(index){
+					_this.selectTaseself = true;
+				})
+			}
+		})
+
         $('.js_data_6').hide();
         var _d = []
             ,_in = 0;                    
@@ -335,6 +352,7 @@ function orderFormClass()
 		}
 
 		this.addressModToggle('save');
+
 
 		//获取配送数据并且开启配送方式
 		var timeHandle = setInterval(function(){
@@ -554,6 +572,15 @@ function orderFormClass()
 		{
 			saveButtonList.first().trigger('focus');
 			return false;
+		}
+
+		//如果必须选择自提点而没有选择，不允许提交
+		if(this.selectTaseself){
+			if(!$('input[name=takeself]').prop('checked')){
+				alert('请选择自提点');
+				return false;
+			}
+
 		}
 		return true;
 	}

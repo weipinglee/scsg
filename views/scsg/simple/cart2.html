@@ -6,6 +6,7 @@
 <script type='text/javascript'>
 var _url = "{url:/block/order_delivery_count}";
 var final_sum = {$this->final_sum};
+var getTakeselfUrl = "{url:/block/getTakeselfList}";
 var _delivery_url = "{url:/block/order_delivery_free}";
 //更换增值发票和普通发票
 $(document).ready(function(){
@@ -22,7 +23,7 @@ $(document).ready(function(){
 
 //创建订单表单实例
 orderFormInstance = new orderFormClass();
-
+orderFormInstance.getTakeselfUrl = getTakeselfUrl;
 //DOM加载完毕
 jQuery(function(){
 	//使用红包按钮
@@ -77,7 +78,7 @@ function takeselfInit(id){
 			  async:false,
 			  url: '{url:block/getOneTakeself}',
 			  data: {'id':id},
-			  success: function(data){
+			  success: function(data){window.realAlert(JSON.stringify(data));
 			  	$('#takeself').html(template.render('takeselfTemplate',{"item":data}));
 			  },
 			  
@@ -285,6 +286,7 @@ function selectTakeself(deliveryId)
 								<a href="javascript:selectTakeself();"><span class="red">切换自提点</span></a>
 								</td>
 							</tr>
+							<tr><th></th><td><span class="red">自提点所在小区外的区域不予配送</span></td></tr>
 							<tr class='hide' id='takeselfParam'><td><%=province%></td><td><%=city%></td><td><%=area%></td></tr>
 						    {/if}
                         </script>
