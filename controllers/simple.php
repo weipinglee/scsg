@@ -2645,7 +2645,7 @@ class Simple extends IController
 		if($siteConfig->mobile)
 		{
 			$content = smsTemplate::sellerReg(array('{true_name}' => $truename));
-			$result = Hsms::send($mobile,$content);
+			$result = Hsms::send($siteConfig->mobile,$content);
 		}
 
 		$this->redirect('/site/success?message='.urlencode("申请成功！请耐心等待管理员的审核"));

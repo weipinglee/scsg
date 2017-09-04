@@ -768,6 +768,8 @@ class Block extends IController
                 }
                 if($order_id)
                 {
+					//支付成功后短信通知各方（商户、购买者、自提点）
+
                     $paymentInstance->notifyStop();
                     exit;
                 }
