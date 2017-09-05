@@ -275,7 +275,28 @@ class Block extends IController
        $data['goodsList'] = $goodsList;               
        echo JSON::encode($data);
    }
-    
+
+	//订单中同一个商家的商品一次性获取运费数据
+	public function get_order_delivery_fee()
+	{
+		$area = IFilter::act(IReq::get("area"),'int');
+		$delivery_info = IFilter::act(IReq::get("delivery_info"));
+		$delivery_info = rtrim($delivery_info,'|');
+		$delivery_info = explode('|',$delivery_info);
+		$delivery_info1 = array();
+		foreach($delivery_info as $key=>$val){
+
+			$temp = explode('_',$val);
+			$delivery_info1[$key]['delivery_id'] = $temp[0];
+			$delivery_info1[$key]['goods_id'] = $temp[1];
+			$delivery_info1[$key]['product_id'] = $temp[2];
+			$delivery_info1[$key]['num'] = $temp[3];
+		}
+		$result = Delivery::getDeliverys($area,$delivery_info1);
+		die(JSON::encode($result));
+	}
+
+
    public function order_delivery_free()
    {
        $area = IFilter::act(IReq::get("area"),'int');

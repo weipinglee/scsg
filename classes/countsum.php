@@ -342,8 +342,8 @@ class CountSum
 		foreach($goodsListFinal as $buy => $goodList){
 			foreach($goodList as $k=>$goodInfo){
 				$goodsListFinal[$buy][$k]['delivery']
-						= $deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']];
-				$deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']] = 0;
+						= $deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']]['price'];
+				$deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']]['price'] = 0;
 			}
 		}
 		//print_r($goodsListFinal);
