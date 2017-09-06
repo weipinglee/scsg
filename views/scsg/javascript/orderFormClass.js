@@ -153,12 +153,12 @@ function orderFormClass()
                 ,price = 0
                 ,_g = []
                 ,_group = 0;
-			var _deliveryInfo ;
+			var _deliveryInfo = '';
             _this.parents('table').find('.js_goods_delivery').each(function(){
                 var _t = $(this)
                     ,obj = _t.attr('js_data')
-                    ,dataArray = obj.split("_");
-				_deliveryInfo = obj + '|';
+                   // ,dataArray = obj.split("_");
+				_deliveryInfo = _deliveryInfo + obj + '|';
                    /* $.ajax({
                         type:'post',
                         async:false,

@@ -1032,7 +1032,7 @@ class Simple extends IController
     	$this->freeFreight = $result['freeFreight'] ? 1 : 0;
     	//商品列表按商家分开
     	$this->goodsList = $this->goodsListBySeller($this->goodsList);
-		print_r($this->goodsList);
+
     	//判断所选商品商家是否支持货到付款,有一个商家不支持则不显示
     	$sellerObj = new IModel('seller');
     	$this->freight_collect=1;
@@ -1642,7 +1642,7 @@ class Simple extends IController
         }
         unset($goodsResult['goodsList']);
         $goodsResult['goodsList'] = $temp;
-        $orderData = $countSumObj->countOrderFeeee($goodsResult,$area,$payment,$insured,$taxes);print_r($orderData);
+        $orderData = $countSumObj->countOrderFeeee($goodsResult,$area,$payment,$insured,$taxes);
         if(is_string($orderData))
         {
             IError::show(403,$orderData);
