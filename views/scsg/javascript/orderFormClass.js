@@ -68,7 +68,7 @@ function orderFormClass()
 		$('#final_sum').text(this.orderAmount);
 		$('[name="ticket_value"]').text(this.ticketPrice);
 		$('#delivery_fee_show').text(this.deliveryPrice);
-		$('#protect_price_value').text(this.protectPrice);
+		//$('#protect_price_value').text(this.protectPrice);
 		$('#payment_value').text(this.paymentPrice);
 		$('#tax_fee').text(this.taxPrice);
 		if(this.presell){//计算预售金额
@@ -170,11 +170,13 @@ function orderFormClass()
                 ,price = 0
                 ,_g = []
                 ,_group = 0;
+			var _deliveryInfo = '';
             _this.parents('table').find('.js_goods_delivery').each(function(){
                 var _t = $(this)
                     ,obj = _t.attr('js_data')
-                    ,dataArray = obj.split("_");
-                    $.ajax({
+                   // ,dataArray = obj.split("_");
+				_deliveryInfo = _deliveryInfo + obj + '|';
+                   /* $.ajax({
                         type:'post',
                         async:false,
                         data:{"area":area,"deliveryId":dataArray[0],"goodsId":dataArray[1],"productId":dataArray[2],"num":dataArray[3]},
@@ -205,10 +207,39 @@ function orderFormClass()
                             _g.push(content.goodsList);
                             _group = content.group_id;
                         },
-                        timeout:1000,
-                    })
+                        timeout:1000
+                    })*/
                     _in++;
             })
+
+
+			$.ajax({
+				type: 'post',
+				async:false,
+				data: {"area":area,"delivery_info":_deliveryInfo},
+				url:_get_delivery_url,
+				success : function(data){
+					data  = JSON.parse(data);
+					$.each(data.delivery,function(index){
+						var content = data.delivery[index];
+						//地区无法送达
+						if(content.if_delivery == 1 || content.error == 1)
+						{
+							alert('您选择地区部分商品无法送达');
+						}
+						else{
+							price += (data.delivery[index].price);
+						}
+
+
+					})
+					_g.push(data.goodsList);
+					_group = data.group_id;
+				}
+
+			})
+
+
              $.ajax({
                 type:'post',
                 async:false,
@@ -218,9 +249,9 @@ function orderFormClass()
                 success:function(jsonData)
                 {
                     if(!jsonData.isFreeFreight)
-                    {
+                    {//window.realAlert(JSON.stringify(jsonData));
                         orderFormInstance.deliveryPrice += parseFloat(price);
-                        
+
                         _this.html('￥'+parseFloat(price).toFixed(2));
                     }
                     else
@@ -233,8 +264,10 @@ function orderFormClass()
                         _this.html('免运费');
                     }
                 }
-            })        
+            })
         })
+
+
         if(_d.length > 0)
         {
             for(var i = 0; i < _d.length; i ++){

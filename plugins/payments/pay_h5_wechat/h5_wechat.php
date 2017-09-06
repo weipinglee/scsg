@@ -24,8 +24,7 @@ class h5_wechat extends paymentPlugin
      */
     public function getSubmitUrl()
     {
-        return 'http://www.yqtvt.com/site/wapPayCode';
-       // return 'https://api.mch.weixin.qq.com/pay/unifiedorder';
+        return 'https://api.mch.weixin.qq.com/pay/unifiedorder';
     }
     /*
      * @param 获取配置参数

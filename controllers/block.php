@@ -275,7 +275,74 @@ class Block extends IController
        $data['goodsList'] = $goodsList;               
        echo JSON::encode($data);
    }
-    
+
+	//订单中同一个商家的商品一次性获取运费数据
+	public function get_order_delivery_fee()
+	{
+		$area = IFilter::act(IReq::get("area"),'int');
+		$delivery_info = IFilter::act(IReq::get("delivery_info"));
+		$delivery_info = rtrim($delivery_info,'|');
+		$delivery_info = explode('|',$delivery_info);
+		$delivery_info1 = array();
+
+		$countSumObj = new CountSum($this->user['user_id']);
+		$goodsList = array();
+		foreach($delivery_info as $key=>$val){
+
+			$temp = explode('_',$val);
+			$delivery_info1[$key]['delivery_id'] = $temp[0];
+			$delivery_info1[$key]['goods_id'] = $temp[1];
+			$delivery_info1[$key]['product_id'] = $temp[2];
+			$delivery_info1[$key]['num'] = $temp[3];
+
+			$productId = $temp[2];
+			$goodsId = $temp[1];
+			$num = $temp[3];
+			if($productId)
+			{
+				$model = new IModel('products');
+				$sell_price = $model->getField('id='.$productId, 'sell_price');
+				$goodsList[$goodsId]['sum'] = $sell_price * $num;
+
+
+				$groupPrice  = $countSumObj->getGroupPrice($productId,'product');
+				if($groupPrice){
+					$minPrice = $groupPrice;
+				}else{
+					$minPrice = $sell_price;
+				}
+				$minPrice = min($minPrice,$sell_price);
+				$goodsList[$goodsId]['reduce'] = $num * ($sell_price - $minPrice);
+			}
+			if($goodsId)
+			{
+				$model = new IModel('goods');
+				$sell_price = $model->getField('id='.$goodsId, 'sell_price');
+				$goodsList[$goodsId]['sum'] = $sell_price * $num;
+
+				$groupPrice  = $countSumObj->getGroupPrice($goodsId,'goods');
+				if($groupPrice){
+					$minPrice = $groupPrice;
+				}else{
+					$minPrice = $sell_price;
+				}
+				$minPrice = min($minPrice,$sell_price);
+				$goodsList[$goodsId]['reduce'] = $num * ($sell_price - $minPrice);
+			}
+		}
+		$result['delivery'] = Delivery::getDeliverys($area,$delivery_info1);
+		if(is_string($result))
+		{
+			//unset($result);
+			$result['delivery']['error'] = 1;
+		}
+		$result['group_id'] = $countSumObj->getGroupId();
+		$result['goodsList'] = $goodsList;
+
+		die(JSON::encode($result));
+	}
+
+
    public function order_delivery_free()
    {
        $area = IFilter::act(IReq::get("area"),'int');
