@@ -1584,6 +1584,7 @@ class Simple extends IController
             }
             //计算购物车中的商品价格$goodsResult
             $goodsResult = $countSumObj->cart_count($cartData, $area);
+			//print_r($goodsResult);
             $cart = new Cart();
             $cart->del_many($delCart);
             //清空购物车
@@ -1641,7 +1642,7 @@ class Simple extends IController
         }
         unset($goodsResult['goodsList']);
         $goodsResult['goodsList'] = $temp;
-        $orderData = $countSumObj->countOrderFeeee($goodsResult,$area,$payment,$insured,$taxes);
+        $orderData = $countSumObj->countOrderFeeee($goodsResult,$area,$payment,$insured,$taxes);print_r($orderData);
         if(is_string($orderData))
         {
             IError::show(403,$orderData);

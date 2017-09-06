@@ -470,7 +470,7 @@ function selectTakeself(deliveryId)
                                     <th>单价</th>
 									<th>优惠</th>
 									<th>数量</th>
-                                    <th>是否保价</th>
+                                    <!--<th>是否保价</th>-->
 									<th class="last">商品小计</th>
 								</tr>
 							</thead>
@@ -502,7 +502,7 @@ function selectTakeself(deliveryId)
 									<td><b>￥{$item['sell_price']}</b></td>
 									<td>{if:isset($item['combine'])}<span>优惠套餐:{$item['combine']}</span>{/if}减￥{$item['reduce']}</td>
 									<td>{$item['count']}</td>
-                                    <td><b class="red2 js_goods_delivery" js_data="{$item['delivery_id']}_{$item['goods_id']}_{$item['product_id']}_{$item['count']}"></b></td>
+                                    <td style="display:none;"><b class="red2 js_goods_delivery" js_data="{$item['delivery_id']}_{$item['goods_id']}_{$item['product_id']}_{$item['count']}"></b></td>
 									<td><b class="red2">￥{$item['sum']}</b><span id="{$item['delivery_id']}_{$item['goods_id']}_{$item['product_id']}_{$item['count']}"></span></td>
 								</tr>
 								{/if}
@@ -529,7 +529,9 @@ function selectTakeself(deliveryId)
 						- 代金券：<b name='ticket_value'>0</b>
 						+ 税金：<b id='tax_fee'>0</b>{if:!$this->good_type}
 						+ 运费总计：<b id='delivery_fee_show'>0</b>
-						+ 保价：<b id='protect_price_value'>0</b>{/if}
+						<!--+ 保价：<b id='protect_price_value'>0</b>-->
+
+						{/if}
 						+ 支付手续费：<b id='payment_value'>0</b></p>
 					{if:!isset($this->prop_not)}
 					<a href="javascript:void(0)" id="ticket_a" class="fold" hidefocus>

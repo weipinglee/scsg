@@ -66,7 +66,7 @@ function orderFormClass()
 		$('#final_sum').text(this.orderAmount);
 		$('[name="ticket_value"]').text(this.ticketPrice);
 		$('#delivery_fee_show').text(this.deliveryPrice);
-		$('#protect_price_value').text(this.protectPrice);
+		//$('#protect_price_value').text(this.protectPrice);
 		$('#payment_value').text(this.paymentPrice);
 		$('#tax_fee').text(this.taxPrice);
 		if(this.presell){//计算预售金额
@@ -203,20 +203,21 @@ function orderFormClass()
 				url:_get_delivery_url,
 				success : function(data){
 					data  = JSON.parse(data);
-					$.each(data,function(index){
+					$.each(data.delivery,function(index){
+						var content = data.delivery[index];
 						//地区无法送达
 						if(content.if_delivery == 1 || content.error == 1)
 						{
 							alert('您选择地区部分商品无法送达');
 						}
 						else{
-							price += (data[index].price);
+							price += (data.delivery[index].price);
 						}
 
 
 					})
-					_g.push(content.goodsList);
-					_group = content.group_id;
+					_g.push(data.goodsList);
+					_group = data.group_id;
 				}
 
 			})
@@ -249,7 +250,7 @@ function orderFormClass()
             })
         })
 
-		window.realAlert(orderFormInstance.deliveryPrice);return false;
+
         if(_d.length > 0)
         {
             for(var i = 0; i < _d.length; i ++){

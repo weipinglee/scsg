@@ -70,7 +70,7 @@ class Delivery
 
 
 
-        return array('16'=>array('price'=>5));
+        return array('16'=>array('price'=>5, 'protect_price' => 0, 'if_delivery' => 0));
     }
     /**
      * @brief 配送方式计算管理模块
