@@ -79,7 +79,7 @@ function takeselfInit(id){
 			  async:false,
 			  url: '{url:block/getOneTakeself}',
 			  data: {'id':id},
-			  success: function(data){window.realAlert(JSON.stringify(data));
+			  success: function(data){
 			  	$('#takeself').html(template.render('takeselfTemplate',{"item":data}));
 			  },
 			  
