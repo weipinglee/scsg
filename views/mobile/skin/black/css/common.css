@@ -868,6 +868,12 @@ font-size: 13px;
 .pay_cont .but a.but_qx{
 	background: #eee;
 }
+.forgot_div{
+	padding:10px 20px;
+}
+.forgot_div .forgot{
+	color:#3052b7;
+}
 /*支付密码页面*/
 /*商家列表界面*/
 .search_nav_top{
