@@ -42,6 +42,7 @@
 var _url = "{url:/block/order_delivery_count}";
 var final_sum = {$this->final_sum};
 var _delivery_url = "{url:/block/order_delivery_free}";
+var _get_delivery_url = "{url:/block/get_order_delivery_fee}";
 //创建订单表单实例
 orderFormInstance = new orderFormClass();
 
@@ -76,6 +77,7 @@ jQuery(function(){
 
     //计算运费
     $(function(){
+
         orderFormInstance.get_delivery();
     })
 });
