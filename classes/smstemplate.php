@@ -91,5 +91,17 @@ class smsTemplate
 		return strtr($templateString,$data);
 	}
 
+	public static function toTakeself($data = null)
+	{
+		$templateString = "订单号为{orderNo}的订单将配送到这里,领取验证码:{mobile_code}";
+		return strtr($templateString,$data);
+	}
+
+	public static function orderToSeller($data = null)
+	{
+		$templateString = "尊敬的商户{true_name},订单号为{orderNo}的订单已完成支付，请登录后台处理。";
+		return strtr($templateString,$data);
+	}
+
 
 }

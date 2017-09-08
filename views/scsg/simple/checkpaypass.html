@@ -11,7 +11,10 @@
 	</div>
 	<div class="confirm_box">
 			<h3>
-				你正在支付订单：<p>{$this->orderData['order_no']}</p>
+				你正在支付订单：
+				{foreach:$items=$this->orderData}
+				<p>{$item['order_no']}</p>
+				{/foreach}
 				<span class="pay_num">支付<b>{$this->sum}</b>元</span>
 			</h3>
 			<form action='{url:/simple/docheckPaypass}' method='get' target='_blank'>
@@ -19,6 +22,7 @@
 				<input type="password" name="paypass" />
 				<input type="hidden" name="order_id" value="{$this->order_id}"/>
 				<input type="hidden" name="pay_level" value="{$this->pay_level}"/>
+				<input type="hidden" name="toUrl" value="{$this->toUrl}"/>
 				<input class="submit_pay" type="submit" value="确认支付"  />
 				<a href class="forget_paypass">忘记支付密码？</a>
 			</form>

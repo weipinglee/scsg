@@ -3,6 +3,7 @@
 {if:!$sellerRow}
 {set:IError::show(403,'商户信息不存在')}
 {/if}
+
 <div class="position"> <span>您当前的位置：</span> <a href="{url:}"> 首页</a> » 商户主页 </div>
 <div class="wrapper clearfix container_2">
 
@@ -27,44 +28,13 @@
 					   <p>商户资质：</p>
 					   <div class="zz_img_div">
 					   	 <a class="zz_img_a1">
-					      <img class="img1" src="{skin:images/201506110111392092.jpg}"/>
+					      <img class="img1" src="{webroot:$sellerRow['paper_img']}"/>
 					     </a> <!-- 鼠标放到图片上显示 class="img2" 大图 -->
 					   	 <a class="zz_img_a2">
-					      <img class="img2" src="{skin:images/201506110111392092.jpg}"/>
+					      <img class="img2" src="{webroot:$sellerRow['paper_img']}"/>
 					     </a>
 					   </div>
-					    <div class="zz_img_div">
-					   	 <a class="zz_img_a1">
-					      <img class="img1" src="{skin:images/201506110111392092.jpg}"/>
-					     </a> <!-- 鼠标放到图片上显示 class="img2" 大图 -->
-					   	 <a class="zz_img_a2">
-					      <img class="img2" src="{skin:images/201506110111392092.jpg}"/>
-					     </a>
-					   </div>
-					    <div class="zz_img_div">
-					   	 <a class="zz_img_a1">
-					      <img class="img1" src="{skin:images/201506110111392092.jpg}"/>
-					     </a> <!-- 鼠标放到图片上显示 class="img2" 大图 -->
-					   	 <a class="zz_img_a2">
-					      <img class="img2" src="{skin:images/201506110111392092.jpg}"/>
-					     </a>
-					   </div>
-					    <div class="zz_img_div">
-					   	 <a class="zz_img_a1">
-					      <img class="img1" src="{skin:images/201506110111392092.jpg}"/>
-					     </a> <!-- 鼠标放到图片上显示 class="img2" 大图 -->
-					   	 <a class="zz_img_a2">
-					      <img class="img2" src="{skin:images/201506110111392092.jpg}"/>
-					     </a>
-					   </div>
-					    <div class="zz_img_div">
-					   	 <a class="zz_img_a1">
-					      <img class="img1" src="{skin:images/201506110111392092.jpg}"/>
-					     </a> <!-- 鼠标放到图片上显示 class="img2" 大图 -->
-					   	 <a class="zz_img_a2">
-					      <img class="img2" src="{skin:images/201506110111392092.jpg}"/>
-					     </a>
-					   </div>
+
 					</div>
 				</div>
 			</div>

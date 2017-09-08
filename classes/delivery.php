@@ -21,6 +21,7 @@ class Delivery
      */
     private static function getFeeByWeight($weight,$firstFee,$secondFee)
     {
+
         $firstFee = (float)$firstFee;
         $secondFee = (float)$secondFee;
         //当商品重量小于或等于首重的时候
@@ -55,6 +56,187 @@ class Delivery
         return $firstFee + $secondFee * $more;
     }
 
+    /**
+     * 一个订单中同一个商家的商品合并计算运费，按不同配送方式返回
+     * @param $area int 区域的ID
+     * @param array $goodsArray 商品数据，二维数组，内含goods_id,product_id,num,delivery_id四个字段
+     * @return array 二维数组 每个配送方式对应的价格，保护价格，是否配送
+     */
+    public static function getDeliverys($area,$goodsArray=array())
+    {
+        $delivery    = new IModel('delivery');
+        if(empty($goodsArray))
+            return false;
+        $deliveryInfo = array();
+        foreach($goodsArray as $key=>$val){
+            $deliveryInfo[$val['delivery_id']][] =
+                array('goods_id'=>$val['goods_id'],'product_id'=>$val['product_id'],'num'=>$val['num']);
+        }
+
+        $result = array();
+        $seller_id = 0;
+        foreach($deliveryInfo as $delivery_id=>$goods){
+            if(!$delivery_id)
+            {
+                $delivery_id = $delivery->getField('is_delete = 0 and status = 1 and is_default = 1', 'id');
+            }
+            if(!$delivery_id)
+            {
+                $result[$delivery_id] = array('price' => 0, 'protect_price' => 0, 'if_delivery' => 0);
+            }
+            $weight = 0;//该配送方式下商品总重量
+            $nums = 0;//该配送方式下商品总数量
+            $totalPrice = 0;
+            foreach($goods as $oneGood){
+                $goodsRow = $oneGood['product_id'] > 0 ? Api::run("getProductInfo",array('#id#',$oneGood['product_id'])) : Api::run("getGoodsInfo",array('#id#',$oneGood['goods_id']));
+
+                if(empty($goodsRow))
+                {
+                    return "商品已下架";
+                }
+                $seller_id = $goodsRow['seller_id'];
+                $weight +=  $goodsRow['weight'] * $oneGood['num'];
+                $nums += $oneGood['num'];
+                $totalPrice += $goodsRow['sell_price'] * $oneGood['num'];
+                if($goodsRow['type'] == 1)
+                {
+                    $result[$delivery_id] = array('price' => 0, 'protect_price' => 0, 'if_delivery' => 0);
+                    break;
+                }
+            }
+
+            //获取默认的配送方式信息
+            $deliveryRow = $delivery->getObj('is_delete = 0 and status = 1 and id = '.$delivery_id);
+            if(!$deliveryRow)
+            {
+                return "配送方式不存在";
+            }
+
+            //商家商品
+            if($seller_id)
+            {
+                $deliveryExtendDB = new IModel('delivery_extend');
+                $deliverySellerRow = $deliveryExtendDB->getObj('delivery_id = '.$delivery_id.' and seller_id = '.$seller_id);
+                //使用商家配置的物流运费
+                if($deliverySellerRow)
+                {
+                    $deliveryRow = $deliverySellerRow;
+                }
+            }
+
+            //设置首重和次重
+            self::$firstWeight          = $deliveryRow['first_weight'];
+            self::$secondWeight         = $deliveryRow['second_weight'];
+
+            $deliveryRow['if_delivery'] = '0';
+
+            //当配送方式是统一配置的时候，不进行区分地区价格
+            $area_groupid = unserialize($deliveryRow['area_groupid']);
+            //print_r($area_groupid);
+            if($deliveryRow['price_type'] == 0 || !is_array($area_groupid))
+            {
+                if(isset($deliveryRow['deli_type']) && $deliveryRow['deli_type'] == 2)
+                {
+                    $deliveryRow['price'] = self::getFeeByNum($nums,$deliveryRow['first_price'],$deliveryRow['second_price']);
+                }
+                else
+                {
+                    $deliveryRow['price'] = self::getFeeByWeight($weight,$deliveryRow['first_price'],$deliveryRow['second_price']);
+                }
+            }
+            //当配送方式为指定区域和价格的时候
+            else
+            {
+                $matchKey = $matchKeyArea = $matchKeyCity = $matchKeyProvince = '';
+                $flag     = false;
+
+                //每项都是以';'隔开的省份ID
+                //$area_groupid = unserialize($deliveryRow['area_groupid']);
+                foreach($area_groupid as $key => $result)
+                {
+                    //匹配到了特殊的省份运费价格
+                    if(strpos($result,';'.$area.';') !== false && $matchKeyArea==='')
+                    {
+                        $matchKeyArea = $key;
+                        $flag     = true;
+                    }
+                    else if(strpos($result,';'.substr($area,0,4).'00;') !== false && $matchKeyCity===''){
+                        $matchKeyCity = $key;
+                        $flag     = true;
+
+                    }
+                    else if(strpos($result,';'.substr($area,0,2).'0000;') !== false )
+                    {
+                        $matchKeyProvince = $key;
+                        $flag     = true;
+                    }
+                }
+                //匹配到了特殊的省份运费价格
+                if($flag)
+                {
+                    if($matchKeyArea !== ''){
+                        $matchKey = $matchKeyArea;
+                    }else if($matchKeyCity !== ''){
+                        $matchKey =$matchKeyCity;
+                    }else {
+                        $matchKey = $matchKeyProvince;
+                    }
+                    //echo $matchKey;
+                    //获取当前省份特殊的运费价格
+                    $firstprice  = unserialize($deliveryRow['firstprice']);
+                    $secondprice = unserialize($deliveryRow['secondprice']);
+
+                    if(isset($deliveryRow['deli_type']) && $deliveryRow['deli_type'] == 2)
+                    {
+                        $deliveryRow['price'] = self::getFeeByNum($nums,$firstprice[$matchKey],$secondprice[$matchKey]);
+                    }
+                    else
+                    {
+                        $deliveryRow['price'] = self::getFeeByWeight($weight,$firstprice[$matchKey],$secondprice[$matchKey]);
+                    }
+                }
+                else
+                {
+                    //判断是否设置默认费用了
+                    if($deliveryRow['open_default'] == 1)
+                    {
+                        if(isset($deliveryRow['deli_type']) && $deliveryRow['deli_type'] == 2)
+                        {
+                            $deliveryRow['price'] = self::getFeeByNum($nums,$deliveryRow['first_price'],$deliveryRow['second_price']);
+                        }
+                        else
+                        {
+                            $deliveryRow['price'] = self::getFeeByWeight($weight,$deliveryRow['first_price'],$deliveryRow['second_price']);
+                        }
+
+                    }
+                    else
+                    {
+                        $deliveryRow['price']       = '0';
+                        $deliveryRow['if_delivery'] = '1';
+                    }
+                }
+            }
+
+            //计算保价
+            if($deliveryRow['is_save_price'] == 1)
+            {
+                $goodsSum                     = $nums * $totalPrice;
+                $tempProtectPrice             = $goodsSum * ($deliveryRow['save_rate'] * 0.01);
+                $deliveryRow['protect_price'] = ($tempProtectPrice <= $deliveryRow['low_price']) ? $deliveryRow['low_price'] : $tempProtectPrice;
+            }
+            else
+            {
+                $deliveryRow['protect_price'] = 0;
+            }
+
+            $result[$delivery_id] = $deliveryRow;
+
+        }
+
+
+        return $result;
+    }
     /**
      * @brief 配送方式计算管理模块
      * @param $area    int 区域的ID

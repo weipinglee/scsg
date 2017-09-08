@@ -1817,8 +1817,9 @@ class Seller extends IController
 	public function fapiao_show_save(){
 		$id = IFilter::act(IReq::get('id'),'int');
 		$money = IFilter::act(IReq::get('money'),'float');
+		$redirect = IFilter::act(IReq::get('redirect'));
 		if(!$id || !$money){
-			$this->redirect('fapiao_apply');
+			$this->redirect($redirect);
 		}
 		$db_fa = new IModel('order_fapiao');
 		$data=array(
@@ -1827,7 +1828,7 @@ class Seller extends IController
 		);
 		$db_fa->setData($data);
 		$db_fa->update('id='.$id);
-		$this->redirect('fapiao_list');
+		$this->redirect($redirect);
 	}
     
     //[促销活动] 添加修改 [单页]

@@ -1032,6 +1032,7 @@ class Simple extends IController
     	$this->freeFreight = $result['freeFreight'] ? 1 : 0;
     	//商品列表按商家分开
     	$this->goodsList = $this->goodsListBySeller($this->goodsList);
+
     	//判断所选商品商家是否支持货到付款,有一个商家不支持则不显示
     	$sellerObj = new IModel('seller');
     	$this->freight_collect=1;
@@ -1070,15 +1071,47 @@ class Simple extends IController
 	function checkPaypass()
 	{
 		if($this->user['user_id']==null)$this->redirect('login');
-
+		$toUrl = IFilter::act(IReq::get('toUrl'));
 		$this->order_id = IFilter::act(IReq::get('order_id'), 'int');
-		$this->pay_level = IFilter::act(IReq::get('pay_level'), 'int');
-		$this->sum = IFilter::act(IReq::get('sum'));
+		$this->pay_level =  IReq::get('pay_level') ? IFilter::act(IReq::get('pay_level'),'int') : 2;
 
-		$orderModel = new IModel('order');
-		$res = $orderModel->getObj('id='.$this->order_id);
-		$this->orderData = $res;
-		$this->redirect('checkPaypass');
+		$oId = $this->order_id;
+		$pay_type = 1;
+		if($this->pay_level==1){
+			$orderParent = new IModel('order_parent');
+			$orderParentData = $orderParent->getObj('id='.$oId);
+			$orderModel = new IModel('order');
+			$res = $orderModel->select(array('pid'=>$oId),'order_no,pay_type,order_amount');
+			$this->sum = $orderParentData['order_amount'];
+			if(!empty($res)){
+				$pay_type = $res[0]['pay_type'];
+			}
+		}
+		else{
+			$orderModel = new IModel('order');
+			$res = $orderModel->select(array('id'=>$oId),'order_no,pay_type,order_amount');
+			if(!empty($res)){
+				$pay_type = $res[0]['pay_type'];
+				$this->sum = $res[0]['order_amount'];
+			}
+		}
+
+		if($pay_type==1){
+			$this->orderData = $res;
+			$this->toUrl = $toUrl;
+			$this->redirect('checkPaypass');
+		}
+		else{
+			if($toUrl){
+				$this->redirect($toUrl);
+			}
+			else{
+				$this->redirect('/block/dopay/order_id/'.$this->order_id.'/pay_level/'.$this->pay_level);
+			}
+
+		}
+
+
 	}
 
 	//验证支付密码动作
@@ -1088,12 +1121,16 @@ class Simple extends IController
 		$order_id = IFilter::act(IReq::get('order_id'), 'int');
 		$pay_level = IFilter::act(IReq::get('pay_level'), 'int');
 		$sum = IFilter::act(IReq::get('sum'));
+		$toUrl = IFilter::act(IReq::get('toUrl'));
 		$pass = IFilter::act(IReq::get('paypass'));
 
 		$user_id = $this->user['user_id'];
 
 		$zhifu = new zhifu();
 		if($zhifu->checkPayPass($pass,$user_id)){
+			if($toUrl){
+				$this->redirect($toUrl);
+			}
 			$this->redirect('/block/doPay/order_id/'.$order_id.'/pay_level/'.$pay_level);
 		}
 		else
@@ -1583,6 +1620,7 @@ class Simple extends IController
             }
             //计算购物车中的商品价格$goodsResult
             $goodsResult = $countSumObj->cart_count($cartData, $area);
+			//print_r($goodsResult);
             $cart = new Cart();
             $cart->del_many($delCart);
             //清空购物车
@@ -2609,7 +2647,7 @@ class Simple extends IController
 		if($siteConfig->mobile)
 		{
 			$content = smsTemplate::sellerReg(array('{true_name}' => $truename));
-			$result = Hsms::send($mobile,$content);
+			$result = Hsms::send($siteConfig->mobile,$content);
 		}
 
 		$this->redirect('/site/success?message='.urlencode("申请成功！请耐心等待管理员的审核"));

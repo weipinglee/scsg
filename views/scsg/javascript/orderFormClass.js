@@ -38,7 +38,9 @@ function orderFormClass()
 	this.weight       = 0;//商品总重量
 	
 	this.deliveryConf = {};//记录配送信息的json对象
-	
+
+	this.getTakeselfUrl = '';//根据区域id获取自提点信息
+	this.selectTaseself = false;//是否必须选择自提点，默认可不选
 	/*
 	 * 选择配送方式时调用，设置deliveryConf
 	 */
@@ -66,7 +68,7 @@ function orderFormClass()
 		$('#final_sum').text(this.orderAmount);
 		$('[name="ticket_value"]').text(this.ticketPrice);
 		$('#delivery_fee_show').text(this.deliveryPrice);
-		$('#protect_price_value').text(this.protectPrice);
+		//$('#protect_price_value').text(this.protectPrice);
 		$('#payment_value').text(this.paymentPrice);
 		$('#tax_fee').text(this.taxPrice);
 		if(this.presell){//计算预售金额
@@ -140,11 +142,26 @@ function orderFormClass()
         var province = $('[name="province"]').val();
         var city     = $('[name=city]').val();
         var area     = $('[name=area]').val();
-          
+		var _this = this;
         if(!area)
         {
             return;
         }
+
+		//验证该收获区域是否有自提点,如果有自提点，设置selectTaseself属性为true,提交订单时必须选择自提点
+		_this.selectTaseself = false;
+		$.ajax({
+			type:'post',
+			data:{"type":'area',"id":area},
+			dataType:'json',
+			url:_this.getTakeselfUrl,
+			success:function(data){
+				$.each(data,function(index){
+					_this.selectTaseself = true;
+				})
+			}
+		})
+
         $('.js_data_6').hide();
         var _d = []
             ,_in = 0;                    
@@ -153,11 +170,13 @@ function orderFormClass()
                 ,price = 0
                 ,_g = []
                 ,_group = 0;
+			var _deliveryInfo = '';
             _this.parents('table').find('.js_goods_delivery').each(function(){
                 var _t = $(this)
                     ,obj = _t.attr('js_data')
-                    ,dataArray = obj.split("_");
-                    $.ajax({
+                   // ,dataArray = obj.split("_");
+				_deliveryInfo = _deliveryInfo + obj + '|';
+                   /* $.ajax({
                         type:'post',
                         async:false,
                         data:{"area":area,"deliveryId":dataArray[0],"goodsId":dataArray[1],"productId":dataArray[2],"num":dataArray[3]},
@@ -188,10 +207,39 @@ function orderFormClass()
                             _g.push(content.goodsList);
                             _group = content.group_id;
                         },
-                        timeout:1000,
-                    })
+                        timeout:1000
+                    })*/
                     _in++;
             })
+
+
+			$.ajax({
+				type: 'post',
+				async:false,
+				data: {"area":area,"delivery_info":_deliveryInfo},
+				url:_get_delivery_url,
+				success : function(data){
+					data  = JSON.parse(data);
+					$.each(data.delivery,function(index){
+						var content = data.delivery[index];
+						//地区无法送达
+						if(content.if_delivery == 1 || content.error == 1)
+						{
+							alert('您选择地区部分商品无法送达');
+						}
+						else{
+							price += (data.delivery[index].price);
+						}
+
+
+					})
+					_g.push(data.goodsList);
+					_group = data.group_id;
+				}
+
+			})
+
+
              $.ajax({
                 type:'post',
                 async:false,
@@ -201,9 +249,9 @@ function orderFormClass()
                 success:function(jsonData)
                 {
                     if(!jsonData.isFreeFreight)
-                    {
+                    {//window.realAlert(JSON.stringify(jsonData));
                         orderFormInstance.deliveryPrice += parseFloat(price);
-                        
+
                         _this.html('￥'+parseFloat(price).toFixed(2));
                     }
                     else
@@ -216,8 +264,10 @@ function orderFormClass()
                         _this.html('免运费');
                     }
                 }
-            })        
+            })
         })
+
+
         if(_d.length > 0)
         {
             for(var i = 0; i < _d.length; i ++){
@@ -335,6 +385,7 @@ function orderFormClass()
 		}
 
 		this.addressModToggle('save');
+
 
 		//获取配送数据并且开启配送方式
 		var timeHandle = setInterval(function(){
@@ -554,6 +605,15 @@ function orderFormClass()
 		{
 			saveButtonList.first().trigger('focus');
 			return false;
+		}
+
+		//如果必须选择自提点而没有选择，不允许提交
+		if(this.selectTaseself){
+			if(!$('input[name=takeself]').prop('checked')){
+				alert('请选择自提点');
+				return false;
+			}
+
 		}
 		return true;
 	}

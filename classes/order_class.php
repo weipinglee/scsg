@@ -99,7 +99,7 @@ class Order_Class
                 $memberRow  = $memberObj->getObj('user_id = '.$user_id,'prop,group_id');
              }
              $orderObj  = new IModel('order');        
-             $orderList = $orderObj->query('pid='.$orderRow['id'], 'id,status,prop,order_amount,order_no,type');
+             $orderList = $orderObj->query('pid='.$orderRow['id'], 'id,status,prop,order_amount,order_no,type,seller_id');
              $config = new Config('site_config');
              foreach($orderList as $v)
              {
@@ -189,6 +189,9 @@ class Order_Class
                     Hsms::send($config->mobile,$smsContent);
                 }
                 $return[] = $v['id'];
+
+				 //通知商户
+				 self::noticeSeller($v['seller_id'],$v['order_no']);
              }                                   
              return $return;
         }
@@ -323,13 +326,35 @@ class Order_Class
 				    $smsContent = smsTemplate::payFinishToAdmin(array('{orderNo}' => $orderNo));
 				    Hsms::send($config->mobile,$smsContent);
 			    }
-			    return $orderRow['id'];         
+
+				//通知商户
+				self::noticeSeller($orderRow['seller_id'],$orderRow['order_no']);
+			    return $orderRow['id'];
+
 		    }
 		    else
 		    {
 			    return false;
 		    }
         }
+	}
+
+	/**
+	 * 支付完成后给商户发送短信
+	 * @param $seller_id int 商户id
+	 * @param $order_no string 订单号
+	 * @return bool
+	 */
+	public static function noticeSeller($seller_id,$order_no){
+		if($seller_id!=0){
+			$sellerDB = new IModel('seller');
+			$sellerData = $sellerDB->getObj('id='.$seller_id,'mobile,true_name');
+			if(!empty($sellerData)){
+				$smsContent = smsTemplate::orderToSeller(array('{orderNo}' => $order_no , '{true_name}'=>$sellerData['true_name']));
+				Hsms::send($sellerData['mobile'],$smsContent);
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -361,6 +386,10 @@ class Order_Class
 				{
 					$smsContent = smsTemplate::takeself(array('{orderNo}' => $orderRow['order_no'],'{address}' => $takeselfRow['address'],'{mobile_code}' => $mobile_code,'{phone}' => $takeselfRow['phone'],'{name}' => $takeselfRow['name']));
 					Hsms::send($orderRow['mobile'],$smsContent);
+
+					//给自提点发送短信
+					$smsContent1  = smsTemplate::toTakeself(array('{orderNo}' => $orderRow['order_no'],'{mobile_code}' => $mobile_code));
+					Hsms::send($takeselfRow['mobile'],$smsContent1);
 				}
 			}
 		}

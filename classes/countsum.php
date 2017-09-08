@@ -160,6 +160,7 @@ class CountSum
 		//获取商品或货品数据
 		/*Goods 拼装商品优惠价的数据*/
         $goodsListFinal = array();
+		$deliveryInfo = array();
         foreach($buyInfoList as $buy=>$buyInfo)
         {
     	    if(isset($buyInfo['goods']['id']) && $buyInfo['goods']['id'])
@@ -168,7 +169,8 @@ class CountSum
     		    $goodsIdStr = join(',',$buyInfo['goods']['id']);
     		    $goodsObj   = new IModel('goods as go');
     		    $goodsList  = $goodsObj->query('go.id in ('.$goodsIdStr.')','go.name,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,go.delivery_id,go.combine_price,go.type,go.sign_code');
-    		    //开始优惠情况判断
+
+    		     //开始优惠情况判断
     		    foreach($goodsList as $key => $val)
     		    {
                     $order_extend[$val['seller_id']]['sum'] = isset($order_extend[$val['seller_id']]['sum']) ? $order_extend[$val['seller_id']]['sum'] : 0;
@@ -209,12 +211,16 @@ class CountSum
                     $goodsList[$key]['combine_id'] = $buy;
                     
                     //计算运费
-                    $delivery = Delivery::getDelivery(0, $val['delivery_id'], $val['goods_id'], $val['product_id'], $goodsList[$key]['count']);
+                  //  $delivery = Delivery::getDelivery(0, $val['delivery_id'], $val['goods_id'], $val['product_id'], $goodsList[$key]['count']);
+					$deliveryInfo[$val['seller_id']][] =
+							array('goods_id'=>$val['goods_id'],'product_id'=>$val['product_id'],
+									'num'=>$goodsList[$key]['count'],'delivery_id'=>$val['delivery_id']);
+
                     $goodsList[$key]['delivery'] = 0;
-                    if(isset($delivery['price']))
-                    {
-                       $goodsList[$key]['delivery']  += $delivery['price']; 
-                    }
+//                    if(isset($delivery['price']))
+//                    {
+//                       $goodsList[$key]['delivery']  += $delivery['price'];
+//                    }
                     
     			    $current_sum_all           = $goodsList[$key]['sell_price'] * $goodsList[$key]['count'];
     			    $current_reduce_all        = $goodsList[$key]['reduce']     * $goodsList[$key]['count'];
@@ -293,12 +299,16 @@ class CountSum
     			    $productList[$key]['sum']    = $current_sum_all - $current_reduce_all;
 
                     //计算运费
-                    $delivery = Delivery::getDelivery(0, $val['delivery_id'], $val['goods_id'], $val['product_id'], $productList[$key]['count']);
-                    $productList[$key]['delivery'] = 0;
-                    if(isset($delivery['price']))
-                    {
-                       $productList[$key]['delivery']  += $delivery['price']; 
-                    }
+                  //  $delivery = Delivery::getDelivery(0, $val['delivery_id'], $val['goods_id'], $val['product_id'], $productList[$key]['count']);
+					$deliveryInfo[$val['seller_id']][] =
+							array('goods_id'=>$val['goods_id'],'product_id'=>$val['product_id'],
+									'num'=>$productList[$key]['count'],'delivery_id'=>$val['delivery_id']);
+
+					$productList[$key]['delivery'] = 0;
+//                    if(isset($delivery['price']))
+//                    {
+//                       $productList[$key]['delivery']  += $delivery['price'];
+//                    }
                     $order_extend[$val['seller_id']]['sum'] += $current_sum_all;
                     $order_extend[$val['seller_id']]['weight'] += $val['weight'] * $productList[$key]['count'];
                     $order_extend[$val['seller_id']]['point'] += $val['point']  * $productList[$key]['count'];
@@ -321,6 +331,22 @@ class CountSum
     	    }
         }
 		$final_sum = $this->sum - $this->reduce;
+
+		//计算相同商家运费，生成键为[商家id][配送id]的数组
+		$deliveryTemp = array();
+		foreach($deliveryInfo as $seller_id=>$val){
+				$deliveryTemp[$seller_id] = Delivery::getDeliverys($area,$val);
+		}
+
+		//同一商家相同配送方式第一个商品费用计算为综合费用，其余配送费记为0
+		foreach($goodsListFinal as $buy => $goodList){
+			foreach($goodList as $k=>$goodInfo){
+				$goodsListFinal[$buy][$k]['delivery']
+						= $deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']]['price'];
+				$deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']]['price'] = 0;
+			}
+		}
+		//print_r($goodsListFinal);
     	//总金额满足的促销规则
     	if($user_id&&$prom)
     	{
@@ -635,6 +661,17 @@ class CountSum
         );
         $goods_seller_data = array();
         $order_extend = array();
+		$deliveryInfo = array();
+
+		foreach($goodsResult['goodsList'] as $key => $val){
+			$deliveryInfo[$val['seller_id']][$key] =
+					array('goods_id'=>$val['goods_id'],'product_id'=>$val['product_id'],
+							'num'=>$val['count'],'delivery_id'=>$val['delivery_id']);
+		}
+		$deliveryTemp = array();
+		foreach($deliveryInfo as $seller_id=>$val){
+			$deliveryTemp[$seller_id] = Delivery::getDeliverys($area_id,$val);
+		}
         foreach($goodsResult['goodsList'] as $key => $val){
             $order_extend[$val['seller_id']]['deliveryOrigPrice'] = isset($order_extend[$val['seller_id']]['deliveryOrigPrice']) ? $order_extend[$val['seller_id']]['deliveryOrigPrice'] : 0;
             $order_extend[$val['seller_id']]['insuredPrice'] = isset($order_extend[$val['seller_id']]['insuredPrice']) ? $order_extend[$val['seller_id']]['insuredPrice'] : 0;
@@ -642,67 +679,70 @@ class CountSum
             $order_extend[$val['seller_id']]['taxPrice'] = isset($order_extend[$val['seller_id']]['taxPrice']) ? $order_extend[$val['seller_id']]['taxPrice'] : 0;
             $order_extend[$val['seller_id']]['sum'] = isset($order_extend[$val['seller_id']]['sum']) ? $order_extend[$val['seller_id']]['sum'] : 0;
             $order_extend[$val['seller_id']]['reduce'] = isset($order_extend[$val['seller_id']]['reduce']) ? $order_extend[$val['seller_id']]['reduce'] : 0;
-            $deliveryRow = Delivery::getDelivery($area_id, $val['delivery_id'], $val['goods_id'], $val['product_id'], $val['count']);
-            
-            if(is_string($deliveryRow) || $deliveryRow['if_delivery'] == 1)
-            {
-                return "您所选购的商品：".$val['name']."，无法送达";
-            }
-            $result['deliveryOrigPrice'] += $deliveryRow['price'];
-            $order_extend[$val['seller_id']]['deliveryOrigPrice'] += $deliveryRow['price'];
-            
-            //商品保价计算
-            //    if($is_insured == 1 || ( is_array($is_insured) && isset($is_insured[$val['goods_id']."_".$val['product_id']]) ) )
-            if($is_insured == 1  || ( is_array($is_insured) && isset($is_insured[$key]) ) )
-            {
-                $result['insuredPrice'] += $deliveryRow['protect_price'];
-                $order_extend[$val['seller_id']]['insuredPrice'] += $deliveryRow['protect_price'];
-                $order_extend[$val['seller_id']]['if_insured'] =1;
-            }
-            if(!$goodsResult['freeFreight'])
-            {
-                $result['deliveryPrice'] += $deliveryRow['price'];
-                $order_extend[$val['seller_id']]['deliveryPrice'] += $deliveryRow['price'];
-                $goodsResult['goodsList'][$key]['deliveryPrice'] = $deliveryRow['price'];
-            }
-            else
-            {
-                if(is_array($goodsResult['freeFreight']))
-                {
-                    $proModel = new IModel('promotion');
-                    $freeFreight = implode(',', $goodsResult['freeFreight']);
-                    $goods = $proModel->query('id in ('.$freeFreight.')', 'goods_id, seller_id');
-                    $goodsList = '';
-                    foreach($goods as $v)
-                    {
-                        if($v['goods_id'] == 'all')
-                        {
-                            $goods = new IModel('goods');
-                            $gId = $goods->getFields(array('seller_id' => $v['seller_id'], 'id' => $val['goods_id']), 'id');
-                            $goodsList .= $gId  ? ','.implode(',', $gId) : '';
-                        }
-                        elseif(!empty($v['goods_id']))
-                        {
-                            $goodsList .= ','.$v['goods_id'];
-                        }
-                    }
-                    if(in_array($val['goods_id'], explode(',',$goodsList)))
-                    {
-                        $goodsResult['goodsList'][$key]['deliveryPrice'] = 0;
-                    }
-                    else
-                    {
-                        $result['deliveryPrice'] += $deliveryRow['price'];
-                        $order_extend[$val['seller_id']]['deliveryPrice'] += $deliveryRow['price'];
-                        $goodsResult['goodsList'][$key]['deliveryPrice'] = $deliveryRow['price'];
-                    }
-                }
-                else
-                {
-                    $goodsResult['goodsList'][$key]['deliveryPrice'] = 0;
-                }
-            }
-            $goodsResult['goodsList'][$key]['insuredPrice'] = $deliveryRow['protect_price'];
+
+			$item = $deliveryTemp[$val['seller_id']][$val['delivery_id']];
+			$deliveryTemp[$val['seller_id']][$val['delivery_id']]['price'] = 0;
+			if(is_string($item) || $item['if_delivery'] == 1)
+			{
+				return "您所选购的商品无法送达";
+			}
+			$result['deliveryOrigPrice'] += $item['price'];
+			$order_extend[$val['seller_id']]['deliveryOrigPrice'] += $item['price'];
+
+			//商品保价计算
+			//    if($is_insured == 1 || ( is_array($is_insured) && isset($is_insured[$val['goods_id']."_".$val['product_id']]) ) )
+			if($is_insured == 1  || ( is_array($is_insured)&& isset($is_insured[$key]) ) )
+			{
+				$result['insuredPrice'] += $item['protect_price'];
+				$order_extend[$val['seller_id']]['insuredPrice'] += $item['protect_price'];
+				$order_extend[$val['seller_id']]['if_insured'] =1;
+			}
+
+			if(!$goodsResult['freeFreight'])
+			{
+				$result['deliveryPrice'] += $item['price'];
+				$order_extend[$val['seller_id']]['deliveryPrice'] += $item['price'];
+				$goodsResult['goodsList'][$key]['deliveryPrice'] = $item['price'];
+			}
+			else
+			{
+				if(is_array($goodsResult['freeFreight']))
+				{
+					$proModel = new IModel('promotion');
+					$freeFreight = implode(',', $goodsResult['freeFreight']);
+					$goods = $proModel->query('id in ('.$freeFreight.')', 'goods_id, seller_id');
+					$goodsList = '';
+					foreach($goods as $v)
+					{
+						if($v['goods_id'] == 'all')
+						{
+							$goods = new IModel('goods');
+							$gId = $goods->getFields(array('seller_id' => $v['seller_id'], 'id' => $val['goods_id']), 'id');
+							$goodsList .= $gId  ? ','.implode(',', $gId) : '';
+						}
+						elseif(!empty($v['goods_id']))
+						{
+							$goodsList .= ','.$v['goods_id'];
+						}
+					}
+					if(in_array($val['goods_id'], explode(',',$goodsList)))
+					{
+						$goodsResult['goodsList'][$key]['deliveryPrice'] = 0;
+					}
+					else
+					{
+						$result['deliveryPrice'] += $item['price'];
+						$order_extend[$val['seller_id']]['deliveryPrice'] += $item['price'];
+						$goodsResult['goodsList'][$key]['deliveryPrice'] = $item['price'];
+					}
+				}
+				else
+				{
+					$goodsResult['goodsList'][$key]['deliveryPrice'] = 0;
+				}
+			}
+
+           $goodsResult['goodsList'][$key]['insuredPrice'] = $item['protect_price'];
 
             //商品税金计算
             if($is_invoice == true)
@@ -726,6 +766,10 @@ class CountSum
             $order_extend[$val['seller_id']]['sum'] += $val['sum'];
             $order_extend[$val['seller_id']]['reduce'] += $val['reduce'];
         }
+
+
+
+
         foreach($order_extend as $k => $v)
         {            
             //非货到付款的线上支付方式手续费
