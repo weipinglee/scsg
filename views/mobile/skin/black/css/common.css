@@ -977,3 +977,16 @@ span.grade i {
 }
 
 /*首页搜索增加商户/商家搜索 end*/
+/*配送*/
+.password_ok{
+   display: block;
+   width:100%;
+    text-align: center;
+    border: 1px solid #dedede;
+    height: 40px;
+    line-height: 35px;
+    margin-right: 12%;
+    background: #F15A24;
+    color: #fff;
+}
+/*配送end*/
