@@ -69,7 +69,7 @@ class smsTemplate
 	 */
 	public static function sellerCheck($data = null)
 	{
-		$templateString = "您的加盟商状态已经被修改为:{result}状态,请登录您的商户后台查看具体的详情";
+		$templateString = "您申请的店铺{true_name}已{result}，请尽快登录商户后台进行信息完善。";
 		return strtr($templateString,$data);
 	}
 
@@ -99,7 +99,7 @@ class smsTemplate
 
 	public static function orderToSeller($data = null)
 	{
-		$templateString = "尊敬的商户{true_name},订单号为{orderNo}的订单已完成支付，请登录后台处理。";
+		$templateString = "{true_name},买家{member}已付款，请尽快登录后台进行处理";
 		return strtr($templateString,$data);
 	}
 

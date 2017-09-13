@@ -96,7 +96,7 @@ class Order_Class
 
                 //获取用户信息
                 $memberObj  = new IModel('member');
-                $memberRow  = $memberObj->getObj('user_id = '.$user_id,'prop,group_id');
+                $memberRow  = $memberObj->getObj('user_id = '.$user_id,'prop,group_id,true_name');
              }
              $orderObj  = new IModel('order');        
              $orderList = $orderObj->query('pid='.$orderRow['id'], 'id,status,prop,order_amount,order_no,type,seller_id');
@@ -191,7 +191,7 @@ class Order_Class
                 $return[] = $v['id'];
 
 				 //通知商户
-				 self::noticeSeller($v['seller_id'],$v['order_no']);
+				 self::noticeSeller($v['seller_id'],$v['order_no'],$memberRow['true_name']);
              }                                   
              return $return;
         }
@@ -257,7 +257,7 @@ class Order_Class
 
 				    //获取用户信息
 				    $memberObj  = new IModel('member');
-				    $memberRow  = $memberObj->getObj('user_id = '.$user_id,'prop,group_id');
+				    $memberRow  = $memberObj->getObj('user_id = '.$user_id,'prop,group_id,true_name');
 
 				    //(1)删除订单中使用的道具
 				    if($ticket_id != '')
@@ -328,7 +328,7 @@ class Order_Class
 			    }
 
 				//通知商户
-				self::noticeSeller($orderRow['seller_id'],$orderRow['order_no']);
+				self::noticeSeller($orderRow['seller_id'],$orderRow['order_no'],$memberRow['true_name']);
 			    return $orderRow['id'];
 
 		    }
@@ -345,12 +345,12 @@ class Order_Class
 	 * @param $order_no string 订单号
 	 * @return bool
 	 */
-	public static function noticeSeller($seller_id,$order_no){
+	public static function noticeSeller($seller_id,$order_no,$member_name=''){
 		if($seller_id!=0){
 			$sellerDB = new IModel('seller');
 			$sellerData = $sellerDB->getObj('id='.$seller_id,'mobile,true_name');
 			if(!empty($sellerData)){
-				$smsContent = smsTemplate::orderToSeller(array('{orderNo}' => $order_no , '{true_name}'=>$sellerData['true_name']));
+				$smsContent = smsTemplate::orderToSeller(array('{orderNo}' => $order_no , '{true_name}'=>$sellerData['true_name'],'{member}'=>$member_name));
 				Hsms::send($sellerData['mobile'],$smsContent);
 			}
 		}

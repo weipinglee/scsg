@@ -815,7 +815,7 @@ class Member extends IController
 			if($userData['is_lock']!=$sellerRow['is_lock'] && isset($sellerRow['mobile']) && $sellerRow['mobile'])
 			{
 				$result = $sellerRow['is_lock'] == 0 ? "审核通过" : "锁定";
-				$content = smsTemplate::sellerCheck(array('{result}' => $result));
+				$content = smsTemplate::sellerCheck(array('{result}' => $result,'{true_name}'=>$sellerRow['true_name']));
 				 Hsms::send($sellerRow['mobile'],$content);
 			}
 			//修改密码
