@@ -31,7 +31,9 @@ class Delivery
         }
 
         //当商品重量大于首重时，根据次重进行累加计算
-        $num = ceil(($weight - self::$firstWeight)/self::$secondWeight);
+        if(self::$secondWeight>0)
+             $num = ceil(($weight - self::$firstWeight)/self::$secondWeight);
+        else $num = 0;
         return $firstFee + $secondFee * $num;
     }
     
@@ -52,7 +54,9 @@ class Delivery
         }
 
         //当商品重量大于首重时，根据次重进行累加计算
-        $more = ceil(($num - self::$firstWeight)/self::$secondWeight);
+        if(self::$secondWeight>0)
+            $more = ceil(($num - self::$firstWeight)/self::$secondWeight);
+        else $more = 0;
         return $firstFee + $secondFee * $more;
     }
 
