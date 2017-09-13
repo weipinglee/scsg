@@ -58,6 +58,7 @@
 
 	  {set:$seller_id = IFilter::act(IReq::get('id'),'int')}
 	  {set:$sellerRow=Api::run('getSellerInfo',$seller_id)}
+	  {set:$sellerPaper=Api::run('getSellerPapers',$seller_id)}
 
     <div class="top_title">
 		<a class="sj_de on">商家介绍</a>
@@ -135,8 +136,9 @@
         <div class="t_name">商户资质:</div>
    </div>
     <div class="sh_zz clear">
-    	<img src="{webroot:$sellerRow['paper_img']}"/>
-    
+		{foreach:items=$sellerPaper}
+    	<img src="{webroot:$item['img']}"/>
+    {/foreach}
     </div>
 </div>
     	<script type="text/javascript" src="{theme:javascript/searchlist.js}" charset="UTF-8"></script>

@@ -266,6 +266,10 @@ return array(
 	'getSellerInfo'=>array(
 	   'file' => 'seller.php','class' => 'APISeller'
 	),
+	//获取商户资质图片
+		'getSellerPapers'=>array(
+				'file' => 'seller.php','class' => 'APISeller'
+		),
 	//取得商户列表
 	'getSellerInfo'=>array(
 	   'file' => 'seller.php','class' => 'APISeller'

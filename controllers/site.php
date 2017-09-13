@@ -1999,4 +1999,6 @@ class Site extends IController
         $this->queryObj = Api::run('getSellerList',$where);
         $this->redirect('seller_list');
     }
+
+
 }

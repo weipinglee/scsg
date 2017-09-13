@@ -15,6 +15,12 @@ class APISeller
 		return $info;
 	}
 
+	public function getSellerPapers($seller_id){
+		$query = new IModel('seller_paper');
+		$info = $query->query("seller_id=".$seller_id);
+		return $info;
+	}
+
 	/**
 	 * 查找商户列表
 	 * @param string $where 筛选条件
