@@ -150,17 +150,17 @@ function orderFormClass()
 
 		//验证该收获区域是否有自提点,如果有自提点，设置selectTaseself属性为true,提交订单时必须选择自提点
 		_this.selectTaseself = false;
-		$.ajax({
-			type:'post',
-			data:{"type":'area',"id":area},
-			dataType:'json',
-			url:_this.getTakeselfUrl,
-			success:function(data){
-				$.each(data,function(index){
-					_this.selectTaseself = true;
-				})
-			}
-		})
+		//$.ajax({
+		//	type:'post',
+		//	data:{"type":'area',"id":area},
+		//	dataType:'json',
+		//	url:_this.getTakeselfUrl,
+		//	success:function(data){
+		//		$.each(data,function(index){
+		//			_this.selectTaseself = true;
+		//		})
+		//	}
+		//})
 
         $('.js_data_6').hide();
         var _d = []

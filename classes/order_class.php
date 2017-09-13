@@ -396,7 +396,8 @@ class Order_Class
 		//普通付款通知
 		else
 		{
-			$smsContent = smsTemplate::payFinishToUser(array('{orderNo}' => $orderNo));
+			$time = ITime::getDateTime('Y-m-d H:i',time() + 60*60);
+			$smsContent = smsTemplate::payFinishToUser(array('{address}' => $orderRow['address'],'{time}' => $time));
 			Hsms::send($orderRow['mobile'],$smsContent);
 		}
 	}

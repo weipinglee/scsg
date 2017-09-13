@@ -284,7 +284,7 @@ function selectTakeself(deliveryId)
 							<tr><th></th><td><%=area_val%> <%=address%>  <%=mobile%>  <%=telphone%></td></tr>
                             {if:!$this->good_type}
 							<tr><th>代收点：</th><td><input type='checkbox' name='takeself' class='hide checks' value='0'/> <span id="takeself"></span>
-								<a href="javascript:selectTakeself();"><span class="red">切换自提点(自提点所在小区外的区域不予配送)</span></a>
+								<a href="javascript:selectTakeself();"><span class="red">切换自提点(自提客户或非香榭小区范围内客户可选自提点进行自主取货)</span></a>
 								</td>
 							</tr>
 							<tr class='hide' id='takeselfParam'><td><%=province%></td><td><%=city%></td><td><%=area%></td></tr>

@@ -49,7 +49,7 @@ class smsTemplate
 	 */
 	public static function takeself($data = null)
 	{
-		$templateString = "您的订单号:{orderNo},{name}自提地址:{address},领取验证码:{mobile_code},请尽快领取";
+		$templateString = "订单已被商家确认，请于9:30点前前往{address}提取您预定的早餐、领取验证码为：{mobile_code}。";
 		return strtr($templateString,$data);
 	}
 
@@ -87,7 +87,8 @@ class smsTemplate
 	 */
 	public static function payFinishToUser($data = null)
 	{
-		$templateString = "您的订单号:{orderNo},已付款成功,稍后我们会尽快为您服务";
+		$templateString = "订单已被商家确认，您购买的早餐将于{time}前送达至{address}";
+
 		return strtr($templateString,$data);
 	}
 

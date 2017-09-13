@@ -2864,5 +2864,5 @@ class Simple extends IController
         $num            = IReq::get('num') ? IFilter::act(IReq::get('num'), 'int') :１;
         $result = Delivery::getDelivery(0, $delivery_id, $goods_id, $product_id, $num);
         echo JSON::encode($result);
-    }   
+    }
 }
