@@ -156,20 +156,20 @@ class Delivery
 
                 //每项都是以';'隔开的省份ID
                 //$area_groupid = unserialize($deliveryRow['area_groupid']);
-                foreach($area_groupid as $key => $result)
+                foreach($area_groupid as $key => $res)
                 {
                     //匹配到了特殊的省份运费价格
-                    if(strpos($result,';'.$area.';') !== false && $matchKeyArea==='')
+                    if(strpos($res,';'.$area.';') !== false && $matchKeyArea==='')
                     {
                         $matchKeyArea = $key;
                         $flag     = true;
                     }
-                    else if(strpos($result,';'.substr($area,0,4).'00;') !== false && $matchKeyCity===''){
+                    else if(strpos($res,';'.substr($area,0,4).'00;') !== false && $matchKeyCity===''){
                         $matchKeyCity = $key;
                         $flag     = true;
 
                     }
-                    else if(strpos($result,';'.substr($area,0,2).'0000;') !== false )
+                    else if(strpos($res,';'.substr($area,0,2).'0000;') !== false )
                     {
                         $matchKeyProvince = $key;
                         $flag     = true;
@@ -234,7 +234,7 @@ class Delivery
                 $deliveryRow['protect_price'] = 0;
             }
 
-            $result[$delivery_id] = $deliveryRow;
+            $result[$delivery_id] =  $deliveryRow;
 
         }
 
