@@ -104,6 +104,9 @@ class Menu
                 '/comment/discussion_list_seller'         => '讨论管理',  
                 '/comment/comment_list_seller'            => '评价管理', 
             ),
+			'配送员管理' => array(
+				'/member/deliver_edit' => '配送员添加'
+			)
 		),
 
 	   '订单'=>array(

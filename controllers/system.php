@@ -336,8 +336,9 @@ class System extends IController
 	        {
 				$config_param[$key] = IFilter::act(IReq::get($key));
 	        }
-	        $config_param = JSON::encode($config_param);
+
 		}
+		$config_param = JSON::encode($config_param);
         $updateData = array(
         	'name'          => $name,
         	'poundage_type' => $poundage_type,

@@ -948,5 +948,55 @@ class Member extends IController
 		$this->redirect('seller_list');
 	}
 
+	/********************配送员管理****************************/
+	public function deliver_edit()
+	{
+		$uid  = IFilter::act(IReq::get('uid'),'int');
+
+		if(!$uid)
+			$uid = 1;
+		//编辑会员信息读取会员信息
+		$this->deliverRow = array();
+		if($uid)
+		{
+			$deliverObj = new IModel('deli_person');
+			$this->deliverRow = $deliverObj->getObj("id=".$uid);
+
+		}
+		$this->redirect('deliver_edit');
+	}
+
+	public function deliver_save(){
+		$id = IFilter::act(IReq::get('id'),'int');
+		$data = array(
+				'username' => IFilter::act(IReq::get('username')),
+				'true_name' => IFilter::act(IReq::get('true_name')),
+				'mobile' => IFilter::act(IReq::get('mobile')),
+				'province' => IFilter::act(IReq::get('province'),'int'),
+				'city' => IFilter::act(IReq::get('city'),'int'),
+				'area' => IFilter::act(IReq::get('area'),'int'),
+				'address' => IFilter::act(IReq::get('address')),
+				'status' => IFilter::act(IReq::get('status'),'int')
+		);
+		$password = IFilter::act(IReq::get('password'));
+
+		if($password){
+			$data['password'] = sha1($password);
+		}
+		$deliObj = new IModel('deli_person');
+		if($id){
+			$deliObj->setData($data);
+			$deliObj->update("id=".$id);
+		}
+		else{
+			$deliObj->setData($data);
+			$deliObj->add();
+		}
+
+		$this->redirect('deliver_edit');
+
+
+	}
+
 	
 }
