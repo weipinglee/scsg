@@ -119,6 +119,22 @@ body.second .wrapper{border-top:2px solid #000}
 .main{width:750px}
 .sidebar{width:200px}
 	.wrapper .box{border:1px  solid #E1E1E1;margin-bottom: 10px; }
+.wrapper td .upload_btn{
+	width: 60px;
+    /* border: 1px solid #A09898; */
+    background: rgba(214, 214, 214, 0.23);
+    text-align: center;
+    padding-top: 5px;
+}
+.wrapper .box .pic{
+	display: block;
+	float:left;
+}
+.wrapper .box:after{
+	display: block;
+	content: "";
+	clear: both;
+}
 		.wrapper .box .title{height:31px;border-bottom:1px #e1e1e1 solid;line-height:30px}
 		.wrapper .box .title2{height:36px;border-bottom:1px #e1e1e1 solid;line-height:36px}
 		.wrapper .box .title3{height:41px;margin-top:10px;border-bottom:0;overflow:hidden}
