@@ -2575,6 +2575,9 @@ class Simple extends IController
 		$address     = IFilter::act(IReq::get('address'));
 		$home_url    = IFilter::act(IReq::get('home_url'));
 
+		$paper_img = IFilter::act(IReq::get('img'));
+		$paper_imgs = IFilter::act(IReq::get('_imgList'));
+
 		if($password == '')
 		{
 			$errorMsg = '请输入密码！';
@@ -2618,30 +2621,37 @@ class Simple extends IController
 			'is_lock'   => 1,
 		);
 
-		
+
 		//商户资质上传
 		if((isset($_FILES['paper_img']['name']) && $_FILES['paper_img']['name']) || (isset($_FILES['logo_img']['name']) && $_FILES['logo_img']['name']))
 		{
 			$uploadObj = new PhotoUpload();
 			$uploadObj->setIterance(false);
 			$photoInfo = $uploadObj->run();
-			if(isset($photoInfo['paper_img']['img']) && file_exists($photoInfo['paper_img']['img']))
-			{
-				$sellerRow['paper_img'] = $photoInfo['paper_img']['img'];
-			}
+
 			if(isset($photoInfo['logo_img']['img']) && file_exists($photoInfo['logo_img']['img']))
 			{
 				$sellerRow['logo_img'] = $photoInfo['logo_img']['img'];
 			}
 		}
-
+		$sellerRow['paper_img'] = $paper_img;
 		$sellerRow['seller_name'] = $seller_name;
 		$sellerRow['password']    = md5($password);
 		$sellerRow['create_time'] = ITime::getDateTime();
 
 		$sellerDB->setData($sellerRow);
-		$sellerDB->add();
+		$seller_id = $sellerDB->add();
 
+		//处理多张资质图片
+		if($paper_imgs){
+			$paperObj = new IModel("seller_paper");
+			$paperObj->del("seller_id = ".$seller_id);
+			$paper_imgs = explode(',',$paper_imgs);
+			foreach($paper_imgs as $val){
+				$paperObj->setData(array('seller_id' => $seller_id,'img' => $val));
+				$paperObj->add();
+			}
+		}
 		//短信通知商城平台
 		$siteConfig = new Config('site_config');
 		if($siteConfig->mobile)
@@ -2865,4 +2875,30 @@ class Simple extends IController
         $result = Delivery::getDelivery(0, $delivery_id, $goods_id, $product_id, $num);
         echo JSON::encode($result);
     }
+
+	/**
+	 * @brief 商品添加中图片上传的方法
+	 */
+	public function goods_img_upload()
+	{
+		//获得配置文件中的数据
+		$config = new Config("site_config");
+		//调用文件上传类
+		$photoObj = new PhotoUpload();
+		$photo    = current($photoObj->run());
+		//判断上传是否成功，如果float=1则成功
+		if($photo['flag'] == 1)
+		{
+			$result = array(
+					'flag'=> 1,
+					'img' => $photo['img']
+			);
+		}
+		else
+		{
+			$result = array('flag'=> $photo['flag']);
+		}
+		//print_r($result);
+		echo JSON::encode($result);
+	}
 }
