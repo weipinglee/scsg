@@ -2256,7 +2256,7 @@ class Simple extends IController
 		}
 		$pwd = md5($pwd);
 		$tb_user = new IModel("user");
-		$tb_user->setData(array("paysecret" => $pwd));
+		$tb_user->setData(array("pay_secret" => $pwd));
 		$re = $tb_user->update("id='{$row['user_id']}'");
 		if($re !== false)
 		{
