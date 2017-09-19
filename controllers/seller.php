@@ -1011,6 +1011,7 @@ class Seller extends IController
 
 			if($countData['orderAmountPrice'] > 0)
 			{
+				$countData['orderAmountPrice'] = $countData['orderAmountPrice'] - $countData['deliveryPrice'];
 				$replaceData = array(
 					'{startTime}'     => $start_time,
 					'{endTime}'       => $end_time,
@@ -1054,8 +1055,10 @@ class Seller extends IController
 		$queryObject = CountSum::getSellerGoodsFeeQuery($seller_id,$start_time,$end_time,0);
 		$countData   = CountSum::countSellerOrderFee($queryObject->find());
 
+
 		if($countData['orderAmountPrice'] > 0)
 		{
+			$countData['orderAmountPrice'] = $countData['orderAmountPrice'] - $countData['deliveryPrice'];
 			$replaceData = array(
 				'{startTime}'     => $start_time,
 				'{endTime}'       => $end_time,

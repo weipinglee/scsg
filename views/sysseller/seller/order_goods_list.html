@@ -56,11 +56,11 @@
 				</td>
 				<td>￥{$item['real_price']} x <label class="orange bold">{$item['goods_nums']} 件</label></td>
 				<td>
-					<p>运费：￥{$item['delivery_fee']}</p>
+					<!--<p>运费：￥{$item['delivery_fee']}</p>-->
 					<p>保价：￥{$item['save_price']}</p>
 					<p>税金：￥{$item['tax']}</p>
 				</td>
-				{set:$sum = array_sum(array($goodsSum,$item['delivery_fee'],$item['save_price'],$item['tax']))}
+				{set:$sum = array_sum(array($goodsSum,$item['save_price'],$item['tax']))}
 				<td title="{$sum}">￥{$sum}</td>
 				<td title="{$item['create_time']}">{$item['create_time']}</td>
 				<td>
