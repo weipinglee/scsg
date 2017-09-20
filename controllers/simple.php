@@ -2254,7 +2254,7 @@ class Simple extends IController
 		{
 			IError::show(403,"新密码至少六位，且两次输入的密码应该一致。");
 		}
-		$pwd = md5($pwd);
+		$pwd = sha1($pwd);
 		$tb_user = new IModel("user");
 		$tb_user->setData(array("pay_secret" => $pwd));
 		$re = $tb_user->update("id='{$row['user_id']}'");
@@ -3018,4 +3018,5 @@ class Simple extends IController
 		//print_r($result);
 		echo JSON::encode($result);
 	}
+	
 }
