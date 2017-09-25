@@ -316,7 +316,7 @@ class AccountLog
 	 */
 	public static function sellerBillTemplate($data = null)
 	{
-		$templateString = "结算起止时间：{startTime} 到 {endTime}，商品销售量：{goodsNums} 件，商品销售总价：{goodsSums} 元，运费总价：{deliveryPrice} 元，商品保价：{protectedPrice} 元，商品税金总价：{taxPrice} 元，总计：{totalSum} 元";
+		$templateString = "结算起止时间：{startTime} 到 {endTime}，商品销售量：{goodsNums} 件，商品销售总价：{goodsSums} 元，商品保价：{protectedPrice} 元，商品税金总价：{taxPrice} 元，总计：{totalSum} 元";
 		return strtr($templateString,$data);
 	}
 }

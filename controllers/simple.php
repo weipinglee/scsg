@@ -1032,6 +1032,7 @@ class Simple extends IController
     	$this->freeFreight = $result['freeFreight'] ? 1 : 0;
     	//商品列表按商家分开
     	$this->goodsList = $this->goodsListBySeller($this->goodsList);
+
     	//判断所选商品商家是否支持货到付款,有一个商家不支持则不显示
     	$sellerObj = new IModel('seller');
     	$this->freight_collect=1;
@@ -1065,6 +1066,80 @@ class Simple extends IController
         $this->param = $param;
     	$this->redirect('cart2');
     }
+
+	//验证支付密码的页面
+	function checkPaypass()
+	{
+		if($this->user['user_id']==null)$this->redirect('login');
+		$toUrl = IFilter::act(IReq::get('toUrl'));
+		$this->order_id = IFilter::act(IReq::get('order_id'), 'int');
+		$this->pay_level =  IReq::get('pay_level') ? IFilter::act(IReq::get('pay_level'),'int') : 2;
+
+		$oId = $this->order_id;
+		$pay_type = 1;
+		if($this->pay_level==1){
+			$orderParent = new IModel('order_parent');
+			$orderParentData = $orderParent->getObj('id='.$oId);
+			$orderModel = new IModel('order');
+			$res = $orderModel->select(array('pid'=>$oId),'order_no,pay_type,order_amount');
+			$this->sum = $orderParentData['order_amount'];
+			if(!empty($res)){
+				$pay_type = $res[0]['pay_type'];
+			}
+		}
+		else{
+			$orderModel = new IModel('order');
+			$res = $orderModel->select(array('id'=>$oId),'order_no,pay_type,order_amount');
+			if(!empty($res)){
+				$pay_type = $res[0]['pay_type'];
+				$this->sum = $res[0]['order_amount'];
+			}
+		}
+
+		if($pay_type==1){
+			$this->orderData = $res;
+			$this->toUrl = $toUrl;
+			$this->redirect('checkPaypass');
+		}
+		else{
+			if($toUrl){
+				$this->redirect($toUrl);
+			}
+			else{
+				$this->redirect('/block/dopay/order_id/'.$this->order_id.'/pay_level/'.$this->pay_level);
+			}
+
+		}
+
+
+	}
+
+	//验证支付密码动作
+	function docheckPaypass()
+	{
+		if($this->user['user_id']==null)$this->redirect('login');
+		$order_id = IFilter::act(IReq::get('order_id'), 'int');
+		$pay_level = IFilter::act(IReq::get('pay_level'), 'int');
+		$sum = IFilter::act(IReq::get('sum'));
+		$toUrl = IFilter::act(IReq::get('toUrl'));
+		$pass = IFilter::act(IReq::get('paypass'));
+
+		$user_id = $this->user['user_id'];
+
+		$zhifu = new zhifu();
+		if($zhifu->checkPayPass($pass,$user_id)){
+			if($toUrl){
+				$this->redirect($toUrl);
+			}
+			$this->redirect('/block/doPay/order_id/'.$order_id.'/pay_level/'.$pay_level);
+		}
+		else
+			$this->redirect('/simple/checkPaypass/order_id/'.$order_id.'/pay_level/'.$pay_level.'/sum/'.$sum);
+	}
+
+
+
+
 	//手机端选择收货地址
     function address(){
     	if($this->user['user_id']==null)$this->redirect('login');
@@ -1486,6 +1561,7 @@ class Simple extends IController
         $order_type    = 0;
         $invoice       = isset($_POST['taxes']) ? 1 : 0;
         $dataArray     = array();
+		$this->payment_id = $payment;
         //防止表单重复提交
         if(IReq::get('timeKey') != null)
         {
@@ -1544,6 +1620,7 @@ class Simple extends IController
             }
             //计算购物车中的商品价格$goodsResult
             $goodsResult = $countSumObj->cart_count($cartData, $area);
+			//print_r($goodsResult);
             $cart = new Cart();
             $cart->del_many($delCart);
             //清空购物车
@@ -1794,8 +1871,8 @@ class Simple extends IController
         $this->payment     = $paymentName;
         $this->paymentType = $paymentType;
         $this->finalData = $finalData;
-       
-        //订单金额为0时，订单自动完成
+
+		//订单金额为0时，订单自动完成
         if($this->final_sum <= 0)
         {
             $this->redirect('update_order_status/order_no/'.$dataArray['order_no']);
@@ -1953,6 +2030,57 @@ class Simple extends IController
 		}
 	}
 
+	//手机短信找回支付密码
+	function find_paypassword_mobile()
+	{
+// 		$username = IReq::get('username');
+// 		if($username === null || !Util::is_username($username)  )
+// 		{
+// 			IError::show(403,"请输入正确的用户名");
+// 		}
+
+		$mobile = IReq::get("mobile");
+		if($mobile === null || !IValidate::mobi($mobile))
+		{
+			IError::show(403,"请输入正确的电话号码");
+		}
+
+		$mobile_code = IReq::get('mobile_code');
+		if($mobile_code === null)
+		{
+			IError::show(403,"请输入短信校验码");
+		}
+
+		$userDB = new IModel('user');
+		$userRow = $userDB->getObj('phone = "'.$mobile.'" ');
+		if($userRow)
+		{
+			$findPasswordDB = new IModel('find_password');
+			$dataRow = $findPasswordDB->getObj('user_id = '.$userRow['id'].' and hash = "'.$mobile_code.'"');
+			if($dataRow)
+			{
+				//短信验证码已经过期
+				if(time() - $dataRow['addtime'] > 3600)
+				{
+					$findPasswordDB->del("user_id = ".$userRow['user_id']);
+					IError::show(403,"您的短信校验码已经过期了，请重新找回密码");
+				}
+				else
+				{
+					$this->redirect('/simple/restore_paypassword/hash/'.$mobile_code);
+				}
+			}
+			else
+			{
+				IError::show(403,"您输入的短信校验码错误");
+			}
+		}
+		else
+		{
+			IError::show(403,"用户名与手机号码不匹配");
+		}
+	}
+
 	//发送手机验证码短信
 	function send_message_mobile()
 	{
@@ -2032,6 +2160,31 @@ class Simple extends IController
 	}
 
 	/**
+	 * @brief 邮箱链接激活验证
+	 */
+	function restore_paypassword()
+	{
+		$hash = IFilter::act(IReq::get("hash"));
+		if(!$hash)
+		{
+			IError::show(403,"找不到校验码");
+		}
+		$tb = new IModel("find_password");
+		$addtime = time() - 3600*72;
+		$where  = " `hash`='$hash' AND addtime > $addtime ";
+		$where .= $this->user['user_id'] ? " and user_id = ".$this->user['user_id'] : "";
+
+		$row = $tb->getObj($where);
+		if(!$row)
+		{
+			IError::show(403,"校验码已经超时");
+		}
+
+		$this->formAction = IUrl::creatUrl("/simple/do_restore_paypassword/hash/$hash");
+		$this->redirect("restore_paypassword");
+	}
+
+	/**
 	 * @brief 执行密码修改重置操作
 	 */
 	function do_restore_password()
@@ -2073,6 +2226,47 @@ class Simple extends IController
 		IError::show(403,"密码修改失败，请重试");
 	}
 
+	/**
+	 * @brief 执行密码修改重置操作
+	 */
+	function do_restore_paypassword()
+	{
+		$hash = IFilter::act(IReq::get("hash"));
+		if(!$hash)
+		{
+			IError::show(403,"找不到校验码");
+		}
+		$tb = new IModel("find_password");
+		$addtime = time() - 3600*72;
+		$where  = " `hash`='$hash' AND addtime > $addtime ";
+		$where .= $this->user['user_id'] ? " and user_id = ".$this->user['user_id'] : "";
+
+		$row = $tb->getObj($where);
+		if(!$row)
+		{
+			IError::show(403,"校验码已经超时");
+		}
+
+		//开始修改密码
+		$pwd   = IReq::get("password");
+		$repwd = IReq::get("repassword");
+		if($pwd == null || strlen($pwd) < 6 || $repwd!=$pwd)
+		{
+			IError::show(403,"新密码至少六位，且两次输入的密码应该一致。");
+		}
+		$pwd = sha1($pwd);
+		$tb_user = new IModel("user");
+		$tb_user->setData(array("pay_secret" => $pwd));
+		$re = $tb_user->update("id='{$row['user_id']}'");
+		if($re !== false)
+		{
+			$message = "修改密码成功";
+			$tb->del("`hash`='{$hash}'");
+			$this->redirect("/site/success/message/".urlencode($message));
+			exit;
+		}
+		IError::show(403,"密码修改失败，请重试");
+	}
     //添加收藏夹
     function favorite_add()
     {
@@ -2498,6 +2692,9 @@ class Simple extends IController
 		$address     = IFilter::act(IReq::get('address'));
 		$home_url    = IFilter::act(IReq::get('home_url'));
 
+		$paper_img = IFilter::act(IReq::get('img'));
+		$paper_imgs = IFilter::act(IReq::get('_imgList'));
+
 		if($password == '')
 		{
 			$errorMsg = '请输入密码！';
@@ -2541,36 +2738,43 @@ class Simple extends IController
 			'is_lock'   => 1,
 		);
 
-		
+
 		//商户资质上传
 		if((isset($_FILES['paper_img']['name']) && $_FILES['paper_img']['name']) || (isset($_FILES['logo_img']['name']) && $_FILES['logo_img']['name']))
 		{
 			$uploadObj = new PhotoUpload();
 			$uploadObj->setIterance(false);
 			$photoInfo = $uploadObj->run();
-			if(isset($photoInfo['paper_img']['img']) && file_exists($photoInfo['paper_img']['img']))
-			{
-				$sellerRow['paper_img'] = $photoInfo['paper_img']['img'];
-			}
+
 			if(isset($photoInfo['logo_img']['img']) && file_exists($photoInfo['logo_img']['img']))
 			{
 				$sellerRow['logo_img'] = $photoInfo['logo_img']['img'];
 			}
 		}
-
+		$sellerRow['paper_img'] = $paper_img;
 		$sellerRow['seller_name'] = $seller_name;
 		$sellerRow['password']    = md5($password);
 		$sellerRow['create_time'] = ITime::getDateTime();
 
 		$sellerDB->setData($sellerRow);
-		$sellerDB->add();
+		$seller_id = $sellerDB->add();
 
+		//处理多张资质图片
+		if($paper_imgs){
+			$paperObj = new IModel("seller_paper");
+			$paperObj->del("seller_id = ".$seller_id);
+			$paper_imgs = explode(',',$paper_imgs);
+			foreach($paper_imgs as $val){
+				$paperObj->setData(array('seller_id' => $seller_id,'img' => $val));
+				$paperObj->add();
+			}
+		}
 		//短信通知商城平台
 		$siteConfig = new Config('site_config');
 		if($siteConfig->mobile)
 		{
 			$content = smsTemplate::sellerReg(array('{true_name}' => $truename));
-			$result = Hsms::send($mobile,$content);
+			$result = Hsms::send($siteConfig->mobile,$content);
 		}
 
 		$this->redirect('/site/success?message='.urlencode("申请成功！请耐心等待管理员的审核"));
@@ -2787,5 +2991,32 @@ class Simple extends IController
         $num            = IReq::get('num') ? IFilter::act(IReq::get('num'), 'int') :１;
         $result = Delivery::getDelivery(0, $delivery_id, $goods_id, $product_id, $num);
         echo JSON::encode($result);
-    }   
+    }
+
+	/**
+	 * @brief 商品添加中图片上传的方法
+	 */
+	public function goods_img_upload()
+	{
+		//获得配置文件中的数据
+		$config = new Config("site_config");
+		//调用文件上传类
+		$photoObj = new PhotoUpload();
+		$photo    = current($photoObj->run());
+		//判断上传是否成功，如果float=1则成功
+		if($photo['flag'] == 1)
+		{
+			$result = array(
+					'flag'=> 1,
+					'img' => $photo['img']
+			);
+		}
+		else
+		{
+			$result = array('flag'=> $photo['flag']);
+		}
+		//print_r($result);
+		echo JSON::encode($result);
+	}
+	
 }

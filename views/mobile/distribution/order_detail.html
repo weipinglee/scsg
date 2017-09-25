@@ -1,0 +1,130 @@
+
+{set:$orderStatus = Order_Class::getOrderStatus($this->order_info)}
+<!DOCTYPE html>
+<!-- saved from url=(0035)http://m.b5m.com/activelistings/198 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">        
+        <link rel="apple-touch-icon-precomposed" href="http://static-web.b5m.com/wap/img/collect-logo/b5m-collect-logo.png">
+        <title>订单详情</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no, email=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <!-- uc强制竖屏 -->
+        <meta name="screen-orientation" content="portrait">
+        <meta name="full-screen" content="yes">
+        <meta name="browsermode" content="application">
+        <!-- QQ强制竖屏 -->
+        <meta name="x5-orientation" content="portrait">
+        <meta name="x5-fullscreen" content="true">
+        <meta name="x5-page-mode" content="app">
+        <meta name="keywords" content="山城速购">
+        <meta name="description" content="山城速购">
+         <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+         <link rel="stylesheet" href="{skin:css/order.css}" type="text/css">
+         <link rel="stylesheet" href="{skin:fonts/font-awesome.min.css}" type="text/css">
+     	<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+     </head>
+     <body style="background: #efefef;">
+            <div class="pages">
+                <header class="wap-header">
+                     <div class="wap-topbar">
+                         <div class="h-left"><a href="javascript:history.go(-1);" title="返回"></a></div>
+                         <div class="h-center">
+                         <h1>订单详情</h1>
+                        </div>
+                    </div>
+                 </header>
+                 <div class="qrdd">
+
+                   <a class="dz" href="javascript:;">
+                    <p style="padding-left:15px;">
+                        <span class="shname">收货人：ss</span>
+                        <span class="float_rt">13245367845</span>
+                    </p>
+                    <p class=""><i class="icon-map-marker" style="font-size: 18px;"></i>
+                        <span>河北省 石家庄市 市辖区 s</span></p>
+                   </a>
+
+                </div>
+                <div class="qrdd qrdds">
+                    <div class="sj">
+                    <img src="/ducong/scsg/views/mobile/skin/black/images/ptlog.png" style="width: 27px;float:left;position: relative;top: -5px;"><a herf="javascript:;">平台自营</a></div>
+                 <!-- 商品详情-->
+                    <div class="qr_xq">
+                      <a href="/ducong/scsg/site/products/id/17" style="display:block;">
+
+                        <div class="tjxq_img">
+                            <img src="/ducong/scsg/views/mobile/skin/black/images/front/nopic_100_100.gif"/>
+                        </div>
+                        <div class="tjxq_tit">
+                            <p>asd</p>
+                            <p class="tjxq_ge">
+                                                            </p>
+                        </div>
+                       <div class="tjxq_sum">
+                            <p class="sum">
+                                单价：<span>￥10.00</span>
+                                优惠：<span>￥0</span>
+                                数量：<span>x1</span>
+                                
+                            </p>
+                        </div>
+                        <div style="clear: both;"></div>
+                      </a>
+                   </div>
+                   <!-- 商品详情结束 -->
+                </div>
+                {if:!isset($sign)}
+               <p style="padding:5px 16px;">配送费用：<span id="deliveryfee_0_500_192}" style="float:right;">￥0.00</span></p>
+               {/if}
+               <p style="color:red;padding:0px 15px;">
+                  实付款：<b style="float:right;">￥120.00</b>
+                </p>
+                 <div class="qrdd qrdds" style="">
+                     <div class="dxq">
+                        <p><span>订单号:</span><i>{$this->order_info['order_no']}</i>
+                        {if:isset($sign) && in_array($orderStatus,array(1,4))}
+						<a href="{url:/ucenter/makeCode/id/$this->order_info['id']}" style="
+							margin-left: 10px;
+							backg: #DD6109;
+							border: 1px solid #F91224;
+							color: #0A0A0A;
+							padding: 3px 8px;
+						">查看二维码</a>
+                        {/if}
+						</p>
+                        <p><span>创建日期:</span><i>{$this->order_info['create_time']}</i></p>
+                    </div>
+                 </div>
+                 <div class="qrdd qrdds" style="">
+                   <!--  <h4 class="qrfp">发票信息</h4> -->
+                     <div class="dxq">
+                       <p><span>代收点:</span><i>{if: isset($this->order_info['takeself']['name'])}{$this->order_info['takeself']['name']}{/if}</i></p>
+                       <p><span>支付方式:</span><i>{$this->order_info['payment']}</i></p>
+                        {if:!isset($sign)}<p><span>配送方式:</span><i>{$this->order_info['delivery']}</i></p>{/if}
+                        
+                        <p><span>配送时间:</span><i>2017/09/07 08:00——2017/09/07 09:00</i></p>
+                    </div>
+                 </div>
+                  <div class="qrdd qrdds" style="">
+                   <!--  <h4 class="qrfp">发票信息</h4> -->
+                     <div class="dxq">
+                        <p><span>发票抬头:</span><i>{if:$this->order_info['invoice_title']}{$this->order_info['invoice_title']}{else:}普通发票{/if}</i></p>
+                         <p><span>税金:</span><i>￥{$this->order_info['taxes']}</i></p>
+                    </div>
+                 </div>
+                 <div style="height:55px;"></div>
+                 <div class="dxzt">
+                  <p>
+                    <label >
+                        <a class="button_jd_a" onclick="return">接单</a>
+                    </label>
+                    
+                  </p>
+                 </div>
+            </div>
+     </body> 
+     </html>

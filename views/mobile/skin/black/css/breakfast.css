@@ -1,0 +1,68 @@
+.breakfast_form{
+	width: 60%;
+}
+.h-center .search_dy{
+    border: 1px solid #eee;
+    width: 98%;
+    height: 30px;
+    padding: 5px;
+    position: relative;
+    left: 20px;
+}
+
+.break_nav_lately{
+	padding: 0px 20px;
+    background: #fdfdfd;
+    border-bottom: 1px solid #eee;
+}
+.break_nav_lately .lately_span{
+	display: block;
+	height: 40px;
+	line-height: 40px;
+	font-weight: bold;
+}
+.break_nav_lately .lately_info a{
+	float: left;
+	padding: 5px 10px;
+	display: block;
+	border:1px solid #d4d3d3;
+	border-radius: 5px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+.break_center .break_span{
+	padding: 0px 20px;
+	height: 30px;
+	line-height:30px;
+	font-weight: bold;
+	background: #fdfdfd;
+   
+    color: #ea3e01;
+}
+.region .region_ul li{
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #eee;
+	margin: 0px 20px;
+}
+.region_title{
+    border: 1px solid #eee;
+    height: 30px;
+    line-height: 30px;
+    width: 40%;
+    text-align: center;
+    padding-right: 10px;
+    position: relative;
+    
+}
+.region_title a{
+	display: block;
+}
+.region_title .up_icon{
+    background: url(../images/up.png) no-repeat;
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 11px;
+    right: 10px;
+}

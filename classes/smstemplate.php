@@ -49,7 +49,7 @@ class smsTemplate
 	 */
 	public static function takeself($data = null)
 	{
-		$templateString = "您的订单号:{orderNo},{name}自提地址:{address},领取验证码:{mobile_code},请尽快领取";
+		$templateString = "订单已被商家确认，请于9:30点前前往{address}提取您预定的商品、领取验证码为：{mobile_code}。";
 		return strtr($templateString,$data);
 	}
 
@@ -69,7 +69,7 @@ class smsTemplate
 	 */
 	public static function sellerCheck($data = null)
 	{
-		$templateString = "您的加盟商状态已经被修改为:{result}状态,请登录您的商户后台查看具体的详情";
+		$templateString = "您申请的店铺{true_name}已{result}，请尽快登录商户后台进行信息完善。";
 		return strtr($templateString,$data);
 	}
 
@@ -87,7 +87,22 @@ class smsTemplate
 	 */
 	public static function payFinishToUser($data = null)
 	{
-		$templateString = "您的订单号:{orderNo},已付款成功,稍后我们会尽快为您服务";
+		$templateString = "订单已被商家确认，您购买的商品将于{time}前送达至{address}";
+
 		return strtr($templateString,$data);
 	}
+
+	public static function toTakeself($data = null)
+	{
+		$templateString = "订单号为{orderNo}的订单将配送到这里,领取验证码:{mobile_code}";
+		return strtr($templateString,$data);
+	}
+
+	public static function orderToSeller($data = null)
+	{
+		$templateString = "{true_name},买家{member}已付款，请尽快登录后台进行处理";
+		return strtr($templateString,$data);
+	}
+
+
 }

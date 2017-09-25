@@ -6,7 +6,9 @@
 <script type='text/javascript'>
 var _url = "{url:/block/order_delivery_count}";
 var final_sum = {$this->final_sum};
+var getTakeselfUrl = "{url:/block/getTakeselfList}";
 var _delivery_url = "{url:/block/order_delivery_free}";
+var _get_delivery_url = "{url:/block/get_order_delivery_fee}";
 //更换增值发票和普通发票
 $(document).ready(function(){
 	$("input[class='zzsfp']").click(function(){
@@ -22,7 +24,7 @@ $(document).ready(function(){
 
 //创建订单表单实例
 orderFormInstance = new orderFormClass();
-
+orderFormInstance.getTakeselfUrl = getTakeselfUrl;
 //DOM加载完毕
 jQuery(function(){
 	//使用红包按钮
@@ -282,7 +284,7 @@ function selectTakeself(deliveryId)
 							<tr><th></th><td><%=area_val%> <%=address%>  <%=mobile%>  <%=telphone%></td></tr>
                             {if:!$this->good_type}
 							<tr><th>代收点：</th><td><input type='checkbox' name='takeself' class='hide checks' value='0'/> <span id="takeself"></span>
-								<a href="javascript:selectTakeself();"><span class="red">切换自提点</span></a>
+								<a href="javascript:selectTakeself();"><span class="red">切换自提点(自提客户或非香榭小区范围内客户可选自提点进行自主取货)</span></a>
 								</td>
 							</tr>
 							<tr class='hide' id='takeselfParam'><td><%=province%></td><td><%=city%></td><td><%=area%></td></tr>
@@ -338,7 +340,7 @@ function selectTakeself(deliveryId)
 									<th>地址：</th><td><input class="normal" name='address' type="text" alt='格式不正确' pattern='required' /> <span>(*) 收货地址</span></td>
 								</tr>
 								<tr>
-									<th>手机号码：</th><td><input class="middle" name='mobile' type="text" pattern='mobi' alt='格式不正确' /> <span>(*) 收货人的手机号，用于接收发货通知短信及送货前确认</span></td>
+									<th>手机号码：</th><td><input class="middle" name='mobile' type="text" pattern='mobile' alt='格式不正确' /> <span>(*) 收货人的手机号，用于接收发货通知短信及送货前确认</span></td>
 								</tr>
 								<tr>
 									<th>固定电话：</th><td><input class="middle" type="text" pattern='phone' name='telphone' empty alt='格式不正确' /></td>
@@ -442,6 +444,8 @@ function selectTakeself(deliveryId)
 					</div>
                         {foreach:items=$this->goodsList key=$buy item=$goods}
 						{foreach:items=$goods item=$value}
+					{set:$seller_id=$value[0]["seller_id"];}
+
 						<table width="100%" class="cart_table t_c js_seller_diff" js_data="{$key}" js_sum_data="{$value['total_price']}">
 							<colgroup>
 								<col width="115px" />
@@ -467,7 +471,7 @@ function selectTakeself(deliveryId)
                                     <th>单价</th>
 									<th>优惠</th>
 									<th>数量</th>
-                                    <th>运费</th>
+                                    <!--<th>是否保价</th>-->
 									<th class="last">商品小计</th>
 								</tr>
 							</thead>
@@ -499,7 +503,7 @@ function selectTakeself(deliveryId)
 									<td><b>￥{$item['sell_price']}</b></td>
 									<td>{if:isset($item['combine'])}<span>优惠套餐:{$item['combine']}</span>{/if}减￥{$item['reduce']}</td>
 									<td>{$item['count']}</td>
-                                    <td>￥<b class="red2 js_goods_delivery" js_data="{$item['delivery_id']}_{$item['goods_id']}_{$item['product_id']}_{$item['count']}">{$item['delivery']}</b></td>
+                                    <td style="display:none;"><b class="red2 js_goods_delivery" js_data="{$item['delivery_id']}_{$item['goods_id']}_{$item['product_id']}_{$item['count']}"></b></td>
 									<td><b class="red2">￥{$item['sum']}</b><span id="{$item['delivery_id']}_{$item['goods_id']}_{$item['product_id']}_{$item['count']}"></span></td>
 								</tr>
 								{/if}
@@ -522,7 +526,14 @@ function selectTakeself(deliveryId)
 			<div class="cont_2">
 				<strong>结算信息</strong>
 				<div class="pink_box">
-					<p class="f14 t_l">{if:$this->final_sum != $this->sum}优惠后总金额{else:}商品总金额{/if}：<b>{$this->final_sum}</b> - 代金券：<b name='ticket_value'>0</b> + 税金：<b id='tax_fee'>0</b>{if:!$this->good_type} + 运费总计：<b id='delivery_fee_show'>0</b> + 保价：<b id='protect_price_value'>0</b>{/if} + 支付手续费：<b id='payment_value'>0</b></p>
+					<p class="f14 t_l">{if:$this->final_sum != $this->sum}优惠后总金额{else:}商品总金额{/if}：<b>{$this->final_sum}</b>
+						- 代金券：<b name='ticket_value'>0</b>
+						+ 税金：<b id='tax_fee'>0</b>{if:!$this->good_type}
+						+ 运费总计：<b id='delivery_fee_show'>0</b>
+						<!--+ 保价：<b id='protect_price_value'>0</b>-->
+
+						{/if}
+						+ 支付手续费：<b id='payment_value'>0</b></p>
 					{if:!isset($this->prop_not)}
 					<a href="javascript:void(0)" id="ticket_a" class="fold" hidefocus>
 						<b class="orange">使用代金券</b>

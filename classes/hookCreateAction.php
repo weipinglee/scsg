@@ -161,14 +161,14 @@ class hookCreateAction extends IInterceptorBase
 		$siteConfigObj = new Config('site_config');
 		$site_config = $siteConfigObj->getInfo();
 		$order_cancel_time = isset($site_config['order_cancel_time']) ? intval($site_config['order_cancel_time']) : 3;
-		$order_finish_time = isset($site_config['order_finish_time']) ? intval($site_config['order_finish_time']) : 20;
+		$order_finish_time = isset($site_config['order_finish_time']) ? intval($site_config['order_finish_time']) : 20;//完成时间单位是分钟
 
 		$refunds_limit_time=isset($site_config['refunds_limit_time']) ? intval($site_config['refunds_limit_time']) : 7;
 		
 		
 		$orderModel = new IModel('order');
 		$order_cancel_second = $order_cancel_time*24*3600;
-		$order_finish_second = $order_finish_time*24*3600;
+		$order_finish_second = $order_finish_time*60;
 		$orderCancelData  = $order_cancel_time > 0 ? $orderModel->query(" if_del = 0 and type!=4 and pay_type != 0 and status in(1) and TIMESTAMPDIFF(second,create_time,NOW()) >= {$order_cancel_second} ","id,order_no,4 as type_data") : array();
 		$orderCreateData  = $order_finish_time > 0 ? $orderModel->query(" if_del = 0 and type!=4 and distribution_status = 1 and status in(9,1,2) and TIMESTAMPDIFF(second,send_time,NOW()) >= {$order_finish_second} ","id,order_no,5 as type_data") : array();
 

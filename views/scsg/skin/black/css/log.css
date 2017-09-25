@@ -119,6 +119,22 @@ body.second .wrapper{border-top:2px solid #000}
 .main{width:750px}
 .sidebar{width:200px}
 	.wrapper .box{border:1px  solid #E1E1E1;margin-bottom: 10px; }
+.wrapper td .upload_btn{
+	width: 60px;
+    /* border: 1px solid #A09898; */
+    background: rgba(214, 214, 214, 0.23);
+    text-align: center;
+    padding-top: 5px;
+}
+.wrapper .box .pic{
+	display: block;
+	float:left;
+}
+.wrapper .box:after{
+	display: block;
+	content: "";
+	clear: both;
+}
 		.wrapper .box .title{height:31px;border-bottom:1px #e1e1e1 solid;line-height:30px}
 		.wrapper .box .title2{height:36px;border-bottom:1px #e1e1e1 solid;line-height:36px}
 		.wrapper .box .title3{height:41px;margin-top:10px;border-bottom:0;overflow:hidden}
@@ -219,7 +235,7 @@ ul.logolist li.s{width:100px;height:35px;margin:5px 2px}
 /* logolist style start */
 /* form table style start */
 
-label input{cursor:pointer height:30px;padding:7px 20px; background-color:#f60;border:solid 1px 
+label input{cursor:pointer height:30px;padding:7px 20px; background-color:#f60;border:solid 1px
 #f30;color:#FFF; position:relative;top:0px;}
 
 .form_table label{margin-right:5px;vertical-align:middle;color:#a6a6a6}
@@ -620,6 +636,15 @@ span.sel{padding-right:18px;background:url(../images/front/ucenter/sel.gif) righ
 strong.result{ display:block;margin:0 0 5px;font-size:16px;color:#666;text-align:left}
 /* myshopping cart style start */
 .myshopping{height:69px;background:#f7f6f6 url(../images/front/sprites_2.gif) 14px -400px no-repeat}
+.confirm_box{width: 980px;height: 300px;padding: 30px 100px;border: 5px solid #ccc;}
+.confirm_box h3{font-size: 16px;padding-bottom: 20px;border-bottom: 1px dotted #ccc;margin-bottom: 20px;}
+.confirm_box h3 p{font-size: 20px;}
+.confirm_box .pay_num{float: right;}
+.confirm_box .pay_num b{font-size: 24px;color:#f60;line-height: 100px;margin:0 10px;}
+.confirm_box form span{font-size: 16px;}
+.confirm_box form input{line-height: 30px;}
+.confirm_box form input.submit_pay{height: 35px;}
+.confirm_box .forget_paypass{margin-left: 20px;color: #0b3b8b;}
 	.order_step{float:right;width:702px;height:32px;margin:19px 26px 0 0;line-height:32px}
 		.order_step li{float:left;width:188px;height:32px;font-size:14px;font-weight:bold;color:#aaa;background:#e3e3e3 url(../images/front/sprites_2.gif) right -492px no-repeat;padding:0 29px 0 0;overflow:hidden}
 			.order_step li span{display:block}

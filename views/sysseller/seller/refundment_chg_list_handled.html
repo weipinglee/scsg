@@ -43,7 +43,7 @@
 				<td>{$item['time']}</td>
 				<td><a href="{url:/site/products/id/$item['goods_id']}" target="_blank">{$goods['name']} X {$item['goods_nums']}件</a></td>
 				<td>{echo:Order_Class::refundmentText($item['pay_status'],$item['type'])}</th>
-				<td><a href="{url:/seller/refundment_show/id/$item[id]}"><img class="operator" src="{skin:images/main/icn_settings.png}" title="查看" /></a></td>
+				<td><a href="{url:/seller/refundment_chg_show/id/$item[id]}"><img class="operator" src="{skin:images/main/icn_settings.png}" title="查看" /></a></td>
 			</tr>
 			{/query}
 		</tbody>

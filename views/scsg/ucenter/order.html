@@ -105,7 +105,7 @@
 					</td>
 					<td>
 						{if:$status==2}
-							<a topay='{url:/block/dopay/order_id/$item["id"]}' money='{$item["order_amount"]}' href='javascript:void(0)' onclick='pay_confirm(this);'  class='btn_gray btn_small' style='margin-bottom:5px;'>立即支付</a>
+							<a topay="{url:/simple/checkPaypass/order_id/$item['id']}?toUrl=/block/dopay/order_id/{$item['id']}" money='{$item["order_amount"]}' href='javascript:void(0)' onclick='pay_confirm(this);'  class='btn_gray btn_small' style='margin-bottom:5px;'>立即支付</a>
 						{/if}
 						{if:in_array($status,array(1,2))}
 							<a href="{url:/ucenter/order_status/op/cancel/order_id/$item['id']}" class='btn_gray btn_small'>取消订单</a>

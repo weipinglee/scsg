@@ -216,6 +216,7 @@ return array(
 	    	'join'  => 'left join goods as go on go.id = ca.goods_id',
 	    	'where' => ' ca.category_id = #categroy_id# and (go.is_del = 0 OR go.is_del = 4)',
 	    	'order' => ' go.sort asc,go.id desc',
+			'group'=> 'go.id',
 	    	'limit' => 10,
 	    )
 	),
@@ -265,6 +266,10 @@ return array(
 	'getSellerInfo'=>array(
 	   'file' => 'seller.php','class' => 'APISeller'
 	),
+	//获取商户资质图片
+		'getSellerPapers'=>array(
+				'file' => 'seller.php','class' => 'APISeller'
+		),
 	//取得商户列表
 	'getSellerInfo'=>array(
 	   'file' => 'seller.php','class' => 'APISeller'

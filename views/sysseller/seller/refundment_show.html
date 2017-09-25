@@ -27,7 +27,7 @@
 			</fieldset>
 
 			<fieldset>
-				<label>换货商品:</label>
+				<label>退货商品:</label>
 				<div class="box">
 					{query:name=order_goods where=order_id eq $order_id and goods_id eq $goods_id and product_id eq $product_id}
 					{set:$goods = JSON::decode($item['goods_array'])}
@@ -39,7 +39,7 @@
 			</fieldset>
 
 			<fieldset>
-				<label>换货原因:</label>
+				<label>退货原因:</label>
 				<div class="box">{$content}</div>
 			</fieldset>
 
@@ -54,7 +54,7 @@
 			{/if}
 			{if:$delivery_time!=NULL}
 					<fieldset>
-						<label>换货快递单：</label><div class="box">{$delivery_com} | {$delivery_code}</div>
+						<label>退货快递单：</label><div class="box">{$delivery_com} | {$delivery_code}</div>
 					</fieldset>
 			{/if}
 			
@@ -80,7 +80,7 @@
 					</fieldset>
 					{if:$is_send==1}
 					<fieldset>
-						<label>换货地址：</label>
+						<label>退货地址：</label>
 						<div class="box">
 							<select name="delivery_add" pattern="required" alt="请选择收货地址方式" class="normal">
 								<option value='0'>请选择收货地址方式</option>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta charset="utf-8">        
+        <meta charset="utf-8">
         <link rel="apple-touch-icon-precomposed" href="">
         <title>注册</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui">
@@ -20,10 +20,12 @@
         <meta name="keywords" content="山城速购">
         <meta name="description" content="山城速购">
         <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
-		<link rel="stylesheet" href="{skin:css/center.css}" type="text/css">       
+		<link rel="stylesheet" href="{skin:css/center.css}" type="text/css">
 		<script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
-		<script src="{theme:javascript/common.js}"></script> 
-		    
+		<script src="{theme:javascript/common.js}"></script>
+
+
+
 		<link rel="stylesheet" href="{skin:css/csshide1.css}">
 <style>#sell-ad{display:none!important;}</style>
 <script type="text/javascript">window.onerror=function(){return true;}</script></head>
@@ -36,7 +38,7 @@ var checkEmailIsOneUrl = '{url:/simple/checkEmailIsOne}';
 var getMobileCodeUrl = '{url:/simple/getMobileValidateNum}';
 
 </script>
-<script src="{theme:javascript/reg/register.js}"></script> 
+<script src="{theme:javascript/reg/register.js}"></script>
     <body data-mps="PA4101">
         <div id="page">
             <header class="wap-header">
@@ -46,12 +48,12 @@ var getMobileCodeUrl = '{url:/simple/getMobileValidateNum}';
             <h1>注册</h1>
         </div>
     </div>
-</header><link rel="stylesheet" href="{skin:css/loglist.css}">              
+</header><link rel="stylesheet" href="{skin:css/loglist.css}">
   <div id="formbackground" style=" width:100%; height:100%; z-index:-1">
-    {echo:Ad::show("手机注册页顶部图片")}     
-</div>                                   
+    {echo:Ad::show("手机注册页顶部图片")}
+</div>
 
-<section class="reg-main">  
+<section class="reg-main">
 
     <form id="register-form" class="reg-form" method="post" novalidate>
 		<div class="reg-error-box" id='errorInfo'></div>
@@ -82,7 +84,7 @@ var getMobileCodeUrl = '{url:/simple/getMobileValidateNum}';
         </div>
         <div class="field psw mt10">
             <div class="field-relative">
-                <input class="reg-input reg-disabled icon-reg icon-reg-psw" type="password" name="password" placeholder="请输入密码" onfocus='hideErrInfo()' value="" autocomplete="off" onpaste="return false;" oncopy="return false;" oncut="return false;" disabled="disabled">
+                <input class="reg-input reg-disabled icon-reg icon-reg-psw" type="password" name="password" placeholder="请输入密码" onfocus='hideErrInfo()' value="" autocomplete="off" onpaste="return false;" oncopy="return false;" oncut="return false;" disabled="disabled" >
                 <a href="javascript:void(0);" class="icon-reg reg-empty" title="清空" style="display:none;">清空</a>
             </div>
         </div>
@@ -101,7 +103,6 @@ var getMobileCodeUrl = '{url:/simple/getMobileValidateNum}';
 <input type="hidden" id="relate" name="relate" value="">
 <input type="hidden" id="is_app" value="">
 <script src="{theme:javascript/js/validate.min.js}"></script>
-<script src="{theme:javascript/js/user.js}"></script>
 <script>
     $(function(){
         window.B5M_UC = {
@@ -109,6 +110,10 @@ var getMobileCodeUrl = '{url:/simple/getMobileValidateNum}';
         };
         wapReg.regFun();
     });
+
+
+
+
 </script>        </div>
         <input type="hidden" id="is_login" name="is_login" value="">
         <input type="hidden" id="show_nav" value="1">

@@ -381,16 +381,16 @@ margin-right: 10px;
 .search .s-box .kw-suggest a:hover{color:#d6272d;}
 
 .search .s-box .words-give{
-	display:none;background-color:#fff;border:1px solid #aaa;width:402px;height:200px;position:absolute;
-	overflow:hidden;
+  display:none;background-color:#fff;border:1px solid #aaa;width:402px;height:200px;position:absolute;
+  overflow:hidden;
 }
 .search .s-box .words-give p{
-	cursor:pointer;
-	line-height:25px;
-	padding-left:5px;
+  cursor:pointer;
+  line-height:25px;
+  padding-left:5px;
 }
 .search .s-box .words-give p:hover{
-	background-color:#e1e1e1;
+  background-color:#e1e1e1;
 }
 .nav {
 position: relative;
@@ -827,7 +827,7 @@ submit, .submit_buy, .submit_join, .submit_login, .submit_reg, .btn_red,  .submi
     line-height: 30px;
     margin-top: -15px;
     background-color: #F60;
-	}
+  }
 .submit_pay
  {
   background-color: #f60;
@@ -839,7 +839,7 @@ submit, .submit_buy, .submit_join, .submit_login, .submit_reg, .btn_red,  .submi
  }
 
 a.btn_gray{
-	 text-decoration: none;
+   text-decoration: none;
      display: inline-block;
      border:#b7b7b7 solid 1px;
      border-radius:3px;
@@ -849,23 +849,23 @@ a.btn_gray{
     color:#666;
 }
 a.btn_brown{
-	text-decoration: none;
+  text-decoration: none;
            border-radius:3px;
           display: inline-block;
-		  font-family:微软雅黑;
+      font-family:微软雅黑;
           background: #DF680A;
           text-align: center;
           color: #fff;
 }
 a.btn_big{
-	  min-width: 110px;height: 37px;line-height: 37px; font-size: 16px;padding:1px 5px;
+    min-width: 110px;height: 37px;line-height: 37px; font-size: 16px;padding:1px 5px;
 }
 a.btn_small{
-	font-size:14px;width:108px; height:37px; line-height: 37px; border-radius:3px; padding:1px 5px;display: block;margin:10px auto;
+  font-size:14px;width:108px; height:37px; line-height: 37px; border-radius:3px; padding:1px 5px;display: block;margin:10px auto;
 }
 
 input.btn_red{
-	font-family:微软雅黑;
+  font-family:微软雅黑;
    border:none;
    border-radius:5px;
   background: #f34e14;
@@ -885,8 +885,8 @@ a.btn_gray{
    display: block;
 }
 input.btn_brown{
-	font-family:微软雅黑;
-	border:none;
+  font-family:微软雅黑;
+  border:none;
    border-radius:5px;
  background: #DF680A;
    color:#fff;
@@ -894,6 +894,55 @@ input.btn_brown{
 input.btn_mini{font-size:14px;min-width: 60px;height:25px; border-radius:3px;padding:1px 4px;}
 input.btn_small{font-size:14px;min-width: 108px;height:26px; border-radius:3px;padding:1px 5px;}
 input.btn_order{
-	font-size: 16px;  width: 191px;height: 40px;line-height: 40px;
+  font-size: 16px;  width: 191px;height: 40px;line-height: 40px;
 }
 /*按钮结束*/
+/*首页搜索栏增加下拉选择*/
+.search_xz {
+    position: absolute;
+    z-index: 10;
+    border-right: 0;
+    width: 69px;
+    top: 25px;
+    left: -58px;
+}
+.search_xz .search_select {
+    outline: none;
+    height: 30px;
+    padding: 0 5px 0 10px;
+    border: 0;
+    color: #999;
+    width: 60px;
+    background: url(../images/up.png) no-repeat 42px center #f7f7f7;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border: 2px solid #F15A24;
+    border-right: none;
+    text-align: left;
+}
+#search_list {
+    width: 58px;
+    margin: 0 auto;
+    border: 2px solid #F15A24;
+    border-top: none;
+    display: none;
+    overflow: hidden;
+    height: 40px;
+    position: absolute;
+    top: 30px;
+}
+#search_list li {
+    /* padding: 0 0 0 15px; */
+    color: #999;
+    background: #FFF;
+    width: 58px;
+    height: 20px;
+    line-height: 20px;
+    clear: both;
+    text-align: center;
+}
+.search_xz .search_select.down {
+    background: url(../images/down.png) no-repeat 42px center #f7f7f7;
+}
+/*首页搜索栏增加下拉选择 end*/

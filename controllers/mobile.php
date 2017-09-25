@@ -10,8 +10,16 @@ class Mobile extends IController
 	
 	function getMoreProlist(){
 		$childCat = IFilter::act(IReq::get('childCat'));
+		$sellerId = IFilter::act(IReq::get('sellerId'));
 		$pagesize = 10;
-		$goodsObj = search_goods::find(array('category_extend' => $childCat),$pagesize);
+		$whereArr = array();
+		if($childCat!=''){
+			$whereArr['category_extend'] = $childCat;
+		}
+		if($sellerId!=''){
+			$whereArr['seller_id'] = $sellerId;
+		}
+		$goodsObj = search_goods::find($whereArr,$pagesize);
 		self::getGoodsList($goodsObj);
 	}
 	//获取更多搜索产品

@@ -3,9 +3,49 @@
     <form method="get" action="{url:/}">
 		<input type="hidden" name="controller" value="site">
 		<input type="hidden" name="action" value="search_list">
+		<div class="search_xz">
+                <input type="button" class="search_select" value="商品">
+                <input type="hidden" name="type">
+                <ul id="search_list">
+                    <li js_data="1">商品</li>
+                    <li js_data="2">商家</li>
+                </ul>
+            </div>
         <input type="text" name="word" id="keyword" value="" oninput="getKeywords('{url:/block/getLikeWords}',$(this))" class="h-search J-search-trigger" placeholder="输入关键词进行搜索">
         <input type="submit" class="header-search-btn" value="">
 		<div class='words-give' ></div>
+		<script>
+		$(function(){
+			$(".search_select").click(function(){
+				if($("#search_list").is(":hidden")){
+					$("#search_list").show()
+						$(".search_select").addClass('down');
+				}else{
+					$("#search_list").hide()
+						$(".search_select").removeClass('down');
+					}
+				})
+			$("#search_list li").each(function(){
+				$(this).hover(function(){
+					$(this).css('background','#f7f7f7');
+				},function(){
+					$(this).css('background','#FFF');
+				})
+
+			})
+			$("#search_list li").each(function(){
+				var _t = $(this)
+				,_v = _t.attr('js_data');
+				_t.click(function(){
+					$('.search_select').val(_t.text());
+					$('input[name=type]').val(_v);
+					$('#search_list').hide();
+					$(".search_select").removeClass('down');
+			})
+		})
+	});
+</script>
     </form>
 </div>
+
 	        

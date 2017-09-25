@@ -8,7 +8,7 @@ function showPhoneTipWhenBlur(){
 	var phone = $('#mobile').val();
 	var a = /^1[0-9]{10}$/;
     if (!a.test(phone)) {
-        showErrInfo('格式错误');
+        showErrInfo('请输入正确的手机号码');
 
     } else {
         hideErrInfo();
@@ -22,8 +22,12 @@ function showPhoneTipWhenBlur(){
             success: function(e) {
 				if(e.checkResult==1){//手机号码已注册
 					showErrInfo('该手机号码已注册');
+					$('#getCode').attr("disabled",true);
+					$('#getCode').css("background","#ccc");
 				}else{
 					$('input[name=password]').removeAttr('disabled');
+					$('#getCode').attr("disabled",false);
+					$('#getCode').css("background","#ff5e00");
 				}
 			}
 		})
@@ -107,11 +111,11 @@ function resetCheckCode(code){
 
 function registerByPhoneSubmit(){
 	var btn = $('#registerBtn');
-	
+
 	var phone = $('#mobile').val();
 	var a = /^1[0-9]{10}$/;
     if (!a.test(phone)) {
-		showErrInfo('手机格式错误');
+		showErrInfo('手机号码格式错误');
 		return false;
 	}
 	var num = $('#code').val();
@@ -120,10 +124,10 @@ function registerByPhoneSubmit(){
 		showErrInfo('验证码格式错误');
 		return false;
 	}
-	var c = /^[\S]{6,20}$/;
+	var c = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,18}$/;
 	var pwd = $('input[name=password]').val();
 	if(!c.test(pwd)){
-		showErrInfo('密码6-20位的非空字符');
+		showErrInfo('密码请至少包含字母和数字组合不少于6位');
 		return false;
 	}
 	if(!$('#protocol').prop('checked')){
@@ -229,7 +233,7 @@ function login_button_recover(){
 	$('#loginBtn').removeAttr('disabled').text('登陆');
 }
 function loginSubmit()
-{  
+{
 
 	var btn = $('#loginBtn');
 	btn.attr("disabled", true).text("登录中...");
@@ -242,7 +246,7 @@ function loginSubmit()
         login_button_recover();
         return false;
     }
-	
+
    if (j.length > 50) {
         showErrInfo("账号长度不能超过50位");
         login_button_recover();
@@ -254,9 +258,9 @@ function loginSubmit()
             return false
         }
     }
-  
+
     var l = /\s+/;
-  
+
     if (l.test(p)) {
         showErrInfo( "密码不能有空格");
         login_button_recover();
@@ -268,8 +272,8 @@ function loginSubmit()
 		validCode:$('input[name=validCode]').val(),
         returnUrl: returnUrl
     };
-   
-	
+
+
 	$.ajax({
 			type:'post',
 			async:false,
@@ -277,7 +281,7 @@ function loginSubmit()
 			dataType:'json',
 			url:logPath,
 			beforeSend:function(){
-				
+
 			},
 			success:function(e){
 				 if (e) {
@@ -313,12 +317,12 @@ function loginSubmit()
 								if(e.errorTimes>3){
 									ShowValidCode();
 								}
-								
+
 								 break;
 							}
 						}
-						
-						
+
+
 					}else{
 						if(e.errorCode ==0){
 							if(e.returnUrl)
@@ -335,7 +339,7 @@ function loginSubmit()
 			},
 			timeout:1000,
 		})
-	
+
 }
 function ShowValidCode(){
 	$('.valid_code_box').show();

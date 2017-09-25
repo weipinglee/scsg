@@ -1,5 +1,5 @@
 {set:
-	$myCartObj  = new Cart();                   
+	$myCartObj  = new Cart();
 	$myCartInfo = $myCartObj->getMyCart();
 	$siteConfig = new Config("site_config");
 	$callback   = IReq::get('callback') ? urlencode(IFilter::act(IReq::get('callback'),'url')) : '';
@@ -16,7 +16,7 @@ $favorite_ids = implode(',',$favorite_id_arr);}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<head>	
+<head>
 	<title>{echo:$siteConfig->name} </title>
 	<link rel="stylesheet" href="{skin:css/public.css}">
 	<link rel="stylesheet" href="{skin:css/index.css}">
@@ -50,7 +50,7 @@ $favorite_ids = implode(',',$favorite_id_arr);}
 	<meta name="keywords" content="{echo:$siteConfig->index_seo_keywords}">
 	<meta name="description" content="{echo:$siteConfig->index_seo_description}">
     <meta property="qc:admins" content="36501465376114646375733377" />
-	
+
 </head>
 <body>
 <script type='text/javascript'>
@@ -65,7 +65,7 @@ $favorite_ids = implode(',',$favorite_id_arr);}
 			dataType:'json',
 			url:'{url:/ucenter_ajax/sign_add_point}',
 			beforeSend:function(){
-				
+
 			},
 			success:function(data){
 				if(data.point){
@@ -74,7 +74,7 @@ $favorite_ids = implode(',',$favorite_id_arr);}
 				}
 			},
 			error:function(){
-				
+
 			},
 			complete:function(){
 			},
@@ -120,14 +120,14 @@ $favorite_ids = implode(',',$favorite_id_arr);}
 					<div class="hy_message">
 						<a  href="javascript:void(0)">
 							<b id='head_point'>{$this->user['point']}</b>
-							<span>积分<em>							
+							<span>积分<em>
 							{if:$user['sign']==0}
 							<img src="{skin:images/qiandao.gif}" name='sign' onclick='sign_point(this)'/>
 							{else:}
 							<img src="{skin:images/yqiandao.gif}" name='sign' />
 							{/if}
 							</em></span>
-							
+
 						</a>
 						<!--<a  href="{url:/ucenter/account_log}" target="_blank">
 							<b>{$this->user['balance']}</b>
@@ -162,11 +162,11 @@ $favorite_ids = implode(',',$favorite_id_arr);}
 					<ul><li style="height:125px;width:251px;border:0;box-shadow: 0 1px 3px #ccc;background:#fff;">
 							<div>
 										<div class="hd_mobile_show">
-										
+
 										<div class="hd_mobile_content">
 										<img src="{skin:images/erweima_app.jpg}" alt="" style="width:115px;height:115px;"/>
 										</div>
-										
+
 										<dl class="hd_mobile_tab">
 										<dt><b>山城速购APP</b></dt>
 										<dt><a class="blue_link" target="_blank">手机购物更优惠</a></dt>
@@ -199,6 +199,7 @@ $favorite_ids = implode(',',$favorite_id_arr);}
 						<li><a href="{url:/ucenter/complain}" target="_blank">意见建议</a></li>
 						<li><a href="{url:/site/help_list/id/5}" target="_blank">售后服务</a></li>
 						<li><a href="{url:/ucenter/order}" target="_blank">订单状态</a></li>
+						<li><a href="{url:/systemseller}" target="_blank">商家后台</a></li>
 					</ul>
 				</li>
 				<li style="color:#fff;">关注我们:
@@ -218,14 +219,14 @@ $favorite_ids = implode(',',$favorite_id_arr);}
 				<!--可在此处直接添加导航-->
 			</ul>
 		</div><!--导航结束-->
-		<script  type="text/javascript"> 
+		<script  type="text/javascript">
 		$(".navbg").capacityFixed();
 		</script>
 
 	</div>
 
 <!--导航-->
-</div>	
+</div>
 
 {if:$this->isIndex}
 <!--下拉广告图-->
@@ -236,7 +237,7 @@ $favorite_ids = implode(',',$favorite_id_arr);}
 	<DIV {if:!empty($adBig)}style="display: none;"{/if} class="dt_small">
 		<DIV style="display: none;" class="dt_toBig"></DIV>
 		{query:name=ad_manage as ad join=left join ad_position as p on ad.position_id eq p.id fields=ad.name,ad.link,ad.content where=p.name eq '首页顶部缩略' item=$adData}
-			
+
 		{/query}
 		{if:!empty($adData)}
 			<A href="{$adData['link']}" target="_blank"><IMG alt="jquery广告图片缩略图" src="{url:$adData['content']}" width="1190" ></A>
@@ -244,10 +245,10 @@ $favorite_ids = implode(',',$favorite_id_arr);}
 	</DIV>
 	<DIV class="dt_big">
 		<DIV class="dt_toSmall"></DIV>
-		
+
 		{if:!empty($adBig)}
 		<A href="{$adBig['link']}" target="_blank">
-			<IMG id="actionimg" alt="jquery广告图片大图" src="{url:$adBig['content']}" width="1190" ></A> 
+			<IMG id="actionimg" alt="jquery广告图片大图" src="{url:$adBig['content']}" width="1190" ></A>
 		{/if}
 	</DIV>
 </DIV>
@@ -290,7 +291,7 @@ $(document).ready(function(){
 
 });
 //顶部通览可展开收起效果
-if($("#actionimg").length>0){	
+if($("#actionimg").length>0){
 	$("#actionimg").onload=AdvAuto();
 }
 </SCRIPT>
@@ -324,16 +325,16 @@ if($("#actionimg").length>0){
 		<!--logo-->
 
 		<!--cart f-r-->
-		<div class="cart f-r mycart" id="jCart">   
+		<div class="cart f-r mycart" id="jCart">
         {set:$count = 0}
         {foreach:items=$myCartInfo}
         {set:$count+=$item['count']}
         {/foreach}
 			<span class="cart-count"><span name="mycart_count">{$count}</span></span>
 			<a href="{url:/simple/cart}" class="cart-buying" target="_blank"><span class="cart-account">去购物车结算</span></a>
-			
+
 		</div>
-		
+
 		<!--cart f-r-->
 
 		<!--s-box f-r-->
@@ -345,11 +346,50 @@ if($("#actionimg").length>0){
 			<div class="s-main">
 				<input class="ipt-key" type="text" name="word" onkeyup="getKeywords('{url:/block/getLikeWords}',$(this))" autocomplete="off" value="输入关键字...">
 				<input class="btn-search" type="submit" style='cursor:pointer;' value="搜索" onclick="checkInput(&#39;word&#39;,&#39;输入关键字...&#39;);">
-				
+
 			</div>
+			<div class="search_xz">
+				<input type="button" class="search_select" value="商品">
+
+				<ul id="search_list">
+                    <li js_data="search_list">商品</li>
+					<li js_data="seller_list">商家</li>
+				</ul>
+			</div>
+			<script>
+					$(function(){
+						$(".search_select").click(function(){
+							if($("#search_list").is(":hidden")){
+								$("#search_list").show()
+								$(".search_select").addClass('down');
+							}else{
+								$("#search_list").hide()
+								$(".search_select").removeClass('down');
+							}
+						})
+						$("#search_list li").each(function(){
+							$(this).hover(function(){
+								$(this).css('background','#f7f7f7');
+							},function(){
+								$(this).css('background','#FFF');
+							})
+
+						})
+						$("#search_list li").each(function(){
+							var _t = $(this)
+									,_v = _t.attr('js_data');
+							_t.click(function(){
+								$('.search_select').val(_t.text());
+								$('input[name=action]').val(_v);
+								$('#search_list').hide();
+								$(".search_select").removeClass('down');
+							})
+						})
+					});
+				</script>
 			</form>
 			<div class='words-give' >
-				
+
 			</div>
 			<!--s-main-->
 			<!--kw-suggest-->
@@ -378,11 +418,11 @@ if($("#actionimg").length>0){
 
 				<h2 class="cat-title"><a class="t14">全部商品分类<b class="png"></b></a></h2>
 
-				
+
 				<ul class="cat-list" {if:!isset($this->isIndex)}style='display:none;'{/if}>
 					{set:$hotCat=array();}
 					{foreach:items=$categoryTop key=$keyT item=$valT}
-					
+
 					{set:$k=$keyT+1;}
 					<li class="list-item" style='position:static;' js_data="{$valT['id']}">
 						<h3 class="cat-type-{$k}">
@@ -397,21 +437,21 @@ if($("#actionimg").length>0){
 		<script type="text/javascript">
 			(function($){
                 $(function(){
-	            
+
 	            var aLiHover = $("#jCat .cat-list li.list-item");
 	            var pcImgRed = $("#jCat .cat-list li.list-item .pc_show_red");
 	            var pcImgWhi = $("#jCat .cat-list li.list-item .pc_hide_white")
 	             $(aLiHover).each(function(){
-	              var index = $(aLiHover).index(this);	              
+	              var index = $(aLiHover).index(this);
 		        	 $(this).hover(function() {
 		        	 	    $(pcImgWhi).eq(index).show();
 				            $(pcImgRed).eq(index).hide();
-				            
+
 				        }, function() {
 				        	$(pcImgRed).eq(index).show();
 				            $(pcImgWhi).eq(index).hide();
 				        });
-		           });	 
+		           });
 
               });
 			}) (jQuery);
@@ -449,16 +489,16 @@ if($("#actionimg").length>0){
 			                         </ul>
 								</div>
 								<!--cat-layer-->
-								
-					
+
+
 	                    </div>
 					</li>
 					{/foreach}
-				
+
 					<div id='nav-ad' style="float:right;display:none;width: 249px; height: 450px;"></div>
 				</ul>
 				<!--cat-list-->
-	
+
 		  </div>
 			<!--category-->
 		</div>
@@ -468,7 +508,7 @@ if($("#actionimg").length>0){
 		<div class="nav-cnt">
 			{foreach:items=Api::run('getGuideList')}
 						<li class="nav-item"><a href="{url:$item['link']}" target="_blank">{$item['name']}</a></li>
-			{/foreach}			
+			{/foreach}
 		</div>
 		<!--nav-cnt-->
 

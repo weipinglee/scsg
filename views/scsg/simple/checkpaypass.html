@@ -1,0 +1,32 @@
+
+
+<div class="wrapper clearfix">
+	<div class="position mt_10"><span>您当前的位置：</span> <a href="{url:}"> 首页</a> » 成功提交订单</div>
+	<div class="myshopping m_10">
+		<ul class="order_step">
+			<li><span class="first">1、查看购物车</span></li>
+			<li class="current_prev"><span>2、填写核对订单信息</span></li>
+			<li class="last_current"><span>3、成功提交订单</span></li>
+		</ul>
+	</div>
+	<div class="confirm_box">
+			<h3>
+				你正在支付订单：
+				{foreach:$items=$this->orderData}
+				<p>{$item['order_no']}</p>
+				{/foreach}
+				<span class="pay_num">支付<b>{$this->sum}</b>元</span>
+			</h3>
+			<form action='{url:/simple/docheckPaypass}' method='get' target='_blank'>
+				<span>山城速购支付密码：</span>
+				<input type="password" name="paypass" />
+				<input type="hidden" name="order_id" value="{$this->order_id}"/>
+				<input type="hidden" name="pay_level" value="{$this->pay_level}"/>
+				<input type="hidden" name="toUrl" value="{$this->toUrl}"/>
+				<input class="submit_pay" type="submit" value="确认支付"  />
+				<a href="{url:/simple/find_paypassword}" class="forget_paypass">忘记支付密码？</a>
+			</form>
+				<!-- <a href class="forget_paypass" style="line-height:70px;margin-left:146px;">选择其他方式付款</a> -->
+	</div>
+
+</div>

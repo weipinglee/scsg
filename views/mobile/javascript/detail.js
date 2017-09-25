@@ -12,7 +12,7 @@ function loaded() {
         momentum: false,
         hScrollbar: false,
         onScrollEnd: function () {
-          
+
         }
     });
 }
@@ -45,7 +45,7 @@ function loadedBig(count){
 }
 document.addEventListener('DOMContentLoaded', loaded, false);
 window.onload=function(){
-	setInterval(function(){ 
+	setInterval(function(){
       if(myScroll.currPageX==pnum-1){
                 myScroll.scrollToPage(0, 0);
             }else{
@@ -72,7 +72,7 @@ function prev_pic(){
 //share
 
 function toshare(){
-	$(".am-share").addClass("am-modal-active");	
+	$(".am-share").addClass("am-modal-active");
 	if($(".sharebg").length>0){
 		$(".sharebg").addClass("sharebg-active");
 	}else{
@@ -80,14 +80,14 @@ function toshare(){
 		$(".sharebg").addClass("sharebg-active");
 	}
 	$(".sharebg-active,.share_btn").click(function(){
-		$(".am-share").removeClass("am-modal-active");	
+		$(".am-share").removeClass("am-modal-active");
 		setTimeout(function(){
-			$(".sharebg-active").removeClass("sharebg-active");	
-			$(".sharebg").remove();	
+			$(".sharebg-active").removeClass("sharebg-active");
+			$(".sharebg").remove();
 		},300);
 	})
-}	
-	
+}
+
 function viewBigPicOn(){
 	$('article').hide();
 	$('footer').hide();
@@ -130,7 +130,7 @@ function show_det2(_this){
 	$('#det_tuijian').removeClass('hidden');
 	$('#det1').addClass('hidden');
 	$('#comments').addClass('hidden');
-	
+
 		$('.desbox').attr({'style':'outline: 0px; padding: 12px 0px; margin: 0px auto 0px 0px; font-size: 14px;width:100%; overflow: hidden; color: rgb(51, 51, 51); line-height: normal; white-space: normal;'});
 	$(".desbox img").attr({"style":"width:100%;"});
 	$(".ull").attr({"style":"width:100%;"});
@@ -138,10 +138,10 @@ function show_det2(_this){
 
 	$(".ke-zeroborder").css({   "background-size": "100%" , "height": "150px", "width": "100%"});
 	$("#description tbody").remove();
-	 
+
 	$(".spjs_img img").attr({"style":"width:100%;"});
-	$(".spjs_img p").attr({"style":"width:100%;"});  
-	
+	$(".spjs_img p").attr({"style":"width:100%;"});
+
 }
 function show_comments_list(_this){
 	$('.lin').removeClass('lin');
@@ -150,21 +150,22 @@ function show_comments_list(_this){
 	$('#det1').addClass('hidden');
 	$('#det_tuijian').addClass('hidden');
 	$('#comments').removeClass('hidden');
+	$('.anniu').remove();
 	if($('#comments .content').text()==''){
 	comment_ajax_list('all',1);
 	}
-    
+
 }
 /**
  * 获取评论数据(详情首页)
- * @type int 评价等级 
+ * @type int 评价等级
  */
 function comment_ajax(type)
 {
 	var url = comments_url;
 	$.getJSON(url,{type:type,pageSize:3},function(json){
 		for(var item in json.comment_list)
-		{ 
+		{
 			var commentHtml = template.render('commentRowTemplate',json.comment_list[item]);
 			$('#commentBox').prepend(commentHtml);
 		}
@@ -183,11 +184,11 @@ function show_comments(){
  * @param type 评论类型
  * @param statics bool 是否加载统计数据
  */
-function comment_ajax_list(type,statics){ 
+function comment_ajax_list(type,statics){
 	var url = comments_url;
 	var page = parseInt($('input[name=comment_page]').val());
 	$.getJSON(url,{type:type,page:page,pageSize:7},function(json)
-	{//window.alt(JSON.stringify(json));   
+	{//window.alt(JSON.stringify(json));
 	if(json==0)return false;
 		json.point_grade.comment_total=json.comment_total;
 		if(statics){
@@ -197,8 +198,8 @@ function comment_ajax_list(type,statics){
 				$('#comments .content ul').remove();
 				$('#comments .content hr').remove();
 				$('#comments .current').removeClass('current').addClass('other');
-				$(this).removeClass('other').addClass('current');     
-				 $('input[name=comment_page]').val('1');    
+				$(this).removeClass('other').addClass('current');
+				 $('input[name=comment_page]').val('1');
 				comment_ajax_list($(this).attr('type'));
 			})
 		}
@@ -257,14 +258,14 @@ function sele_spec(_self,price)
 
 		//获取货品数据并进行渲染
 		$.getJSON(product_url,{"goods_id":goods_id,"specJSON":specJSON,"random":Math.random},function(json){
-			
+
 			if(json.flag == 'success')
 			{
 				var goods_data = json.data;
 				var price = goods_data.group_price ? goods_data.group_price : goods_data.sell_price;
 				if(!not_chg_price)
 					$('.tc_cont .price').text('￥'+price);
-			
+
 				//普通货品数据渲染
 				$('#data_storeNums').text(goods_data.store_nums);
 				$('#product_id').val(goods_data.id);
@@ -362,7 +363,7 @@ function checkBuyNums()
 {
 	//购买数量小于0
 	var buyNums = parseInt($.trim($('#buyNums').val()));
-	
+
 	if(buyNums <= 0)
 	{
 		$('#buyNums').val(1);
@@ -403,21 +404,21 @@ function buy_now()
 	var active_id = $('input[name=active_id]').val();
 	//var url = '{url:/simple/cart2/id/@id@/num/@buyNums@/type/@type@/promo/$promo/active_id/$active_id}';
 	//url = url.replace('@id@',id).replace('@buyNums@',buyNums).replace('@type@',type);
-	
+
 	if(promo_type!='presell'){
 		var url = direct_buy_url;
 		url = url.replace('@id@',id).replace('@buyNums@',buyNums).replace('@type@',type);
 		if(promo_type && active_id){
-			url += '/promo/'+promo_type+'/active_id/'+active_id; 
+			url += '/promo/'+promo_type+'/active_id/'+active_id;
 		}
 	}else{
 		var url = presell_buy_url;
 		url = url.replace('@id@',id).replace('@buyNums@',buyNums).replace('@type@',type);
 		if( active_id){
-			url +='/active_id/'+active_id; 
+			url +='/active_id/'+active_id;
 		}
 	}
-	
+
 
 	//页面跳转
 	window.location.href = url;
@@ -437,7 +438,7 @@ function joinCart()
 	var goods_id  = (type == 'product') ? productId : id;
 
 	$.getJSON(join_cart_url,{"goods_id":goods_id,"type":type,"goods_num":buyNums,"random":Math.random},function(content){
-		
+
 		if(content.isError == false)
 		{
 			window.location.href = cart_url;
@@ -451,7 +452,7 @@ function joinCart()
 }
 //加入购物车弹出框
 function toshop(callback){
-	$("#tc_shop").removeClass("tc_shop").addClass("tc-modal-active");     
+	$("#tc_shop").removeClass("tc_shop").addClass("tc-modal-active");
 
 	if($(".sharebg").length>0){
 		$(".sharebg").addClass("sharebg-active");
@@ -461,12 +462,12 @@ function toshop(callback){
 		$(".sharebg").addClass("sharebg-active");
 	}
 	$(".sharebg-active,.share_btn").click(function(){
-		$("#tc_shop").removeClass("tc-modal-active").addClass("tc_shop");	
+		$("#tc_shop").removeClass("tc-modal-active").addClass("tc_shop");
 		setTimeout(function(){
-			$(".sharebg-active").removeClass("sharebg-active");	
-			$(".sharebg").remove();	
+			$(".sharebg-active").removeClass("sharebg-active");
+			$(".sharebg").remove();
 		},300);
 	})
 	$('input[name=buyNowButton]').on('click',callback);
-	
-}	
+
+}

@@ -1987,4 +1987,20 @@ class Site extends IController
 
         return $response;
     }
+
+    //获取商家列表
+    public function seller_list()
+    {
+        $this->word = IFilter::act(IReq::get('word'),'text');
+
+        if(!$this->word){
+            $where='';
+        }
+        else
+            $where = 'true_name like "'.$this->word.'%"';
+        $this->queryObj = Api::run('getSellerList',$where);
+        $this->redirect('seller_list');
+    }
+
+
 }

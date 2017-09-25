@@ -15,12 +15,23 @@ class APISeller
 		return $info;
 	}
 
-	//获取商户列表
-	public function getSellerList()
+	public function getSellerPapers($seller_id){
+		$query = new IModel('seller_paper');
+		$info = $query->query("seller_id=".$seller_id);
+		return $info;
+	}
+
+	/**
+	 * 查找商户列表
+	 * @param string $where 筛选条件
+	 * @return IQuery
+	 */
+
+	public function getSellerList($where='')
 	{
 		$page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
 		$query = new IQuery('seller');
-		$query->where = 'is_del = 0';
+		$query->where = $where=='' ? 'is_del = 0' : 'is_del = 0 AND '.$where;
 		$query->order = 'id desc';
 		$query->page  = $page;
 		return $query;

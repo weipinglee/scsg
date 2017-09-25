@@ -3,6 +3,9 @@
 {if:!$sellerRow}
 {set:IError::show(403,'商户信息不存在')}
 {/if}
+{set:$sellerPaper=Api::run('getSellerPapers',$seller_id)}
+
+
 <div class="position"> <span>您当前的位置：</span> <a href="{url:}"> 首页</a> » 商户主页 </div>
 <div class="wrapper clearfix container_2">
 
@@ -23,6 +26,19 @@
 					{if:$sellerRow['server_num']}
 					<p> 商户联系：{set:Sonline::qqShow($sellerRow['server_num'])}</p>
 					{/if}
+					<div class="seller_zz_img clearfix">
+					   <p>商户资质：</p>
+					   <div class="zz_img_div">
+						   {foreach:items=$sellerPaper}
+					   	 <a class="zz_img_a1" href="{webroot:$item['img']}" target="_blank">
+
+					      <img class="img1" src="{webroot:$item['img']}"/>
+
+					     </a> <!-- 鼠标放到图片上显示 class="img2" 大图 -->
+						   {/foreach}
+					   </div>
+
+					</div>
 				</div>
 			</div>
 		</div>

@@ -1,0 +1,63 @@
+
+{set:$queryAccountLogList = Api::run('getUcenterAccoutLog',$this->user['user_id'])}
+{set:$logList = $queryAccountLogList->find()}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0, maximum-scale=1.0">
+<meta content="telephone=no" name="format-detection" />
+<title>山城速购</title>
+
+<script type="text/javascript" src="{theme:javascript/js/jquery-1.9.1.min.js}"></script>
+<link rel="stylesheet" href="{skin:css/common.css}" type="text/css">               
+
+
+</head>
+<body>
+<header class="wap-header">
+    <div class="wap-topbar" style="">
+        <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
+        <div class="h-center">
+            <h1>账单明细</h1>
+        </div>
+    
+    </div>
+</header>
+
+<div class="container">  
+      
+    <ul class="tabs">  
+        <li class="active"><a >交易记录</a></li>  
+        <li><a href="{url:ucenter/withdraw_list}">提现记录</a></li>  
+    </ul>  
+    <div class="tab_container"> 
+        {if:$logList}
+        <div id="tab1" class="tab_content" style="display: block; "> 
+            {foreach:items = $logList}
+            <div class="content_list">
+               
+                <div class="checked_on">
+                    <ul>
+                        <li>{$item['note']}</li>
+                        <li>{echo:$item['amount'] > 0 ?  '+'.$item['amount'] : $item['amount']}</li>
+                    </ul>
+                    <ul>
+                        <li class="time">{$item['time']}</li>
+                        <li class="time">{$item['amount_log']}</li>
+                    </ul>
+                </div>           
+                    <div class="clear"></div>     
+            </div>  
+            {/foreach}
+        </div>  
+          
+        
+        {else:}
+        <div style="text-align: center;font-size: 0.15rem;padding: 0.4rem 0;">暂时没有帐户变动记录<div>
+        {/if}
+         
+    </div>  
+  
+</div> 
+</body>

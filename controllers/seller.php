@@ -523,6 +523,12 @@ class Seller extends IController
 		$seller_id = $this->seller['seller_id'];
 		$sellerDB        = new IModel('seller');
 		$this->sellerRow = $sellerDB->getObj('id = '.$seller_id);
+
+		//获取资质图片
+		$paperObj = new IModel('seller_paper');
+		$this->papers = $paperObj->query('seller_id='.$seller_id);
+
+
 		$this->redirect('seller_edit');
 		
 	}
@@ -532,6 +538,7 @@ class Seller extends IController
 	 */
 	public function seller_add()
 	{
+
 		$seller_id   = $this->seller['seller_id'];
 		$email       = IFilter::act(IReq::get('email'));
 		$phone       = IFilter::act(IReq::get('phone'));
@@ -548,7 +555,8 @@ class Seller extends IController
 		$freight_collect = IFilter::act(IReq::get('freight_collect'),'int');
 		$goods_cat = IFilter::act(IReq::get('goods_cat'));
 		$goods_cat = !empty($goods_cat) ? implode(',',$goods_cat) : '';
-		
+		$paper_img = IFilter::act(IReq::get('img'));
+		$paper_imgs = IFilter::act(IReq::get('_imgList'));
 		//操作失败表单回填
 		if(isset($errorMsg))
 		{
@@ -573,6 +581,8 @@ class Seller extends IController
 			'store_num_warning'      => $store_num_warning,
 			'freight_collect'=>$freight_collect,
 			'goods_cat' => $goods_cat,
+			'paper_img' => $paper_img,
+
 		);
 		//商户资质上传
 		if((isset($_FILES['paper_img']['name']) && $_FILES['paper_img']['name']) || (isset($_FILES['logo_img']['name']) && $_FILES['logo_img']['name']))
@@ -595,6 +605,17 @@ class Seller extends IController
 
 		$sellerDB->setData($sellerRow);
 		$sellerDB->update("id = ".$seller_id);
+
+		//处理多张资质图片
+		if($paper_imgs){
+			$paperObj = new IModel("seller_paper");
+			$paperObj->del("seller_id = ".$seller_id);
+			$paper_imgs = explode(',',$paper_imgs);
+			foreach($paper_imgs as $val){
+				$paperObj->setData(array('seller_id' => $seller_id,'img' => $val));
+				$paperObj->add();
+			}
+		}
 
 		$this->redirect('seller_edit');
 	}
@@ -990,6 +1011,7 @@ class Seller extends IController
 
 			if($countData['orderAmountPrice'] > 0)
 			{
+				$countData['orderAmountPrice'] = $countData['orderAmountPrice'] - $countData['deliveryPrice'];
 				$replaceData = array(
 					'{startTime}'     => $start_time,
 					'{endTime}'       => $end_time,
@@ -1033,8 +1055,10 @@ class Seller extends IController
 		$queryObject = CountSum::getSellerGoodsFeeQuery($seller_id,$start_time,$end_time,0);
 		$countData   = CountSum::countSellerOrderFee($queryObject->find());
 
+
 		if($countData['orderAmountPrice'] > 0)
 		{
+			$countData['orderAmountPrice'] = $countData['orderAmountPrice'] - $countData['deliveryPrice'];
 			$replaceData = array(
 				'{startTime}'     => $start_time,
 				'{endTime}'       => $end_time,
@@ -1817,8 +1841,9 @@ class Seller extends IController
 	public function fapiao_show_save(){
 		$id = IFilter::act(IReq::get('id'),'int');
 		$money = IFilter::act(IReq::get('money'),'float');
+		$redirect = IFilter::act(IReq::get('redirect'));
 		if(!$id || !$money){
-			$this->redirect('fapiao_apply');
+			$this->redirect($redirect);
 		}
 		$db_fa = new IModel('order_fapiao');
 		$data=array(
@@ -1827,7 +1852,7 @@ class Seller extends IController
 		);
 		$db_fa->setData($data);
 		$db_fa->update('id='.$id);
-		$this->redirect('fapiao_apply');
+		$this->redirect($redirect);
 	}
     
     //[促销活动] 添加修改 [单页]

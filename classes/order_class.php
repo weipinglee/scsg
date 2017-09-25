@@ -96,10 +96,10 @@ class Order_Class
 
                 //获取用户信息
                 $memberObj  = new IModel('member');
-                $memberRow  = $memberObj->getObj('user_id = '.$user_id,'prop,group_id');
+                $memberRow  = $memberObj->getObj('user_id = '.$user_id,'prop,group_id,true_name');
              }
              $orderObj  = new IModel('order');        
-             $orderList = $orderObj->query('pid='.$orderRow['id'], 'id,status,prop,order_amount,order_no,type');
+             $orderList = $orderObj->query('pid='.$orderRow['id'], 'id,status,prop,order_amount,order_no,type,seller_id');
              $config = new Config('site_config');
              foreach($orderList as $v)
              {
@@ -189,6 +189,9 @@ class Order_Class
                     Hsms::send($config->mobile,$smsContent);
                 }
                 $return[] = $v['id'];
+
+				 //通知商户
+				 self::noticeSeller($v['seller_id'],$v['order_no'],$memberRow['true_name']);
              }                                   
              return $return;
         }
@@ -254,7 +257,7 @@ class Order_Class
 
 				    //获取用户信息
 				    $memberObj  = new IModel('member');
-				    $memberRow  = $memberObj->getObj('user_id = '.$user_id,'prop,group_id');
+				    $memberRow  = $memberObj->getObj('user_id = '.$user_id,'prop,group_id,true_name');
 
 				    //(1)删除订单中使用的道具
 				    if($ticket_id != '')
@@ -323,13 +326,35 @@ class Order_Class
 				    $smsContent = smsTemplate::payFinishToAdmin(array('{orderNo}' => $orderNo));
 				    Hsms::send($config->mobile,$smsContent);
 			    }
-			    return $orderRow['id'];         
+
+				//通知商户
+				self::noticeSeller($orderRow['seller_id'],$orderRow['order_no'],$memberRow['true_name']);
+			    return $orderRow['id'];
+
 		    }
 		    else
 		    {
 			    return false;
 		    }
         }
+	}
+
+	/**
+	 * 支付完成后给商户发送短信
+	 * @param $seller_id int 商户id
+	 * @param $order_no string 订单号
+	 * @return bool
+	 */
+	public static function noticeSeller($seller_id,$order_no,$member_name=''){
+		if($seller_id!=0){
+			$sellerDB = new IModel('seller');
+			$sellerData = $sellerDB->getObj('id='.$seller_id,'mobile,true_name');
+			if(!empty($sellerData)){
+				$smsContent = smsTemplate::orderToSeller(array('{orderNo}' => $order_no , '{true_name}'=>$sellerData['true_name'],'{member}'=>$member_name));
+				Hsms::send($sellerData['mobile'],$smsContent);
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -361,13 +386,18 @@ class Order_Class
 				{
 					$smsContent = smsTemplate::takeself(array('{orderNo}' => $orderRow['order_no'],'{address}' => $takeselfRow['address'],'{mobile_code}' => $mobile_code,'{phone}' => $takeselfRow['phone'],'{name}' => $takeselfRow['name']));
 					Hsms::send($orderRow['mobile'],$smsContent);
+
+					//给自提点发送短信
+					$smsContent1  = smsTemplate::toTakeself(array('{orderNo}' => $orderRow['order_no'],'{mobile_code}' => $mobile_code));
+					Hsms::send($takeselfRow['mobile'],$smsContent1);
 				}
 			}
 		}
 		//普通付款通知
 		else
 		{
-			$smsContent = smsTemplate::payFinishToUser(array('{orderNo}' => $orderNo));
+			$time = ITime::getDateTime('Y-m-d H:i',time() + 60*60);
+			$smsContent = smsTemplate::payFinishToUser(array('{address}' => $orderRow['address'],'{time}' => $time));
 			Hsms::send($orderRow['mobile'],$smsContent);
 		}
 	}
@@ -468,8 +498,8 @@ class Order_Class
 
 	 		$areaData = area::name($data['province'],$data['city'],$data['area']);
 	 		$data['province_str'] = $areaData[$data['province']];
-	 		$data['city_str']     = $areaData[$data['city']];
-	 		$data['area_str']     = $areaData[$data['area']];
+	 		$data['city_str']     = isset($areaData[$data['city']]) ? $areaData[$data['city']] : '';
+	 		$data['area_str']     = isset($areaData[$data['area']]) ? $areaData[$data['area']] : '';
 
 	        //物流单号
 	    	$tb_delivery_doc = new IQuery('delivery_doc as dd');
@@ -645,9 +675,9 @@ class Order_Class
 		$takeselfRow = $takeselfObj->getObj('id = '.$id);
 
 		$temp = area::name($takeselfRow['province'],$takeselfRow['city'],$takeselfRow['area']);
-		$takeselfRow['province_str'] = $temp[$takeselfRow['province']];
-		$takeselfRow['city_str']     = $temp[$takeselfRow['city']];
-		$takeselfRow['area_str']     = $temp[$takeselfRow['area']];
+		$takeselfRow['province_str'] = isset($temp[$takeselfRow['province']]) ? $temp[$takeselfRow['province']] : '';
+		$takeselfRow['city_str']     = isset($temp[$takeselfRow['city']]) ? $temp[$takeselfRow['city']] : '';
+		$takeselfRow['area_str']     = isset($temp[$takeselfRow['area']]) ? $temp[$takeselfRow['area']] : '';
 		return $takeselfRow;
 	}
 
