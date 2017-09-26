@@ -20,6 +20,7 @@
 			<col width="125px" />
 			<col width="155px" />
 			<col width="75px" />
+			<col width="250px" />
 			<col />
 		</colgroup>
 
@@ -32,6 +33,7 @@
 				<th>支付状态</th>
 				<th>下单时间</th>
 				<th>打印</th>
+				<th>配送地址</th>
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -39,9 +41,11 @@
 		<tbody>
 			{set:$page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1}
             {query:name=order page=$page where=seller_id eq $seller_id and if_del eq 0 and status neq 4 $where id=$orderObject order=id desc}
-            
+
 			<tr>
-				<td title="{$item['order_no']}">{$item['order_no']}</td>
+				<td title="{$item['order_no']}">
+					<a href="{url:/seller/order_show/id/$item[id]/pid/$item[pid]}">{$item['order_no']}</a>
+				</td>
 				<td title="{$item['accept_name']}">{$item['accept_name']}</td>
 				<td title="{$item['mobile']}">{$item['mobile']}</td>
 				<td><span name="disStatusColor{$item['distribution_status']}">{echo:Order_class::getOrderDistributionStatusText($item)}</span></td>
@@ -59,6 +63,7 @@
 					<span class="prt" title="联合打印" onclick="window.open('{url:/order/merge_template/id/$item[id]/seller_id/$seller_id}');">合</span>
 					<span class="prt" title="快递单打印" onclick="window.open('{url:/order/expresswaybill_template/id/$item[id]/seller_id/$seller_id}');">递</span>
 				</td>
+				<td>{echo:area::getNameStr($item['area'])} {$item['address']}</td>
 				<td>
 					<a href="{if:Order_class::isGoDelivery($item)}{url:/seller/order_deliver/id/$item[id]}{else:}javascript:alert('此单不满足发货条件');{/if}"><img class="operator" src="{skin:images/main/icn_jump_back.png}" title="立即发货" alt="立即发货" /></a>
 					<a href="{url:/seller/order_show/id/$item[id]/pid/$item[pid]}"><img title="订单详情" alt="订单详情" src="{skin:images/main/icn_settings.png}" /></a>
