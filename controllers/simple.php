@@ -1560,8 +1560,18 @@ class Simple extends IController
         $order_no      = Order_Class::createOrderNum();
         $order_type    = 0;
         $invoice       = isset($_POST['taxes']) ? 1 : 0;
+		$deli_day      = IFilter::act(IReq::get('deliday'),'int');
+		$deli_time     = IFilter::act(IReq::get('delitime'));
         $dataArray     = array();
 		$this->payment_id = $payment;
+
+		if($deli_day==1){
+			$deli_day = ITime::getDateTime('Y-m-d',time()+3600*24);
+		}
+		else{
+			$deli_day = ITime::getDateTime('Y-m-d');
+		}
+
         //防止表单重复提交
         if(IReq::get('timeKey') != null)
         {
@@ -1700,6 +1710,8 @@ class Simple extends IController
             'postscript'          => $order_message,
             //订单应付总额（商品final_num加上，税金，运费，再减去红包）
             'order_amount'        => $orderData['orderAmountPrice'] - (isset($ticketRow['value']) ? $ticketRow['value'] : 0),
+				'deli_day'        => $deli_day,
+				'deli_time'       => $deli_time
 
         );
         $dataArray['order_amount'] = $dataArray['order_amount'] <= 0 ? 0 : $dataArray['order_amount'];
@@ -1778,7 +1790,9 @@ class Simple extends IController
                 //促销活动ID
                 'active_id'           => $active_id,
                 'pid'                 => $this->order_id,
-                'seller_id'           => $k
+                'seller_id'           => $k,
+					'deli_day'        => $deli_day,
+					'deli_time'       => $deli_time
             );
             
             $data['order_amount'] = $data['order_amount'] <= 0 ? 0 : $data['order_amount'];

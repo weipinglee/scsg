@@ -1408,10 +1408,29 @@ class Order_Class
             if(isset($search['seller_id']) && $search['seller_id'])
             {
                 $where .= " and o.seller_id ".$search['seller_id'];
-            }                               
+            }
+
+			if(isset($search['deliday']) && $search['deliday'])
+			{
+				if($search['deliday']==2){
+					$deli_day = ITime::getDateTime('Y-m-d',time()+3600*24);
+				}
+				elseif($search['deliday']==1){
+					$deli_day = ITime::getDateTime('Y-m-d');
+				}
+				else{
+					$deli_day = $search['deliday'];
+				}
+				$where .= ' and o.deli_day ="'.$deli_day.'"';
+			}
+
+			if(isset($search['deli_time']) && $search['deli_time']){
+				$where .= ' and o.deli_time ="'.$search['deli_time'].'"';
+			}
+
 			foreach($search as $key => $val)
 			{
-				if(!in_array($key,array('keywords','name', 'beginTime', 'endTime', 'seller_id')) && $val!='')
+				if(!in_array($key,array('keywords','name', 'beginTime', 'endTime', 'seller_id','deliday','deli_time')) && $val!='')
 				{
 					$where .= " and o.".$key." = ".$val;
 				}

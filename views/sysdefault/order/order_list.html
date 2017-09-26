@@ -39,11 +39,24 @@
 				<option value="7">部分退款</option>
 			</select>
 
-			<select class="auto" name="search[name]">
-				<option value="">选择订单条件</option>
-				<option value="accept_name">收件人姓名</option>
-				<option value="order_no">订单号</option>
-				<option value="seller_name">商户真实名称</option>
+			<select name="search[deliday]" class="auto">
+				<option value="0">请选择配送日期</option>
+				<option value="1">今天</option>
+				<option value="2">明天</option>
+			</select>
+
+			<select class="auto" name="search[deli_time]">
+				<option value="">请选择配送时间段</option>
+				<option value="5:00-5:30">5:00-5:30</option>
+				<option value="5:30-6:00">5:30-6:00</option>
+				<option value="6:00-6:30">6:00-6:30</option>
+				<option value="6:30-7:00">6:30-7:00</option>
+				<option value="7:00-7:30">7:00-7:30</option>
+				<option value="7:30-8:00">7:30-8:00</option>
+				<option value="8:00-8:30">8:00-8:30</option>
+				<option value="8:30-9:00">8:30-9:00</option>
+				<option value="9:00-9:30">9:00-9:30</option>
+				<option value="9:30-10:00">9:30-10:00</option>
 			</select>
 			<input class="small" name="search[keywords]" type="text" value="" />
             开始时间：<input class="small" type="text" name="search[beginTime]" onfocus="WdatePicker()"  value='{$beginTime}'/>
@@ -62,6 +75,8 @@
 			<col width="115px" />
 			<col width="80px" />
 			<col width="80px"/>
+			<col width="150px"/>
+			<col width="150px"/>
 			<col width="145px"/>
 			
 			<thead>
@@ -75,6 +90,8 @@
 					<th>支付方式</th>
 					<th>用户名</th>
 					<th>下单时间</th>
+					<th>配送日期</th>
+					<th>配送时间</th>
 					<th>操作</th>
 				</tr>
 			</thead>
@@ -93,6 +110,8 @@
 			<col width="115px" />
 			<col width="80px" />
 			<col width="80px"/>
+			<col width="150px"/>
+			<col width="150px"/>
 			<col width="145px"/>
 			
 			<tbody>
@@ -113,6 +132,8 @@
 					<td>{$item['payment_name']}</td>
 					<td>{echo:$item['username']=='' ? '游客' : $item['username']}</td>
 					<td title="{$item['create_time']}">{$item['create_time']}</td>
+					<td >{$item['deli_day']}</td>
+					<td >{$item['deli_time']}</td>
 					<td>
 						<a href="{url:/order/order_show/id/$item[id]/plat/$this->plat}"><img class="operator" src="{skin:images/admin/icon_check.gif}" title="查看" /></a>
 						{if:Order_class::getOrderStatus($item) < 3}
