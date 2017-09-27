@@ -497,7 +497,7 @@ class Order_Class
 	 		}  
 
 	 		$areaData = area::name($data['province'],$data['city'],$data['area']);
-	 		$data['province_str'] = $areaData[$data['province']];
+	 		$data['province_str'] = isset($areaData[$data['province']]) ? $areaData[$data['province']] : '';
 	 		$data['city_str']     = isset($areaData[$data['city']]) ? $areaData[$data['city']] : '';
 	 		$data['area_str']     = isset($areaData[$data['area']]) ? $areaData[$data['area']] : '';
 

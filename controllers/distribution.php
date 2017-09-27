@@ -5,8 +5,7 @@ class distribution extends IController
 
 	function init()
 	{
-		if(!isset($_SESSION['delivery']))
-			$this->redirect('password');
+
 	}
 	
 	public function password(){
@@ -26,7 +25,8 @@ class distribution extends IController
 	}
 
 	public function order(){
-
+		if(!isset($_SESSION['delivery']))
+			$this->redirect('password');
 
 		$this->redirect('order');
 	}
@@ -36,8 +36,11 @@ class distribution extends IController
 	 *
 	 */
 	public function get_orderlist(){
+		if(!isset($_SESSION['delivery']))
+			$this->redirect('password');
 		$page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
 		$status = IReq::get('status')? intval(IReq::get('status')) : null;
+		$status = 3;
 		$order_db = new IQuery('order as o');
 		$where = '';
 		if($status==1){//待付款

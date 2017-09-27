@@ -138,60 +138,22 @@ background-color: rgba(94, 110, 141, 0.9);
              <br><span>七天退换</span></a></p> 
           <b>￥<%=goods_data[i]['real_price']%><br><span>×<%=goods_data[i]['goods_nums']%></span></b>
           <div style="float:right;">
-          <%if(goods_data[i]['can_refund']){%>
-          <a class="hongzi wd-popup-trigger" href='{url:/ucenter/refunds_edit/og_id}/<%=goods_data[i]["id"]%>' >申请售后</a>
-          <%}%>
+
           <a class="hongzi wd-popup-trigger" href='javascript:void(0)'><%=goods_data[i]['og_status']%></a>
-          <%if(goods_data[i]['comment_id']>0){%>
-              <%if(goods_data[i]['comment_status'] == 0){%>
-            
-                <a class="hongzi wd-popup-trigger" href="{url:/site/comments/id}/<%=goods_data[i]['comment_id']%>" >评价</a>
-            <%}else{%>
-                <a class="hongzi wd-popup-trigger" href="javascript:void(0)" >已评价</a>
-                
-            <%}%> 
-        <%}%>
+
         </div>
    </li>
    <%}%>
     <li class="heji">
             <p style="text-align:right; margin:5px;">共<%=num%>商品 合计：￥<b><%=order_amount%></b></p>
-     </li> 
- 
-    <li>
-        <%if(type!=4&&can_pay==1){%>
-        <a class="hongzi wd-popup-trigger pop" href='javascript:void(0)' tourl='{url:/block/doPay/order_id/}/<%=id%>' alt='你确定立即结算吗?'>立即结算</a>
-        <a href="" class="qd-popup-trigger xio pop" tourl='{url:/ucenter/order_status/op/cancel/order_id/}/<%=id%>' alt='你确定取消订单吗?'>取消交易</a>
-        <%}%>
-        <%if(type!=4&&status==9){%>
-        <a  class="hongzi wd-popup-trigger pop" href='javascript:void(0)' tourl='{url:/ucenter/order_status/op/confirm/order_id/}/<%=id%>' alt='你确定确认收货吗?'>确认收货</a>
-    
-        <%}%>
-        
-        <%if(type==4&&order_status_no==1){%>
-        <a class="hongzi wd-popup-trigger pop" href='javascript:void(0)' tourl='{url:/block/doPayPresell/order_id/}/<%=id%>' alt='你确定立即结算吗?'>支付预付款</a>
-        <a href="" class="qd-popup-trigger xio pop" tourl='{url:/ucenter/preorder_status/op/cancel/order_id/}/<%=id%>' alt='你确定取消订单吗?'>取消交易</a>
-        <%}%>
-        <%if(type==4&&order_status_no==4){%>
-            <%if (can_pay==1) {%>
-            <a class="hongzi wd-popup-trigger pop" href='javascript:void(0)' tourl='{url:/block/doPayPresell/order_id/}/<%=id%>' alt='你确定立即结算吗?'>支付尾款</a>
-            <%}%>
-            <%if (can_pay!=1) {%>
-            <a class="hongzi wd-popup-trigger" href='javascript:void(0)' style='color:#ccc;border-color:#ccc;' >未到支付时间</a>
-            <%}%>
-        <%}%>
-        <%if(type==4&&order_status_no==9){%>
-        <a style="margin-top:-20px;" class="hongzi wd-popup-trigger pop" href='javascript:void(0)' tourl='{url:/ucenter/preorder_status/op/confirm/order_id/}/<%=id%>' alt='你确定确认收货吗?'>确认收货</a>
-    
-        <%}%>
-    </li>
+     </li>
      <li class="huise"><hr/></li>
 </ul>
 </script> 
 <script type='text/javascript'>
     var status = '{$status}';
         var obj = {
-            'url': '{url:/ucenter_ajax/get_orderlist}',
+            'url': '{url:/distribution/get_orderlist}',
             'template_id': 'order_box',
             'append_to': $('#order_list'),
             'loading_img': '{skin:images/files/loading.gif}',
