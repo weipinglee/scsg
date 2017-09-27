@@ -1,6 +1,10 @@
 {if:isset($seller['server_num'])}
 {set:$server_num = $seller['server_num'];}
 {/if}
+{if:isset($seller['mobile'])}
+{set:$server_phone = $seller['mobile'];}
+{/if}
+
 	<!-- 底部浮动 -->
  <div style="height:50px;"></div>       
  {if:isset($show_cart)&&$show_cart==1}
@@ -11,12 +15,12 @@
 <!-- <link rel="stylesheet" href="../css/bottom_nav.css" type="text/css"/>  -->
  	<section class="sr-l">
 
- 		{if:isset($server_num)}
-			{if:$server_num}
+ 		{if:isset($server_phone)}
+			{if:$server_phone}
             <div class="s-btn s-cd" data="sales" {if:$width==1}style="width:25%;"{/if}>
-				<a href="{echo:Sonline::getChatUrl($server_num)}" style="position: relative;top:7px;">
-	             	 <p><img src="{skin:images/detail_img/qq.png}"  alt="qq"/></p>
-	             	 <p>客&nbsp;服</p>
+				<a href="tel:{$server_phone}" style="position: relative;top:7px;">
+	             	<!-- <p><img src="{skin:images/detail_img/qq.png}"  alt="qq"/></p>-->
+						             	 <p>客&nbsp;服</p>
               	</a>
             </div>
 			{/if}
