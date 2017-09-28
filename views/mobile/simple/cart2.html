@@ -1,4 +1,5 @@
 {set:$param = $this->param}
+{set:$siteConfig = new Config("site_config");}
 {foreach:items=$this->addressList}
 	{if:$item['id']==$this->defaultAddressId}
 	{set:$defaultAddress = $item;}
@@ -235,7 +236,7 @@ $(".sj img").css("height","27px")
 });
 </script>
 
-
+{set:$deli_time = explode(',',$siteConfig->deli_time)}
      <div class="pages">
          <header class="wap-header">
 	   		 <div class="wap-topbar">
@@ -394,16 +395,9 @@ $(".sj img").css("height","27px")
 				<div class="qrdds_zf">
 					<h4><i>*</i>配送时间:</h4>
 					<select style="" name="delitime" >
-						<option value="5:00-5:30">5:00-5:30</option>
-						<option value="5:30-6:00">5:30-6:00</option>
-						<option value="6:00-6:30">6:00-6:30</option>
-						<option value="6:30-7:00">6:30-7:000</option>
-						<option value="7:00-7:30">7:00-7:300</option>
-						<option value="7:30-8:00">7:30-8:00</option>
-						<option value="8:00-8:30">8:00-8:30</option>
-						<option value="8:30-9:00">8:30-9:00</option>
-						<option value="9:00-9:30">9:00-9:30</option>
-						<option value="9:30-10:00">9:30-10:00</option>
+						{foreach:items=$deli_time}
+						<option value="{$item}">{$item}</option>
+						{/foreach}
 					</select>
 				</div>
 			</div>

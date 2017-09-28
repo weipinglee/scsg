@@ -2,6 +2,8 @@
 {set:$searchParam = http_build_query(Util::getUrlParam('search'))}
 {set:$condition = Util::search(IReq::get('search'));$where = $condition ? " and ".$condition : "";}
 
+{set:$siteConfig = new Config("site_config");}
+{set:$deli_time = explode(',',$siteConfig->deli_time)}
 <article class="module width_full">
 	<header>
 		<h3 class="tabs_involved">订单列表</h3>
@@ -18,6 +20,8 @@
 			<col width="115px" />
 			<col width="125px" />
 			<col width="125px" />
+			<col width="125px" />
+			<col width="125px" />
 			<col width="155px" />
 			<col width="75px" />
 			<col width="250px" />
@@ -32,6 +36,8 @@
 				<th>配送状态</th>
 				<th>支付状态</th>
 				<th>下单时间</th>
+				<th>配送日期</th>
+				<th>配送时间</th>
 				<th>打印</th>
 				<th>配送地址</th>
 				<th>操作</th>
@@ -57,6 +63,8 @@
 					</span>
 				</td>
 				<td title="{$item['create_time']}">{$item['create_time']}</td>
+				<td >{$item['deli_day']}</td>
+				<td >{$item['deli_time']}</td>
 				<td>
 					<span class="prt" title="购物清单打印" onclick="window.open('{url:/order/shop_template/id/$item[id]/seller_id/$seller_id}');">购</span>
 					<span class="prt" title="配货单打印" onclick="window.open('{url:/order/pick_template/id/$item[id]/seller_id/$seller_id}');">配</span>
@@ -117,6 +125,23 @@
 				<option value="5">完成订单</option>
 			</select>
 		</fieldset>
+		<!--<fieldset>
+			<label>配送日期</label>
+			<select name="search[deliday=]">
+				<option value="0">请选择配送日期</option>
+				<option value="1">今天</option>
+				<option value="2">明天</option>
+			</select>
+		</fieldset>
+		<fieldset>
+			<label>配送时间</label>
+			<select name="search[deli_time=]">
+				<option value="">请选择配送时间段</option>
+				{foreach:items=$deli_time}
+				<option value="{$item}">{$item}</option>
+				{/foreach}
+			</select>
+		</fieldset>-->
     </div>
 </form>
 </script>

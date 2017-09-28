@@ -239,7 +239,7 @@ function selectTakeself(deliveryId)
 }
 
 </script>
-
+{set:$deli_time = explode(',',$siteConfig->deli_time)}
 <div class="wrapper clearfix">
 	<div class="position mt_10"><span>您当前的位置：</span> <a href="{url:}"> 首页</a> » 填写核对订单信息</div>
 	<div class="myshopping m_10">
@@ -419,16 +419,11 @@ function selectTakeself(deliveryId)
 						<a class="normal f12" href="javascript:void(0)" id='delitimeToggleButton' ></a>
 					</h3>
 					<div id="delitime_form">
-						<label><input class="radio" name="delitime" alt=""  type="radio" value="5:00-5:30" checked="true" />5:00-5:30</label>
-						<label><input class="radio" name="delitime" alt=""  type="radio" value="5:30-6:00" />5:30-6:00</label>
-						<label><input class="radio" name="delitime" alt=""  type="radio" value="6:00-6:30" />6:00-6:30</label>
-						<label><input class="radio" name="delitime" alt=""  type="radio" value="6:30-7:00" />6:30-7:00</label>
-						<label><input class="radio" name="delitime" alt=""  type="radio" value="7:00-7:30" />7:00-7:30</label>
-						<label><input class="radio" name="delitime" alt=""  type="radio" value="7:30-8:00" />7:30-8:00</label>
-						<label><input class="radio" name="delitime" alt=""  type="radio" value="8:00-8:30" />8:00-8:30</label>
-						<label><input class="radio" name="delitime" alt=""  type="radio" value="8:30-9:00" />8:30-9:00</label>
-						<label><input class="radio" name="delitime" alt=""  type="radio" value="9:00-9:30" />9:00-9:30</label>
-						<label><input class="radio" name="delitime" alt=""  type="radio" value="9:30-10:00" />9:30-10:00</label>
+						{foreach:items=$deli_time}
+						<label><input class="radio" name="delitime" alt=""  type="radio" value="{$item}" {if:$key==0}checked="true"{/if} />{$item}</label>
+						{/foreach}
+
+
 
 					</div>
 

@@ -1,4 +1,6 @@
 {js:my97date}
+{set:$siteConfig = new Config("site_config");}
+{set:$deli_time = explode(',',$siteConfig->deli_time)}
 <div class="headbar">
 	<div class="position">订单<span>></span><span>订单管理</span><span>></span><span>订单列表</span></div>
 	<div class="operating">
@@ -47,16 +49,9 @@
 
 			<select class="auto" name="search[deli_time]">
 				<option value="">请选择配送时间段</option>
-				<option value="5:00-5:30">5:00-5:30</option>
-				<option value="5:30-6:00">5:30-6:00</option>
-				<option value="6:00-6:30">6:00-6:30</option>
-				<option value="6:30-7:00">6:30-7:00</option>
-				<option value="7:00-7:30">7:00-7:30</option>
-				<option value="7:30-8:00">7:30-8:00</option>
-				<option value="8:00-8:30">8:00-8:30</option>
-				<option value="8:30-9:00">8:30-9:00</option>
-				<option value="9:00-9:30">9:00-9:30</option>
-				<option value="9:30-10:00">9:30-10:00</option>
+				{foreach:items=$deli_time}
+				<option value="{$item}">{$item}</option>
+				{/foreach}
 			</select>
 			<input class="small" name="search[keywords]" type="text" value="" />
             开始时间：<input class="small" type="text" name="search[beginTime]" onfocus="WdatePicker()"  value='{$beginTime}'/>
