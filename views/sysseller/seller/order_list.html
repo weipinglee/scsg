@@ -63,8 +63,10 @@
 				<td>
 					<?php
 				$M = new IModel('user');
-				$user = $M->getObj('id='.$item['user_id']);
-					echo $user['username'];
+				if($item['user_id']){
+					$user = $M->getObj('id='.$item['user_id']);
+					echo isset($user['username']) ? $user['username'] : '';
+				}
 				?>
 				</td>
 				<td>
