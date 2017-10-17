@@ -19,6 +19,7 @@ class distribution extends IController
 		$row = $deliObj->getObj('id='.$id);
 		if($row['password']==sha1($pass)){
 			$_SESSION['delivery'] = $row['username'];
+			$_SESSION['delivery_id'] = $row['id'];
 			$this->redirect('order');
 		}
 		$this->redirect('password');
@@ -29,6 +30,23 @@ class distribution extends IController
 			$this->redirect('password');
 
 		$this->redirect('order');
+	}
+
+	//接单操作
+	public function acc_order(){
+		if(!isset($_SESSION['delivery']))
+			$this->redirect('password');
+		$deliver_id = $_SESSION['delivery_id'];
+		$order_id = IFilter::act(IReq::get('id'));
+		$model = new IModel('order');
+		$model->setData(array('deliver_id'=>$deliver_id));
+		$res = $model->update('id='.$order_id.' and deliver_id=0');
+		if($res){
+			die(json_encode(array('success'=>1)));
+		}
+		else{
+			die(json_encode(array('success'=>0)));
+		}
 	}
 
 	/**

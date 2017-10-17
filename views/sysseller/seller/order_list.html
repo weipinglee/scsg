@@ -22,7 +22,9 @@
 			<col width="125px" />
 			<col width="125px" />
 			<col width="125px" />
+			<col width="125px" />
 			<col width="155px" />
+			<col width="75px" />
 			<col width="75px" />
 			<col width="250px" />
 			<col />
@@ -34,12 +36,14 @@
 				<th>收货人</th>
 				<th>联系电话</th>
 				<th>配送状态</th>
+				<th>用户名</th>
 				<th>支付状态</th>
 				<th>下单时间</th>
 				<th>配送日期</th>
 				<th>配送时间</th>
 				<th>打印</th>
 				<th>配送地址</th>
+				<th>是否已接单</th>
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -55,6 +59,7 @@
 				<td title="{$item['accept_name']}">{$item['accept_name']}</td>
 				<td title="{$item['mobile']}">{$item['mobile']}</td>
 				<td><span name="disStatusColor{$item['distribution_status']}">{echo:Order_class::getOrderDistributionStatusText($item)}</span></td>
+				<td></td>
 				<td>
 					<span name="payStatusColor{$item['pay_status']}">
 					{if:$item['pay_type']==0}货到付款{/if}
@@ -72,6 +77,7 @@
 					<span class="prt" title="快递单打印" onclick="window.open('{url:/order/expresswaybill_template/id/$item[id]/seller_id/$seller_id}');">递</span>
 				</td>
 				<td>{echo:area::getNameStr($item['area'])} {$item['address']}</td>
+				<td>{if:$item['deliver_id']>0}已接单{else:}未接单{/if}</td>
 				<td>
 					<a href="{if:Order_class::isGoDelivery($item)}{url:/seller/order_deliver/id/$item[id]}{else:}javascript:alert('此单不满足发货条件');{/if}"><img class="operator" src="{skin:images/main/icn_jump_back.png}" title="立即发货" alt="立即发货" /></a>
 					<a href="{url:/seller/order_show/id/$item[id]/pid/$item[pid]}"><img title="订单详情" alt="订单详情" src="{skin:images/main/icn_settings.png}" /></a>

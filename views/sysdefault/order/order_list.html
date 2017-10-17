@@ -73,6 +73,7 @@
 			<col width="80px"/>
 			<col width="150px"/>
 			<col width="150px"/>
+			<col width="150px"/>
 			<col width="145px"/>
 			
 			<thead>
@@ -88,6 +89,7 @@
 					<th>下单时间</th>
 					<th>配送日期</th>
 					<th>配送时间</th>
+					<th>是否接单</th>
 					<th>操作</th>
 				</tr>
 			</thead>
@@ -106,6 +108,7 @@
 			<col width="115px" />
 			<col width="80px" />
 			<col width="80px"/>
+			<col width="150px"/>
 			<col width="150px"/>
 			<col width="150px"/>
 			<col width="145px"/>
@@ -130,6 +133,7 @@
 					<td title="{$item['create_time']}">{$item['create_time']}</td>
 					<td >{$item['deli_day']}</td>
 					<td >{$item['deli_time']}</td>
+					<td>{if:$item['deliver_id']>0}已接单{else:}未接单{/if}</td>
 					<td>
 						<a href="{url:/order/order_show/id/$item[id]/plat/$this->plat}"><img class="operator" src="{skin:images/admin/icon_check.gif}" title="查看" /></a>
 						{if:Order_class::getOrderStatus($item) < 3}

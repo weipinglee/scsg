@@ -62,32 +62,6 @@ background-color: rgba(94, 110, 141, 0.9);
 
 
 <div class="qijiandian" id='order_list'>
-<div style="height: 20px;"></div>
-  <ul>
-    
-    <li>
-      <img class="ding_log" src="{skin:images/ptlog.png}"><h3>平台自营＞</h3>
-      <a class="order_number" href="{url:/distribution/order_detail}">20170725175715669998</a><h4 class="state_red">等待发货</h4>
-    </li> 
-           
-    <li class="chanpin">
-        <a class="tupian" href="{url:/distribution/order_detail/id/13}"> <img src="/ducong/scsg/"></a>
-           
-       <p><a href="{url:/distribution/order_detail}">食用油<br><b></b>
-          <br><span>七天退换</span></a></p> 
-          <b>￥140.00<br><span>×1</span></b>
-        <div style="float:right;">
-
-          <a class="hongzi wd-popup-trigger" href="javascript:void(0)">未发货</a>
-          
-        </div>
-   </li>
-   
-    <li class="heji">
-            <p style="text-align:right; margin:5px;">共1商品 合计：￥<b>140.00</b></p>
-     </li> 
-     <li class="huise"><hr></li>
-</ul>
 
 </div>  
 
@@ -139,6 +113,7 @@ background-color: rgba(94, 110, 141, 0.9);
           <b>￥<%=goods_data[i]['real_price']%><br><span>×<%=goods_data[i]['goods_nums']%></span></b>
           <div style="float:right;">
 
+              <a class="hongzi wd-popup-trigger" name="deliver_acc" id="<%=id%>">接单</a>
           <a class="hongzi wd-popup-trigger" href='javascript:void(0)'><%=goods_data[i]['og_status']%></a>
 
         </div>
@@ -176,6 +151,32 @@ background-color: rgba(94, 110, 141, 0.9);
     var $subs = $("input[name^='sub']");
     $("#ckAll").prop("checked" , $subs.length == $subs.filter(":checked").length ? true :false);
   });
+
+    //配送员接单
+     $('a[name=deliver_acc]').click(function(){
+         var order_id = $(this).attr('id');
+         var _this = $(this);
+         $.ajax({
+             type: 'post',
+             async: false,
+             data: {'id':order_id},
+             dataType: 'json',
+             url: '{url:/distribution/acc_order}',
+             beforeSend: function(){
+
+             },
+             success: function(data){
+                if(data.success==1){
+                    _this.text('已接单').removeClass('hongzi');
+                }
+             },
+             complete: function(){
+
+
+             },
+             timeout: 1000
+         })
+     })
     
 
 </script>
