@@ -263,9 +263,7 @@ function showDelitime(){
 		var interMin = 30*60*1000;
 		var now = new Date();
 		option.each(function(){
-			var time = $(this).val();
-			strs=time.split("-");
-			time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +strs[1];
+			time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +$(this).val();
 			//window.realAlert(parseInt(now - new Date(time)));
 			if(parseInt(now - new Date(time))> -interMin){//不可选该时间段
 				$(this).attr('disabled',true);
