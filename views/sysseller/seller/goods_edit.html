@@ -148,7 +148,6 @@
                 <label>运费计算</label>
                 <div class="box">
                     <select name="delivery_id">
-                        <option value="0">请选择</option>
                         {foreach: items=$this->delivery}
                         <option value="{$item['id']}">{$item['name']}</option>
                         {/foreach}

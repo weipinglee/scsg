@@ -201,7 +201,6 @@
                         <th>运费计算：</th>
                         <td>
                             <select name="delivery_id">
-                                <option value="0">请选择</option>
                                 {foreach: items=$this->delivery}
                                 <option value="{$item['id']}">{$item['name']}</option>
                                 {/foreach}
