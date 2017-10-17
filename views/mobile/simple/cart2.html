@@ -234,6 +234,48 @@ function selectProtect(obj)
 $(document).ready(function(){
 $(".sj img").css("height","27px")
 });
+
+
+$(function(){
+	showDelitime();
+	$('[name=deliday]').change(function(){
+		showDelitime();
+	})
+})
+
+function showDelitime(){
+	var type = $('[name=deliday]').val();
+	var option = $('select[name=delitime]').find('option');
+	if(type==2){
+		option.removeAttr('selected');
+		option.eq(0).attr('selected',true);
+		option.attr('disabled',true);
+
+	}
+	else if(type==1){
+		option.removeAttr('disabled');
+		option.eq(0).attr('disabled',true);
+		option.eq(1).attr('selected',true);
+	}
+	else{
+		option.removeAttr('disabled').removeAttr('selected');
+		option.eq(0).attr('disabled',true);
+		var interMin = 30*60*1000;
+		var now = new Date();
+		option.each(function(){
+			var time = $(this).val();
+			strs=time.split("-");
+			time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +strs[1];
+			//window.realAlert(parseInt(now - new Date(time)));
+			if(parseInt(now - new Date(time))> -interMin){//不可选该时间段
+				$(this).attr('disabled',true);
+			}
+			else{
+				$(this).attr('selected',true);
+			}
+		})
+	}
+}
 </script>
 
 {set:$deli_time = explode(',',$siteConfig->deli_time)}
@@ -386,8 +428,9 @@ $(".sj img").css("height","27px")
 				<div class="qrdds_zf">
 					<h4><i>*</i>配送日期:</h4>
 					<select style="" name="deliday" >
-						<option value="0">今天</option>
-						<option value="1">明天</option>
+						<option value="0">定时达</option>
+						<option value="1">次日达</option>
+						<option value="2">即时配送</option>
 					</select>
 				</div>
 			</div>
@@ -395,6 +438,7 @@ $(".sj img").css("height","27px")
 				<div class="qrdds_zf">
 					<h4><i>*</i>配送时间:</h4>
 					<select style="" name="delitime" >
+						<option value="-1">即时配送</option>
 						{foreach:items=$deli_time}
 						<option value="{$item}">{$item}</option>
 						{/foreach}

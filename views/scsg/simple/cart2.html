@@ -406,9 +406,9 @@ function selectTakeself(deliveryId)
 
 					</h3>
 					<div id="deliday_form">
-						<label><input class="radio" name="deliday" alt=""  type="radio" value="0" checked="true" />今天</label>
-						<label><input class="radio" name="deliday" alt=""  type="radio" value="1" />明天</label>
-
+						<label><input class="radio" name="deliday" alt=""  type="radio" value="0" checked="true" />定时达</label>
+						<label><input class="radio" name="deliday" alt=""  type="radio" value="1" />次日达</label>
+						<label><input class="radio" name="deliday" alt=""  type="radio" value="2" />即时配送</label>
 					</div>
 
 				</div>
@@ -423,12 +423,11 @@ function selectTakeself(deliveryId)
 						<label><input class="radio" name="delitime" alt=""  type="radio" value="{$item}" {if:$key==0}checked="true"{/if} />{$item}</label>
 						{/foreach}
 
-
-
 					</div>
 
 
 				</div>
+
 				<!--配送时间 结束-->
 
 				<!--订单留言 开始-->
@@ -634,6 +633,7 @@ function selectTakeself(deliveryId)
 	</form>
 </div>
 <script type="text/javascript">
+
     $(function(){
         $('#js_promotion_list').find('p.indent').each(function(){
             if($(this).is(':visible'))
@@ -642,4 +642,43 @@ function selectTakeself(deliveryId)
             }
         })
     })
+
+
+	$(function(){
+		showDelitime();
+		$('input[name=deliday]').click(function(){
+			showDelitime();
+		})
+	})
+
+	function showDelitime(){
+		var type = $('input[name=deliday]:checked').val();
+		if(type==2){
+			$('#delitime_form').find('input[type=radio]').removeAttr('checked').attr('disabled',true);
+		}
+		else if(type==1){
+			$('#delitime_form').find('input[type=radio]').removeAttr('disabled');
+			$('#delitime_form').find('input[type=radio]').eq(0).attr('checked',true);
+		}
+		else{
+			$('#delitime_form').find('input[type=radio]').removeAttr('disabled').removeAttr('checked');
+			var interMin = 30*60*1000;
+			var now = new Date();
+			$('#delitime_form').find('input[type=radio]').each(function(){
+				var time = $(this).val();
+				strs=time.split("-");
+				time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +strs[1];
+				//window.realAlert(parseInt(now - new Date(time)));
+				if(parseInt(now - new Date(time))> -interMin){//不可选该时间段
+					$(this).attr('disabled',true);
+				}
+				else{
+					$(this).attr('checked',true);
+				}
+			})
+		}
+	}
+
+
+
 </script>
