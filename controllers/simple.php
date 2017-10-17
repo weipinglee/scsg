@@ -1561,7 +1561,7 @@ class Simple extends IController
         $order_type    = 0;
         $invoice       = isset($_POST['taxes']) ? 1 : 0;
 		$deli_day      = IFilter::act(IReq::get('deliday'),'int');
-		$deli_time     = IFilter::act(IReq::get('delitime'));
+		$deli_time     = $deli_day == 2 ? 0 : IFilter::act(IReq::get('delitime'));
         $dataArray     = array();
 		$this->payment_id = $payment;
 

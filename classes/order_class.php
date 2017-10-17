@@ -1418,13 +1418,16 @@ class Order_Class
 				elseif($search['deliday']==1){
 					$deli_day = ITime::getDateTime('Y-m-d');
 				}
+				elseif($search['deliday']==3){
+					$deli_day = ITime::getDateTime('Y-m-d');
+				}
 				else{
 					$deli_day = $search['deliday'];
 				}
 				$where .= ' and o.deli_day ="'.$deli_day.'"';
 			}
 
-			if(isset($search['deli_time']) && $search['deli_time']){
+			if(isset($search['deli_time']) ){
 				$where .= ' and o.deli_time ="'.$search['deli_time'].'"';
 			}
 
