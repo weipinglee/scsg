@@ -59,7 +59,14 @@
 				<td title="{$item['accept_name']}">{$item['accept_name']}</td>
 				<td title="{$item['mobile']}">{$item['mobile']}</td>
 				<td><span name="disStatusColor{$item['distribution_status']}">{echo:Order_class::getOrderDistributionStatusText($item)}</span></td>
-				<td></td>
+
+				<td>
+					<?php
+				$M = new IModel('user');
+				$user = $M->getObj('id='.$item['user_id']);
+					echo $user['username'];
+				?>
+				</td>
 				<td>
 					<span name="payStatusColor{$item['pay_status']}">
 					{if:$item['pay_type']==0}货到付款{/if}
