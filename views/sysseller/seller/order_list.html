@@ -26,6 +26,7 @@
 			<col width="155px" />
 			<col width="75px" />
 			<col width="75px" />
+			<col width="75px" />
 			<col width="250px" />
 			<col />
 		</colgroup>
@@ -44,6 +45,7 @@
 				<th>打印</th>
 				<th>配送地址</th>
 				<th>接单状态</th>
+				<th>商品信息</th>
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -87,6 +89,21 @@
 				</td>
 				<td>{echo:area::getNameStr($item['area'])} {$item['address']}</td>
 				<td>{if:$item['deliver_id']>0}<span style="color:red">已接单</span>{else:}<span >未接单</span>{/if}</td>
+				<td>
+					{set:$order_id=$item['id']}
+					{set:$goods_ids='' }
+					{query:name=order_goods  where=order_id eq $order_id   item=$good}
+					{set:$goods_ids .= $good['goods_id'].','}
+					{/query}
+					{set:$goods_ids.=0}
+					<?php
+							$goodsModel = new IModel('goods');
+							$goods = $goodsModel->query('id in ('.$goods_ids.')','name,info');
+					foreach($goods as $t){
+					echo $t['info']!='' ? $t['info'] : $t['name'].'</br>';
+					}
+					?>
+				</td>
 				<td>
 					<a href="{if:Order_class::isGoDelivery($item)}{url:/seller/order_deliver/id/$item[id]}{else:}javascript:alert('此单不满足发货条件');{/if}"><img class="operator" src="{skin:images/main/icn_jump_back.png}" title="立即发货" alt="立即发货" /></a>
 					<a href="{url:/seller/order_show/id/$item[id]/pid/$item[pid]}"><img title="订单详情" alt="订单详情" src="{skin:images/main/icn_settings.png}" /></a>

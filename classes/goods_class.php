@@ -155,6 +155,7 @@ class goods_class
 
 		$goodsUpdateData['goods_no']     = isset($postData['_goods_no'])     ? current($postData['_goods_no'])     : '';
 		$goodsUpdateData['store_nums']   = array_sum($postData['_store_nums']);
+		$goodsUpdateData['info']         = isset($postData['info']) ? $postData['info'] : '';
 		$goodsUpdateData['market_price'] = isset($postData['_market_price']) ? current($postData['_market_price']) : 0;
         $goodsUpdateData['sell_price']   = isset($postData['_sell_price'])   ? current($postData['_sell_price'])   : 0;
         $goodsUpdateData['sign_code']   = isset($postData['_sign_code'])   ? current($postData['_sign_code'])   : '';
