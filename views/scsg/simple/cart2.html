@@ -406,9 +406,9 @@ function selectTakeself(deliveryId)
 
 					</h3>
 					<div id="deliday_form">
-						<label><input class="radio" name="deliday" alt=""  type="radio" value="0" checked="true" />定时达</label>
-						<label><input class="radio" name="deliday" alt=""  type="radio" value="1" />次日达</label>
-						<label><input class="radio" name="deliday" alt=""  type="radio" value="2" />即时配送</label>
+						<label><input class="radio a" name="deliday" alt=""  type="radio" value="0" checked="true" />定时达</label>
+						<label><input class="radio b" name="deliday" alt=""  type="radio" value="1" />次日达</label>
+						<label><input class="radio c" name="deliday" alt=""  type="radio" value="2" />即时配送</label>
 					</div>
 
 				</div>
@@ -652,8 +652,26 @@ function selectTakeself(deliveryId)
 	})
 
 	function showDelitime(){
-		var type = $('input[name=deliday]:checked').val();
+		var _this = $('input[name=deliday]:checked');
+		var type = _this.val();
+		var now = new Date();
+		var interMin = 30*60*1000;
+
+		$('input.a').attr('disabled',true).attr('checked',false);//把第一个和第三个选项先设置为不可选
+		$('input.c').attr('disabled',true).attr('checked',false);
+		//$('input.b').attr('checked',true);
+		$('#delitime_form').find('input[type=radio]').each(function(){
+			time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +$(this).val();
+			//window.realAlert(parseInt(now - new Date(time)));
+			if(parseInt(now - new Date(time))< -interMin){//如果有可选时间段
+				$(this).attr('checked',true).attr('disabled',false);
+				$('input.a').attr('disabled',false);
+				$('input.c').attr('disabled',false);
+			}
+
+		})
 		if(type==2){
+			_this.attr('checked',true);
 			$('#delitime_form').find('input[type=radio]').removeAttr('checked').attr('disabled',true);
 		}
 		else if(type==1){
@@ -662,8 +680,7 @@ function selectTakeself(deliveryId)
 		}
 		else{
 			$('#delitime_form').find('input[type=radio]').removeAttr('disabled').removeAttr('checked');
-			var interMin = 30*60*1000;
-			var now = new Date();
+
 			$('#delitime_form').find('input[type=radio]').each(function(){
 				time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +$(this).val();
 				//window.realAlert(parseInt(now - new Date(time)));
@@ -671,7 +688,8 @@ function selectTakeself(deliveryId)
 					$(this).attr('disabled',true);
 				}
 				else{
-					$(this).attr('checked',true);
+					$(this).attr('checked',true).attr('disabled',false);
+					_this.attr('disabled',false).attr('checked',true);
 				}
 			})
 		}
