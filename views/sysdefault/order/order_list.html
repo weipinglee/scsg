@@ -137,9 +137,10 @@
 					<th>商品信息</th>
 					<th>操作</th>
 				</tr>
+
 				
 				{foreach:items = $this->order_list key=$k}
-				<tr>
+				<tr class="tr_center">
 					<td class="t_c"><input name="id[]" type="checkbox" value="{$item['id']}" onclick='to_excel(this)' /></td>
 					<td title="{$item['order_no']}">{$item['order_no']}</td>
 					<td title="{$item['accept_name']}">{$item['accept_name']}</td>

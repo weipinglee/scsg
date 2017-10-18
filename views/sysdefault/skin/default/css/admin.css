@@ -478,3 +478,6 @@ vertical-align:middle;
 .list_table tbody .tr_top th{
 	text-align: center;
 }
+.list_table tbody .tr_center td{
+	text-align: center;
+}
