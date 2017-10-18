@@ -82,47 +82,9 @@ background-color: rgba(94, 110, 141, 0.9);
     
  <script type='text/html' id='order_box'>
 <ul>
-    <li>
-    {if:$status==1}
-         <%if(can_pay==1){%>
-    
-        <input type="checkbox" name="sub[]" value='<%=id%>'/>
 
-            <%}%>
-    {/if} 
-    <img class="ding_log" <%if(seller_logo){%> src="{webroot:}<%=seller_logo%>" <%}%> src="{skin:images/ptlog.png}"><h3><%=seller_name%>＞</h3>
- 
-    {if:$status==1}
-         <%if(can_pay==1){%>
-    
-        <input type="checkbox" name="sub[]" value='<%=id%>'/>
 
-            <%}%>
-    {/if}
-    <a class="order_number" href="{url:/ucenter/order_detail/id/}/<%=id%>"><%=order_no%></a><h4 class="state_red"><%=order_status%></h4>
-     </li> 
-<% for(var i in goods_data){%>
-     
-    
-                   
-    <li class="chanpin">
-         <a class="tupian"  href="{url:/ucenter/order_detail/id/}/<%=id%>"> <img src="{url:<%=goods_data[i]['img']%>}" ></a>
-           
-           <p><a href="{url:/ucenter/order_detail/id/}/<%=id%>"><%if(type==1){%>[团购]<%}%><%if(type==4){%>[预售]<%}%><%=goods_data[i]['name']%><br><b><%==goods_data[i]['spec']%></b>
-             <br><span>七天退换</span></a></p> 
-          <b>￥<%=goods_data[i]['real_price']%><br><span>×<%=goods_data[i]['goods_nums']%></span></b>
-          <div style="float:right;">
 
-              <a class="hongzi wd-popup-trigger" name="deliver_acc" id="<%=id%>">接单</a>
-          <a class="hongzi wd-popup-trigger" href='javascript:void(0)'><%=goods_data[i]['og_status']%></a>
-
-        </div>
-   </li>
-   <%}%>
-    <li class="heji">
-            <p style="text-align:right; margin:5px;">共<%=num%>商品 合计：￥<b><%=order_amount%></b></p>
-     </li>
-     <li class="huise"><hr/></li>
 </ul>
 </script> 
 <script type='text/javascript'>
@@ -132,7 +94,7 @@ background-color: rgba(94, 110, 141, 0.9);
             'template_id': 'order_box',
             'append_to': $('#order_list'),
             'loading_img': '{skin:images/files/loading.gif}',
-            'trans_data': {status:status},
+            'trans_data': {},
             'callback' : null
         };
     var ajax = new Ajax_Get_Data();
