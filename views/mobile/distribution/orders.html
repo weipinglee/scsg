@@ -1,0 +1,199 @@
+{set:$status=isset($_GET['status'])?$_GET['status']:0;}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <title>我的山城</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimum-scale=1.0, maximum-scale=1.0">    
+        <link rel="apple-touch-icon" href="apple_logo" />
+    <link rel="stylesheet" type="text/css" href="{skin:css/style/account-1.css}">
+    <link rel="stylesheet" href="{skin:css/common.css}" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{skin:css/style/reset.css}">
+    <link rel="stylesheet" type="text/css" href="{skin:css/style/style.css}">
+    <script src="{theme:javascript/jquery-1.9.1.min.js}"></script>
+    <script src="{theme:javascript/js/account-1.js/modernizr.js}"></script>
+    {js:artTemplate}
+    <script src="{theme:javascript/common.js}"></script>
+<script src="{theme:javascript/js/account-1.js/main.js}"></script> 
+<link rel="stylesheet" href="{skin:css/product.min.css}" type="text/css" />
+
+<style>
+    .loading-imgS{background:#fff;text-align:center;padding:10px 0;width:100%}
+.ding_log{width: 23px;
+    height: 23px;
+    float: left;
+    margin-left: 3px;
+ }
+.loading-imgS p{font-size:16px;color:#9A9A9A;text-align:center}
+
+.loading-imgS img{width:32px!important;height:32px!important;display:none}
+.wds-popup{
+    position: fixed;
+left: 0;
+top: 0;
+height: 100%;
+width: 100%;
+background-color: rgba(94, 110, 141, 0.9);
+}
+.qijiandian ul h3 {
+    float: left;
+    margin: 6px 0 0 3px;
+}
+</style> 
+<script type='text/javascript'>
+    
+    
+</script>
+</head>
+<body > 
+      <div id="page">
+      <header class="wap-header">
+                <div class="wap-topbar" style="">
+                    <div class="h-left"><a href="javascript:history.go(-1);" title="返回">返回</a></div>
+                    <div class="h-center">
+                        <h1>配送订单</h1>
+                    </div>
+                        
+                </div>
+             </header>
+        </div>
+    <header>
+
+
+<div class="qijiandian" id='order_list'>
+   <ul>
+       <li>
+       <img class="ding_log" src="/ducong/scsg/views/mobile/skin/black/images/ptlog.png">
+         <h3>美味早餐小吃></h3>
+         <a class="order_number" href="">20170912134148280834</a>
+         <h4 class="state_red">待接单</h4>
+       </li>
+       <li class="chanpin">
+        <div>用户名：王某莫</div>
+        <div>支付状态：待支付</div>
+        <div>下单时间：2017/10/20 06:12:10</div>
+        <div>配送时间:2017/10/20 07:12:10</div>
+        <div>收货人：王某莫</div>
+        <div>联系方式：17868688883</div>
+        <div>地址</div>
+           
+       </li>
+        <li>
+         <div style="float:right;">
+          
+          <a class="hongzi wd-popup-trigger" href="">接单</a>
+        </div>
+       </li>
+       <li class="huise"><hr></li>
+   </ul>
+    <ul>
+       <li>
+       <img class="ding_log" src="/ducong/scsg/views/mobile/skin/black/images/ptlog.png">
+         <h3>美味早餐小吃></h3>
+         <a class="order_number" href="">20170912134148280834</a>
+         <h4 class="state_red">待接单</h4>
+       </li>
+       <li class="chanpin">
+        <div>用户名：王某莫</div>
+        <div>支付状态：待支付</div>
+        <div>下单时间：2017/10/20 06:12:10</div>
+        <div>配送时间:2017/10/20 07:12:10</div>
+        <div>收货人：王某莫</div>
+        <div>联系方式：17868688883</div>
+        <div>地址</div>
+           
+       </li>
+        <li>
+         <div style="float:right;">
+          
+          <a class="hongzi wd-popup-trigger" href="">接单</a>
+        </div>
+       </li>
+       <li class="huise"><hr></li>
+   </ul>
+</div>  
+
+
+<footer id="footer">
+        <nav>
+            <a href="{url:/site/index?callback=}">首页</a>
+            <!-- <a href="http://wap.zol.com.cn/">分类</a> --><a href="category">分类</a>
+            <a class="badge" href="{url:/site/pro_lists?callback=}">搜索</a>
+            <!-- <a href="http://app.zol.com.cn/">应用</a> --><a href="#">应用</a>
+        </nav>
+
+    <div class="f-ch-cp">
+        <div class="item"><a href="{url:/site/index/client/pc}">桌面版</a></div>
+        <div class="item"><span class="copyright_1">Copyright</span> <span class="copyright_2">2012-2015</span><span class="copyright_3">www.yqtvt.com</span><span class="copyright_4">版权所有</span></div></div>
+</footer>
+
+    
+ <script type='text/html' id='order_box'>
+<ul>
+
+
+
+</ul>
+</script> 
+<script type='text/javascript'>
+    var status = '{$status}';
+        var obj = {
+            'url': '{url:/distribution/get_orderlist}',
+            'template_id': 'order_box',
+            'append_to': $('#order_list'),
+            'loading_img': '{skin:images/files/loading.gif}',
+            'trans_data': {},
+            'callback' : null
+        };
+    var ajax = new Ajax_Get_Data();
+    ajax.init(obj);
+
+ 
+</script>
+
+ <script type='text/javascript'>
+
+  $("#ckAll").click(function() {
+    $("input[name^='sub']").prop("checked", this.checked);
+  });
+  
+  $("input[name^='sub']").click(function() {
+    var $subs = $("input[name^='sub']");
+    $("#ckAll").prop("checked" , $subs.length == $subs.filter(":checked").length ? true :false);
+  });
+
+    //配送员接单
+     $('a[name=deliver_acc]').click(function(){
+         var order_id = $(this).attr('id');
+         var _this = $(this);
+         $.ajax({
+             type: 'post',
+             async: false,
+             data: {'id':order_id},
+             dataType: 'json',
+             url: '{url:/distribution/acc_order}',
+             beforeSend: function(){
+
+             },
+             success: function(data){
+                if(data.success==1){
+                    _this.text('已接单').removeClass('hongzi');
+                }
+             },
+             complete: function(){
+
+
+             },
+             timeout: 1000
+         })
+     })
+    
+
+</script>
+
+ 
+    
+</body>
+</html>
+

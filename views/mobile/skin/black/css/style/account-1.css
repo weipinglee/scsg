@@ -534,15 +534,15 @@ a.articles header h4 { float: left; width: 75%; vertical-align: top; color: #1e1
 	 margin-bottom: 5px;
 	width: 100%;
 	overflow: hidden;
-	background-color: #f6f3f3;
+	background-color: #f4f4f4;
 	clear: both;
 	margin-top: 0px;
 	margin-right: auto;
 	margin-bottom: 0px;
 	margin-left: auto;
 	height: auto;
-	padding-top: 8px;
 	margin-bottom:5px;
+	padding:  10px;
 }
 .qijiandian ul .chanpin .tupian {
 	height: 75px;
@@ -998,3 +998,9 @@ a.order_number {
     text-align: left;
     border-radius: 2px;
 }
+/*配送订单*/
+.qijiandian ul .chanpin div{
+	line-height: 25px;
+}
+
+/*配送订单 end*/
