@@ -107,7 +107,7 @@ background-color: rgba(94, 110, 141, 0.9);
 
          </li>
          <li>
-             <div style="float:right;">
+             <div class="acc_info" style="float:right;">
                      <%if (deliver_id>0){%>
                  <a class=" wd-popup-trigger" >
                      已接单
@@ -175,6 +175,14 @@ background-color: rgba(94, 110, 141, 0.9);
              },
              timeout: 1000
          })
+     })
+
+     $('.acc_info').find('a').click(function(){
+         var text = $(this).text();
+         if($.trim(text)=='已接单'){
+             $(this).addClass('hongzi');
+         }
+        
      })
     
 
