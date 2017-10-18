@@ -1,4 +1,4 @@
-{set:$status=isset($_GET['status'])?$_GET['status']:0;}
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -81,14 +81,51 @@ background-color: rgba(94, 110, 141, 0.9);
 
     
  <script type='text/html' id='order_box'>
-<ul>
 
+     <ul>
+         <li>
+             <img class="ding_log" src="{url:<%=seller_img%>}">
+             <h3><%=seller_name%>></h3>
+             <a class="order_number" href=""><%=order_no%></a>
+             <h4 class="state_red">
+                 <%if (deliver_id>0){%>
+                 已接单
+                 <%}else {%>
+                 待接单
+                 <%}%>
 
+             </h4>
+         </li>
+         <li class="chanpin">
+             <div>用户名：<%=username%></div>
+             <div>支付状态：<%=pay_status%></div>
+             <div>下单时间：<%=create_time%></div>
+             <div>配送时间:<%=deli_day %> <%=deli_time %></div>
+             <div>收货人：<%=accept_name%></div>
+             <div>联系方式：<%=telphone%></div>
+             <div>地址:<%=address%></div>
 
-</ul>
+         </li>
+         <li>
+             <div style="float:right;">
+                     <%if (deliver_id>0){%>
+                 <a class=" wd-popup-trigger" >
+                     已接单
+                 </a>
+                     <%}else {%>
+                 <a class="hongzi wd-popup-trigger" name="deliver_acc" id="<%=id%>" href="javascript:void()">
+                        接单
+                 </a>
+                     <%}%>
+
+             </div>
+         </li>
+         <li class="huise"><hr></li>
+     </ul>
+
 </script> 
 <script type='text/javascript'>
-    var status = '{$status}';
+
         var obj = {
             'url': '{url:/distribution/get_orderlist}',
             'template_id': 'order_box',

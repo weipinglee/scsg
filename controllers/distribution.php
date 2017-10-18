@@ -80,6 +80,13 @@ class distribution extends IController
 		$order_list = $orderHandle->find();
 
 		unset($order_goods_data);
+		$sellerObj = new IModel('seller');
+		foreach($order_list as $key=>$item){
+			$sellerData = $sellerObj->getObj('id='.$item['seller_id'],'logo_img,true_name');//print_r($sellerData);
+			$order_list[$key]['seller_name'] = isset($sellerData['true_name']) ? $sellerData['true_name'] : '';
+			$order_list[$key]['seller_img'] = isset($sellerData['logo_img']) ? $sellerData['logo_img'] : '';
+			$order_list[$key]['pay_status'] = Order_Class::getOrderPayStatusText($item);
+		}
 		//print_r($order_list);
 		die(JSON::encode($order_list));
 	}
