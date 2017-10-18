@@ -88,7 +88,7 @@
 					<span class="prt" title="快递单打印" onclick="window.open('{url:/order/expresswaybill_template/id/$item[id]/seller_id/$seller_id}');">递</span>
 				</td>
 				<td>{echo:area::getNameStr($item['area'])} {$item['address']}</td>
-				<td>{if:$item['deliver_id']>0}<span style="color:red">已接单</span>{else:}<span >未接单</span>{/if}</td>
+				<td>{if:$item['deliver_id']>0}<span class="accepted" style="color:black">已接单</span>{else:}<span >未接单</span>{/if}</td>
 				<td>
 					{set:$order_id=$item['id']}
 					{set:$goods_ids='' }
@@ -209,5 +209,9 @@ $(function(){
 	//高亮色彩
 	$('[name="payStatusColor1"]').addClass('green');
 	$('[name="disStatusColor1"]').addClass('green');
+
+	$('span.accepted').click(function(){
+		$(this).css('color','red');
+	})
 });
 </script>
