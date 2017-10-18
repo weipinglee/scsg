@@ -537,18 +537,18 @@ cursor: pointer;
 }
 
 .tablesorter th{
-text-align:left;
+text-align:center;
 border-bottom: 1px dotted #ccc;
 white-space: nowrap;
 }
 .tablesorter td {
 padding: 8px 2px;
-text-align:left;
+text-align:center;
 white-space: nowrap;
 }
 .tablesorter td {
 padding: 8px 2px;
-text-align:left;
+
 }
 
 .tablesorter input[type=image] {
