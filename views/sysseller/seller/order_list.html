@@ -66,7 +66,7 @@
 				</td>
 				<td title="{$item['pay_time']}">{$item['pay_time']}</td>
 				<td >{$item['deli_day']}</td>
-				<td >{$item['deli_time']}</td>
+				<td >{if:!$item['deli_time']}即时配送{else:}{$item['deli_time']}{/if}</td>
 				<td>
 					<span class="prt" title="购物清单打印" onclick="window.open('{url:/seller/xiaopiao1/id/$item[id]}');">票</span>
 					<span class="prt" title="配货单打印" onclick="window.open('{url:/order/pick_template/id/$item[id]/seller_id/$seller_id}');">配</span>
