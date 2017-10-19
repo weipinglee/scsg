@@ -129,7 +129,7 @@
 					<th>打印</th>
 					<th>支付方式</th>
 					<th>用户名</th>
-					<th>下单时间</th>
+					<th>付款时间</th>
 					<th>配送日期</th>
 					<th>配送时间</th>
 					<th>接单时间</th>
@@ -154,7 +154,7 @@
 					</td>
 					<td>{$item['payment_name']}</td>
 					<td>{echo:$item['username']=='' ? '游客' : $item['username']}</td>
-					<td title="{$item['create_time']}">{$item['create_time']}</td>
+					<td title="{$item['pay_time']}">{$item['pay_time']}</td>
 					<td >{$item['deli_day']}</td>
 					<td >{$item['deli_time']}</td>
 					<td>{$item['acc_time']}</td>
