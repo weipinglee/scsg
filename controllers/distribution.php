@@ -38,10 +38,12 @@ class distribution extends IController
 			$this->redirect('password');
 		$deliver_id = $_SESSION['delivery_id'];
 		$order_id = IFilter::act(IReq::get('id'));
-		$model = new IModel('order');
-		$model->setData(array('deliver_id'=>$deliver_id));
-		$res = $model->update('id='.$order_id.' and deliver_id=0');
-		if($res){
+		$deliverObj = new deliver();
+		$res = $deliverObj->deliver_acc($deliver_id,$order_id);
+		$orderObj = new IModel('order');
+		$orderObj->setData(array('deliver_id'=>$deliver_id));
+		$res1 = $orderObj->update('id='.$order_id);
+		if($res && $res1){
 			die(json_encode(array('success'=>1)));
 		}
 		else{
@@ -50,8 +52,8 @@ class distribution extends IController
 	}
 
 	/**
-	 * 获取订单数据
 	 *
+	 * 获取订单数据
 	 */
 	public function get_orderlist(){
 		if(!isset($_SESSION['delivery']))
@@ -69,7 +71,7 @@ class distribution extends IController
 
 		$orderHandle = new IQuery('order as o');
 		$orderHandle->order  = "o.id desc";
-		$orderHandle->fields = "o.*,u.username,p.name as payment_name";
+		$orderHandle->fields = "o.*,u.username,p.name as payment_name,d.status as deliver_status,d.acc_time";
 		$orderHandle->page   = $page;
 		$orderHandle->where  = $where.' and o.type !=4 ';
 		$orderHandle->join   = $join;

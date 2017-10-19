@@ -1359,7 +1359,8 @@ class Order_Class
 	 */
 	public static function getSearchCondition($search=false)
 	{
-		$join  = "left join payment as p on o.pay_type = p.id left join user as u on u.id = o.user_id";
+		$join  = "left join payment as p on o.pay_type = p.id left join user as u on u.id = o.user_id
+					left join order_deliver as d on o.id=d.order_id";
 		$where = "o.if_del = 0";
 		//查询检索过滤
 		if($search)

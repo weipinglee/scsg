@@ -1033,7 +1033,7 @@ class Order extends IController
 		
 		$orderHandle = new IQuery('order as o');
 		$orderHandle->order  = "o.id desc";
-		$orderHandle->fields = "o.*,u.username,p.name as payment_name";
+		$orderHandle->fields = "o.*,u.username,p.name as payment_name,d.status as deliverStatus,d.acc_time";
 		$orderHandle->page   = $page;
 		$orderHandle->where  = $where.' and o.type !=4 ';
 		$orderHandle->join   = $join;

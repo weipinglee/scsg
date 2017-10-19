@@ -37,6 +37,7 @@
 
 		<tbody>
 			{set:$page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1}
+			{set:$deliver = new deliver();}
             {query:name=order page=$page where=seller_id eq $seller_id and if_del eq 0 and status neq 4 $where id=$orderObject order=id desc}
 
 			<tr>
@@ -73,7 +74,16 @@
 					<span class="prt" title="快递单打印" onclick="window.open('{url:/order/expresswaybill_template/id/$item[id]/seller_id/$seller_id}');">递</span>
 				</td>
 				<!-- <td>{echo:area::getNameStr($item['area'])} {$item['address']}</td> -->
-				<td>{if:$item['deliver_id']>0}<span class="accepted" style="color:black">已接单</span>{else:}<span >未接单</span>{/if}</td>
+				{set:$deliverStatus= $deliver->getDeliverStatus($item['id']);}
+				<td>
+					{if:$deliverStatus==1}
+					<span  class="acc" id="{$item['id']}" style="color:black">已接单</span>
+					{elseif:$deliverStatus==2}
+					<span  style="color:red">已接单</span>
+					{else:}
+					<span >未接单</span>
+					{/if}
+				</td>
 				<td>
 					{set:$order_id=$item['id']}
 					{set:$goods_ids='' }
@@ -195,8 +205,27 @@ $(function(){
 	$('[name="payStatusColor1"]').addClass('green');
 	$('[name="disStatusColor1"]').addClass('green');
 
-	$('span.accepted').click(function(){
-		$(this).css('color','red');
+
+	$('span.acc').click(function(){
+		var order_id = $(this).attr('id');
+		var _this = $(this);
+		$.ajax({
+			type: 'post',
+			async: false,
+			data: {'order_id':order_id},
+			dataType: 'json',
+			url: '{url:/seller/startWork}',
+			beforeSend: function(){
+
+			},
+			success: function(data){
+				if(data.success==1){
+					_this.css('color','red');
+				}
+			},
+
+			timeout: 1000
+		})
 	})
 });
 </script>

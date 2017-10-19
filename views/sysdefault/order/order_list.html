@@ -157,7 +157,7 @@
 					<td title="{$item['create_time']}">{$item['create_time']}</td>
 					<td >{$item['deli_day']}</td>
 					<td >{$item['deli_time']}</td>
-					<td></td>
+					<td>{$item['acc_time']}</td>
 					<td>{if:$item['deliver_id']>0}<span style="color:green">已接单</span>{else:}<span>未接单</span>{/if}</td>
 					<td>
 						{set:$order_id=$item['id']}

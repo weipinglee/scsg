@@ -2905,4 +2905,17 @@ class Seller extends IController
 		$this->layout='';
 		$this->redirect('xiaopiao2');
 	}
+
+	function startWork()
+	{
+		$order_id = IFilter::act(IReq::get('order_id'));
+		$deliver = new deliver();
+		$res = $deliver->deliver_work($order_id);
+		if($res){
+			die(json_encode(array('success'=>1)));
+		}
+		else{
+			die(json_encode(array('success'=>0)));
+		}
+	}
 }
