@@ -2895,4 +2895,14 @@ class Seller extends IController
         }
         echo JSON::encode($ticketList);
     }
+
+	function xiaopiao1(){
+		$this->layout='';
+		$this->redirect('xiaopiao1');
+	}
+
+	function xiaopiao2(){
+		$this->layout='';
+		$this->redirect('xiaopiao2');
+	}
 }
