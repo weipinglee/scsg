@@ -2899,6 +2899,38 @@ class Seller extends IController
 
 	function xiaopiao1(){
 		$this->layout='';
+		$order_id = IFilter::act( IReq::get('id'),'int' );
+		$seller_id = $this->seller['seller_id'];
+		$type     = IFilter::act(IReq::get('type'));
+
+		$tb_order =  new IModel('order');
+		$where = $type ? ' and type=4' : ' and type !=4';
+		$data     = $tb_order->getObj('id='.$order_id.$where);
+
+		if($seller_id)
+		{
+			$sellerObj   = new IModel('seller');
+			$config_info = $sellerObj->getObj('id = '.$seller_id);
+
+			$data['set']['name']   = isset($config_info['true_name'])? $config_info['true_name'] : '';
+			$data['set']['phone']  = isset($config_info['phone'])    ? $config_info['phone']     : '';
+			$data['set']['email']  = isset($config_info['email'])    ? $config_info['email']     : '';
+			$data['set']['url']    = isset($config_info['home_url']) ? $config_info['home_url']  : '';
+		}
+		else
+		{
+			$config = new Config("site_config");
+			$config_info = $config->getInfo();
+
+			$data['set']['name']   = isset($config_info['name'])  ? $config_info['name']  : '';
+			$data['set']['phone']  = isset($config_info['phone']) ? $config_info['phone'] : '';
+			$data['set']['email']  = isset($config_info['email']) ? $config_info['email'] : '';
+			$data['set']['url']    = isset($config_info['url'])   ? $config_info['url']   : '';
+		}
+
+		$data['address']   = join('&nbsp;',area::name($data['province'],$data['city'],$data['area']))."&nbsp;".$data['address'];
+		$data['seller_id'] = $seller_id;
+		$this->setRenderData($data);
 		$this->redirect('xiaopiao1');
 	}
 
