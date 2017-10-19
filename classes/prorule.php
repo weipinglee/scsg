@@ -43,6 +43,10 @@ class ProRule
 
 	private $incUsedTimes = 0;//是否增加促销规则使用次数
 
+	private $maxNum = 1;//客户端购买商品的单件最多的数量
+
+	private $maxNumLimit = 1;//服务器端限制的单件活动最多数量
+
 	/**
 	 * @brief 构造函数 初始化商品金额
 	 * @param float $sum 商品金额
@@ -65,6 +69,10 @@ class ProRule
 	 */
 	public function setincTimes(){
 		$this->incUsedTimes = 1;
+	}
+
+	public function setMaxNums($num){
+		$this->maxNum = $num;
 	}
 
 	/**
@@ -302,7 +310,7 @@ class ProRule
 	 * @return array 促销规则信息
 	 */
 	private function satisfyPromotion($award_type = null, $goodsIdList = array(), $area = null)
-	{                           
+	{
         $final_sum = $this->sum;
 		$datetime = ITime::getDateTime();
 		$proObj   = $this->proObj;
@@ -380,7 +388,7 @@ class ProRule
 
 		//去除超次数限制的促销规则
 		foreach($proList as $key=>$val){
-			if($this->checkOutTimes($val['id'])){
+			if($this->checkOutTimes($val['id']) || $this->maxNum>$this->maxNumLimit){//检查活动参加次数和商品数量是否超限
 				unset($proList[$key]);
 			}
 		}
