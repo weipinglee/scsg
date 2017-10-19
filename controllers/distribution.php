@@ -88,6 +88,7 @@ class distribution extends IController
 			$order_list[$key]['seller_name'] = isset($sellerData['true_name']) ? $sellerData['true_name'] : '';
 			$order_list[$key]['seller_img'] = isset($sellerData['logo_img']) ? $sellerData['logo_img'] : '';
 			$order_list[$key]['pay_status'] = Order_Class::getOrderPayStatusText($item);
+			$order_list[$key]['total_pay'] = $item['real_amount'] + $item['real_freight'] - $item['pro_reduce'];
 		}
 		//print_r($order_list);
 		die(JSON::encode($order_list));
