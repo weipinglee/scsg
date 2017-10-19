@@ -1594,7 +1594,7 @@ class Simple extends IController
         $user_id = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
 
         //计算费用
-        $countSumObj = new CountSum($user_id);
+        $countSumObj = new CountSum($user_id,1);
 
         //直接购买商品方式
         if($type && $gid)
@@ -1636,7 +1636,7 @@ class Simple extends IController
             //清空购物车
             //IInterceptor::reg("cart@onFinishAction");
         }
-        //print_r($goodsResult);echo '</br>';
+
         //判断商品商品是否存在
         if(is_string($goodsResult) || empty($goodsResult['goodsList']))
         {
@@ -1644,6 +1644,15 @@ class Simple extends IController
             exit;
         }
 
+		//增加使用过的促销规则使用次数
+		if(!empty($goodsResult['promotion'])){
+			foreach($goodsResult['promotion'] as $key=>$val){
+				if($val['id']){
+					$proObj = new ProRule();
+					$proObj->addUsedTimes($val['id'],$user_id);
+				}
+			}
+		}
         //加入促销活动
         if($promo && $active_id)
         {
@@ -1799,6 +1808,8 @@ class Simple extends IController
             $orderObj->setData($data);
             $oId = $orderObj->add();
             $orderInstance->insertOrderGoods($oId,$orderData['goodsResult'],$payment,$k);
+
+
             //填写开发票信息
             if($invoice){
                 $db_fapiao = new IModel('order_fapiao');

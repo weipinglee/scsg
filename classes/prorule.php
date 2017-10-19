@@ -37,12 +37,18 @@ class ProRule
 	//积分倍数
 	private $point_mul = 1;
 
+	private $user_id = 0;
+
+	private $proObj = null;
+
+	private $incUsedTimes = 0;//是否增加促销规则使用次数
+
 	/**
 	 * @brief 构造函数 初始化商品金额
 	 * @param float $sum 商品金额
 	 * @param int $point_mul 积分倍数
 	 */
-	public function __construct($sum,$point_mul=1)
+	public function __construct($sum=0,$point_mul=1)
 	{
 		//商品金额必须为数字
 		if(!is_numeric($sum))
@@ -51,14 +57,100 @@ class ProRule
 		}
 		$this->sum = $sum;
 		$this->point_mul = $point_mul;
+		$this->proObj = new IModel('promotion');
 	}
 
 	/**
-	 * @brief 设置用户组
+	 * 设置增加使用次数
+	 */
+	public function setincTimes(){
+		$this->incUsedTimes = 1;
+	}
+
+	/**
+	 * 判断当前用户当天使用某个促销规则是否超次数
+	 * @param $prom_id int 促销id
+	 * @return bool 是否超次数 true:超次数
+	 */
+	public function checkOutTimes($prom_id)
+	{
+		$limit_times = $this->proObj->getField('id='.$prom_id,'times_day');//获取促销规则的每日限制使用次数
+		if($limit_times==0){//不限制
+			return false;
+		}
+		//获取当前用户当天已使用的次数
+		$promUserObj = new IModel('prom_user');
+		$date = ITime::getDateTime('Y-m-d');
+		$usedTimes = $promUserObj->getObj('user_id='.$this->user_id.' and prom_id='.$prom_id.' and date="'.$date.'"','times,id');
+
+		if(!isset($usedTimes['times']) || $limit_times>$usedTimes['times']){
+			if($this->incUsedTimes){//生成订单时增加使用次数
+
+				if(isset($usedTimes['id'])){
+					$data = array(
+							'times'=>$usedTimes['times'] + 1 ,
+					);
+					$promUserObj->setData($data);
+					 $promUserObj->update('id='.$usedTimes['id']);
+				}
+				else{
+					$data = array(
+							'times'=>1,
+							'prom_id' => $prom_id,
+							'user_id' => $this->user_id,
+							'date' => $date,
+					);
+					$promUserObj->setData($data);
+					$promUserObj->add();
+				}
+
+			}
+			return false;
+		}
+		return true;
+
+	}
+
+	/**
+	 * 增加促销规则使用次数
+	 * @param $prom_id int 促销规则id
+	 * @param $user_id int 用户id
+	 * @return int
+	 */
+	public function addUsedTimes($prom_id,$user_id){
+		$promUserObj = new IModel('prom_user');
+		$date = ITime::getDateTime('Y-m-d');
+		$usedTimes = $promUserObj->getObj('user_id='.$user_id.' and prom_id='.$prom_id.' and date="'.$date.'"','times,id');
+
+		if(isset($usedTimes['id'])){
+			$data = array(
+					'times'=>$usedTimes['times'] + 1 ,
+			);
+			$promUserObj->setData($data);
+			return $promUserObj->update('id='.$usedTimes['id']);
+		}
+		else{
+			$data = array(
+					'times'=>1,
+					'prom_id' => $prom_id,
+					'user_id' => $user_id,
+					'date' => $date,
+			);
+			$promUserObj->setData($data);
+			return $promUserObj->add();
+		}
+
+
+	}
+
+
+	/**
+	 * @brief 设置用户组兼用户名
 	 * @param string 用户组
 	 */
-	public function setUserGroup($groupId)
+	public function setUserGroup($groupId,$user_id=0)
 	{
+		$this->user_id  = $user_id;
 		$this->user_group = $groupId;
 	}
 
@@ -213,7 +305,7 @@ class ProRule
 	{                           
         $final_sum = $this->sum;
 		$datetime = ITime::getDateTime();
-		$proObj   = new IModel('promotion');
+		$proObj   = $this->proObj;
 		$where    = '`condition` between 0 and '.$final_sum.' and type = 0 and is_close = 0 and start_time <= "'.$datetime.'" and end_time >= "'.$datetime.'"';
 		//奖励类别分析
 		if($award_type != null)
@@ -284,6 +376,14 @@ class ProRule
                 }  
             }
         }
+
+
+		//去除超次数限制的促销规则
+		foreach($proList as $key=>$val){
+			if($this->checkOutTimes($val['id'])){
+				unset($proList[$key]);
+			}
+		}
 		return $proList;
 	}
 	/**

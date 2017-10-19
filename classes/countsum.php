@@ -16,8 +16,11 @@ class CountSum
 	//用户组折扣
 	public $group_discount = '';
 
+
 	/**
 	 * 构造函数
+	 * @param $user_id int 用户id
+	 * @param $flag int 是否生成订单的标志，1：生成订单
 	 */
 	public function __construct($user_id = null)
 	{
@@ -354,14 +357,17 @@ class CountSum
             foreach($order_extend as $k => $v)
             {
                 $proObj = new ProRule($v['sum'] - $v['reduce']);
-                $proObj->setUserGroup($group_id);
+                $proObj->setUserGroup($group_id,$user_id);
+
                 $this->isFreeFreight = $proObj->isFreeFreight($area,$v['goodsIdList']);
                 $order_extend[$k]['promotion'] = $proObj->getInfo($v['goodsIdList'],$area);
                 $order_extend[$k]['proReduce'] = $v['sum'] - $v['reduce'] - $proObj->getSum($v['goodsIdList'], $area);
                 unset($proObj);
             }
 	    	$proObj = new ProRule($final_sum);
-	    	$proObj->setUserGroup($group_id);
+
+	    	$proObj->setUserGroup($group_id,$user_id);
+
 	    	$this->isFreeFreight = $proObj->isFreeFreight($area,$goodsIdList);
 	    	$this->promotion = $proObj->getInfo($goodsIdList,$area, true);
 	    	$this->proReduce = $final_sum - $proObj->getSum($goodsIdList, $area);
@@ -394,6 +400,8 @@ class CountSum
             'extend'     => $this->extend,
     	);
 	}
+
+
 	//获取闪购价
 	/*
 	 * @$goods_id int 商品id
