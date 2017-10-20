@@ -106,7 +106,16 @@ class Deliver
 
     public function waiting_acc_nums()
     {
-        
+        $orderObj = new IModel('order');
+        $nums = $orderObj->getField('deliver_id=0 and  status=2 and distribution_status=0 ','count(id)');
+        return $nums;
+    }
+
+    public function uncomplate_deliver_num($deliver_id)
+    {
+        $deliverObj =  self::$obj;
+        $nums = $deliverObj->getField('status<'.self::USERACC.' and deliver_id='.$deliver_id,'count(id)');
+        return $nums;
     }
 
 

@@ -163,4 +163,15 @@ class distribution extends IController
 		$this->og_data = $og_data;
 		$this->redirect('order_detail',false);
 	}
+
+	public function getWaitNums(){
+		$deliverObj = new deliver();
+		echo $deliverObj->waiting_acc_nums();
+	}
+
+	public function getUncomplatedNums(){
+		$deliverObj = new deliver();
+		$deliver_id = $_SESSION['delivery_id'];
+		echo $deliverObj->uncomplate_deliver_num($deliver_id);
+	}
 }
