@@ -754,7 +754,7 @@ a.articles header h4 { float: left; width: 75%; vertical-align: top; color: #1e1
 
 
 .caidan {
-	height: 30px;
+	height: 40px;
 	width: 100%;
 	margin-top: 0px;
 	margin-right: auto;
@@ -767,17 +767,17 @@ a.articles header h4 { float: left; width: 75%; vertical-align: top; color: #1e1
 }
 .caidan ul li {
 	float: left;
-	height: 30px;
+	height: 40px;
 	width: 16%;
 	text-align: center;
-	line-height: 30px;
+	line-height: 40px;
 	font-size: 16px;
 }
 	.caidan ul .qbys{
 	background-color: #F30;
 	background-position: right center;
 	float: left;
-	height: 30px;
+	height: 40px;
 	width: 20%;
 }
 	.caidan ul .qbys a{ color:#FFF;}
@@ -1002,5 +1002,28 @@ a.order_number {
 .qijiandian ul .chanpin div{
 	line-height: 25px;
 }
+.order_top{
+    height: 40px;
+    border-bottom: 1px solid #F00;
+    margin-bottom: 10px;
+}
+.order_top ul li{
+	float: left;
+	height:40px;
+	line-height: 40px;
+	width: 32%;
+	text-align: center;
+}
+.order_top ul .qbys {
+    background-color: #F30;
+    background-position: right center;
+    float: left;
+    height: 40px;
+    width: 36%;
+}
+.order_top ul .qbys a{
+	color: #fff;
+}
+
 
 /*配送订单 end*/
