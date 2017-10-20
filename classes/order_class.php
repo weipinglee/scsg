@@ -396,7 +396,13 @@ class Order_Class
 		//普通付款通知
 		else
 		{
-			$time = ITime::getDateTime('Y-m-d H:i',time() + 60*60);
+			if($orderRow['deli_time']){
+				$time = $orderRow['deli_day'].' '.$orderRow['deli_time'];
+			}
+			else{
+				$time = ITime::getDateTime('Y-m-d H:i',time() + 30*60);
+			}
+
 			$smsContent = smsTemplate::payFinishToUser(array('{address}' => $orderRow['address'],'{time}' => $time));
 			Hsms::send($orderRow['mobile'],$smsContent);
 		}
