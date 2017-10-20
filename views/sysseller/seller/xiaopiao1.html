@@ -66,7 +66,7 @@
 			{if:!$deli_time && $pay_time}
 				{set:$deliTime = strtotime($pay_time);}
 				{set:$deliTime = ITime::pass(1800,'Y-m-d H:i:s',$deliTime)}
-			{$deliTime}
+			{$deliTime}前
 			{elseif:$deli_time}
 			{$deli_day} {$deli_time}:00
 			{else:}
