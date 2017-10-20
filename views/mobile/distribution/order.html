@@ -1,4 +1,4 @@
-
+{set:$status=$this->status;}
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -67,9 +67,9 @@ background-color: rgba(94, 110, 141, 0.9);
 
 <div class="caidan">
   <ul>
-    <li class="qbys"><a href="/distribution/order">全部（10）</a></li>
-    <li><a href="/distribution/order/status/1">待接单（5）</a></li>
-    <li><a href="/distribution/order/status/2">待配送（5）</a></li>
+    <li {if:!$status}class="qbys"{/if}><a href="{url:/distribution/order}">全部</a></li>
+    <li {if:$status==1}class="qbys"{/if}><a href="{url:/distribution/order/status/1}">待接单（{$this->wait_acc_nums}）</a></li>
+    <li {if:$status==2}class="qbys"{/if}><a href="{url:/distribution/order/status/2}">待配送（{$this->uncomplate_nums}）</a></li>
   </ul>
 </div>
 <div class="qijiandian" id='order_list'>
@@ -89,7 +89,7 @@ background-color: rgba(94, 110, 141, 0.9);
         <div class="item"><a href="{url:/site/index/client/pc}">桌面版</a></div>
         <div class="item"><span class="copyright_1">Copyright</span> <span class="copyright_2">2012-2015</span><span class="copyright_3">www.yqtvt.com</span><span class="copyright_4">版权所有</span></div></div>
 </footer>
-
+<input type="hidden" name="page" value="1"/>
     
  <script type='text/html' id='order_box'>
 
@@ -143,14 +143,17 @@ background-color: rgba(94, 110, 141, 0.9);
 
 </script> 
 <script type='text/javascript'>
-
+        var status={$status};
         var obj = {
             'url': '{url:/distribution/get_orderlist}',
             'template_id': 'order_box',
             'append_to': $('#order_list'),
             'loading_img': '{skin:images/files/loading.gif}',
-            'trans_data': {},
-            'callback' : null
+            'trans_data': {'status':status},
+            'callback' : function(data){
+
+
+            }
         };
     var ajax = new Ajax_Get_Data();
     ajax.init(obj);

@@ -28,6 +28,12 @@ class distribution extends IController
 	public function order(){
 		if(!isset($_SESSION['delivery']))
 			$this->redirect('password');
+		$deliver_id = $_SESSION['delivery_id'];
+		$deliverObj = new deliver();
+		$this->wait_acc_nums = $deliverObj->waiting_acc_nums();
+		$this->uncomplate_nums = $deliverObj->uncomplate_deliver_num($deliver_id);
+
+		$this->status = IFilter::act(IReq::get('status','get')) ? IFilter::act(IReq::get('status','get')) : 0;
 
 		$this->redirect('order');
 	}
@@ -67,27 +73,34 @@ class distribution extends IController
 		if(!isset($_SESSION['delivery']))
 			$this->redirect('password');
 		//搜索条件
-		$search = IFilter::act(IReq::get('search'));
 		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
 
-		$search['distribution_status'] = IReq::get('distribution_status');
-		//条件筛选处理
-		list($join,$where) = order_class::getSearchCondition($search);
-		//$join = $join.' left join refundment_doc as r on r.order_id=o.id and r.if_del=0 ';
-		//$join2 = $join.' left join refundment_doc as r on r.order_id=o.id and r.if_del=0 and r.pay_status in (0,3,4,7)';
-		//拼接sql
+		$join = 'left join user as u on u.id = o.user_id left join order_deliver as d on o.id=d.order_id';
+		$where = 'o.if_del=0';
+		$status = IFilter::act(IReq::get('status','post'));
+		if($status==1){
+			$where .= ' and o.deliver_id=0 and o.status=2 and o.distribution_status=0 ';
+		}
+		else if($status==2){
+			$where .= ' and d.status<4 ';
+		}
+
 
 		$orderHandle = new IQuery('order as o');
 		$orderHandle->order  = "o.id desc";
-		$orderHandle->fields = "o.*,u.username,p.name as payment_name,d.status as deliver_status,d.acc_time";
+		$orderHandle->fields = "o.*,u.username,d.status as deliver_status,d.acc_time";
 		$orderHandle->page   = $page;
+		$orderHandle->pagesize = 10;
 		$orderHandle->where  = $where.' and o.type !=4 ';
 		$orderHandle->join   = $join;
-		$orderHandle->group = 'o.id';
-		$this->search      = $search;
+
 		$this->orderHandle = $orderHandle;
 
 		$order_list = $orderHandle->find();
+
+		if($orderHandle->page==0){
+			$order_list = array();
+		}
 
 		unset($order_goods_data);
 		$sellerObj = new IModel('seller');
@@ -164,14 +177,5 @@ class distribution extends IController
 		$this->redirect('order_detail',false);
 	}
 
-	public function getWaitNums(){
-		$deliverObj = new deliver();
-		echo $deliverObj->waiting_acc_nums();
-	}
 
-	public function getUncomplatedNums(){
-		$deliverObj = new deliver();
-		$deliver_id = $_SESSION['delivery_id'];
-		echo $deliverObj->uncomplate_deliver_num($deliver_id);
-	}
 }
