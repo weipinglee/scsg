@@ -75,6 +75,7 @@ class ProRule
 		$this->maxNum = $num;
 	}
 
+
 	/**
 	 * 判断当前用户当天使用某个促销规则是否超次数
 	 * @param $prom_id int 促销id
@@ -388,7 +389,8 @@ class ProRule
 
 		//去除超次数限制的促销规则
 		foreach($proList as $key=>$val){
-			if($this->checkOutTimes($val['id']) || $this->maxNum>$this->maxNumLimit){//检查活动参加次数和商品数量是否超限
+			$maxNumLimit = $val['nums_time'];
+			if($this->checkOutTimes($val['id']) || ($maxNumLimit!=0 && $this->maxNum>$maxNumLimit)){//检查活动参加次数和商品数量是否超限
 				unset($proList[$key]);
 			}
 		}

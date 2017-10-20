@@ -1932,6 +1932,7 @@ class Seller extends IController
             'intro'         => IFilter::act(IReq::get('intro','post'),'text'),
             'award_type'    => $award_type,
 			'times_day'     => IFilter::act(IReq::get('times_day','post')),
+			'nums_time'     => IFilter::act(IReq::get('nums_time','post')),
             'type'          => 0,
             'user_group'    => $user_group_str,
             'award_value'   => IFilter::act(IReq::get('award_value','post')),

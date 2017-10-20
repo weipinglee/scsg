@@ -36,6 +36,13 @@
                     <label class="tip">每个用户每天最多使用次数，0表示不限制</label>
                 </fieldset>
                 <fieldset>
+                    <label>每次商品数量限制：</label>
+                    <div class="box">
+                        <input type="text" name="nums_time" class="normal" value="0" />
+                    </div>
+                    <label class="tip">每个用户每次使用这个活动限制的商品数量，0表示不限制</label>
+                </fieldset>
+                <fieldset>
                 <label>允许参与人群：</label>
                 <div class="box">
                         <label class='attr'><input type='checkbox' name='group_all' value='all' {if:$this->promotionRow['user_group']=='all'} checked=checked {/if} onclick='select_all();' />全部</label>

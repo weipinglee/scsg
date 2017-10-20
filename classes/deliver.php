@@ -103,4 +103,11 @@ class Deliver
         return $res;
 
     }
+
+    public function waiting_acc_nums()
+    {
+        
+    }
+
+
 }
