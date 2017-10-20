@@ -42,7 +42,12 @@ background-color: rgba(94, 110, 141, 0.9);
 }
 </style> 
 <script type='text/javascript'>
-    
+    $(document).ready(function () {
+        $(".order_top ul li").click(function(){
+            $(".order_top ul li").removeClass("qbys")
+            $(this).addClass("qbys")
+        });
+    });
     
 </script>
 </head>
@@ -60,7 +65,13 @@ background-color: rgba(94, 110, 141, 0.9);
         </div>
     <header>
 
-
+<div class="caidan">
+  <ul>
+    <li class="qbys"><a href="/distribution/order">全部（10）</a></li>
+    <li><a href="/distribution/order/status/1">待接单（5）</a></li>
+    <li><a href="/distribution/order/status/2">待配送（5）</a></li>
+  </ul>
+</div>
 <div class="qijiandian" id='order_list'>
 
 </div>  
