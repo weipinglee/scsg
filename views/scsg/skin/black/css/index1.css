@@ -404,7 +404,10 @@ a.btn_pay{display:inline-block;width:119px;height:37px;margin-right:20px;backgro
 	.salebox .saletitle{margin:3px 0 5px}
 /* saleinfos style end */
 /* common title style start */
-.container_2 .box .title,.container_2 .box .title2,.container_2 .main .box .title3,.help_s .box .title{height:34px;line-height:34px;padding-left:15px;border-bottom:none;text-align:left;font-size:14px;font-weight:bold;background:url(../images/front/sprites_2.gif) 0 -94px repeat-x;color:#638C0B}
+.container_2 .box .title,.container_2 .box .title2,.container_2 .main .box .title3,.help_s .box .title{height:34px;line-height:34px;padding-left:15px;border-bottom:none;text-align:left;font-size:14px;font-weight:bold;background:url(../images/front/sprites_2.gif) 0 -94px repeat-x;color:#638C0B; overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;}
 .container_2 .main .box .title{height:31px;line-height:30px;padding-left:15px;color:#404040;background-position:0 -29px}
 .container_2 .main .box .title2{height:33px;border-bottom:1px solid #000;color:#404040;background-position:0 -249px}
 .container_2 .main .box .title3{height:34px;line-height:34px;border-bottom:1px solid #e1e1e1;margin-top:0;color:#333;background-position:0 -366px}

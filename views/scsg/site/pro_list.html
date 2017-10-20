@@ -216,7 +216,7 @@ $(function(){
 					<h3 class="title"> <span style='display:inline;color:red;'>{if:$item['is_del']==4}[预售]{/if}</span><a style='display:inline;' title="{$item['name']}" class="p_name" href="{url:/site/products/id/$item[id]}" target="_blank">{$item['name']}</a>
 						<span>总销量：{$item['sale']}<a class="blue" href="{url:/site/comments_list/id/$item[id]}" target="_blank">( {$item['comments']}人评论 )</a></span>
 						<span class='grade'><i style="width:{echo:Common::gradeWidth($item['grade'],$item['comments'])}px"></i></span>
-						<span style='margin-top:2px;'>
+						<span style='margin-top:2px;display: block;overflow: hidden;white-space: nowrap; text-overflow: ellipsis;'>
 							<a  style='margin-left:5px;text-decoration:none;'>{$seller_arr[$item['seller_id']]}</a>
 						</span>
 					</h3>
