@@ -76,10 +76,13 @@
 				<!-- <td>{echo:area::getNameStr($item['area'])} {$item['address']}</td> -->
 				{set:$deliverStatus= $deliver->getDeliverStatus($item['id']);}
 				<td>
-					{if:$deliverStatus==1}
-					<span  class="acc" id="{$item['id']}" style="color:black">已接单</span>
+					{if:$deliverStatus==4}
+					<span  class="acc" id="{$item['id']}" style="color:green">已送达</span>
+
 					{elseif:$deliverStatus==2}
 					<span  style="color:red">已接单</span>
+					{elseif:$deliverStatus==1}
+					<span  >已接单</span>
 					{else:}
 					<span >未接单</span>
 					{/if}

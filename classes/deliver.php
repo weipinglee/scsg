@@ -18,6 +18,7 @@ class Deliver
     CONST ACC  = 1;//配送员已接单
     CONST WORK = 2;//开始制作
     CONST COMP = 3;//制作完成，交付配送员
+    CONST USERACC = 4;//配送员交付到用户手中
 
     private $tableName = 'order_deliver';
 
@@ -82,5 +83,24 @@ class Deliver
             return true;
         }
         return false;
+    }
+
+    /**
+     * 已送到用户手中的确认操作
+     * @param $order_id
+     * @return int
+     */
+    public function user_acc($deliver_id,$order_id)
+    {
+        $data = array(
+            'status' => self::USERACC,
+            'useracc_time'   => ITime::getDateTime()
+        );
+
+        self::$obj->setData($data);
+        $res = self::$obj->update('order_id='.$order_id.' and deliver_id='.$deliver_id);
+
+        return $res;
+
     }
 }

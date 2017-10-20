@@ -1066,7 +1066,7 @@ class Order extends IController
 				}
 			}
 		}
-		
+
 		$this->order_refund = $order_refund;
 	
 		$this->redirect("order_list");

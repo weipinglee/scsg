@@ -38,12 +38,20 @@ class distribution extends IController
 			$this->redirect('password');
 		$deliver_id = $_SESSION['delivery_id'];
 		$order_id = IFilter::act(IReq::get('id'));
+		$status = IFilter::act(IReq::get('status','post'));
 		$deliverObj = new deliver();
-		$res = $deliverObj->deliver_acc($deliver_id,$order_id);
-		$orderObj = new IModel('order');
-		$orderObj->setData(array('deliver_id'=>$deliver_id));
-		$res1 = $orderObj->update('id='.$order_id);
-		if($res && $res1){
+		$res = false;
+		if($status==1){
+			$res = $deliverObj->deliver_acc($deliver_id,$order_id);
+			$orderObj = new IModel('order');
+			$orderObj->setData(array('deliver_id'=>$deliver_id));
+			 $orderObj->update('id='.$order_id);
+		}
+		else if($status==2){
+			$res = $deliverObj->user_acc($deliver_id,$order_id);
+		}
+
+		if($res){
 			die(json_encode(array('success'=>1)));
 		}
 		else{

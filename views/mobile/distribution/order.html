@@ -88,7 +88,9 @@ background-color: rgba(94, 110, 141, 0.9);
              <h3><%=seller_name%>></h3>
              <a class="order_number" href="{url:/distribution/order_detail/id/}/<%=id%>"><%=order_no%></a>
              <h4 class="state_red">
-                 <%if (deliver_id>0){%>
+                 <%if (deliver_status==4){%>
+                 已送达
+                 <%}else if (deliver_status>0){%>
                  已接单
                  <%}else {%>
                  待接单
@@ -110,9 +112,17 @@ background-color: rgba(94, 110, 141, 0.9);
          <li>
              <div class="acc_info" style="float:right;">
                      <%if (deliver_id==0){%>
-                 <a class="hongzi wd-popup-trigger" name="deliver_acc" id="<%=id%>" href="javascript:void()">
+                 <a class="hongzi wd-popup-trigger" name="deliver_acc" id="<%=id%>" status="1" href="javascript:void()">
                         接单
                  </a>
+                 <%}else if (deliver_status<4){%>
+                 <a class="hongzi wd-popup-trigger" name="deliver_acc" id="<%=id%>" status="2" href="javascript:void()">
+                     送达
+                 </a>
+                 <%}else {%>
+                 <a class="hongzi wd-popup-trigger" href="javascript:void()">
+                 已送达
+                     </a>
                      <%}%>
 
              </div>
@@ -152,10 +162,11 @@ background-color: rgba(94, 110, 141, 0.9);
      $('a[name=deliver_acc]').click(function(){
          var order_id = $(this).attr('id');
          var _this = $(this);
+         var status = $(this).attr('status');
          $.ajax({
              type: 'post',
              async: false,
-             data: {'id':order_id},
+             data: {'id':order_id,'status':status},
              dataType: 'json',
              url: '{url:/distribution/acc_order}',
              beforeSend: function(){
@@ -163,7 +174,13 @@ background-color: rgba(94, 110, 141, 0.9);
              },
              success: function(data){
                 if(data.success==1){
-                    _this.text('已接单').removeClass('hongzi');
+                    if(status==1){
+                        _this.text('送达').attr('status',2);
+                    }
+                    else if(status==2){
+                        _this.text('已送达');
+                    }
+
                 }
              },
              complete: function(){
