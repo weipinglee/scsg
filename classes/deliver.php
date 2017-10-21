@@ -114,7 +114,7 @@ class Deliver
     public function uncomplate_deliver_num($deliver_id)
     {
         $deliverObj =  self::$obj;
-        $nums = $deliverObj->getField('if_del=0 and status<'.self::USERACC.' and deliver_id='.$deliver_id,'count(id)');
+        $nums = $deliverObj->getField(' status<'.self::USERACC.' and deliver_id='.$deliver_id,'count(id)');
         return $nums;
     }
 
