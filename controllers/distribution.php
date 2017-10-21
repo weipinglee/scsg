@@ -108,7 +108,7 @@ class distribution extends IController
 			if(!$item['seller_id'])
 				$item['seller_id'] = 0;
 			$sellerData = $sellerObj->getObj('id='.$item['seller_id'],'logo_img,true_name');//print_r($sellerData);
-			$order_list[$key]['seller_name'] = isset($sellerData['true_name']) ? $sellerData['true_name'] : '';
+			$order_list[$key]['seller_name'] = isset($sellerData['true_name']) ? $sellerData['true_name'] : '平台';
 			$order_list[$key]['seller_img'] = isset($sellerData['logo_img']) ? $sellerData['logo_img'] : '';
 			$order_list[$key]['pay_status'] = Order_Class::getOrderPayStatusText($item);
 			$order_list[$key]['total_pay'] = $item['real_amount'] + $item['real_freight'] - $item['pro_reduce'];
