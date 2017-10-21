@@ -50,6 +50,15 @@
     		text-align: right;
     		
     	}
+    	.print_div{
+    		text-align: center;
+    	}
+    	.print_div .btn_print{
+    		width: 112px;
+		    height: 31px;
+		    margin: 40px auto;
+		    border: 0;
+    	}
     	
     </style>
 </head>
@@ -105,6 +114,8 @@
 		<p>{$mobile}</p>
 		<p>{$accept_name}</p>
 	</div>
+	<div class="print_div"><input type="submit" class="btn_print noprint" onclick="window.print();" value="打印"></div>
 </div>
+
 </body>
 </html>
