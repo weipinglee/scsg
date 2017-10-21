@@ -248,7 +248,7 @@ function showDelitime(){
 	var option = $('select[name=delitime]').find('option');
 	var interMin = 30*60*1000;
 	var now = new Date();
-	$('option.a').attr('selected',false).attr('disabled',true);
+	$('option.a').attr('disabled',true);
 	$('option.c').attr('disabled',true);
 	$('option.b').attr('selected',true);
 	option.each(function(){
