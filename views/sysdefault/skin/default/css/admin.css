@@ -474,3 +474,10 @@ vertical-align:middle;
 	body{overflow-y:auto;}
 	.border_table td{white-space: normal;word-break: normal;}
 }
+/*订单列表*/
+.list_table tbody .tr_top th{
+	text-align: center;
+}
+.list_table tbody .tr_center td{
+	text-align: center;
+}

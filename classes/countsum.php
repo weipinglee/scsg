@@ -16,8 +16,11 @@ class CountSum
 	//用户组折扣
 	public $group_discount = '';
 
+
 	/**
 	 * 构造函数
+	 * @param $user_id int 用户id
+	 * @param $flag int 是否生成订单的标志，1：生成订单
 	 */
 	public function __construct($user_id = null)
 	{
@@ -339,14 +342,17 @@ class CountSum
 		}
 
 		//同一商家相同配送方式第一个商品费用计算为综合费用，其余配送费记为0
+		$max_count=0;//统计购买单个产品最多的数量
 		foreach($goodsListFinal as $buy => $goodList){
 			foreach($goodList as $k=>$goodInfo){
+				if($goodInfo['count']>$max_count)
+					$max_count = $goodInfo['count'];
 				$goodsListFinal[$buy][$k]['delivery']
 						= $deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']]['price'];
 				$deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']]['price'] = 0;
 			}
 		}
-		//print_r($goodsListFinal);
+
     	//总金额满足的促销规则
     	if($user_id&&$prom)
     	{
@@ -354,14 +360,17 @@ class CountSum
             foreach($order_extend as $k => $v)
             {
                 $proObj = new ProRule($v['sum'] - $v['reduce']);
-                $proObj->setUserGroup($group_id);
+                $proObj->setUserGroup($group_id,$user_id);
+				$proObj->setMaxNums($max_count);
                 $this->isFreeFreight = $proObj->isFreeFreight($area,$v['goodsIdList']);
                 $order_extend[$k]['promotion'] = $proObj->getInfo($v['goodsIdList'],$area);
                 $order_extend[$k]['proReduce'] = $v['sum'] - $v['reduce'] - $proObj->getSum($v['goodsIdList'], $area);
                 unset($proObj);
             }
 	    	$proObj = new ProRule($final_sum);
-	    	$proObj->setUserGroup($group_id);
+
+	    	$proObj->setUserGroup($group_id,$user_id);
+			$proObj->setMaxNums($max_count);
 	    	$this->isFreeFreight = $proObj->isFreeFreight($area,$goodsIdList);
 	    	$this->promotion = $proObj->getInfo($goodsIdList,$area, true);
 	    	$this->proReduce = $final_sum - $proObj->getSum($goodsIdList, $area);
@@ -394,6 +403,8 @@ class CountSum
             'extend'     => $this->extend,
     	);
 	}
+
+
 	//获取闪购价
 	/*
 	 * @$goods_id int 商品id

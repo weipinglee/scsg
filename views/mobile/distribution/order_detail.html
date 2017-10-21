@@ -41,47 +41,64 @@
 
                    <a class="dz" href="javascript:;">
                     <p style="padding-left:15px;">
-                        <span class="shname">收货人：ss</span>
-                        <span class="float_rt">13245367845</span>
+                        <span class="shname">收货人：{$this->order_info['accept_name']}</span>
+                        <span class="float_rt">{$this->order_info['mobile']}</span>
                     </p>
                     <p class=""><i class="icon-map-marker" style="font-size: 18px;"></i>
-                        <span>河北省 石家庄市 市辖区 s</span></p>
-                   </a>
+                        <span>{$this->order_info['province_str']} {$this->order_info['city_str']} {$this->order_info['area_str']} {$this->order_info['address']}</span></p>
+                </a>
 
                 </div>
+                {foreach:items=$this->og_data item=$good}
+                {set:$good_info = JSON::decode($good['goods_array'])}
+                <?php /*?>
                 <div class="qrdd qrdds">
-                    <div class="sj">
-                    <img src="/ducong/scsg/views/mobile/skin/black/images/ptlog.png" style="width: 27px;float:left;position: relative;top: -5px;"><a herf="javascript:;">平台自营</a></div>
+                    <div class="sj"><img {if:isset($good['seller_logo'])} src="{webroot:}{$good['seller_logo']}" {else:} src="{skin:images/ptlog.png}" {/if} style="width:27px;float:left;"/><a herf="javascript:;">{$good['seller_name']}</a></div>
                  <!-- 商品详情-->
                     <div class="qr_xq">
-                      <a href="/ducong/scsg/site/products/id/17" style="display:block;">
+                      <a href="{url:/site/products/id/$good['goods_id']}" style="display:block;padding-bottom:25px;">
+                 <?php */?>
+                {if:$good['type'] == 1}
+                {set:$sign = 1}
+                {/if} 
+                {query:name=seller where=id eq $good[seller_id] fields=logo_img}
+                    {set:$seller_logo = $item['logo_img']}
+                {/query}       
+                <div class="qrdd qrdds">
+                    <div class="sj">
+                    <img {if:!empty($seller_logo)} src="{webroot:$seller_logo}" {else:} src="{skin:images/ptlog.png}" {/if} style="width:27px;float:left;"/><a herf="javascript:;">{$good['seller_name']}</a></div>
+                 <!-- 商品详情-->
+                    <div class="qr_xq">
+                      <a href="{url:/site/products/id/$good['goods_id']}" style="display:block;">
 
                         <div class="tjxq_img">
-                            <img src="/ducong/scsg/views/mobile/skin/black/images/front/nopic_100_100.gif"/>
+                            <img src="{webroot:$good['img']}" onerror='this.src="{skin:images/front/nopic_100_100.gif}"'>
                         </div>
                         <div class="tjxq_tit">
-                            <p>asd</p>
+                            <p>{$good_info['name']}</p>
                             <p class="tjxq_ge">
-                                                            </p>
+                                {if:$good_info['value']!=''}{$good_info['value']}{/if}
+                            </p>
                         </div>
                        <div class="tjxq_sum">
                             <p class="sum">
-                                单价：<span>￥10.00</span>
-                                优惠：<span>￥0</span>
-                                数量：<span>x1</span>
+                                单价：<span>￥{$good['sell_price']}</span>
+                                优惠：<span>￥{echo:$good['sell_price']-$good['real_price']}</span>
+                                数量：<span>x{$good['goods_nums']}</span>
                                 
                             </p>
                         </div>
-                        <div style="clear: both;"></div>
+						<div style="clear: both;"></div>
                       </a>
                    </div>
                    <!-- 商品详情结束 -->
                 </div>
+                {/foreach}
                 {if:!isset($sign)}
-               <p style="padding:5px 16px;">配送费用：<span id="deliveryfee_0_500_192}" style="float:right;">￥0.00</span></p>
+               <p style="padding:5px 16px;">配送费用：<span id="deliveryfee_0_500_192}" style="float:right;">￥{$this->order_info['real_freight']}</span></p>
                {/if}
                <p style="color:red;padding:0px 15px;">
-                  实付款：<b style="float:right;">￥120.00</b>
+                  实付款：<b style="float:right;">￥{$this->order_info['order_amount']}</b>
                 </p>
                  <div class="qrdd qrdds" style="">
                      <div class="dxq">
@@ -102,11 +119,7 @@
                  <div class="qrdd qrdds" style="">
                    <!--  <h4 class="qrfp">发票信息</h4> -->
                      <div class="dxq">
-                       <p><span>代收点:</span><i>{if: isset($this->order_info['takeself']['name'])}{$this->order_info['takeself']['name']}{/if}</i></p>
-                       <p><span>支付方式:</span><i>{$this->order_info['payment']}</i></p>
-                        {if:!isset($sign)}<p><span>配送方式:</span><i>{$this->order_info['delivery']}</i></p>{/if}
-                        
-                        <p><span>配送时间:</span><i>2017/09/07 08:00——2017/09/07 09:00</i></p>
+                        <p><span>支付方式:</span><i>{$this->order_info['payment']}</i></p>
                     </div>
                  </div>
                   <div class="qrdd qrdds" style="">
@@ -118,12 +131,26 @@
                  </div>
                  <div style="height:55px;"></div>
                  <div class="dxzt">
-                  <p>
+                <p>
+                    {if:in_array($orderStatus,array(1,2))}
                     <label >
-                        <a class="button_jd_a" onclick="return">接单</a>
+                        <a onclick="return confirm('确定取消订单吗')" href="{url:/ucenter/order_status/op/cancel/order_id/$this->order_info['order_id']}">取消订单</a>
                     </label>
-                    
-                  </p>
+                    {/if}
+
+                    {if:$orderStatus == 2}
+                    <label >
+                        <a href="javascript:;" onclick="window.location.href='{url:/block/doPay/order_id/$this->order_info['order_id']}'">立即付款</a>
+                    </label>
+                    {/if}
+
+                    {if:in_array($orderStatus,array(25))}
+                    <label >
+                        <a href="javascript:;" onclick="window.location.href='{url:/ucenter/order_status/op/confirm/order_id/$this->order_info['order_id']}'">确认收货</a>
+                    </label>
+                    {/if}
+
+                </p>
                  </div>
             </div>
      </body> 

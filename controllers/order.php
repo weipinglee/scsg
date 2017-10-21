@@ -1009,7 +1009,7 @@ class Order extends IController
     public function order_list()
     {
 		//搜索条件
-		$search = IFilter::act(IReq::get('search'),'strict');
+		$search = IFilter::act(IReq::get('search'));
 		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
         $plat = IReq::get('plat') ? IReq::get('plat') : '';
         if($plat == 'plat')
@@ -1033,7 +1033,7 @@ class Order extends IController
 		
 		$orderHandle = new IQuery('order as o');
 		$orderHandle->order  = "o.id desc";
-		$orderHandle->fields = "o.*,u.username,p.name as payment_name";
+		$orderHandle->fields = "o.*,u.username,p.name as payment_name,d.status as deliverStatus,d.acc_time";
 		$orderHandle->page   = $page;
 		$orderHandle->where  = $where.' and o.type !=4 ';
 		$orderHandle->join   = $join;
@@ -1066,7 +1066,7 @@ class Order extends IController
 				}
 			}
 		}
-		
+
 		$this->order_refund = $order_refund;
 	
 		$this->redirect("order_list");

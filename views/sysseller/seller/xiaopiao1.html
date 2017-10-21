@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+    *{
+    	padding: 0px;
+    	margin:0px;
+    	font-size: 15px;
+    }
+    ul li{
+    	list-style-type:none;
+    }
+    .clear:after{
+    	content: "";
+    	display: block;
+    	clear: both;
+    }
+	    .xp_div{
+	    	margin:20px auto;
+	    	padding: 10px;
+	    	width: 300px;
+	    	
+	    }
+	    .xp_div  p{
+	    	line-height: 30px;
+	    }
+    	.xp_div .div2 p{
+    		text-align: center;
+    	}
+    	.xp_div hr{
+    		height:1px;border:none;border-top:1px dashed #928f8f;
+    	}
+    	.div3 ul li{
+    		float: left;
+    		line-height: 30px;
+    	}
+    	.div3 ul li.li1{
+    		width: 60%;
+    	}
+    	.div3 ul li.li2{
+    		width: 20%;
+    	}
+    	.div3 ul li.li3{
+    		width: 20%;
+    		text-align: right;
+    	}
+    	.div4 p{
+    		text-align: right;
+    		
+    	}
+    	
+    </style>
+</head>
+<body>
+<div class="xp_div">
+	<div>{echo:ITime::getDateTime('Y年m月d日 H:i')}</div>
+	<hr/>
+	<div class="div2">
+		<p class="seller_p">{if:isset($set['name'])}{$set['name']}{/if}</p>
+		<p class="pay_p">在线支付{if:$pay_status}（已支付）{else:}(（未支付）){/if}</p>
+		<p>订单号：{$order_no}</p>
+		<p>付款时间：{$pay_time}</p>
+		<p>配送时间：
+			{if:!$deli_time && $pay_time}
+				{set:$deliTime = strtotime($pay_time);}
+				{set:$deliTime = ITime::pass(1800,'Y-m-d H:i:s',$deliTime)}
+			{$deliTime}前
+			{elseif:$deli_time}
+			{$deli_day} {$deli_time}:00
+			{else:}
+			即时配送
+			{/if}</p>
+		<hr/>
+	</div>
+	<div class="div3 ">
+		{set:$goodsSum = 0;$deliveryPrice = 0;}
+		{query:name=order_goods as og join=left join goods as go on go.id eq og.goods_id where=order_id eq $id}
+		{set:$goodsSum      += $item['real_price'] * $item['goods_nums']}
+		{set:$deliveryPrice += $item['delivery_fee']}
+		{set:$goodsRow       = JSON::decode($item['goods_array'])}
+		<ul class="clear">
+			<li class="li1"><span>{$goodsRow['name']}  </span></li>
+			<li class="li2"><span>x{$item['goods_nums']}</span></li>
+			<li class="li3"><span>￥{$item['real_price']}</span></li>
+		</ul>
+
+		{/query}
+
+		<hr/>
+	</div>
+	<div class="div4">
+		<p>运费：￥{echo:number_format($deliveryPrice,2)}</p>
+		<p>优惠：-￥{echo:number_format($pro_reduce,2)}</p>
+		<p>总计：￥{echo:number_format($order_amount,2)}</p>
+		<hr/>
+	</div>
+	<div class="div6">
+        <p>留言：{$note}</p>
+        <hr/>
+    </div>
+	<div class="div5">
+		<p>{$address}</p>
+		<p>{$mobile}</p>
+		<p>{$accept_name}</p>
+	</div>
+</div>
+</body>
+</html>

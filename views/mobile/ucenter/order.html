@@ -172,9 +172,10 @@ background-color: rgba(94, 110, 141, 0.9);
 			  <%if(goods_data[i]['comment_status'] == 0){%>
 			
 	 			<a class="hongzi wd-popup-trigger" href="{url:/site/comments/id}/<%=goods_data[i]['comment_id']%>" >评价</a>
+			<%}else if(goods_data[i]['comment_status'] == 1){%>
+				<a class="hongzi wd-popup-trigger" href="{url:/site/comments/id}/<%=goods_data[i]['comment_id']%>" >追加评价</a>
 			<%}else{%>
-				<a class="hongzi wd-popup-trigger" href="javascript:void(0)" >已评价</a>
-				
+			  <a href="javascript:void(0)">已追评</a>
 			<%}%> 
 		<%}%>
 		</div>

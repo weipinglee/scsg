@@ -28,6 +28,20 @@
 						<label>* 此活动的使用时间段</label>
 					</td>
 				</tr>
+                <tr>
+                    <th>单日使用次数：</th>
+                    <td>
+                        <input type="text" name="times_day" class="normal" value="0" />
+                         <label> 每个用户每天最多使用次数，0表示不限制</label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>每次商品数量限制：</th>
+                    <td>
+                        <input type="text" name="nums_time" class="normal" value="0" />
+                        <label> 每个用户每次使用这个活动限制的商品数量，0表示不限制</label>
+                    </td>
+                </tr>
 				<tr>
 					<th valign="top">允许参与人群：</th>
 					<td>
@@ -454,6 +468,8 @@
 		'end_time':'{$this->promotionRow['end_time']}',
 		'user_group[]':'{echo:str_replace(",",";",$this->promotionRow['user_group']);}',
 		'group_all':"{$this->promotionRow['user_group']}",
+        'times_day' :"{$this->promotionRow['times_day']}",
+        'nums_time' :"{$this->promotionRow['nums_time']}",
 		'is_close':'{$this->promotionRow['is_close']}',
 		'condition':'{$this->promotionRow['condition']}',
 		'award_type':'{$this->promotionRow['award_type']}'

@@ -234,7 +234,9 @@ $(document).on('click', '.js_hide_big_photo', function(){
 					{if:isset($up_time) && $up_time}
 					<li>上架时间：{$up_time}</li>
 					{/if}
-					
+                    {if:isset($info) && $info}
+                    <li>商品信息：{$info}</li>
+                    {/if}
 					
 				</ul>
 				{if:isset($content) && $content}

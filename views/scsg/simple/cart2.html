@@ -239,7 +239,7 @@ function selectTakeself(deliveryId)
 }
 
 </script>
-
+{set:$deli_time = explode(',',$siteConfig->deli_time)}
 <div class="wrapper clearfix">
 	<div class="position mt_10"><span>您当前的位置：</span> <a href="{url:}"> 首页</a> » 填写核对订单信息</div>
 	<div class="myshopping m_10">
@@ -283,11 +283,12 @@ function selectTakeself(deliveryId)
 							<tr><th>收货人信息：</th><td><%=province_val%> <%=city_val%>  (<%=accept_name%>收)</td></tr>
 							<tr><th></th><td><%=area_val%> <%=address%>  <%=mobile%>  <%=telphone%></td></tr>
                             {if:!$this->good_type}
+							<!--
 							<tr><th>代收点：</th><td><input type='checkbox' name='takeself' class='hide checks' value='0'/> <span id="takeself"></span>
 								<a href="javascript:selectTakeself();"><span class="red">切换自提点(自提客户或非香榭小区范围内客户可选自提点进行自主取货)</span></a>
 								</td>
 							</tr>
-							<tr class='hide' id='takeselfParam'><td><%=province%></td><td><%=city%></td><td><%=area%></td></tr>
+							<tr class='hide' id='takeselfParam'><td><%=province%></td><td><%=city%></td><td><%=area%></td></tr>-->
 						    {/if}
                         </script>
 					</table>
@@ -399,6 +400,35 @@ function selectTakeself(deliveryId)
 					
 				</div>
 				<!--支付方式 结束-->
+				<div class="wrap_box" id='deliDay' style='display:block'>
+					<h3>
+						<span class="orange">配送日期</span>
+
+					</h3>
+					<div id="deliday_form">
+						<label><input class="radio a" name="deliday" alt=""  type="radio" value="0" checked="true" />定时达</label>
+						<label><input class="radio b" name="deliday" alt=""  type="radio" value="1" />次日达</label>
+						<label><input class="radio c" name="deliday" alt=""  type="radio" value="2" />即时配送</label>
+					</div>
+
+				</div>
+				<!--配送时间 开始-->
+				<div class="wrap_box" id='deliTime' style='display:block'>
+					<h3>
+						<span class="orange">配送时间</span>
+						<a class="normal f12" href="javascript:void(0)" id='delitimeToggleButton' ></a>
+					</h3>
+					<div id="delitime_form">
+						{foreach:items=$deli_time}
+						<label><input class="radio" name="delitime" alt=""  type="radio" value="{$item}" {if:$key==0}checked="true"{/if} />{$item}</label>
+						{/foreach}
+
+					</div>
+
+
+				</div>
+
+				<!--配送时间 结束-->
 
 				<!--订单留言 开始-->
 				<div class="wrap_box">
@@ -469,7 +499,7 @@ function selectTakeself(deliveryId)
 									<th>商品名称</th>
 									<th>赠送积分</th>
                                     <th>单价</th>
-									<th>优惠</th>
+									<th>会员优惠</th>
 									<th>数量</th>
                                     <!--<th>是否保价</th>-->
 									<th class="last">商品小计</th>
@@ -603,6 +633,7 @@ function selectTakeself(deliveryId)
 	</form>
 </div>
 <script type="text/javascript">
+
     $(function(){
         $('#js_promotion_list').find('p.indent').each(function(){
             if($(this).is(':visible'))
@@ -611,4 +642,59 @@ function selectTakeself(deliveryId)
             }
         })
     })
+
+
+	$(function(){
+		showDelitime();
+		$('input[name=deliday]').click(function(){
+			showDelitime();
+		})
+	})
+
+	function showDelitime(){
+		var _this = $('input[name=deliday]:checked');
+		var type = _this.val();
+		var now = new Date();
+		var interMin = 30*60*1000;
+
+		$('input.a').attr('disabled',true).attr('checked',false);//把第一个和第三个选项先设置为不可选
+		$('input.c').attr('disabled',true).attr('checked',false);
+		//$('input.b').attr('checked',true);
+		$('#delitime_form').find('input[type=radio]').each(function(){
+			time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +$(this).val();
+			//window.realAlert(parseInt(now - new Date(time)));
+			if(parseInt(now - new Date(time))< -interMin){//如果有可选时间段
+				$(this).attr('checked',true).attr('disabled',false);
+				$('input.a').attr('disabled',false);
+				$('input.c').attr('disabled',false);
+			}
+
+		})
+		if(type==2){
+			_this.attr('checked',true);
+			$('#delitime_form').find('input[type=radio]').removeAttr('checked').attr('disabled',true);
+		}
+		else if(type==1){
+			$('#delitime_form').find('input[type=radio]').removeAttr('disabled');
+			$('#delitime_form').find('input[type=radio]').eq(0).attr('checked',true);
+		}
+		else{
+			$('#delitime_form').find('input[type=radio]').removeAttr('disabled').removeAttr('checked');
+
+			$('#delitime_form').find('input[type=radio]').each(function(){
+				time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +$(this).val();
+				//window.realAlert(parseInt(now - new Date(time)));
+				if(parseInt(now - new Date(time))> -interMin){//不可选该时间段
+					$(this).attr('disabled',true);
+				}
+				else{
+					$(this).attr('checked',true).attr('disabled',false);
+					_this.attr('disabled',false).attr('checked',true);
+				}
+			})
+		}
+	}
+
+
+
 </script>

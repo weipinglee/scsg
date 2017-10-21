@@ -1,4 +1,5 @@
 {set:$param = $this->param}
+{set:$siteConfig = new Config("site_config");}
 {foreach:items=$this->addressList}
 	{if:$item['id']==$this->defaultAddressId}
 	{set:$defaultAddress = $item;}
@@ -233,9 +234,64 @@ function selectProtect(obj)
 $(document).ready(function(){
 $(".sj img").css("height","27px")
 });
+
+
+$(function(){
+	showDelitime();
+	$('[name=deliday]').change(function(){
+		showDelitime();
+	})
+})
+
+function showDelitime(){
+	var type = $('[name=deliday]').val();
+	var option = $('select[name=delitime]').find('option');
+	var interMin = 30*60*1000;
+	var now = new Date();
+	$('option.a').attr('selected',false).attr('disabled',true);
+	$('option.c').attr('disabled',true);
+	$('option.b').attr('selected',true);
+	option.each(function(){
+		time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +$(this).val();
+		//window.realAlert(parseInt(now - new Date(time)));
+		if(parseInt(now - new Date(time))< -interMin){//有选该时间段
+			$('option.a').attr('disabled',false);
+			$('option.c').attr('disabled',false);
+		}
+
+	})
+	if(type==2){
+		$('option.c').attr('selected',true);
+		option.removeAttr('selected');
+		option.eq(0).attr('selected',true);
+		option.attr('disabled',true);
+
+	}
+	else if(type==1){
+		option.removeAttr('disabled');
+		option.eq(0).attr('disabled',true);
+		option.eq(1).attr('selected',true);
+	}
+	else{
+		option.removeAttr('disabled').removeAttr('selected');
+		option.eq(0).attr('disabled',true);
+
+		option.each(function(){
+			time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +$(this).val();
+			//window.realAlert(parseInt(now - new Date(time)));
+			if(parseInt(now - new Date(time))> -interMin){//不可选该时间段
+				$(this).attr('disabled',true);
+			}
+			else{
+				$(this).attr('selected',true);
+				$('option.a').attr('selected',true);
+			}
+		})
+	}
+}
 </script>
 
-
+{set:$deli_time = explode(',',$siteConfig->deli_time)}
      <div class="pages">
          <header class="wap-header">
 	   		 <div class="wap-topbar">
@@ -355,10 +411,12 @@ $(".sj img").css("height","27px")
 		<div class="qrdd qrdds">
 			<div class="qrdds_zf">
             {if:!$this->good_type}
+				<!--
 		     	<h4>代收点:</h4>
 					<select style="" name="takeself">
 		     		<option>请选择代收点（可空）</option>
 		     		</select>
+		     		-->
 		    {/if}
 		 		</div>
 		</div>
@@ -378,6 +436,29 @@ $(".sj img").css("height","27px")
      			</select><label style="display: none;">*请选择支付方式</label>
      		</div>
 		</div>
+
+			<div class="qrdd qrdds">
+				<div class="qrdds_zf">
+					<h4><i>*</i>配送日期:</h4>
+					<select style="" name="deliday" >
+						<option class="b" value="1">次日达</option>
+						<option class="a" value="0">定时达</option>
+
+						<option class="c" value="2">即时配送</option>
+					</select>
+				</div>
+			</div>
+			<div class="qrdd qrdds">
+				<div class="qrdds_zf">
+					<h4><i>*</i>配送时间:</h4>
+					<select style="" name="delitime" >
+						<option value="-1">即时配送</option>
+						{foreach:items=$deli_time}
+						<option value="{$item}">{$item}</option>
+						{/foreach}
+					</select>
+				</div>
+			</div>
 		<div class="qrdd qrdds">
 		    <div class="qrdds_zf">
 		    	<h4>买家留言:</h4>

@@ -1560,8 +1560,18 @@ class Simple extends IController
         $order_no      = Order_Class::createOrderNum();
         $order_type    = 0;
         $invoice       = isset($_POST['taxes']) ? 1 : 0;
+		$deli_day      = IFilter::act(IReq::get('deliday'),'int');
+		$deli_time     = $deli_day == 2 ? 0 : IFilter::act(IReq::get('delitime'));
         $dataArray     = array();
 		$this->payment_id = $payment;
+
+		if($deli_day==1){
+			$deli_day = ITime::getDateTime('Y-m-d',time()+3600*24);
+		}
+		else{
+			$deli_day = ITime::getDateTime('Y-m-d');
+		}
+
         //防止表单重复提交
         if(IReq::get('timeKey') != null)
         {
@@ -1584,7 +1594,7 @@ class Simple extends IController
         $user_id = ($this->user['user_id'] == null) ? 0 : $this->user['user_id'];
 
         //计算费用
-        $countSumObj = new CountSum($user_id);
+        $countSumObj = new CountSum($user_id,1);
 
         //直接购买商品方式
         if($type && $gid)
@@ -1626,7 +1636,7 @@ class Simple extends IController
             //清空购物车
             //IInterceptor::reg("cart@onFinishAction");
         }
-        //print_r($goodsResult);echo '</br>';
+
         //判断商品商品是否存在
         if(is_string($goodsResult) || empty($goodsResult['goodsList']))
         {
@@ -1634,6 +1644,15 @@ class Simple extends IController
             exit;
         }
 
+		//增加使用过的促销规则使用次数
+		if(!empty($goodsResult['promotion'])){
+			foreach($goodsResult['promotion'] as $key=>$val){
+				if($val['id']){
+					$proObj = new ProRule();
+					$proObj->addUsedTimes($val['id'],$user_id);
+				}
+			}
+		}
         //加入促销活动
         if($promo && $active_id)
         {
@@ -1700,6 +1719,8 @@ class Simple extends IController
             'postscript'          => $order_message,
             //订单应付总额（商品final_num加上，税金，运费，再减去红包）
             'order_amount'        => $orderData['orderAmountPrice'] - (isset($ticketRow['value']) ? $ticketRow['value'] : 0),
+				'deli_day'        => $deli_day,
+				'deli_time'       => $deli_time
 
         );
         $dataArray['order_amount'] = $dataArray['order_amount'] <= 0 ? 0 : $dataArray['order_amount'];
@@ -1778,13 +1799,17 @@ class Simple extends IController
                 //促销活动ID
                 'active_id'           => $active_id,
                 'pid'                 => $this->order_id,
-                'seller_id'           => $k
+                'seller_id'           => $k,
+					'deli_day'        => $deli_day,
+					'deli_time'       => $deli_time
             );
             
             $data['order_amount'] = $data['order_amount'] <= 0 ? 0 : $data['order_amount'];
             $orderObj->setData($data);
             $oId = $orderObj->add();
             $orderInstance->insertOrderGoods($oId,$orderData['goodsResult'],$payment,$k);
+
+
             //填写开发票信息
             if($invoice){
                 $db_fapiao = new IModel('order_fapiao');

@@ -52,36 +52,51 @@
 			<div class="dd">
 				
 			</div>
+			{if:$this->comment['status'] == 1}
+			<input type="hidden" name="replySelf" value="1" />
+			<input type="hidden" name="_imgList" value=""/>
+			<div class="yj">
+				<input type='hidden' name='sellerid' value="{$item['seller_id']}"/>
+				<textarea class="texts" name='contents'></textarea>
+				<p>
+					<input class="butt" type="reset" value="重置" onclick="$('[name=contents]').val('');"/>
+					<input class="butt"  onclick="comment_reply()" type="button" value="提交"/>
+				</p>
 
-				<div class="star">
-					<span>宝贝与描述相符</span>
-	
-					<ul>
+			</div>
+			{else:}
+			<div class="star">
+				<span>宝贝与描述相符</span>
+
+				<ul>
 					<li><a href="javascript:;">1</a></li>
 					<li><a href="javascript:;">2</a></li>
 					<li><a href="javascript:;">3</a></li>
 					<li><a href="javascript:;">4</a></li>
 					<li><a href="javascript:;">5</a></li>
-					</ul>
-				</div>
-				<script type="text/javascript">
-				$(function(){
-				var score = new Score({
-				callback: function(cfg) {
-				console.log(cfg.starAmount);
-				}
-				});
-				});
-				</script>
-            <div class="yj">
-					<input type='hidden' name='sellerid' value="{$item['seller_id']}"/>
-					<textarea class="texts" name='contents'></textarea>
-					<p>
-						<input class="butt" type="reset" value="重置" onclick="$('[name=contents]').val('');"/>
-						<input class="butt"  onclick="comment_add()" type="button" value="提交"/>
-					</p>
-	
+				</ul>
 			</div>
+			<script type="text/javascript">
+				$(function(){
+					var score = new Score({
+						callback: function(cfg) {
+							console.log(cfg.starAmount);
+						}
+					});
+				});
+			</script>
+			<div class="yj">
+				<input type='hidden' name='sellerid' value="{$item['seller_id']}"/>
+				<textarea class="texts" name='contents'></textarea>
+				<p>
+					<input class="butt" type="reset" value="重置" onclick="$('[name=contents]').val('');"/>
+					<input class="butt"  onclick="comment_add()" type="button" value="提交"/>
+				</p>
+
+			</div>
+			{/if}
+
+
 		</div>
     </section>
 <!--第三种模块结束-->                             
@@ -105,6 +120,28 @@ function comment_add()
 	var sellerid = $('input[name=sellerid]').val();
 	var data={'point':point,'contents':contents,'id':{$id},'sellerid':sellerid};
 	$.post("{url:/site/comment_add/id/$id}",data,function(c)
+	{
+		if(c==='success')
+		{
+			location="{url:/ucenter/order}";
+		}
+		else
+			alert(c);
+	});
+}
+
+//追评
+function comment_reply()
+{
+	var _r=$("input[name='replySelf']").val()
+			,goodsPhoto = [];
+
+
+	var contents=$("[name=contents]").val();
+	var sellerid = $('input[name=sellerid]').val();
+	var _imgList = $('input[name=_imgList]').val();
+	var data={'replySelf':_r,'contents':contents,'pid':{$id},'sellerid':sellerid,'imgList':_imgList};
+	$.post("{url:/site/comment_replySelf}",data,function(c)
 	{
 		if(c==='success')
 		{

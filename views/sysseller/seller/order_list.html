@@ -2,6 +2,8 @@
 {set:$searchParam = http_build_query(Util::getUrlParam('search'))}
 {set:$condition = Util::search(IReq::get('search'));$where = $condition ? " and ".$condition : "";}
 
+{set:$siteConfig = new Config("site_config");}
+{set:$deli_time = explode(',',$siteConfig->deli_time)}
 <article class="module width_full">
 	<header>
 		<h3 class="tabs_involved">订单列表</h3>
@@ -12,39 +14,49 @@
 	</header>
 
 	<table class="tablesorter" cellspacing="0">
-		<colgroup>
-			<col width="145px" />
-			<col width="85px" />
-			<col width="115px" />
-			<col width="125px" />
-			<col width="125px" />
-			<col width="155px" />
-			<col width="75px" />
-			<col />
-		</colgroup>
+		
 
 		<thead>
 			<tr>
 				<th>订单号</th>
-				<th>收货人</th>
-				<th>联系电话</th>
+				<!-- <th>收货人</th> -->
+				<!-- <th>联系电话</th> -->
 				<th>配送状态</th>
+				<th>用户名</th>
 				<th>支付状态</th>
-				<th>下单时间</th>
+				<th>付款时间</th>
+				<th>配送日期</th>
+				<th>配送时间</th>
 				<th>打印</th>
+				<!-- <th>配送地址</th> -->
+				<th>接单状态</th>
+				<th>商品信息</th>
 				<th>操作</th>
 			</tr>
 		</thead>
 
 		<tbody>
 			{set:$page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1}
+			{set:$deliver = new deliver();}
             {query:name=order page=$page where=seller_id eq $seller_id and if_del eq 0 and status neq 4 $where id=$orderObject order=id desc}
-            
+
 			<tr>
-				<td title="{$item['order_no']}">{$item['order_no']}</td>
-				<td title="{$item['accept_name']}">{$item['accept_name']}</td>
-				<td title="{$item['mobile']}">{$item['mobile']}</td>
+				<td title="{$item['order_no']}">
+					<a href="{url:/seller/order_show/id/$item[id]/pid/$item[pid]}">{$item['order_no']}</a>
+				</td>
+			<!-- 	<td title="{$item['accept_name']}">{$item['accept_name']}</td>
+				<td title="{$item['mobile']}">{$item['mobile']}</td> -->
 				<td><span name="disStatusColor{$item['distribution_status']}">{echo:Order_class::getOrderDistributionStatusText($item)}</span></td>
+
+				<td>
+					<?php
+				$M = new IModel('user');
+				if($item['user_id']){
+					$user = $M->getObj('id='.$item['user_id']);
+					echo isset($user['username']) ? $user['username'] : '';
+				}
+				?>
+				</td>
 				<td>
 					<span name="payStatusColor{$item['pay_status']}">
 					{if:$item['pay_type']==0}货到付款{/if}
@@ -52,12 +64,43 @@
 					{echo:Order_class::getOrderPayStatusText($item)}
 					</span>
 				</td>
-				<td title="{$item['create_time']}">{$item['create_time']}</td>
+				<td title="{$item['pay_time']}">{$item['pay_time']}</td>
+				<td >{$item['deli_day']}</td>
+				<td >{if:!$item['deli_time']}即时配送{else:}{$item['deli_time']}{/if}</td>
 				<td>
-					<span class="prt" title="购物清单打印" onclick="window.open('{url:/order/shop_template/id/$item[id]/seller_id/$seller_id}');">购</span>
+					<span class="prt" title="购物清单打印" onclick="window.open('{url:/seller/xiaopiao1/id/$item[id]}');">票</span>
 					<span class="prt" title="配货单打印" onclick="window.open('{url:/order/pick_template/id/$item[id]/seller_id/$seller_id}');">配</span>
 					<span class="prt" title="联合打印" onclick="window.open('{url:/order/merge_template/id/$item[id]/seller_id/$seller_id}');">合</span>
 					<span class="prt" title="快递单打印" onclick="window.open('{url:/order/expresswaybill_template/id/$item[id]/seller_id/$seller_id}');">递</span>
+				</td>
+				<!-- <td>{echo:area::getNameStr($item['area'])} {$item['address']}</td> -->
+				{set:$deliverStatus= $deliver->getDeliverStatus($item['id']);}
+				<td>
+					{if:$deliverStatus==4}
+					<span  class="acc" id="{$item['id']}" style="color:green">已送达</span>
+
+					{elseif:$deliverStatus==2}
+					<span  style="color:red">已接单</span>
+					{elseif:$deliverStatus==1}
+					<span  >已接单</span>
+					{else:}
+					<span >未接单</span>
+					{/if}
+				</td>
+				<td>
+					{set:$order_id=$item['id']}
+					{set:$goods_ids='' }
+					{query:name=order_goods  where=order_id eq $order_id   item=$good}
+					{set:$goods_ids .= $good['goods_id'].','}
+					{/query}
+					{set:$goods_ids.=0}
+					<?php
+							$goodsModel = new IModel('goods');
+							$goods = $goodsModel->query('id in ('.$goods_ids.')','name,info');
+					foreach($goods as $t){
+					echo $t['info']!='' ? $t['info'] : $t['name'].'</br>';
+					}
+					?>
 				</td>
 				<td>
 					<a href="{if:Order_class::isGoDelivery($item)}{url:/seller/order_deliver/id/$item[id]}{else:}javascript:alert('此单不满足发货条件');{/if}"><img class="operator" src="{skin:images/main/icn_jump_back.png}" title="立即发货" alt="立即发货" /></a>
@@ -112,6 +155,23 @@
 				<option value="5">完成订单</option>
 			</select>
 		</fieldset>
+		<!--<fieldset>
+			<label>配送日期</label>
+			<select name="search[deliday=]">
+				<option value="0">请选择配送日期</option>
+				<option value="1">今天</option>
+				<option value="2">明天</option>
+			</select>
+		</fieldset>
+		<fieldset>
+			<label>配送时间</label>
+			<select name="search[deli_time=]">
+				<option value="">请选择配送时间段</option>
+				{foreach:items=$deli_time}
+				<option value="{$item}">{$item}</option>
+				{/foreach}
+			</select>
+		</fieldset>-->
     </div>
 </form>
 </script>
@@ -147,5 +207,28 @@ $(function(){
 	//高亮色彩
 	$('[name="payStatusColor1"]').addClass('green');
 	$('[name="disStatusColor1"]').addClass('green');
+
+
+	$('span.acc').click(function(){
+		var order_id = $(this).attr('id');
+		var _this = $(this);
+		$.ajax({
+			type: 'post',
+			async: false,
+			data: {'order_id':order_id},
+			dataType: 'json',
+			url: '{url:/seller/startWork}',
+			beforeSend: function(){
+
+			},
+			success: function(data){
+				if(data.success==1){
+					_this.css('color','red');
+				}
+			},
+
+			timeout: 1000
+		})
+	})
 });
 </script>

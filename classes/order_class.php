@@ -396,7 +396,13 @@ class Order_Class
 		//普通付款通知
 		else
 		{
-			$time = ITime::getDateTime('Y-m-d H:i',time() + 60*60);
+			if($orderRow['deli_time']){
+				$time = $orderRow['deli_day'].' '.$orderRow['deli_time'];
+			}
+			else{
+				$time = ITime::getDateTime('Y-m-d H:i',time() + 30*60);
+			}
+
 			$smsContent = smsTemplate::payFinishToUser(array('{address}' => $orderRow['address'],'{time}' => $time));
 			Hsms::send($orderRow['mobile'],$smsContent);
 		}
@@ -497,7 +503,7 @@ class Order_Class
 	 		}  
 
 	 		$areaData = area::name($data['province'],$data['city'],$data['area']);
-	 		$data['province_str'] = $areaData[$data['province']];
+	 		$data['province_str'] = isset($areaData[$data['province']]) ? $areaData[$data['province']] : '';
 	 		$data['city_str']     = isset($areaData[$data['city']]) ? $areaData[$data['city']] : '';
 	 		$data['area_str']     = isset($areaData[$data['area']]) ? $areaData[$data['area']] : '';
 
@@ -1359,7 +1365,8 @@ class Order_Class
 	 */
 	public static function getSearchCondition($search=false)
 	{
-		$join  = "left join payment as p on o.pay_type = p.id left join user as u on u.id = o.user_id";
+		$join  = "left join payment as p on o.pay_type = p.id left join user as u on u.id = o.user_id
+					left join order_deliver as d on o.id=d.order_id";
 		$where = "o.if_del = 0";
 		//查询检索过滤
 		if($search)
@@ -1408,10 +1415,32 @@ class Order_Class
             if(isset($search['seller_id']) && $search['seller_id'])
             {
                 $where .= " and o.seller_id ".$search['seller_id'];
-            }                               
+            }
+
+			if(isset($search['deliday']) && $search['deliday'])
+			{
+				if($search['deliday']==2){
+					$deli_day = ITime::getDateTime('Y-m-d',time()+3600*24);
+				}
+				elseif($search['deliday']==1){
+					$deli_day = ITime::getDateTime('Y-m-d');
+				}
+				elseif($search['deliday']==3){
+					$deli_day = ITime::getDateTime('Y-m-d');
+				}
+				else{
+					$deli_day = $search['deliday'];
+				}
+				$where .= ' and o.deli_day ="'.$deli_day.'"';
+			}
+
+			if(isset($search['deli_time']) ){
+				$where .= ' and o.deli_time ="'.$search['deli_time'].'"';
+			}
+
 			foreach($search as $key => $val)
 			{
-				if(!in_array($key,array('keywords','name', 'beginTime', 'endTime', 'seller_id')) && $val!='')
+				if(!in_array($key,array('keywords','name', 'beginTime', 'endTime', 'seller_id','deliday','deli_time')) && $val!='')
 				{
 					$where .= " and o.".$key." = ".$val;
 				}

@@ -5,8 +5,7 @@ class distribution extends IController
 
 	function init()
 	{
-		if(!isset($_SESSION['delivery']))
-			$this->redirect('password');
+
 	}
 	
 	public function password(){
@@ -20,108 +19,163 @@ class distribution extends IController
 		$row = $deliObj->getObj('id='.$id);
 		if($row['password']==sha1($pass)){
 			$_SESSION['delivery'] = $row['username'];
+			$_SESSION['delivery_id'] = $row['id'];
 			$this->redirect('order');
 		}
 		$this->redirect('password');
 	}
 
 	public function order(){
+		if(!isset($_SESSION['delivery']))
+			$this->redirect('password');
+		$deliver_id = $_SESSION['delivery_id'];
+		$deliverObj = new deliver();
+		$this->wait_acc_nums = $deliverObj->waiting_acc_nums();
+		$this->uncomplate_nums = $deliverObj->uncomplate_deliver_num($deliver_id);
 
+		$this->status = IFilter::act(IReq::get('status','get')) ? IFilter::act(IReq::get('status','get')) : 0;
 
 		$this->redirect('order');
 	}
 
+	//接单操作
+	public function acc_order(){
+		if(!isset($_SESSION['delivery']))
+			$this->redirect('password');
+		$deliver_id = $_SESSION['delivery_id'];
+		$order_id = IFilter::act(IReq::get('id'));
+		$status = IFilter::act(IReq::get('status','post'));
+		$deliverObj = new deliver();
+		$res = false;
+		if($status==1){
+			$res = $deliverObj->deliver_acc($deliver_id,$order_id);
+			$orderObj = new IModel('order');
+			$orderObj->setData(array('deliver_id'=>$deliver_id));
+			 $orderObj->update('id='.$order_id);
+		}
+		else if($status==2){
+			$res = $deliverObj->user_acc($deliver_id,$order_id);
+		}
+
+		if($res){
+			die(json_encode(array('success'=>1)));
+		}
+		else{
+			die(json_encode(array('success'=>0)));
+		}
+	}
+
 	/**
-	 * 获取订单数据
 	 *
+	 * 获取订单数据
 	 */
 	public function get_orderlist(){
-		$page = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
-		$status = IReq::get('status')? intval(IReq::get('status')) : null;
-		$order_db = new IQuery('order as o');
-		$where = '';
-		if($status==1){//待付款
-			$where .= ' and ((o.type!=4 and o.status=1)  or (o.type=4 and o.status in (1,4) )) and o.pay_type!=0';
+		if(!isset($_SESSION['delivery']))
+			$this->redirect('password');
+		//搜索条件
+		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
 
-		}else if($status==2){//待发货
-			$where .= ' and ((o.type!=4 and o.status=2) or (o.type=4 and o.status=7)) and o.distribution_status=0';
+		$join = 'left join user as u on u.id = o.user_id left join order_deliver as d on o.id=d.order_id';
+		$where = 'o.if_del=0';
+		$status = IFilter::act(IReq::get('status','post'));
+		if($status==1){
+			$where .= ' and o.deliver_id=0 and o.status=2 and o.distribution_status=0 ';
 		}
-		else if($status==3){//待收货
-			$where .= ' and ((type!=4 and status=9)  or (type=4 and status=9))';
-		}
-		else if($status==4){//待评价
-			$where .= ' and ((type!=4 and status=5) or (type=4 and status=11))';
-		}
-		else if($status==5){//退换货
-			$where .= ' and type!=4 and o.status in (6,7,8) ';
-		}
-		//$order_db->join = 'left join presell as p on p.'
-		$order_db->where = ' if_del=0'.$where;
-		$order_db->fields = '*';
-		$order_db->order ='id DESC';
-		$order_db->page = $page;
-		$order_data = $order_db->find();
-		if($order_db->page==0 || empty($order_data)){echo 0;exit;}
-		$ids = '';
-		foreach($order_data as $k=>$v){
-			$ids .=$v['id'].',';
-		}
-		$ids = substr($ids,0,-1);
-
-		$_where = '';
-		if($status==4){//待评价
-			$_where .= ' and c.status = 0';
+		else if($status==2){
+			$where .= ' and d.status<4 ';
 		}
 
-		$order_goods_db = new IQuery('order_goods as og');
-		$order_goods_db->join = ' left join order as o on o.id = og.order_id left join comment as c on og.comment_id=c.id ';
-		$order_goods_db->where = 'og.order_id in ('.$ids.')'.$_where;
-		$order_goods_db->fields = 'o.status,og.id,og.goods_id,og.seller_id,og.refunds_status,og.order_id,og.goods_nums,og.comment_id,og.img,og.real_price,og.goods_array,og.is_send,og.delivery_id,og.delivery_fee,c.id as cid,c.point,c.status as comment_status';
-		$order_goods_data = $order_goods_db->find();
 
-		foreach($order_goods_data as $k=>$v){
-			$tem = JSON::decode($v['goods_array']);
-			$order_goods_data[$k]['spec'] = $tem['value'];
-			$order_goods_data[$k]['name'] = $tem['name'];
-			$order_goods_data[$k]['og_status'] = Order_Class::get_order_good_status($v);
+		$orderHandle = new IQuery('order as o');
+		$orderHandle->order  = "o.id desc";
+		$orderHandle->fields = "o.*,u.username,d.status as deliver_status,d.acc_time";
+		$orderHandle->page   = $page;
+		$orderHandle->pagesize = 10;
+		$orderHandle->where  = $where.' and o.type !=4 ';
+		$orderHandle->join   = $join;
+
+		$this->orderHandle = $orderHandle;
+
+		$order_list = $orderHandle->find();
+
+		if($orderHandle->page==0){
+			$order_list = array();
 		}
-		foreach($order_data as $k=>$v){
-			if($v['type']!='4'){
-				$order_data[$k]['order_status_no'] = Order_Class::getOrderStatus($order_data[$k]);
-				$order_data[$k]['order_status'] = Order_Class::orderStatusText($order_data[$k]['order_status_no']);
-				$order_data[$k]['can_pay'] = ($v['pay_type']!=0 && $v['status']==1) ? 1 : 0;
-			}else{
-				$order_data[$k]['order_status_no'] = $v['status'];
-				$order_data[$k]['order_status'] = Preorder_Class::getOrderStatus($order_data[$k]);
-				$order_data[$k]['can_pay'] = Preorder_Class::can_pay($order_data[$k])? 1:0;
-			}
 
-			$order_data[$k]['num']=0;
-			if($v['seller_id'])
+		unset($order_goods_data);
+		$sellerObj = new IModel('seller');
+		foreach($order_list as $key=>$item){
+			$sellerData = $sellerObj->getObj('id='.$item['seller_id'],'logo_img,true_name');//print_r($sellerData);
+			$order_list[$key]['seller_name'] = isset($sellerData['true_name']) ? $sellerData['true_name'] : '';
+			$order_list[$key]['seller_img'] = isset($sellerData['logo_img']) ? $sellerData['logo_img'] : '';
+			$order_list[$key]['pay_status'] = Order_Class::getOrderPayStatusText($item);
+			$order_list[$key]['total_pay'] = $item['real_amount'] + $item['real_freight'] - $item['pro_reduce'];
+		}
+		//print_r($order_list);
+		die(JSON::encode($order_list));
+	}
+
+	/**
+	 * @brief 订单详情
+	 * @return String
+	 */
+	public function order_detail()
+	{
+		$id = IFilter::act(IReq::get('id'),'int');
+		$orderObj = new order_class();
+		$this->order_info = $orderObj->getOrderShow($id);
+		if($this->order_info['type']==4)$this->redirect('preorder_detail/id/'.$this->order_info['id']);
+		$this->fapiao_data = array();
+		if($this->order_info['invoice']==1){
+			$fapiao_db = new IModel('order_fapiao');
+			$this->fapiao_data = $fapiao_db->getObj('order_id='.$id);
+		}
+		if(!$this->order_info)
+		{
+			IError::show(403,'订单信息不存在');
+		}
+
+
+		//获取商品信息
+		$tb_order_goods = new IQuery('order_goods as og');
+		$tb_order_goods->join = 'left join goods as g on og.goods_id=g.id';
+		$tb_order_goods->where = 'og.order_id='.$id;
+		$tb_order_goods->group = 'og.id';
+		$tb_order_goods->fields = 'g.type,g.sell_price,g.point,og.product_id,og.is_send,og.real_price,og.refunds_status,og.id as og_id,og.goods_id,og.img,og.goods_array,og.goods_nums,og.seller_id';
+		$og_data = $tb_order_goods->find();
+		foreach($og_data as $key=>$val){
+			if($val['seller_id'] <> 0)
 			{
-				$seller_name = API::run('getSellerInfo',$v['seller_id'],'true_name');
-				$seller_logo = API::run('getSellerInfo',$v['seller_id'],'logo_img');
-				$order_data[$k]['seller_name'] = $seller_name['true_name'];
-				$order_data[$k]['seller_logo'] = $seller_logo['logo_img'];
+				$seller_name = API::run('getSellerInfo',$val['seller_id'],'true_name');
+				$seller_logo = API::run('getSellerInfo',$val['seller_id'],'logo_img');
+				$og_data[$key]['seller_name'] = $seller_name['true_name'];
+				$og_data[$key]['seller_logo'] = $seller_logo['logo_img'];
 			}
 			else
 			{
-				$order_data[$k]['seller_name'] = '平台自营';
+				$og_data[$key]['seller_name'] = '平台自营';
 			}
-			foreach($order_goods_data as $key=>$val){
-				if($val['order_id']==$v['id']){
-					$order_goods_data[$key]['can_refund'] = $v['type']!=4 && (Refunds_Class::order_goods_refunds(array_merge($v,$val)) || Refunds_Class::order_goods_chg(array_merge($v,$val))) ? 1 : 0;
-					$order_data[$k]['goods_data'][] = $order_goods_data[$key];
-					$order_data[$k]['num'] +=$val['goods_nums'];
-				}
-
-			}
-			if(empty($order_data[$k]['goods_data']))
+			//判断所买商品是否分规格
+			if($val['product_id'])
 			{
-				unset($order_data[$k]);
+				$product = new IModel('products');
+				$sell_price = $product->getField('id='.$val['product_id'], 'sell_price');
+				$point = $product->getField('id='.$val['product_id'], 'point');
+				$og_data[$key]['sell_price'] = $sell_price ? $sell_price : 0;
+				$og_data[$key]['point'] = $point ? $point : 0;
+			}
+			else
+			{
+				$goods = new IModel('goods');
+				$sell_price = $goods->getField('id='.$val['goods_id'], 'sell_price');
+				$point = $goods->getField('id='.$val['goods_id'], 'point');
+				$og_data[$key]['sell_price'] = $sell_price ? $sell_price : 0;
+				$og_data[$key]['point'] = $point ? $point : 0;
 			}
 		}
-		unset($order_goods_data);
-		echo JSON::encode($order_data);
+		$this->og_data = $og_data;
+		$this->redirect('order_detail',false);
 	}
+
+
 }
