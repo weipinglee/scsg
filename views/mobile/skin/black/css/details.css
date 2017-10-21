@@ -78,7 +78,7 @@
 
 	/*服务*/
 	.qq-login{overflow:auto;padding:10px 10%;text-align:center}
-.qq-login a{width:50%;float:left;text-align:center}
+.qq-login a{width:33%;float:left;text-align:center}
 .qq-login a i{height:50px;width:50px;display:inline-block;overflow:hidden;text-indent:-1000px;border-radius:50%}
 .qq-login p{color:#666}
 .qq-login .fw i{background-image: url(../images/fw1.jpg);background-position:center;background-repeat:no-repeat;background-size:60px auto;}
