@@ -7,7 +7,8 @@
     *{
     	padding: 0px;
     	margin:0px;
-    	font-size: 15px;
+    	/*font-size: 15px;*/
+    	font-size: 10px;
     }
     ul li{
     	list-style-type:none;
@@ -19,12 +20,13 @@
     }
 	    .xp_div{
 	    	margin:20px auto;
-	    	padding: 10px;
-	    	width: 300px;
-	    	
+	    	padding:0 10px;
+	    	/*width: 300px;*/
+	    	width: 200px;
 	    }
 	    .xp_div  p{
-	    	line-height: 30px;
+	    	/*line-height: 30px;*/
+	    	line-height: 10px;
 	    }
     	.xp_div .div2 p{
     		text-align: center;
@@ -34,7 +36,7 @@
     	}
     	.div3 ul li{
     		float: left;
-    		line-height: 30px;
+    		/*line-height: 30px;*/
     	}
     	.div3 ul li.li1{
     		width: 60%;
@@ -70,7 +72,7 @@
 		<p class="seller_p">{if:isset($set['name'])}{$set['name']}{/if}</p>
 		<p class="pay_p">在线支付{if:$pay_status}（已支付）{else:}(（未支付）){/if}</p>
 		<p>订单号：{$order_no}</p>
-		<p>付款时间：{$pay_time}</p>
+		<!-- <p>付款时间：{$pay_time}</p> -->
 		<p>配送时间：
 			{if:!$deli_time && $pay_time}
 				{set:$deliTime = strtotime($pay_time);}
@@ -83,7 +85,7 @@
 			{/if}</p>
 		<hr/>
 	</div>
-	<div class="div3 ">
+	<!-- <div class="div3 ">
 		{set:$goodsSum = 0;$deliveryPrice = 0;}
 		{query:name=order_goods as og join=left join goods as go on go.id eq og.goods_id where=order_id eq $id}
 		{set:$goodsSum      += $item['real_price'] * $item['goods_nums']}
@@ -98,10 +100,10 @@
 		{/query}
 
 		<hr/>
-	</div>
+	</div> -->
 	<div class="div4">
-		<p>运费：￥{echo:number_format($deliveryPrice,2)}</p>
-		<p>优惠：-￥{echo:number_format($pro_reduce,2)}</p>
+		<!-- <p>运费：￥{echo:number_format($deliveryPrice,2)}</p>
+		<p>优惠：-￥{echo:number_format($pro_reduce,2)}</p> -->
 		<p>总计：￥{echo:number_format($order_amount,2)}</p>
 		<hr/>
 	</div>
@@ -114,7 +116,7 @@
 		<p>{$mobile}</p>
 		<p>{$accept_name}</p>
 	</div>
-	<div class="print_div"><input type="submit" class="btn_print noprint" onclick="window.print();" value="打印"></div>
+	<div class="print_div"><input type="submit" class="btn_print noprint" onclick="javascript:this.style.display=this.style.display=='none'?'':'none';if (window.print != null) { window.print(); } else {alert('没有安装打印机'); }" value="打印"></div>
 </div>
 
 </body>
