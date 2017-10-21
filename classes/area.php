@@ -64,12 +64,28 @@ class area
 		if($provinceCode==$cityCode){
 			return $areaDB->getField('area_id = '.$provinceCode,'area_name');
 		}
+		
 		else if($cityCode==$paramStr)
 		{
-			return $areaDB->getField('area_id = '.$provinceCode,'area_name').' '.$areaDB->getField('area_id = '.$cityCode,'area_name');
+			$prov = $areaDB->getField('area_id = '.$provinceCode,'area_name');
+			$city = $areaDB->getField('area_id = '.$cityCode,'area_name');
+			if($prov && $city){
+				return $prov.' '.$city;
+			}
+			else 
+				return '';
+			
 		}
 		else{
-			return $areaDB->getField('area_id = '.$provinceCode,'area_name').' '.$areaDB->getField('area_id = '.$cityCode,'area_name').' '.$areaDB->getField('area_id = '.$paramStr,'area_name');
+			$prov = $areaDB->getField('area_id = '.$provinceCode,'area_name');
+			$city = $areaDB->getField('area_id = '.$cityCode,'area_name');
+			$area = $areaDB->getField('area_id = '.$paramStr,'area_name');
+			
+			if($prov && $city && $area){
+				return $prov.' '.$city.' '.$area;
+			}
+			else 
+				return '';
 		}
 		
 	}
