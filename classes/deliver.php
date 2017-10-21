@@ -107,7 +107,7 @@ class Deliver
     public function waiting_acc_nums()
     {
         $orderObj = new IModel('order');
-        $nums = $orderObj->getField('if_del=0 and deliver_id=0 and  status=2 and distribution_status=0 ','count(id)');
+        $nums = $orderObj->getField('if_del=0 and deliver_id=0 and  status=2 and distribution_status=0 and o.type !=4 ','count(id)');
         return $nums;
     }
 
