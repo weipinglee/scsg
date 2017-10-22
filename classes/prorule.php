@@ -357,7 +357,7 @@ class ProRule
                 {
                     $proList[$k]['hide'] = 1;
                 }
-				if($maxNum>$proList[$k]['nums_time'])
+				if($proList[$k]['nums_time']!=0 && $maxNum>$proList[$k]['nums_time'])
 				{
 					$proList[$k]['hide'] = 1;
 				}
