@@ -565,7 +565,7 @@ class Simple extends IController
 	    	$groupObj = new IModel('member as m,user_group as g');
 			$groupRow = $groupObj->getObj('m.user_id = '.$this->user['user_id'].' and m.group_id = g.id','g.*');
 			$groupRow['id'] = empty($groupRow) ? 0 : $groupRow['id'];
-	    	$proObj->setUserGroup($groupRow['id']);
+	    	$proObj->setUserGroup($groupRow['id'],$this->user['user_id']);
 		}
     	$promotion = $proObj->getInfo($goodsList);
     	$proReduce = number_format($final_sum - $proObj->getSum($goodsList),2);
