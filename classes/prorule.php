@@ -43,9 +43,7 @@ class ProRule
 
 	private $incUsedTimes = 0;//是否增加促销规则使用次数
 
-	private $maxNum = 1;//客户端购买商品的单件最多的数量
 
-	private $maxNumLimit = 1;//服务器端限制的单件活动最多数量
 
 	/**
 	 * @brief 构造函数 初始化商品金额
@@ -312,6 +310,7 @@ class ProRule
 	 */
 	private function satisfyPromotion($award_type = null, $goodsIdList = array(), $area = null)
 	{
+		//print_r($goodsIdList);
         $final_sum = $this->sum;
 		$datetime = ITime::getDateTime();
 		$proObj   = $this->proObj;
@@ -332,7 +331,7 @@ class ProRule
 		}                  
 		$proList = $proObj->query($where,'*','`condition`');
         $proListTemp = $proList;
-        $temp = array_keys($goodsIdList);
+        $temp = array_keys($goodsIdList);//print_r($goodsIdList);
         foreach($proListTemp as $k => $v)
         {
             $gId = array();
@@ -350,8 +349,10 @@ class ProRule
             {
                 $sumNum = 0;
                 $reduceNum = 0;
+				$maxNum = 0;
                 foreach($common as $val)
                 {
+					$maxNum = $goodsIdList[$val]['num']>$maxNum ? $goodsIdList[$val]['num'] : $maxNum;
                     $sumNum += $goodsIdList[$val]['sum'];
                     $reduceNum += $goodsIdList[$val]['reduce'];
                 }
@@ -360,6 +361,12 @@ class ProRule
                 {
                     $proList[$k]['hide'] = 1;
                 }
+				if($maxNum>$proList[$k]['nums_time'])
+				{
+					$proList[$k]['hide'] = 1;
+				}
+
+
             }
             else
             {   
@@ -389,8 +396,7 @@ class ProRule
 
 		//去除超次数限制的促销规则
 		foreach($proList as $key=>$val){
-			$maxNumLimit = $val['nums_time'];
-			if($this->checkOutTimes($val['id']) || ($maxNumLimit!=0 && $this->maxNum>$maxNumLimit)){//检查活动参加次数和商品数量是否超限
+			if($this->checkOutTimes($val['id'])){//检查活动参加次数是否超限
 				unset($proList[$key]);
 			}
 		}
