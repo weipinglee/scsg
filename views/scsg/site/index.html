@@ -6,7 +6,13 @@
 	$seo_data['keywords']=$site_config->index_seo_keywords;
 	$seo_data['description']=$site_config->index_seo_description;
 	seo::set($seo_data);
-}		
+}
+
+<?php
+$siteConfigInfo   = $site_config->getInfo();
+$this->index_slide = isset($siteConfigInfo['index_slide'])? unserialize($siteConfigInfo['index_slide']) :array();
+
+?>
 <script type="text/javascript" src="{theme:javascript/jquery.kinMaxShow-1.0.min.js}"></script>
 <script type"text/javascript" src="{theme:javascript/a.js}"></script>
 <link href="{skin:css/bm.css}" rel="stylesheet">

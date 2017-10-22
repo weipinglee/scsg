@@ -38,7 +38,15 @@
 		<script src="{theme:javascript/filter.js}"></script>
 		<script src="{theme:javascript/swiper.jquery.min.js}"></script>
 		</head>
-
+<?php
+$siteConfigObj=new Config('site_config');
+$site_config   = $siteConfigObj->getInfo();
+$index_slide = isset($site_config['index_slide'])? unserialize($site_config['index_slide']) :array();
+foreach($index_slide as $key=>$val){
+$index_slide[$key]['img'] = thumb::get( $index_slide[$key]['img'],500,300);
+}
+$this->index_slide = $index_slide;
+?>
 		
     <body data-mps="PA4101">
 	

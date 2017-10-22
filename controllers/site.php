@@ -28,6 +28,9 @@ class Site extends IController
 		$siteConfigObj = new Config("site_config");
 		$site_config   = $siteConfigObj->getInfo();
 		$index_slide = isset($site_config['index_slide'])? unserialize($site_config['index_slide']) :array();
+        foreach($index_slide as $key=>$val){
+            $index_slide[$key]['img'] = thumb::get( $index_slide[$key]['img'],760,500);
+        }
 		$this->index_slide = $index_slide;
 		//print_r($this->index_slide);exit;
 		//获取商品分类
@@ -50,13 +53,13 @@ class Site extends IController
 		$this->user_like_goods = user_like::get_like_cate($uid,6);
 		
 		//获取团购商品
-		 $tuan = new IQuery('regiment as r');
-		$tuan->join = 'left join goods as g on r.goods_id=g.id';
-        $tuan->fields = 'r.*';
-        $tuan->where = 'r.is_close = 0 AND NOW() between r.start_time and r.end_time and g.is_del=0';
-        $tuan->order = 'r.id desc';
-        $tuan->limit = 3;
-        $this->tuanList = $tuan->find();
+//		 $tuan = new IQuery('regiment as r');
+//		$tuan->join = 'left join goods as g on r.goods_id=g.id';
+//        $tuan->fields = 'r.*';
+//        $tuan->where = 'r.is_close = 0 AND NOW() between r.start_time and r.end_time and g.is_del=0';
+//        $tuan->order = 'r.id desc';
+//        $tuan->limit = 3;
+        $this->tuanList = array();
 
 		$this->redirect('index');
 	}
