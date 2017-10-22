@@ -127,7 +127,7 @@ class Simple extends IController
     			$data['errorCode']=3;
     	}
 
-    	if(!IValidate::phone($phone))
+    	if(!$phone || !IValidate::phone($phone))
     	{
     		$data['errorCode']=15;
     	}
