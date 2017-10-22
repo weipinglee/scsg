@@ -23,7 +23,7 @@ class ProRule
 	private $user_group = null;
 
 	//现金促销规则奖励仅一次 true:1次;false:多次不限
-	public $isCashOnce = true;
+	public $isCashOnce = false;
 
 	//赠品促销规则奖励仅一次 true:1次;false:多次不限
 	public $isGiftOnce = false;
@@ -368,7 +368,8 @@ class ProRule
             {   
                 $proList[$k]['hide'] = 1;
             }      
-        }                                                                            
+        }
+
         if($area)
         {
             $proListTemp = $proList;
@@ -605,7 +606,7 @@ class ProRule
 			{
 				$awardInfo = $allAwardInfo;
 			}
-		}     
+		}
 		return $awardInfo;
 	}
 }
