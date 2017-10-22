@@ -45,24 +45,44 @@ class distribution extends IController
 		$deliver_id = $_SESSION['delivery_id'];
 		$order_id = IFilter::act(IReq::get('id'));
 		$status = IFilter::act(IReq::get('status','post'));
-		$deliverObj = new deliver();
-		$res = false;
-		if($status==1){
-			$res = $deliverObj->deliver_acc($deliver_id,$order_id);
-			$orderObj = new IModel('order');
-			$orderObj->setData(array('deliver_id'=>$deliver_id));
-			 $orderObj->update('id='.$order_id);
-		}
-		else if($status==2){
-			$res = $deliverObj->user_acc($deliver_id,$order_id);
-		}
 
-		if($res){
-			die(json_encode(array('success'=>1)));
+		$orderObj = new IModel('order');
+		$orderRow = $orderObj->getObj('id='.$order_id);
+		if(!empty($orderRow)){
+			$deliverObj = new deliver();
+			$res = false;
+			$orderStatus = Order_Class::getOrderStatus($orderRow);
+			if($status==1){
+				if($orderStatus==4){
+					$res = $deliverObj->deliver_acc($deliver_id,$order_id);
+					$orderObj = new IModel('order');
+					$orderObj->setData(array('deliver_id'=>$deliver_id));
+					$orderObj->update('id='.$order_id);
+				}
+				else{
+					die(json_encode(array('success'=>0,'info'=>'该状态不能接单')));
+				}
+
+			}
+			else if($status==2){
+				if($orderStatus==3||$orderStatus==6){
+					$res = $deliverObj->user_acc($deliver_id,$order_id);
+				}
+				else{
+					die(json_encode(array('success'=>0,'info'=>'该状态不允许此操作')));
+				}
+
+			}
+
+			if($res){
+				die(json_encode(array('success'=>1)));
+			}
+			else{
+				die(json_encode(array('success'=>0,'操作失败')));
+			}
 		}
-		else{
-			die(json_encode(array('success'=>0)));
-		}
+		die(json_encode(array('success'=>0,'info'=>'订单不存在')));
+
 	}
 
 	/**
@@ -83,6 +103,9 @@ class distribution extends IController
 		}
 		else if($status==2){
 			$where .= ' and d.status<4 ';
+		}
+		else{
+			$where .= ' and o.pay_status=1 ';
 		}
 
 
