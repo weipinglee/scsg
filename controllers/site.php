@@ -25,18 +25,11 @@ class Site extends IController
 
 	function index()
 	{
-		$siteConfigObj = new Config("site_config");
-		$site_config   = $siteConfigObj->getInfo();
-		$index_slide = isset($site_config['index_slide'])? unserialize($site_config['index_slide']) :array();
-        foreach($index_slide as $key=>$val){
-            $index_slide[$key]['img'] = thumb::get( $index_slide[$key]['img'],760,500);
-        }
-		$this->index_slide = $index_slide;
 		//print_r($this->index_slide);exit;
 		//获取商品分类
 		$categoryList = array();
-	
-		foreach( Api::run('getCategoryListTop') as $key=>$v){
+	    $cates = Api::run('getCategoryListTop');
+		foreach( $cates as $key=>$v){
 			$categoryList[$key] = $v;
 			$categoryList[$key]['child'] = Api::run('getCategoryByParentid',array('#parent_id#',$v['id']),5);
 			$categoryList[$key]['goods'] = Api::run('getCategoryExtendList',array('#categroy_id#',$v['id']),20);

@@ -238,7 +238,7 @@ return array(
 	    	'name'  => 'category',
 	    	'where' => ' parent_id = 0 and visibility = 1 ',
 	    	'order' => ' sort asc',
-	    	'limit' => 20,
+	    	'limit' => 5,
 	    )
 	),
 	//根据一级分类输出二级分类列表
