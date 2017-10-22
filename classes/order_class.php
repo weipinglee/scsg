@@ -1983,13 +1983,13 @@ class Order_Class
 		if($goodsOrderRow['delivery_id'] == 0 )
 		{
 			if(!empty($send_data)){
-				$otherFee += $goodsOrderRow['delivery_fee'];
+				$otherFee = bcadd($otherFee,$goodsOrderRow['delivery_fee'],5);
 			}
             if($orderRow['if_insured'])
             {
-                $otherFee += $goodsOrderRow['save_price'];
+                $otherFee = bcadd($otherFee,$goodsOrderRow['save_price'],5);
             }
-			$otherFee += $goodsOrderRow['tax'];
+			$otherFee = bcadd($otherFee,$goodsOrderRow['tax'],5);
 		}
 		if($goodsOrderRow['combine_id'])
         {
@@ -2001,7 +2001,7 @@ class Order_Class
             {
                 if($otherGoods)
                 {
-                    $amount = $orderRow['order_amount'] - $otherGoods[0]['price'];
+                    $amount = bcsub($orderRow['order_amount'] , $otherGoods[0]['price'],5);
                 }
             }
             else
@@ -2010,19 +2010,22 @@ class Order_Class
                 {
                     if($otherGoods[0]['count'] > 1)
                     {
-                        $amount = $goodsOrderRow['real_price'] * $goodsOrderRow['goods_nums'];
+                        $amount = bcmul($goodsOrderRow['real_price'] , $goodsOrderRow['goods_nums'],5);
                     }
                     else
                     {
-                        $amount = $orderRow['order_amount'] - $otherGoods[0]['price'];
+                        $amount = bcsub($orderRow['order_amount'] , $otherGoods[0]['price'],5);
                     }
                 }
             }
         }
-		$amount = $goodsOrderRow['real_price'] * $goodsOrderRow['goods_nums'];
+		$amount = bcmul($goodsOrderRow['real_price'] , $goodsOrderRow['goods_nums'],5);
+
 		//退款额计算：将促销优惠和红包优惠平均分配
-		$order_reduce = $orderRow['pro_reduce'] + $orderRow['ticket_reduce'];
-		$amount = $amount - $amount * $order_reduce/($orderRow['real_amount']+$orderRow['pro_reduce'])+ $otherFee;
+		$order_reduce = bcadd($orderRow['pro_reduce'] , $orderRow['ticket_reduce'],5);
+
+		$amount = bcadd(bcsub($amount , bcdiv(bcmul($amount , $order_reduce,10),$orderRow['real_amount'],10),5), $otherFee,5);
+
 		//rturn$amount = str_replace(',','',$amount);
 		$amount = number_format(floatval($amount),2);
 		return str_replace(',','',$amount);	
