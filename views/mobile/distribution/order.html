@@ -73,7 +73,7 @@ background-color: rgba(94, 110, 141, 0.9);
 <div class="order_top">
   <ul>
     <li {if:!$status}class="qbys"{/if}><a href="{url:/distribution/order}">全部</a></li>
-    <!-- <li {if:$status==1}class="qbys"{/if}><a href="{url:/distribution/order/status/1}">待接单（{$this->wait_acc_nums}）</a></li> -->
+    <li {if:$status==1}class="qbys"{/if}><a href="{url:/distribution/order/status/1}">待接单（{$this->wait_acc_nums}）</a></li>
     <li {if:$status==2}class="qbys"{/if}><a href="{url:/distribution/order/status/2}">待配送（{$this->uncomplate_nums}）</a></li>
   </ul>
 </div>
