@@ -69,11 +69,6 @@ class ProRule
 		$this->incUsedTimes = 1;
 	}
 
-	public function setMaxNums($num){
-		$this->maxNum = $num;
-	}
-
-
 	/**
 	 * 判断当前用户当天使用某个促销规则是否超次数
 	 * @param $prom_id int 促销id
@@ -209,7 +204,8 @@ class ProRule
 			$explain[$key]['plan'] = $val['name'];
             $explain[$key]['info'] = $this->typeExplain($val['award_type'],$val['condition'],$val['award_value']);
 			$explain[$key]['hide'] = isset($val['hide']) ? $val['hide'] : 0;
-		}                                    
+		}
+
 		return $explain;
 	}
 
