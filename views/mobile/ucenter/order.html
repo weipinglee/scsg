@@ -161,7 +161,7 @@ background-color: rgba(94, 110, 141, 0.9);
 		 <a class="tupian"  href="{url:/ucenter/order_detail/id/}/<%=id%>"> <img src="{url:<%=goods_data[i]['img']%>}" ></a>
 		   
 		   <p><a href="{url:/ucenter/order_detail/id/}/<%=id%>"><%if(type==1){%>[团购]<%}%><%if(type==4){%>[预售]<%}%><%=goods_data[i]['name']%><br><b><%==goods_data[i]['spec']%></b>
-		     <br><span>七天退换</span></a></p> 
+		     <br></a></p>
 		  <b>￥<%=goods_data[i]['real_price']%><br><span>×<%=goods_data[i]['goods_nums']%></span></b>
 		  <div style="float:right;">
 		  <%if(goods_data[i]['can_refund']){%>
