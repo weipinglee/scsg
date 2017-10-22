@@ -180,8 +180,8 @@ class Captcha
             $length = rand($this->minWordLength, $this->maxWordLength);
         }
 
-        $words  = "abcdefghijlmnopqrstvwyz";
-        $vocals = "aeiou";
+        $words  = "1234567890";
+        $vocals = "0987654321";
 
         $text  = "";
         $vocal = rand(0, 1);
@@ -189,11 +189,11 @@ class Captcha
 		{
             if ($vocal)
 			{
-                $text .= substr($vocals, mt_rand(0, 4), 1);
+                $text .= substr($vocals, mt_rand(0, 9), 1);
             }
 			else
 			{
-                $text .= substr($words, mt_rand(0, 22), 1);
+                $text .= substr($words, mt_rand(0, 9), 1);
             }
             $vocal = !$vocal;
         }
