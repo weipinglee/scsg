@@ -1011,7 +1011,7 @@ a.order_number {
 	float: left;
 	height:40px;
 	line-height: 40px;
-	width: 32%;
+	width: 48%;
 	text-align: center;
 }
 .order_top ul .qbys {
@@ -1019,7 +1019,7 @@ a.order_number {
     background-position: right center;
     float: left;
     height: 40px;
-    width: 36%;
+    width: 52%;
 }
 .order_top ul .qbys a{
 	color: #fff;
