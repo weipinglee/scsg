@@ -250,16 +250,19 @@ function showDelitime(){
 	var now = new Date();
 	$('option.a').attr('disabled',true);
 	$('option.c').attr('disabled',true);
-	$('option.b').attr('selected',true);
-	option.each(function(){
-		time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +$(this).val();
-		//window.realAlert(parseInt(now - new Date(time)));
-		if(parseInt(now - new Date(time))< -interMin){//有选该时间段
-			$('option.a').attr('disabled',false);
-			$('option.c').attr('disabled',false);
+	option.each(function(index){
+		if(index>0){
+			time = now.getFullYear()+'/'+parseInt(now.getMonth()+1)+'/'+now.getDate()+' ' +$(this).val()+':00';
+			if(parseInt(now - new Date(time))< -interMin){//有选该时间段
+				//alert(4);
+				$('option.a').attr('disabled',false);
+				$('option.c').attr('disabled',false);
+			}
 		}
 
+
 	})
+
 	if(type==2){
 		$('option.c').attr('selected',true);
 		option.removeAttr('selected');
@@ -271,13 +274,14 @@ function showDelitime(){
 		option.removeAttr('disabled');
 		option.eq(0).attr('disabled',true);
 		option.eq(1).attr('selected',true);
+		$('option.b').attr('selected',true);
 	}
 	else{
 		option.removeAttr('disabled').removeAttr('selected');
 		option.eq(0).attr('disabled',true);
 
 		option.each(function(){
-			time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +$(this).val();
+			time = now.getFullYear()+'/'+parseInt(now.getMonth()+1)+'/'+now.getDate()+' ' +$(this).val();
 			//window.realAlert(parseInt(now - new Date(time)));
 			if(parseInt(now - new Date(time))> -interMin){//不可选该时间段
 				$(this).attr('disabled',true);
@@ -441,9 +445,8 @@ function showDelitime(){
 				<div class="qrdds_zf">
 					<h4><i>*</i>配送日期:</h4>
 					<select style="" name="deliday" >
-						<option class="b" value="1">次日达</option>
 						<option class="a" value="0">定时达</option>
-
+						<option class="b" value="1">次日达</option>
 						<option class="c" value="2">即时配送</option>
 					</select>
 				</div>
