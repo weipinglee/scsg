@@ -92,21 +92,22 @@ class distribution extends IController
 	public function get_orderlist(){
 		if(!isset($_SESSION['delivery']))
 			$this->redirect('password');
+		$deliver_id = $_SESSION['delivery_id'];
 		//搜索条件
 		$page   = IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1;
 
 		$join = 'left join user as u on u.id = o.user_id left join order_deliver as d on o.id=d.order_id';
-		$time = '2017-10-22';
+		$time = '2017-10-22 ';
 		$where = 'o.if_del=0 and o.create_time>"'.$time.'"';
 		$status = IFilter::act(IReq::get('status','post'));
 		if($status==1){
-			$where .= ' and o.deliver_id=0 and o.status=2 and o.distribution_status=0 ';
+			$where .= '  and o.deliver_id=0 and o.status=2 and o.distribution_status=0 ';
 		}
 		else if($status==2){
-			$where .= ' and d.status<4 ';
+			$where .= '  and d.status<4 and  d.deliver_id='.$deliver_id;
 		}
 		else{
-			$where .= ' and o.pay_status=1 ';
+			$where .= '  and o.pay_status=1 ';
 		}
 
 

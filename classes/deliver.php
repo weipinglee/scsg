@@ -107,14 +107,16 @@ class Deliver
     public function waiting_acc_nums()
     {
         $orderObj = new IModel('order');
-        $nums = $orderObj->getField('if_del=0 and deliver_id=0 and  status=2 and distribution_status=0 and type !=4 ','count(id)');
+        $time = '2017-10-22';
+        $nums = $orderObj->getField('if_del=0 and create_time>"'.$time.'" and deliver_id=0 and  status=2 and distribution_status=0 and type !=4 ','count(id)');
         return $nums;
     }
 
     public function uncomplate_deliver_num($deliver_id)
     {
         $deliverObj =  self::$obj;
-        $nums = $deliverObj->getField(' status<'.self::USERACC.' and deliver_id='.$deliver_id,'count(id)');
+        $time = '2017-10-22';
+        $nums = $deliverObj->getField(' acc_time>"'.$time.'" and status<'.self::USERACC.' and deliver_id='.$deliver_id,'count(id)');
         return $nums;
     }
 
