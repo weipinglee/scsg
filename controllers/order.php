@@ -50,7 +50,11 @@ class Order extends IController
                 $temp = $orderGoods->query($where, 'goods_id, goods_price, real_price, goods_nums');
                 foreach($temp as $v)
                 {
-                    $goodsList[$v['goods_id']] = array('sum' => $v['goods_price'] * $v['goods_nums'], 'reduce' => ($v['goods_price']-$v['real_price'])*$v['goods_nums']);
+                    $goodsList[$v['goods_id']] =
+							array('sum' => $v['goods_price'] * $v['goods_nums'],
+									'reduce' => ($v['goods_price']-$v['real_price'])*$v['goods_nums'],
+									'num' => $v['goods_nums']
+							);
                 }
 				//获得折扣前的价格
 			 	$rule = new ProRule($data['real_amount']+$data['pro_reduce']);
