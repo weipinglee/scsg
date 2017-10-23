@@ -392,8 +392,11 @@ function showDelitime(){
 							<p style='color:red; text-align:right;padding-right:15px;'>
 								小计：<b >￥{$item['sum']}</b>
 							</p>
+							<p style='text-align:right;padding-right:15px;'>
+								餐盒费用：<b >￥0</b>
+							</p>
                             {if:!$this->good_type}
-							<p style="float: right;padding-right: 16px;height: 20px;">配送费用 ￥<span class="js_goods_delivery" js_data="{$item['delivery_id']}_{$item['goods_id']}_{$item['product_id']}_{$item['count']}">{$item['delivery']}</span></p>
+							<p style="float: right;padding-right: 16px;height: 20px;">配送费用：￥<span class="js_goods_delivery" js_data="{$item['delivery_id']}_{$item['goods_id']}_{$item['product_id']}_{$item['count']}">{$item['delivery']}</span></p>
                             {/if}
 			     		</div>
 						<div style="clear:both;"></div>
@@ -516,6 +519,7 @@ function showDelitime(){
      			<p>{if:$this->final_sum != $this->sum}优惠后总金额{else:}商品总金额{/if}<b>￥{$this->final_sum}</b></p>
 				<p> - 代金券：<b name='ticket_value'>0</b></p>
 				<p> + 税金：<b id='tax_fee'>0</b></p>
+				<p> + 餐盒费：<b>0</b></p>
                 {if:!$this->good_type}
 				<p> + 运费总计：<b id='delivery_fee_show'>0</b></p>
 				<p> + 保价：<b id='protect_price_value'>0</b></p>
