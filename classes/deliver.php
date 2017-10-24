@@ -108,7 +108,7 @@ class Deliver
     {
         $orderObj = new IModel('order');
         $time = '2017-10-22';
-        $nums = $orderObj->getField('if_del=0 and create_time>"'.$time.'" and deliver_id=0 and  status=2 and distribution_status=0 and type !=4 ','count(id)');
+        $nums = $orderObj->getField('takeself=0 and if_del=0 and create_time>"'.$time.'" and deliver_id=0 and  status=2 and distribution_status=0 and type !=4 ','count(id)');
         return $nums;
     }
 
@@ -117,7 +117,7 @@ class Deliver
         $time = '2017-10-22';
         $orderHandle = new IQuery('order as o');
         $orderHandle->join = 'left join user as u on u.id = o.user_id left join order_deliver as d on o.id=d.order_id';
-        $orderHandle->where = 'o.if_del=0 and o.create_time>"'.$time.'"'.'  and d.status<4 and  d.deliver_id='.$deliver_id.' and o.type !=4 ';
+        $orderHandle->where = 'o.takeself=0 and o.if_del=0 and o.create_time>"'.$time.'"'.'  and d.status<4 and  d.deliver_id='.$deliver_id.' and o.type !=4 ';
         $orderHandle->fields = "count(o.id) as count";
         $orderHandle->limit = 1;
         $res = $orderHandle->find();

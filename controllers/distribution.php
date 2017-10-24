@@ -98,7 +98,7 @@ class distribution extends IController
 
 		$join = 'left join user as u on u.id = o.user_id left join order_deliver as d on o.id=d.order_id';
 		$time = '2017-10-22 ';
-		$where = 'o.if_del=0 and o.create_time>"'.$time.'"';
+		$where = 'o.takeself=0 and o.if_del=0 and o.create_time>"'.$time.'"';
 		$status = IFilter::act(IReq::get('status','post'));
 		if($status==1){
 			$where .= '  and o.deliver_id=0 and o.status=2 and o.distribution_status=0 ';
