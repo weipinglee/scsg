@@ -105,7 +105,9 @@
 	</div>
 	<div class="div4">
 		<p>运费：￥{echo:number_format($deliveryPrice,2)}</p>
+		{if:$box_fee>0}
 		<p>餐盒费：￥{echo:number_format($box_fee,2)}</p>
+		{/if}
 		<p>优惠：-￥{echo:number_format($pro_reduce,2)}</p>
 		<p>总计：￥{echo:number_format($order_amount,2)}</p>
 		<hr/>
