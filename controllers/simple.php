@@ -1568,7 +1568,7 @@ class Simple extends IController
 		$deli_time     = $deli_day == 2 ? 0 : IFilter::act(IReq::get('delitime'));
         $dataArray     = array();
 		$this->payment_id = $payment;
-
+echo $takeself;
 		if($deli_day==1){
 			$deli_day = ITime::getDateTime('Y-m-d',time()+3600*24);
 		}
@@ -1600,6 +1600,9 @@ class Simple extends IController
         //计算费用
         $countSumObj = new CountSum($user_id,1);
 
+		if($takeself){
+			$countSumObj->setFreeFreight();
+		}
         //直接购买商品方式
         if($type && $gid)
         {

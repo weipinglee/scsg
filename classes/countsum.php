@@ -16,6 +16,8 @@ class CountSum
 	//用户组折扣
 	public $group_discount = '';
 
+	private static $forceFreeFreight = false;
+
 
 	/**
 	 * 构造函数
@@ -127,6 +129,13 @@ class CountSum
 		
 		
 	}
+
+	/**
+	 * 强制免运费
+	 */
+	public function setFreeFreight(){
+		self::$forceFreeFreight = true;
+	}
 	/**
 	 * @brief 计算商品价格
 	 * @param Array $buyInfo ,购物车格式
@@ -156,6 +165,7 @@ class CountSum
     	$productList  = array();//
         $order_extend = array();
         $goodsIdList = array();
+		$forceFreeFreight = self::$forceFreeFreight;
 		/*开始计算goods和product的优惠信息 , 会根据条件分析出执行以下哪一种情况:
 		 *(1)查看此商品(货品)是否已经根据不同会员组设定了优惠价格;
 		 *(2)当前用户是否属于某个用户组中的成员，并且此用户组享受折扣率;
@@ -350,7 +360,7 @@ class CountSum
 		//计算相同商家运费，生成键为[商家id][配送id]的数组
 		$deliveryTemp = array();
 		foreach($deliveryInfo as $seller_id=>$val){
-				$deliveryTemp[$seller_id] = Delivery::getDeliverys($area,$val);
+				$deliveryTemp[$seller_id] = Delivery::getDeliverys($area,$val,$forceFreeFreight);
 		}
 
 		//同一商家相同配送方式第一个商品费用计算为综合费用，其余配送费记为0
@@ -359,8 +369,11 @@ class CountSum
 			foreach($goodList as $k=>$goodInfo){
 				if($goodInfo['delivery_id']==0)
 					$goodInfo['delivery_id'] = 1;
-				$goodsListFinal[$buy][$k]['delivery']
-						= $deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']]['price'];
+				if(!$forceFreeFreight)
+					$goodsListFinal[$buy][$k]['delivery']
+							= $deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']]['price'];
+				else
+					$goodsListFinal[$buy][$k]['delivery'] = 0;
 				$deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']]['price'] = 0;
 			}
 		}
@@ -689,6 +702,7 @@ class CountSum
         $goods_seller_data = array();
         $order_extend = array();
 		$deliveryInfo = array();
+		$forceFreeFreight = self::$forceFreeFreight;
 
 		foreach($goodsResult['goodsList'] as $key => $val){
 			$deliveryInfo[$val['seller_id']][$key] =
@@ -697,7 +711,7 @@ class CountSum
 		}
 		$deliveryTemp = array();
 		foreach($deliveryInfo as $seller_id=>$val){
-			$deliveryTemp[$seller_id] = Delivery::getDeliverys($area_id,$val);
+			$deliveryTemp[$seller_id] = Delivery::getDeliverys($area_id,$val,$forceFreeFreight);
 		}
         foreach($goodsResult['goodsList'] as $key => $val){
             $order_extend[$val['seller_id']]['deliveryOrigPrice'] = isset($order_extend[$val['seller_id']]['deliveryOrigPrice']) ? $order_extend[$val['seller_id']]['deliveryOrigPrice'] : 0;

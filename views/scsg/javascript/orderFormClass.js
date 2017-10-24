@@ -145,10 +145,20 @@ function orderFormClass()
         var city     = $('[name=city]').val();
         var area     = $('[name=area]').val();
 		var _this = this;
+		var orderFormObj = this;
         if(!area)
         {
             return;
         }
+
+		//看是否选择了自提点，如果选择了自提点，免运费
+		var ziti = $('input[type=checkbox][name=takeself]').prop('checked');
+		if(ziti){
+			this.freeFreight = 1;
+		}
+		else{
+			this.freeFreight = 0;
+		}
 
 		//验证该收获区域是否有自提点,如果有自提点，设置selectTaseself属性为true,提交订单时必须选择自提点
 		_this.selectTaseself = false;
@@ -250,7 +260,7 @@ function orderFormClass()
                 url: _delivery_url,
                 success:function(jsonData)
                 {
-                    if(!jsonData.isFreeFreight)
+                    if(!jsonData.isFreeFreight && orderFormObj.freeFreight==0)
                     {//window.realAlert(JSON.stringify(jsonData));
                         orderFormInstance.deliveryPrice += parseFloat(price);
 

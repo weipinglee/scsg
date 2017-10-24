@@ -66,7 +66,7 @@ class Delivery
      * @param array $goodsArray 商品数据，二维数组，内含goods_id,product_id,num,delivery_id四个字段
      * @return array 二维数组 每个配送方式对应的价格，保护价格，是否配送
      */
-    public static function getDeliverys($area,$goodsArray=array())
+    public static function getDeliverys($area,$goodsArray=array(),$isFree=0)
     {
         $delivery    = new IModel('delivery');
         if(empty($goodsArray))
@@ -235,7 +235,8 @@ class Delivery
             }
 
             $result[$delivery_id] =  $deliveryRow;
-
+            if($isFree)
+                $result[$delivery_id] = array('price' => 0, 'protect_price' => 0, 'if_delivery' => 0);
         }
 
 

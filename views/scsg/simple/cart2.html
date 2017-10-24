@@ -66,6 +66,10 @@ jQuery(function(){
 	orderFormInstance.goodsSum = "{$this->final_sum}";
 
 	orderFormInstance.box_fee = "{$this->box_fee}";
+
+	$('input[type=checkbox][name=takeself]').click(function(){
+		orderFormInstance.get_delivery();
+	})
 	
 });
 
@@ -235,6 +239,7 @@ function selectTakeself(deliveryId)
 			$('#takeself'+deliveryId).empty();
 			$('[name="takeself"]').removeClass('hide').val(json.id).attr('checked','checked');
 			$('#takeself'+deliveryId).html(template.render('takeselfTemplate',{"item":json}));
+			orderFormInstance.get_delivery();
 			return true;
 		}
 	});
