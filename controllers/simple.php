@@ -556,6 +556,7 @@ class Simple extends IController
             $goodsList[$temp['goods_id']]['reduce'] = $temp['reduce'];
 			$goodsList[$temp['goods_id']]['num'] = $temp['count'];
         }
+
     	$final_sum = intval(IReq::get('final_sum'));
     	$proObj = new ProRule($final_sum);
     	//总金额满足的促销规则
@@ -567,13 +568,13 @@ class Simple extends IController
 			$groupRow['id'] = empty($groupRow) ? 0 : $groupRow['id'];
 	    	$proObj->setUserGroup($groupRow['id'],$this->user['user_id']);
 		}
+
     	$promotion = $proObj->getInfo($goodsList);
     	$proReduce = number_format($final_sum - $proObj->getSum($goodsList),2);
 		$result = array(
     		'promotion' => $promotion,
     		'proReduce' => $proReduce,
 		);
-//print_r($result);
     	echo JSON::encode($result);
     }
     /**
