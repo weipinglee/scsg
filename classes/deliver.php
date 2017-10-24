@@ -114,10 +114,14 @@ class Deliver
 
     public function uncomplate_deliver_num($deliver_id)
     {
-        $deliverObj =  self::$obj;
         $time = '2017-10-22';
-        $nums = $deliverObj->getField(' acc_time>"'.$time.'" and status<'.self::USERACC.' and deliver_id='.$deliver_id,'count(id)');
-        return $nums;
+        $orderHandle = new IQuery('order as o');
+        $orderHandle->join = 'left join user as u on u.id = o.user_id left join order_deliver as d on o.id=d.order_id';
+        $orderHandle->where = 'o.if_del=0 and o.create_time>"'.$time.'"'.'  and d.status<4 and  d.deliver_id='.$deliver_id.' and o.type !=4 ';
+        $orderHandle->fields = "count(o.id) as count";
+        $orderHandle->limit = 1;
+        $res = $orderHandle->find();
+        return isset($res[0]['count']) ? $res[0]['count'] : 0;
     }
 
 
