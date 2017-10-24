@@ -87,10 +87,11 @@
 		<hr/>
 	</div>
 	<div class="div3 ">
-		{set:$goodsSum = 0;$deliveryPrice = 0;}
+		{set:$goodsSum = 0;$deliveryPrice = 0;$box_fee = 0;}
 		{query:name=order_goods as og join=left join goods as go on go.id eq og.goods_id where=order_id eq $id}
 		{set:$goodsSum      += $item['real_price'] * $item['goods_nums']}
 		{set:$deliveryPrice += $item['delivery_fee']}
+		{set:$box_fee       += $item['box_fee']}
 		{set:$goodsRow       = JSON::decode($item['goods_array'])}
 		<ul class="clear">
 			<li class="li1"><span>{$goodsRow['name']}  </span></li>
@@ -104,6 +105,7 @@
 	</div>
 	<div class="div4">
 		<p>运费：￥{echo:number_format($deliveryPrice,2)}</p>
+		<p>餐盒费：￥{echo:number_format($box_fee,2)}</p>
 		<p>优惠：-￥{echo:number_format($pro_reduce,2)}</p>
 		<p>总计：￥{echo:number_format($order_amount,2)}</p>
 		<hr/>
