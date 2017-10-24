@@ -300,7 +300,7 @@ a.ingot_btn:link,a.ingot_btn:visited{ display:block; width:300px; height:45px; l
                         .common-slide .list{
                             position:relative;
                             width: 800px;
-                            height:200px;
+                            height:210px;
                             overflow:hidden
                         }
                         .common-slide .list ul{
@@ -308,7 +308,7 @@ a.ingot_btn:link,a.ingot_btn:visited{ display:block; width:300px; height:45px; l
                         }
                         .common-slide .list li{
                            
-                            height:200px;
+                            height:210px;
                             line-height:100px;
                             float:left;
                             position:relative;
