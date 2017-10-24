@@ -12,7 +12,7 @@ article .name{color:#323232;font-size:18px;font-family:"榛戜綋";line-height:2
 .picture{text-align:center;position:relative}
 /*修改ul高度，原来为241px*/
 .pic_detail .picture
-ul{height:210px;overflow:hidden}
+ul{height:260px;overflow:hidden}
 .picture
 .slide{background:url(../images/bg_item2.png) no-repeat;display:block;font-size:40px;height:18px;position:absolute;top:80px;width:12px}
 .picture
@@ -284,7 +284,7 @@ a.ingot_btn:link,a.ingot_btn:visited{ display:block; width:300px; height:45px; l
                     }
 
 #slides {
-                            height: 210px;
+                            height: 260px;
                             margin: 0px auto;
                             position: relative;
                             text-align: center;
@@ -293,14 +293,14 @@ a.ingot_btn:link,a.ingot_btn:visited{ display:block; width:300px; height:45px; l
                         }
                         .common-slide{
                             width: 100%;
-                            height:210px;
+                            height:260px;
                            /* margin:5px auto;*/
                             position:relative;
                         }
                         .common-slide .list{
                             position:relative;
                             width: 800px;
-                            height:210px;
+                            height:260px;
                             overflow:hidden
                         }
                         .common-slide .list ul{
@@ -308,7 +308,7 @@ a.ingot_btn:link,a.ingot_btn:visited{ display:block; width:300px; height:45px; l
                         }
                         .common-slide .list li{
                            
-                            height:210px;
+                            height:260px;
                             line-height:100px;
                             float:left;
                             position:relative;
@@ -318,14 +318,14 @@ a.ingot_btn:link,a.ingot_btn:visited{ display:block; width:300px; height:45px; l
                         .common-slide .list li a img{
                             vertical-align:top;
                             width:100%;
-                            height: 210px;
+                            height: 260px;
                         }
                         .common-slide .list li.three-img a img{
                             margin-top:2px
                         }
                         .common-slide .list li.one-img a{
                             width: 100%;
-                            height:210px;
+                            height:260px;
                         }
                         .common-slide .list li a{
                             margin-left:15px;
