@@ -4,8 +4,10 @@ var showBig = false;
 var goods_id = id;
 var pnum = photo_num;
 function loaded() {
-
-	document.getElementById("scroller").style.width=200*pnum+'px';
+	//移动端商品详情页面商品轮播图
+	var widths=window.screen.width
+	$("#thelist  li").css({'width':widths});
+	document.getElementById("scroller").style.width=widths*pnum+'px';
 	document.getElementById("scroller1").style.width=300*pnum+'px';
     myScroll = new iScroll('wrapper', {
         snap: true,
