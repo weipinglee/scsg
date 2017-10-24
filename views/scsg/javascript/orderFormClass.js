@@ -155,9 +155,13 @@ function orderFormClass()
 		var ziti = $('input[type=checkbox][name=takeself]').prop('checked');
 		if(ziti){
 			this.freeFreight = 1;
+			$('#deli_day_text').text('自提日期');
+			$('#deli_time_text').text('自提时间');
 		}
 		else{
 			this.freeFreight = 0;
+			$('#deli_day_text').text('配送日期');
+			$('#deli_time_text').text('配送时间');
 		}
 
 		//验证该收获区域是否有自提点,如果有自提点，设置selectTaseself属性为true,提交订单时必须选择自提点
