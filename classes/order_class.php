@@ -767,6 +767,7 @@ class Order_Class
                     $goodsArray['seller_id']   = $val['seller_id'];
                     $goodsArray['combine_id']   = $val['combine_id'];
 				    $goodsArray['sign_code']   = $val['sign_code'];
+					$goodsArray['box_fee']     = $val['box_fee'];
 				    $orderGoodsObj->setData($goodsArray);
 				    $insert_id = $orderGoodsObj->add(true);
                     $temp = $good->getField('id = '.$val['goods_id'], 'store_type');
@@ -2026,6 +2027,7 @@ class Order_Class
 
 		$amount = bcadd(bcsub($amount , bcdiv(bcmul($amount , $order_reduce,10),$orderRow['real_amount'],10),5), $otherFee,5);
 
+		$amount += $goodsOrderRow['box_fee'];
 		//rturn$amount = str_replace(',','',$amount);
 		$amount = number_format(floatval($amount),2);
 		return str_replace(',','',$amount);	

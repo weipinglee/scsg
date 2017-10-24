@@ -72,7 +72,13 @@ function prom_ajax(){
 	var final_sum   = mathSub(parseFloat($('#origin_price').text()),parseFloat($('#discount_price').text()))
         _v = [];
         $('input[name^=sub]:checked').each(function(){
-            _v.push($(this).attr('data-json'));
+			var data_json = $(this).attr('data-json');
+			data_json = JSON.parse(data_json);
+			data_json.count = $(this).parent('td').parent('tr').find('div.num').find('input').val();
+			data_json.sum = data_json.sell_price * data_json.count;
+			data_json = JSON.stringify(data_json);
+			//window.realAlert(data_json);
+            _v.push(data_json);
         })
 	var tmpUrl = prom_url;
 		tmpUrl = tmpUrl.replace("@random@",Math.random());

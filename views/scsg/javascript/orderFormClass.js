@@ -36,6 +36,7 @@ function orderFormClass()
 	this.protectPrice = 0;//保价
 	this.ticketPrice  = 0;//代金券
 	this.weight       = 0;//商品总重量
+	this.box_fee      = 0;//餐盒费
 	
 	this.deliveryConf = {};//记录配送信息的json对象
 
@@ -58,11 +59,12 @@ function orderFormClass()
 		//代金券
 		this.ticketPrice = $('input:radio[name="ticket_id"]:checked').length > 0 ? $('input:radio[name="ticket_id"]:checked').attr('alt') : 0;
 		//最终金额
-		this.orderAmount = parseFloat(this.goodsSum) - parseFloat(this.ticketPrice) + parseFloat(this.paymentPrice) + parseFloat(this.taxPrice) + parseFloat(this.protectPrice);
+		this.orderAmount = parseFloat(this.goodsSum) - parseFloat(this.ticketPrice) + parseFloat(this.paymentPrice) + parseFloat(this.taxPrice) + parseFloat(this.protectPrice) + parseFloat(this.box_fee);
         /*if(!this.freeFreight)
         {*/
             this.orderAmount += parseFloat(this.deliveryPrice);
         /*}*/
+
 		this.orderAmount = this.orderAmount <=0 ? 0 : this.orderAmount.toFixed(2);        
 		//刷新DOM数据
 		$('#final_sum').text(this.orderAmount);

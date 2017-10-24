@@ -148,6 +148,7 @@ class CountSum
     	$this->isFreeFreight = false;   //是否免运费
         $this->tax           = 0;       //商品税金
         $this->extend        = 0;       //拆分订单数据
+		$this->box_fee       = 0;       //包装费
 
 		$user_id      = $this->user_id;
 		$group_id     = $this->group_id;
@@ -171,7 +172,7 @@ class CountSum
     		    //购物车中的商品数据
     		    $goodsIdStr = join(',',$buyInfo['goods']['id']);
     		    $goodsObj   = new IModel('goods as go');
-    		    $goodsList  = $goodsObj->query('go.id in ('.$goodsIdStr.')','go.name,go.id as goods_id,go.img,go.sell_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,go.delivery_id,go.combine_price,go.type,go.sign_code');
+    		    $goodsList  = $goodsObj->query('go.id in ('.$goodsIdStr.')','go.name,go.id as goods_id,go.img,go.sell_price,go.box_price,go.point,go.weight,go.store_nums,go.exp,go.goods_no,0 as product_id,go.seller_id,go.delivery_id,go.combine_price,go.type,go.sign_code');
 
     		     //开始优惠情况判断
     		    foreach($goodsList as $key => $val)
@@ -183,7 +184,9 @@ class CountSum
                     $order_extend[$val['seller_id']]['exp'] = isset($order_extend[$val['seller_id']]['exp']) ? $order_extend[$val['seller_id']]['exp'] : 0;
                     $order_extend[$val['seller_id']]['count'] = isset($order_extend[$val['seller_id']]['count']) ? $order_extend[$val['seller_id']]['count'] : 0;
                     $order_extend[$val['seller_id']]['reduce'] = isset($order_extend[$val['seller_id']]['reduce']) ? $order_extend[$val['seller_id']]['reduce'] : 0;
-    //     			//检查库存
+					$order_extend[$val['seller_id']]['box_fee'] = isset($order_extend[$val['seller_id']]['box_fee']) ? $order_extend[$val['seller_id']]['box_fee'] : 0;
+
+					//检查库存
     //     			if($buyInfo['goods']['data'][$val['goods_id']]['count'] <= 0 || $buyInfo['goods']['data'][$val['goods_id']]['count'] > $val['store_nums'])
     //     			{
     //     				return "商品：".$val['name']."购买数量超出库存，请重新调整购买数量";
@@ -228,6 +231,7 @@ class CountSum
     			    $current_sum_all           = $goodsList[$key]['sell_price'] * $goodsList[$key]['count'];
     			    $current_reduce_all        = $goodsList[$key]['reduce']     * $goodsList[$key]['count'];
     			    $goodsList[$key]['sum']    = $current_sum_all - $current_reduce_all;
+					$goodsList[$key]['box_price'] = $goodsList[$key]['box_price'] * $goodsList[$key]['count'];
 
                     $order_extend[$val['seller_id']]['sum'] += $current_sum_all;
                     $order_extend[$val['seller_id']]['weight'] += $val['weight'] * $goodsList[$key]['count'];
@@ -236,7 +240,9 @@ class CountSum
                     $order_extend[$val['seller_id']]['exp'] += $val['exp']    * $goodsList[$key]['count'];
                     $order_extend[$val['seller_id']]['count'] += $goodsList[$key]['count'];
                     $order_extend[$val['seller_id']]['reduce'] += $current_reduce_all;
+					$order_extend[$val['seller_id']]['box_fee'] += $val['box_price']  * $goodsList[$key]['count'];
     			    //全局统计
+					$this->box_fee+= $val['box_price'] * $goodsList[$key]['count'];
 		    	    $this->weight += $val['weight'] * $goodsList[$key]['count'];
 		    	    $this->point  += $val['point']  * $goodsList[$key]['count'];
 		    	    $this->exp    += $val['exp']    * $goodsList[$key]['count'];
@@ -258,7 +264,7 @@ class CountSum
     		    $productIdStr = join(',',$buyInfo['product']['id']);
     		    $productObj   = new IQuery('products as pro,goods as go');
     		    $productObj->where  = 'pro.id in ('.$productIdStr.') and go.id = pro.goods_id';
-    		    $productObj->fields = 'pro.sell_price,pro.weight,pro.id as product_id,pro.spec_array,pro.goods_id,pro.store_nums,pro.products_no as goods_no,go.name,pro.point,pro.combine_price,go.exp,go.img,go.seller_id,go.delivery_id,go.type,pro.sign_code';
+    		    $productObj->fields = 'pro.sell_price,pro.weight,pro.id as product_id,pro.spec_array,pro.goods_id,pro.store_nums,pro.products_no as goods_no,go.name,go.box_price,pro.point,pro.combine_price,go.exp,go.img,go.seller_id,go.delivery_id,go.type,pro.sign_code';
     		    $productList  = $productObj->find();
     		    //开始优惠情况判断
     		    foreach($productList as $key => $val)
@@ -270,7 +276,9 @@ class CountSum
                     $order_extend[$val['seller_id']]['exp'] = isset($order_extend[$val['seller_id']]['exp']) ? $order_extend[$val['seller_id']]['exp'] : 0;
                     $order_extend[$val['seller_id']]['count'] = isset($order_extend[$val['seller_id']]['count']) ? $order_extend[$val['seller_id']]['count'] : 0;
                     $order_extend[$val['seller_id']]['reduce'] = isset($order_extend[$val['seller_id']]['reduce']) ? $order_extend[$val['seller_id']]['reduce'] : 0;
-    			    //检查库存
+					$order_extend[$val['seller_id']]['box_fee'] = isset($order_extend[$val['seller_id']]['box_fee']) ? $order_extend[$val['seller_id']]['box_fee'] : 0;
+
+					//检查库存
     //     			if($buyInfo['product']['data'][$val['product_id']]['count'] <= 0 || $buyInfo['product']['data'][$val['product_id']]['count'] > $val['store_nums'])
     //     			{
     //     				return "货品：".$val['name']."购买数量超出库存，请重新调整购买数量";
@@ -301,7 +309,7 @@ class CountSum
     			    $current_sum_all             = $productList[$key]['sell_price']  * $productList[$key]['count'];
     			    $current_reduce_all          = $productList[$key]['reduce']      * $productList[$key]['count'];
     			    $productList[$key]['sum']    = $current_sum_all - $current_reduce_all;
-
+					$productList[$key]['box_price'] = $productList[$key]['box_price'] * $productList[$key]['count'];
                     //计算运费
                   //  $delivery = Delivery::getDelivery(0, $val['delivery_id'], $val['goods_id'], $val['product_id'], $productList[$key]['count']);
 					$deliveryInfo[$val['seller_id']][] =
@@ -320,7 +328,9 @@ class CountSum
                     $order_extend[$val['seller_id']]['exp'] += $val['exp']    * $productList[$key]['count'];
                     $order_extend[$val['seller_id']]['count'] += $productList[$key]['count'];
                     $order_extend[$val['seller_id']]['reduce'] += $current_reduce_all;
-    			    //全局统计
+					$order_extend[$val['seller_id']]['box_fee'] += $val['box_price']  * $productList[$key]['count'];
+							//全局统计
+					$this->box_fee+= $val['box_price'] * $productList[$key]['count'];
 		    	    $this->weight += $val['weight'] * $productList[$key]['count'];
 		    	    $this->point  += $val['point']  * $productList[$key]['count'];
 		    	    $this->exp    += $val['exp']    * $productList[$key]['count'];
@@ -347,6 +357,8 @@ class CountSum
 
 		foreach($goodsListFinal as $buy => $goodList){
 			foreach($goodList as $k=>$goodInfo){
+				if($goodInfo['delivery_id']==0)
+					$goodInfo['delivery_id'] = 1;
 				$goodsListFinal[$buy][$k]['delivery']
 						= $deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']]['price'];
 				$deliveryTemp[$goodInfo['seller_id']][$goodInfo['delivery_id']]['price'] = 0;
@@ -371,7 +383,7 @@ class CountSum
 	    	$proObj->setUserGroup($group_id,$user_id);
 	    	$this->isFreeFreight = $proObj->isFreeFreight($area,$goodsIdList);
 	    	$this->promotion = $proObj->getInfo($goodsIdList,$area, true);
-			//print_r($goodsIdList);
+
 	    	$this->proReduce = $final_sum - $proObj->getSum($goodsIdList, $area);
     	}
     	else
@@ -384,7 +396,8 @@ class CountSum
 	    	$this->promotion = array();
 	    	$this->proReduce = 0;
     	}
-    	$this->final_sum = $final_sum - $this->proReduce;
+    	$this->final_sum =  $final_sum - $this->proReduce;
+
         $this->extend  = $order_extend;
     	return array(
     		'final_sum'  => $this->final_sum,//减去会员减价和促销减价后的总价
@@ -400,6 +413,7 @@ class CountSum
     		'exp'        => $this->exp,
     		'tax'        => $this->tax,
             'extend'     => $this->extend,
+			'box_fee'    => $this->box_fee ,//餐盒费，包装费
     	);
 	}
 
@@ -665,6 +679,9 @@ class CountSum
             //最终订单金额
             'orderAmountPrice' => 0,
 
+			//餐盒费
+			'box_fee'      => 0,
+
             //商品列表
             'goodsResult' => array(),
             'order_extend' => array()
@@ -689,6 +706,7 @@ class CountSum
             $order_extend[$val['seller_id']]['taxPrice'] = isset($order_extend[$val['seller_id']]['taxPrice']) ? $order_extend[$val['seller_id']]['taxPrice'] : 0;
             $order_extend[$val['seller_id']]['sum'] = isset($order_extend[$val['seller_id']]['sum']) ? $order_extend[$val['seller_id']]['sum'] : 0;
             $order_extend[$val['seller_id']]['reduce'] = isset($order_extend[$val['seller_id']]['reduce']) ? $order_extend[$val['seller_id']]['reduce'] : 0;
+			$order_extend[$val['seller_id']]['box_fee'] = isset($order_extend[$val['seller_id']]['box_fee']) ? $order_extend[$val['seller_id']]['box_fee'] : 0;
 
 			$item = $deliveryTemp[$val['seller_id']][$val['delivery_id']];
 			$deliveryTemp[$val['seller_id']][$val['delivery_id']]['price'] = 0;
@@ -699,6 +717,14 @@ class CountSum
 			$result['deliveryOrigPrice'] += $item['price'];
 			$order_extend[$val['seller_id']]['deliveryOrigPrice'] += $item['price'];
 
+
+			//餐盒费计算
+			if($val['box_price']>0){
+				$order_extend[$val['seller_id']]['box_fee'] += $val['box_price'] ;
+				$result['box_fee'] += $val['box_price'] ;
+
+			}
+			$goodsResult['goodsList'][$key]['box_fee'] = $val['box_price'];
 			//商品保价计算
 			//    if($is_insured == 1 || ( is_array($is_insured) && isset($is_insured[$val['goods_id']."_".$val['product_id']]) ) )
 			if($is_insured == 1  || ( is_array($is_insured)&& isset($is_insured[$key]) ) )
@@ -773,6 +799,8 @@ class CountSum
             else{
                 $goodsResult['goodsList'][$key]['taxPrice'] = 0;
             }
+
+
             $order_extend[$val['seller_id']]['sum'] += $val['sum'];
             $order_extend[$val['seller_id']]['reduce'] += $val['reduce'];
         }
@@ -794,7 +822,7 @@ class CountSum
         }
 
         //最终订单金额计算
-        $order_amount = $goodsFinalSum + $result['deliveryPrice'] + $result['insuredPrice'] + $result['taxPrice'] + $result['paymentPrice'] + $discount;
+        $order_amount = $goodsFinalSum + $result['deliveryPrice'] + $result['insuredPrice'] + $result['taxPrice'] + $result['paymentPrice'] + $result['box_fee'] + $discount;
         $result['orderAmountPrice'] = $order_amount <= 0 ? 0 : round($order_amount,2);
 
         //订单商品刷新

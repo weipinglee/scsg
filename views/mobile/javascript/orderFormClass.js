@@ -36,6 +36,7 @@ function orderFormClass()
 	this.taxPrice     = 0;//税金
 	this.protectPrice = 0;//保价
 	this.ticketPrice  = 0;//代金券
+	this.box_fee      = 0;//餐盒费
 	
 	//this.deliveryConf = {};//记录配送信息的json对象
 	
@@ -75,7 +76,7 @@ function orderFormClass()
 		//代金券
 		this.ticketPrice = $('#ticket_a').hasClass("show_check") && $('input:radio[name="ticket_id"]:checked').length>0 ? $('input:radio[name="ticket_id"]:checked').attr('alt') : 0;
 		//最终金额
-		this.orderAmount = parseFloat(this.goodsSum) - parseFloat(this.ticketPrice) + parseFloat(this.deliveryPrice) + parseFloat(this.paymentPrice) + parseFloat(this.taxPrice) + parseFloat(this.protectPrice);
+		this.orderAmount = parseFloat(this.goodsSum) - parseFloat(this.ticketPrice) + parseFloat(this.deliveryPrice) + parseFloat(this.paymentPrice) + parseFloat(this.taxPrice) + parseFloat(this.protectPrice) + parseFloat(this.box_fee);
 
 		this.orderAmount = this.orderAmount <=0 ? 0 : this.orderAmount.toFixed(2);
 

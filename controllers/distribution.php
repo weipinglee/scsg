@@ -65,7 +65,7 @@ class distribution extends IController
 
 			}
 			else if($status==2){
-				if($orderStatus==3||$orderStatus==6){
+				if($orderStatus!=4){
 					$res = $deliverObj->user_acc($deliver_id,$order_id);
 				}
 				else{

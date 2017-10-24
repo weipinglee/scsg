@@ -160,8 +160,9 @@ class goods_class
         $goodsUpdateData['sell_price']   = isset($postData['_sell_price'])   ? current($postData['_sell_price'])   : 0;
         $goodsUpdateData['sign_code']   = isset($postData['_sign_code'])   ? current($postData['_sign_code'])   : '';
         $goodsUpdateData['combine_price']   = isset($postData['_combine_price'])   ? current($postData['_combine_price'])   : 0;
-		$goodsUpdateData['cost_price']   = isset($postData['_cost_price'])   ? current($postData['_cost_price'])   : 0;   
-        $goodsUpdateData['weight']       = isset($postData['_weight'])       ? current($postData['_weight'])       : 0;
+		$goodsUpdateData['cost_price']   = isset($postData['_cost_price'])   ? current($postData['_cost_price'])   : 0;
+		$goodsUpdateData['box_price']   = isset($postData['box_price'])   ? $postData['box_price']   : 0;
+		$goodsUpdateData['weight']       = isset($postData['_weight'])       ? current($postData['_weight'])       : 0;
         $goodsUpdateData['point']        = isset($postData['_point'])        ? current($postData['_point'])        : 0;
         $goodsUpdateData['tax']        = isset($postData['_tax'])        ? current($postData['_tax'])        : 0;
         $goodsUpdateData['default_tax']        = isset($postData['_default_tax'])        ? current($postData['_default_tax'])        : 0;
