@@ -588,7 +588,7 @@ class ProRule
 
 		//获取所有现金促销规则奖励信息
         $award_type_str = join(',',$award_type);
-		$allAwardInfo   = $this->satisfyPromotion($award_type_str,$goodsIdList, $area,null);
+		$allAwardInfo   = $this->satisfyPromotion($award_type_str,$goodsIdList, $area,null);//print_r($allAwardInfo);
 		//当现金奖励仅为一次时，奖励优惠最大化
 		if(!empty($allAwardInfo))
 		{

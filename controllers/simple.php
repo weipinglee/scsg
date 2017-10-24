@@ -573,7 +573,7 @@ class Simple extends IController
     		'promotion' => $promotion,
     		'proReduce' => $proReduce,
 		);
-
+//print_r($result);
     	echo JSON::encode($result);
     }
     /**
@@ -935,6 +935,7 @@ class Simple extends IController
 			$result = $countSumObj->cart_count($cartData);
 
 		}
+		//print_r($result);
 		//检查商品合法性或促销活动等有错误
 		if( is_string($result))
 		{
@@ -1031,6 +1032,7 @@ class Simple extends IController
     	$this->reduce      = $result['reduce'];
     	$this->weight      = $result['weight'];
     	$this->freeFreight = $result['freeFreight'] ? 1 : 0;
+		$this->box_fee     = $result['box_fee'];
     	//商品列表按商家分开
     	$this->goodsList = $this->goodsListBySeller($this->goodsList);
 
@@ -1574,18 +1576,18 @@ class Simple extends IController
 		}
 
         //防止表单重复提交
-        if(IReq::get('timeKey') != null)
-        {
-            if(ISafe::get('timeKey') == IReq::get('timeKey'))
-            {
-                IError::show(403,'订单数据不能被重复提交');
-                exit;
-            }
-            else
-            {
-                ISafe::set('timeKey',IReq::get('timeKey'));
-            }
-        }
+//        if(IReq::get('timeKey') != null)
+//        {
+//            if(ISafe::get('timeKey') == IReq::get('timeKey'))
+//            {
+//                IError::show(403,'订单数据不能被重复提交');
+//                exit;
+//            }
+//            else
+//            {
+//                ISafe::set('timeKey',IReq::get('timeKey'));
+//            }
+//        }
 
         if($province == 0 || $city == 0 || $area == 0)
         {
@@ -1631,7 +1633,7 @@ class Simple extends IController
             }
             //计算购物车中的商品价格$goodsResult
             $goodsResult = $countSumObj->cart_count($cartData, $area);
-			//print_r($goodsResult);
+		//	print_r($goodsResult);
             $cart = new Cart();
             $cart->del_many($delCart);
             //清空购物车
@@ -1698,7 +1700,9 @@ class Simple extends IController
         }
         unset($goodsResult['goodsList']);
         $goodsResult['goodsList'] = $temp;
+
         $orderData = $countSumObj->countOrderFeeee($goodsResult,$area,$payment,$insured,$taxes);
+
         if(is_string($orderData))
         {
             IError::show(403,$orderData);
@@ -1718,7 +1722,7 @@ class Simple extends IController
             'mobile'              => $mobile,
             'create_time'         => ITime::getDateTime(),
             'postscript'          => $order_message,
-            //订单应付总额（商品final_num加上，税金，运费，再减去红包）
+            //订单应付总额（商品final_num加上，税金，运费，包装费，再减去红包）
             'order_amount'        => $orderData['orderAmountPrice'] - (isset($ticketRow['value']) ? $ticketRow['value'] : 0),
 				'deli_day'        => $deli_day,
 				'deli_time'       => $deli_time
@@ -1788,7 +1792,7 @@ class Simple extends IController
                 'pro_reduce'         => $goodsResult['extend'][$k]['proReduce'] ,
                 //红包减免金额
                 'ticket_reduce'      => isset($ticket) ? $ticket : 0,
-                'order_amount'        => $goodsResult['extend'][$k]['sum']-$goodsResult['extend'][$k]['proReduce']-$goodsResult['extend'][$k]['reduce']+$v['deliveryPrice'] + $v['insuredPrice'] + $v['taxPrice'] + $v['paymentPrice'] - (isset($ticket) ? $ticket : 0),
+                'order_amount'        => $goodsResult['extend'][$k]['sum']-$goodsResult['extend'][$k]['proReduce']-$goodsResult['extend'][$k]['reduce']+$v['box_fee'] + $v['deliveryPrice'] + $v['insuredPrice'] + $v['taxPrice'] + $v['paymentPrice'] - (isset($ticket) ? $ticket : 0),
 
                 //订单保价
                 'if_insured'          => isset($v['if_insured']) ? 1 : 0,
@@ -1802,7 +1806,10 @@ class Simple extends IController
                 'pid'                 => $this->order_id,
                 'seller_id'           => $k,
 					'deli_day'        => $deli_day,
-					'deli_time'       => $deli_time
+					'deli_time'       => $deli_time,
+
+					//餐盒费
+				'box_fee'             => $v['box_fee']
             );
             
             $data['order_amount'] = $data['order_amount'] <= 0 ? 0 : $data['order_amount'];
