@@ -105,6 +105,13 @@ function orderFormClass()
 		{
 			return;
 		}
+		var ziti = $('select[name=takeself]').val();
+		if(ziti>0){
+			this.freeFreight = 1;
+		}
+		else{
+			this.freeFreight = 0;
+		}
         $('.js_data_6').hide();
         var _d = []
         ,_in = 0; 
@@ -186,7 +193,7 @@ function orderFormClass()
                 url: _delivery_url,
                 success:function(jsonData)
                 {
-                    if(!jsonData.isFreeFreight)
+                    if(!jsonData.isFreeFreight && orderFormObj.freeFreight==0)
                     {
                         orderFormInstance.deliveryPrice += parseFloat(price);
                         

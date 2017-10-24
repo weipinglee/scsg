@@ -77,10 +77,15 @@ jQuery(function(){
 	takeselfInit("{$this->custom['takeself']}");
 	$('select[name=payment]').val('-1');
 
+
     //计算运费
     $(function(){
 
         orderFormInstance.get_delivery();
+
+		$('select[name=takeself]').change(function(){
+			orderFormInstance.get_delivery();
+		})
     })
 });
 
@@ -394,7 +399,7 @@ function showDelitime(){
 								小计：<b >￥{$item['sum']}</b>
 							</p>
                             {if:!$this->good_type}
-							<p style="float: right;padding-right: 16px;height: 20px;">配送费用：￥<span class="js_goods_delivery" js_data="{$item['delivery_id']}_{$item['goods_id']}_{$item['product_id']}_{$item['count']}">{$item['delivery']}</span></p>
+							<p style="float: right;padding-right: 16px;height: 20px;display:none">配送费用：￥<span class="js_goods_delivery" js_data="{$item['delivery_id']}_{$item['goods_id']}_{$item['product_id']}_{$item['count']}">{$item['delivery']}</span></p>
                             {/if}
 			     		</div>
 						<div style="clear:both;"></div>
@@ -419,7 +424,7 @@ function showDelitime(){
 
 		     	<h4>代收点:</h4>
 					<select style="" name="takeself">
-		     		<option>请选择代收点（可空）</option>
+		     		<option value="0">请选择代收点（可空）</option>
 		     		</select>
 
 		    {/if}
