@@ -110,11 +110,17 @@ function orderFormClass()
 			this.freeFreight = 1;
 			$('#deli_day_text').text('自提日期');
 			$('#deli_time_text').text('自提时间');
+			$('option.a').text('今日');
+			$('option.b').text('次日');
+			$('option.c').text('即时');
 		}
 		else{
 			this.freeFreight = 0;
 			$('#deli_day_text').text('配送日期');
 			$('#deli_time_text').text('配送时间');
+			$('option.a').text('定时达');
+			$('option.b').text('次日达');
+			$('option.c').text('即时配送');
 		}
         $('.js_data_6').hide();
         var _d = []
