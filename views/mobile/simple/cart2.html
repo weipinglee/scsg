@@ -449,7 +449,7 @@ function showDelitime(){
 
 			<div class="qrdd qrdds">
 				<div class="qrdds_zf">
-					<h4><i>*</i>配送日期:</h4>
+					<h4><i>*</i><span id="deli_day_text">配送日期</span>:</h4>
 					<select style="" name="deliday" >
 						<option class="a" value="0">定时达</option>
 						<option class="b" value="1">次日达</option>
@@ -459,7 +459,7 @@ function showDelitime(){
 			</div>
 			<div class="qrdd qrdds">
 				<div class="qrdds_zf">
-					<h4><i>*</i>配送时间:</h4>
+					<h4><i>*</i><span id="deli_time_text">配送时间</span>:</h4>
 					<select style="" name="delitime" >
 						<option value="-1">即时配送</option>
 						{foreach:items=$deli_time}

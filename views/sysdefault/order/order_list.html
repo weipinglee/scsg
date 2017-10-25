@@ -130,8 +130,8 @@
 					<th>支付方式</th>
 					<th>用户名</th>
 					<th>付款时间</th>
-					<th>配送日期</th>
-					<th>配送时间</th>
+					<th>配送/自提日期</th>
+					<th>配送/自提时间</th>
 					<th>接单时间</th>
 					<th>接单状态</th>
 					<th>商品信息</th>
@@ -155,8 +155,8 @@
 					<td>{$item['payment_name']}</td>
 					<td>{echo:$item['username']=='' ? '游客' : $item['username']}</td>
 					<td title="{$item['pay_time']}">{$item['pay_time']}</td>
-					<td >{$item['deli_day']}</td>
-					<td >{$item['deli_time']}</td>
+					<td ><span {if:$item['takeself']}style="color:red"{/if}>{$item['deli_day']}</span></td>
+					<td ><span {if:$item['takeself']}style="color:red"{/if}>{$item['deli_time']}</span></td>
 					<td>{$item['acc_time']}</td>
 					<td>{if:$item['deliverStatus']==4}
 						<span style="color:green">已送达</span>

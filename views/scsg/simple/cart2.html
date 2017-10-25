@@ -413,9 +413,21 @@ function selectTakeself(deliveryId)
 
 					</h3>
 					<div id="deliday_form">
-						<label><input class="radio a" name="deliday" alt=""  type="radio" value="0" checked="true" />定时达</label>
-						<label><input class="radio b" name="deliday" alt=""  type="radio" value="1" />次日达</label>
-						<label><input class="radio c" name="deliday" alt=""  type="radio" value="2" />即时配送</label>
+						<label>
+							<input class="radio a" name="deliday" alt=""  type="radio" value="0" checked="true" />
+							<span class="noTakeself">定时达</span>
+							<span class="haveTakeself" style="display:none;">今日</span>
+						</label>
+						<label>
+							<input class="radio b" name="deliday" alt=""  type="radio" value="1" />
+							<span class="noTakeself">次日达</span>
+							<span class="haveTakeself" style="display:none;">次日</span>
+						</label>
+						<label>
+							<input class="radio c" name="deliday" alt=""  type="radio" value="2" />
+							<span class="noTakeself">即时配送</span>
+							<span class="haveTakeself" style="display:none;">即时</span>
+						</label>
 					</div>
 
 				</div>

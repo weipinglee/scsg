@@ -25,8 +25,8 @@
 				<th>用户名</th>
 				<th>支付状态</th>
 				<th>付款时间</th>
-				<th>配送日期</th>
-				<th>配送时间</th>
+				<th>配送/自提日期</th>
+				<th>配送/自提时间</th>
 				<th>打印</th>
 				<!-- <th>配送地址</th> -->
 				<th>接单状态</th>
@@ -46,7 +46,7 @@
 				</td>
 			<!-- 	<td title="{$item['accept_name']}">{$item['accept_name']}</td>
 				<td title="{$item['mobile']}">{$item['mobile']}</td> -->
-				<td><span name="disStatusColor{$item['distribution_status']}">{echo:Order_class::getOrderDistributionStatusText($item)}</span></td>
+				<td><span name="disStatusColor{$item['distribution_status']}" >{echo:Order_class::getOrderDistributionStatusText($item)}</span></td>
 
 				<td>
 					<?php
@@ -65,8 +65,8 @@
 					</span>
 				</td>
 				<td title="{$item['pay_time']}">{$item['pay_time']}</td>
-				<td >{$item['deli_day']}</td>
-				<td >{if:!$item['deli_time']}即时配送{else:}{$item['deli_time']}{/if}</td>
+				<td ><span {if:$item['takeself']}style="color:red"{/if}>{$item['deli_day']}</span></td>
+				<td ><span {if:$item['takeself']}style="color:red"{/if}>{if:!$item['deli_time']}即时配送{else:}{$item['deli_time']}{/if}</span></td>
 				<td>
 					<span class="prt" title="购物清单打印" onclick="window.open('{url:/seller/xiaopiao1/id/$item[id]}');">票</span>
 					<span class="prt" title="配货单打印" onclick="window.open('{url:/order/pick_template/id/$item[id]/seller_id/$seller_id}');">配</span>

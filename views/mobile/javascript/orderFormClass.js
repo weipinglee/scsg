@@ -108,9 +108,13 @@ function orderFormClass()
 		var ziti = $('select[name=takeself]').val();
 		if(ziti>0){
 			this.freeFreight = 1;
+			$('#deli_day_text').text('自提日期');
+			$('#deli_time_text').text('自提时间');
 		}
 		else{
 			this.freeFreight = 0;
+			$('#deli_day_text').text('配送日期');
+			$('#deli_time_text').text('配送时间');
 		}
         $('.js_data_6').hide();
         var _d = []
