@@ -457,7 +457,7 @@ class Seller extends IController
 	{
 		$seller_id = $this->seller['seller_id'];
 		$condition = Util::search(IFilter::act(IReq::get('search'),'strict'));
-
+		$deliver = new deliver();
 		$where  = "go.seller_id = ".$seller_id;
 		$where .= $condition ? " and ".$condition : "";
 
@@ -470,31 +470,41 @@ class Seller extends IController
 		$orderList = $orderHandle->find();
 
 		//构建 Excel table
+
 		$strTable ='<table width="500" border="1">';
 		$strTable .= '<tr>';
 		$strTable .= '<td style="text-align:center;font-size:12px;width:120px;">订单编号</td>';
-		$strTable .= '<td style="text-align:center;font-size:12px;" width="100">日期</td>';
-		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">收货人</td>';
-		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">电话</td>';
-		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">订单金额</td>';
-		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">实际支付</td>';
-		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付方式</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="100">配送状态</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="100">用户名</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">支付状态</td>';
-		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">发货状态</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">付款时间</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">配送日期</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">配送时间</td>';
+		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">接单状态</td>';
 		$strTable .= '<td style="text-align:center;font-size:12px;" width="*">商品信息</td>';
 		$strTable .= '</tr>';
 
+
 		foreach($orderList as $k=>$val){
+			$deliverStatus= $deliver->getDeliverStatus($val['id']);
+			$deliverStatusText = '';
+			if($deliverStatus==4){
+				$deliverStatusText = '已送达';
+			}
+			elseif($deliverStatus==1||$deliverStatus==2){
+				$deliverStatusText = '已接单';
+			}
+			else
+				$deliverStatusText = '未接单';
 			$strTable .= '<tr>';
 			$strTable .= '<td style="text-align:center;font-size:12px;">&nbsp;'.$val['order_no'].'</td>';
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['create_time'].' </td>';
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['accept_name'].' </td>';
-			$strTable .= '<td style="text-align:left;font-size:12px;">&nbsp;'.$val['telphone'].'&nbsp;'.$val['mobile'].' </td>';
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['payable_amount'].' </td>';
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['real_amount'].' </td>';
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['payment_name'].' </td>';
-			$strTable .= '<td style="text-align:left;font-size:12px;">'.Order_Class::getOrderPayStatusText($val).' </td>';
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.Order_Class::getOrderDistributionStatusText($val).' </td>';
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['accept_name'].' </td>';
+			$strTable .= '<td style="text-align:left;font-size:12px;">&nbsp;'.Order_Class::getOrderPayStatusText($val).' </td>';
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['pay_time'].' </td>';
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['deli_day'].' </td>';
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$val['deli_time'].' </td>';
+			$strTable .= '<td style="text-align:left;font-size:12px;">'.$deliverStatusText.' </td>';
 
 			$orderGoods = Order_class::getOrderGoods($val['id']);
 
@@ -509,6 +519,7 @@ class Seller extends IController
 			$strTable .= '<td style="text-align:left;font-size:12px;">'.$strGoods.' </td>';
 			$strTable .= '</tr>';
 		}
+
 		$strTable .='</table>';
 		//输出成EXcel格式文件并下载
 		$reportObj = new report();
