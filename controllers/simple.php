@@ -1568,7 +1568,7 @@ class Simple extends IController
 		$deli_time     = $deli_day == 2 ? 0 : IFilter::act(IReq::get('delitime'));
         $dataArray     = array();
 		$this->payment_id = $payment;
-echo $takeself;
+
 		if($deli_day==1){
 			$deli_day = ITime::getDateTime('Y-m-d',time()+3600*24);
 		}
@@ -1819,6 +1819,7 @@ echo $takeself;
             $data['order_amount'] = $data['order_amount'] <= 0 ? 0 : $data['order_amount'];
             $orderObj->setData($data);
             $oId = $orderObj->add();
+
             $orderInstance->insertOrderGoods($oId,$orderData['goodsResult'],$payment,$k);
 
 
