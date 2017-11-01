@@ -104,7 +104,7 @@ class Simple extends IController
 	function checkMobileValidateCode($phone,$num){
 		if($mobileValidateSess = Isafe::get('mobileValidateReg')){
 			if(time() - $mobileValidateSess['time']>=1800){//session过期
-				return 41;
+				return 0;//原来是41，改成0过期不报错
 			}else if($mobileValidateSess['num']!=$num || $mobileValidateSess['phone']!=$phone){
 				return 2;//错误
 			}else return 0;//正确
