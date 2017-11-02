@@ -15,6 +15,7 @@ if( isset($_COOKIE[session_name()]) && $_COOKIE[session_name()] )
 if(!isset($_SESSION))
 {
 	session_set_cookie_params(365*24*3600);
+	ini_set('session.gc_maxlifetime',30*24*3600);
 	session_start();
 }
 
