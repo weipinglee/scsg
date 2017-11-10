@@ -623,7 +623,9 @@ class Order extends IController
             die('<script text="text/javascript">parent.actionCallback("没有要退款的商品");</script>');
             return false;
         }
+
 		if($amount>$orderGoodsRow['real_price']*$orderGoodsRow['goods_nums']+$orderGoodsRow['delivery_fee']+$orderGoodsRow['save_price']+$orderGoodsRow['tax'] +$orderGoodsRow['box_fee']){
+
 			die('<script text="text/javascript">parent.actionCallback("退款金额不得大于实际支付金额");</script>');
 			return false;
 		}

@@ -96,7 +96,9 @@
             <em class="ershou">绑定手机</em>
         </a>
         {/if}
-	
+		{if:$this->sign == false}
+		<a href="{url:/simple/logout}" class="sign_out">退出</a>
+        {/if}
 	</div>
 
 
