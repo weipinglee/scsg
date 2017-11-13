@@ -34,7 +34,7 @@
 		<tbody>
 			{set:$seller_id = $this->seller['seller_id']}
 			{set:$page=(isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
-			{query: name=refundment_doc as rd join=left join order_goods as og on og.order_id eq rd.order_id where=rd.if_del eq 0 and rd.type eq 0 and rd.pay_status in (1,2,5,6) and rd.goods_id eq og.goods_id and rd.product_id eq og.product_id and rd.seller_id eq $seller_id $where order=id desc page=$page fields=og.order_id,og.goods_array,og.goods_nums,rd.*}
+			{query: name=refundment_doc as rd join=left join order_goods as og on og.order_id eq rd.order_id where=rd.if_del eq 0 and rd.type eq 0 and rd.pay_status in (1,2,5,6,7) and rd.goods_id eq og.goods_id and rd.product_id eq og.product_id and rd.seller_id eq $seller_id $where order=id desc page=$page fields=og.order_id,og.goods_array,og.goods_nums,rd.*}
 			{set:$goods = JSON::decode($item['goods_array'])}
 			<tr>
 				<td><a href='{url:/seller/order_show/id/$item[order_id]}'>{$item['order_no']}</a></td>
