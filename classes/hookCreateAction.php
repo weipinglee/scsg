@@ -126,8 +126,8 @@ class hookCreateAction extends IInterceptorBase
 					}
 					Order_Class::get_order_status_refunds($v['rid'],2);
 					Order_Class::ordergoods_status_refunds(2,$v,0);
-					$refundment_db->setData(array('pay_status'=>2));
-					$refundment_db->update('id='.$v['rid']);
+					//$refundment_db->setData(array('pay_status'=>2));
+					//$refundment_db->update('id='.$v['rid']);
 				}
 				catch(Exception $e){
 					$e->getMessage();
