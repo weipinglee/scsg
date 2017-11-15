@@ -677,7 +677,8 @@ function selectTakeself(deliveryId)
 	function showDelitime(){
 		var _this = $('input[name=deliday]:checked');
 		var type = _this.val();
-		var now = new Date();
+		var serverTime = "{echo:date('Y-m-d H:i:s')}";
+		var now = new Date(serverTime);
 		var interMin = 30*60*1000;
 
 		$('input.a').attr('disabled',true).attr('checked',false);//把第一个和第三个选项先设置为不可选

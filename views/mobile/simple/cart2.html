@@ -253,7 +253,8 @@ function showDelitime(){
 	var type = $('[name=deliday]').val();
 	var option = $('select[name=delitime]').find('option');
 	var interMin = 30*60*1000;
-	var now = new Date();
+	var serverTime = "{echo:date('Y-m-d H:i:s')}";
+	var now = new Date(serverTime);
 	$('option.a').attr('disabled',true);
 	$('option.c').attr('disabled',true);
 	option.each(function(index){
