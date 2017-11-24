@@ -1,0 +1,163 @@
+<link rel="stylesheet" href="{skin:css/breakfast.css}">
+<!-- <div class="breakfast_list_top">
+	<span class="breakfast_list_span">鑫鑫小区</span>
+	<a class="qh_a" href="{url:/site/breakfast}">切换区域</a>
+</div> -->
+<div class="position">
+<div class="breadcrumb">
+    <div class="crumbs-bar clearfix">
+        <div class="crumbs-nav">
+            <div class="crumbs-nav-main clearfix">
+                <div class="crumbs-nav-item one-level"> <a href="javascript;:" class="crumbs-link">首页</a> </div>
+                <div class="crumbs-nav-item">
+                    <i class="crumbs-arrow" style="float: left;margin-right: 10px">&gt;</i>
+                    <div class="menu-drop">
+	                    <div class="trigger"><span class="curr">食用油</span><i class="menu-drop-arrow"></i></div>
+	                    <div class="menu-drop-main">
+	                        <ul class="menu-drop-list">
+	                            <li><a href="/ducong/scsg/site/pro_list/cat/1">食用油</a></li>
+	                            <li><a href="/ducong/scsg/site/pro_list/cat/2">零食</a></li>
+	                            <li><a href="/ducong/scsg/site/pro_list/cat/4">小吃</a></li>
+	                            <li><a href="/ducong/scsg/site/pro_list/cat/12">面</a></li>
+	                        </ul>
+	                    </div>
+                    </div>
+                </div>                   
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper clearfix container_2">
+	<div class="main f_r">
+		<!--推荐商品-->
+		<!--推荐商品-->
+        <!--商品条件检索-->
+		<div class="box m_10">
+			<div class="title">全部</div>
+			<div class="cont">
+				<!--品牌展示-->
+				<dl class="sorting">
+				  <dt>品牌：</dt>
+				  <dd id="brand_dd">
+					<a class="nolimit current" href="?">不限</a>
+							
+					<a href="?&amp;brand=1" id="brand_1">小吃</a>
+				  </dd>
+				</dl>
+								
+				<!--品牌展示-->
+
+				<!--商品价格-->
+				<dl class="sorting">
+					<dt>价格：</dt>
+					<dd id="price_dd">
+						<p class="f_r"><input type="text" class="mini" name="min_price" value="" onchange="checkPrice(this);"> 至 <input type="text" class="mini" name="max_price" onchange="checkPrice(this);" value=""> 元
+						<label><input class="btn_gray btn_mini" type="button" onclick="priceLink();" value="确定"></label></p>
+						<a class="nolimit current" href="?&amp;min_price=&amp;max_price=">不限</a>
+						<a href="?&amp;min_price=1&amp;max_price=1" id="1-1">1-1</a>
+						<a href="?&amp;min_price=2&amp;max_price=39" id="2-39">2-39</a>
+						<a href="?&amp;min_price=40&amp;max_price=79" id="40-79">40-79</a>
+						<a href="?&amp;min_price=80&amp;max_price=199" id="80-199">80-199</a>
+					</dd>
+				</dl>
+				<!--商品价格-->
+				<dl class="sorting">
+				  <dt>区域：</dt>
+				  <dd id="brand_dd">
+					<a class="nolimit" href="?">不限</a>
+							
+					<a class="current" href="?&amp;brand=1" id="brand_1">鑫鑫小区</a>
+					<a href="?&amp;brand=1" id="brand_1">香榭小区</a>
+				  </dd>
+				</dl>
+						
+			</div>
+		</div>
+		<!--商品条件检索-->
+
+		<!--商品列表展示-->
+		<div class="display_title">
+		<!--<span class="l"></span>
+			<span class="r"></span> -->
+			<span class="f_l">排序：</span>
+			<ul>
+				<li class="">
+					<span class="l"></span><span class="r"></span>
+					<a href="?&amp;order=sale">销量<span class=" xia">&nbsp;</span></a>
+				</li>
+				<li class="">
+					<span class="l"></span><span class="r"></span>
+					<a href="?&amp;order=cpoint">评分<span class=" xia">&nbsp;</span></a>
+				</li>
+				<li class="">
+					<span class="l"></span><span class="r"></span>
+					<a href="?&amp;order=price">价格<span class=" xia">&nbsp;</span></a>
+				</li>
+				<li class="current">
+					<span class="l"></span><span class="r"></span>
+					<a href="?&amp;order=new">最新上架<span class=" xia">&nbsp;</span></a>
+				</li>
+			</ul>
+			<span class="f_l">显示方式：</span>
+			<a class="show_b" href="{echo:search_goods::searchUrl('show_type','win')}" title='橱窗展示' alt='橱窗展示'><span class='{echo:search_goods::getListShow(IReq::get('show_type')) == 'win' ? 'current':''}'></span></a>
+			<a class="show_s" href="{echo:search_goods::searchUrl('show_type','list')}" title='列表展示' alt='列表展示'><span class='{echo:search_goods::getListShow(IReq::get('show_type')) == 'list' ? 'current':''}'></span></a>
+		</div>
+
+		<ul class="display_list clearfix m_10">
+			<li class="clearfix  win">
+				<div class="pic">
+					<a title="嗯嗯" href="/ducong/scsg/site/products/id/19" target="_blank"><img src="/ducong/scsg/pic/thumb/img/upload@_@2017@_@07@_@27@_@20170727125753187.jpg/w/200/h/200" width="200" height="200" alt="嗯嗯" title="嗯嗯"></a>
+				</div>
+				<h3 class="title"> 
+				    <span style="display:inline;color:red;"></span><a style="display:inline;" title="嗯嗯" class="p_name" href="/ducong/scsg/site/products/id/19" target="_blank">嗯嗯</a>
+				   <span>总销量：3<a class="blue" href="/ducong/scsg/site/comments_list/id/19" target="_blank">( 0人评论 )</a></span>
+				    <span class="grade"><i style="width:0px"></i></span>
+					<span style="margin-top:2px;">
+						<a style="margin-left:5px;text-decoration:none;">王大拿</a>
+					</span>
+				</h3>
+						
+				<div class="price">￥10.00<s>￥10.00</s></div>
+				
+			</li>
+			<li class="clearfix win">
+				<div class="pic">
+					<a title="嗯嗯" href="/ducong/scsg/site/products/id/19" target="_blank"><img src="/ducong/scsg/pic/thumb/img/upload@_@2017@_@07@_@27@_@20170727125753187.jpg/w/200/h/200" width="200" height="200" alt="嗯嗯" title="嗯嗯"></a>
+				</div>
+				<h3 class="title"> 
+				    <span style="display:inline;color:red;"></span><a style="display:inline;" title="嗯嗯" class="p_name" href="/ducong/scsg/site/products/id/19" target="_blank">嗯嗯</a>
+				   <span>总销量：3<a class="blue" href="/ducong/scsg/site/comments_list/id/19" target="_blank">( 0人评论 )</a></span>
+				    <span class="grade"><i style="width:0px"></i></span>
+					<span style="margin-top:2px;">
+						<a style="margin-left:5px;text-decoration:none;">王大拿</a>
+					</span>
+				</h3>
+						
+				<div class="price">￥10.00<s>￥10.00</s></div>
+				
+			</li>
+			<li class="clearfix win">
+				<div class="pic">
+					<a title="嗯嗯" href="/ducong/scsg/site/products/id/19" target="_blank"><img src="/ducong/scsg/pic/thumb/img/upload@_@2017@_@07@_@27@_@20170727125753187.jpg/w/200/h/200" width="200" height="200" alt="嗯嗯" title="嗯嗯"></a>
+				</div>
+				<h3 class="title"> 
+				    <span style="display:inline;color:red;"></span><a style="display:inline;" title="嗯嗯" class="p_name" href="/ducong/scsg/site/products/id/19" target="_blank">嗯嗯</a>
+				   <span>总销量：3<a class="blue" href="/ducong/scsg/site/comments_list/id/19" target="_blank">( 0人评论 )</a></span>
+				    <span class="grade"><i style="width:0px"></i></span>
+					<span style="margin-top:2px;">
+						<a style="margin-left:5px;text-decoration:none;">王大拿</a>
+					</span>
+				</h3>
+						
+				<div class="price">￥10.00<s>￥10.00</s></div>
+				
+			</li>
+			
+			
+		</ul>
+		<div class="pages_bar"><a href="/ducong/scsg/site/pro_list/cat/1?page=1">首页</a><a class="current_page" href="/ducong/scsg/site/pro_list/cat/1?page=1">1</a><a href="/ducong/scsg/site/pro_list/cat/1?page=1">尾页</a><span>当前第1页/共1页</span></div>
+			<!--商品列表展示-->
+
+	</div>
+</div>
