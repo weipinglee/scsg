@@ -119,27 +119,31 @@
 .break_model .break_con{
 	float: left;
 	padding-left: 20px;
-	width: 369px;
+	width: 272px;
 	margin: 20px 0px;
 }
 .break_model .break_con .model{
-	    height: 180px;
-    line-height: 180px;
-    text-align: center;
-    background: #f9f9f9;
+	height: 120px;
+    background: #f8445f;
     margin-bottom: 10px; 
     border-radius: 10px;
     border: 2px solid #f7aaaa;
+    padding: 20px;
 }
 .break_model .break_con .model a.model_title{
 	display: block;
 	font-size: 18px;
     font-weight: bold;
-    box-shadow: 1px 1px 5px #ddd;
-     border-radius: 10px;
+    height: 120px;
+    color:#fff;
 
 }
-.break_model .break_con .model a.model_title:hover{
+.break_model .break_con .model a.model_title b{
+	font-size: 40px;
+	color:#ec84a1;
+	padding-right: 10px;
+}
+.break_model .break_con .model:hover{
 	box-shadow: 0px 1px 10px #ea3e01;
 	cursor: pointer;
 }
