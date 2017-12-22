@@ -114,3 +114,60 @@
 	margin-left: 10px;
 
 }
+
+/*小区模块*/
+.break_model .break_con{
+	float: left;
+	padding-left: 20px;
+	width: 370px;
+	margin: 20px 0px;
+}
+.break_model .break_con .model{
+    height: 170px;
+/*    background: #f8445f;*/
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 2px solid #f7aaaa;
+}
+.break_model .break_con .model .model_title img{
+    width: 366px;
+    height: 170px;
+    border-radius: 10px;
+}
+.break_model .break_con .model a.model_title{
+	display: block;
+	font-size: 18px;
+    font-weight: bold;
+    height: 170px;
+    color:#fff;
+
+}
+.break_model .break_con .model a.model_title b{
+	font-size: 40px;
+	color:#ec84a1;
+	padding-right: 10px;
+}
+.break_model .break_con .model:hover{
+	box-shadow: 0px 1px 10px #ea3e01;
+	cursor: pointer;
+}
+.break_model .break_con .classification .classification_ul{
+	padding:0 10px;
+	    height: 60px;
+    overflow: hidden;
+}
+.break_model .break_con .classification .classification_ul li{
+    float: left;
+    padding-left: 10px;
+    height: 30px;
+    line-height: 30px;
+}
+.break_model .break_con .classification .classification_ul li a{
+	font-size: 14px;
+}
+.break_model .break_con .classification .classification_ul li a:hover{
+	color: #ea3e01;
+	font-weight: bold;
+	cursor: pointer;
+}
+/*小区模块 end*/

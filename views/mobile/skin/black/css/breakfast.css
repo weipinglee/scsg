@@ -32,18 +32,30 @@
 }
 .break_center .break_span{
 	padding: 0px 20px;
-	height: 30px;
-	line-height:30px;
+	/*height: 30px;
+	line-height:30px;*/
 	font-weight: bold;
 	background: #fdfdfd;
    
     color: #ea3e01;
 }
+.break_center .break_span img{
+	width: 100%;
+	height: 200px;
+}
+.region{
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+}
+.region .region_ul{
+	margin: 0 10px;
+}
 .region .region_ul li{
+	float: left;
 	height: 40px;
 	line-height: 40px;
-	border-bottom: 1px solid #eee;
-	margin: 0px 20px;
+	/*border-bottom: 1px solid #eee;*/
+	margin: 0px 10px;
 }
 .region_title{
     border: 1px solid #eee;
