@@ -246,7 +246,7 @@ function selectTakeself(deliveryId)
 }
 
 </script>
-{set:$deli_time = explode(',',$siteConfig->deli_time)}
+
 <div class="wrapper clearfix">
 	<div class="position mt_10"><span>您当前的位置：</span> <a href="{url:}"> 首页</a> » 填写核对订单信息</div>
 	<div class="myshopping m_10">
@@ -413,21 +413,27 @@ function selectTakeself(deliveryId)
 
 					</h3>
 					<div id="deliday_form">
+						{if:in_array(2,$this->cateData['delitype'])}
 						<label>
 							<input class="radio a" name="deliday" alt=""  type="radio" value="0" checked="true" />
 							<span class="noTakeself">定时达</span>
 							<span class="haveTakeself" style="display:none;">今日</span>
 						</label>
+						{/if}
+						{if:in_array(3,$this->cateData['delitype'])}
 						<label>
 							<input class="radio b" name="deliday" alt=""  type="radio" value="1" />
 							<span class="noTakeself">次日达</span>
 							<span class="haveTakeself" style="display:none;">次日</span>
 						</label>
+						{/if}
+						{if:in_array(1,$this->cateData['delitype'])}
 						<label>
 							<input class="radio c" name="deliday" alt=""  type="radio" value="2" />
 							<span class="noTakeself">即时配送</span>
 							<span class="haveTakeself" style="display:none;">即时</span>
 						</label>
+						{/if}
 					</div>
 
 				</div>
@@ -438,7 +444,7 @@ function selectTakeself(deliveryId)
 						<a class="normal f12" href="javascript:void(0)" id='delitimeToggleButton' ></a>
 					</h3>
 					<div id="delitime_form">
-						{foreach:items=$deli_time}
+						{foreach:items=$this->cateData['delitime']}
 						<label><input class="radio" name="delitime" alt=""  type="radio" value="{$item}" {if:$key==0}checked="true"{/if} />{$item}</label>
 						{/foreach}
 
@@ -685,7 +691,9 @@ function selectTakeself(deliveryId)
 		$('input.c').attr('disabled',true).attr('checked',false);
 		//$('input.b').attr('checked',true);
 		$('#delitime_form').find('input[type=radio]').each(function(){
-			time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +$(this).val();
+			var itemTime = $(this).val().split('-');
+			itemTime = itemTime[0];
+			time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +itemTime;
 			//window.realAlert(parseInt(now - new Date(time)));
 			if(parseInt(now - new Date(time))< -interMin){//如果有可选时间段
 				$(this).attr('checked',true).attr('disabled',false);
@@ -706,7 +714,9 @@ function selectTakeself(deliveryId)
 			$('#delitime_form').find('input[type=radio]').removeAttr('disabled').removeAttr('checked');
 
 			$('#delitime_form').find('input[type=radio]').each(function(){
-				time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +$(this).val();
+				var itemTime = $(this).val().split('-');
+				itemTime = itemTime[0];
+				time = now.getFullYear()+'-'+parseInt(now.getMonth()+1)+'-'+now.getDate()+' ' +itemTime;
 				//window.realAlert(parseInt(now - new Date(time)));
 				if(parseInt(now - new Date(time))> -interMin){//不可选该时间段
 					$(this).attr('disabled',true);

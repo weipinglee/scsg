@@ -1034,6 +1034,29 @@ class Simple extends IController
     	$this->weight      = $result['weight'];
     	$this->freeFreight = $result['freeFreight'] ? 1 : 0;
 		$this->box_fee     = $result['box_fee'];
+
+		//获取商品所属分类的配送信息
+		$good_id = isset($this->goodsList[0][0]['goods_id']) ? $this->goodsList[0][0]['goods_id'] : 0;
+		if($good_id){
+			$goodsModel = new IModel('category_extend');
+			$cateData = $goodsModel->getObj('goods_id='.$good_id);
+			$cateId = $cateData['category_id'];
+			$cateModel = new IModel('category');
+			$cateData = $cateModel->getObj('id='.$cateId);
+			$pid = $cateData['parent_id'];
+			while($pid!=0){
+				$cateData = $cateModel->getObj('id='.$pid);
+				$pid = $cateData['parent_id'];
+			}
+			$cateData['delitype'] = explode(',',$cateData['delitype']);
+			$cateData['delitime'] = explode(',',$cateData['delitime']);
+			$this->cateData = $cateData;
+
+		}
+
+
+
+
     	//商品列表按商家分开
     	$this->goodsList = $this->goodsListBySeller($this->goodsList);
 
@@ -1054,7 +1077,7 @@ class Simple extends IController
 		//获取商品税金
 		$this->goodsTax    = $result['tax'];
 
-		//print_r($this->goodsList);
+
 		//获取配送方式列表（一个商家不支持则不显示）
 		/*$allDeliveryType = Api::run('getDeliveryList');
 		$deli_exe = new IModel('delivery_extend');
