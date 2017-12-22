@@ -588,9 +588,10 @@ class Goods extends IController
 		{
 			$categoryObj = new IModel('category');
 			$categoryRow = $categoryObj->getObj('id = '.$category_id);
+			$categoryRow['delitype'] = explode(',',$categoryRow['delitype']);
+			$this->categoryRow= $categoryRow;
 		}
-		$categoryRow['delitype'] = explode(',',$categoryRow['delitype']);
-		$this->categoryRow= $categoryRow;
+
 		$this->redirect('category_edit');
 	}
 

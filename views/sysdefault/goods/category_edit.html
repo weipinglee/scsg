@@ -68,9 +68,9 @@
 				<tr>
 					<th>配送类型：</th>
 					<td>
-						<label><input type="checkbox" name="delitype[]" value="1" {if:in_array(1,$this->categoryRow['delitype'])}checked="checked"{/if}/>即时配送</label>
-						<label><input type="checkbox" name="delitype[]" value="2" {if:in_array(2,$this->categoryRow['delitype'])}checked="checked"{/if} />定时达</label>
-						<label><input type="checkbox" name="delitype[]" value="3" {if:in_array(3,$this->categoryRow['delitype'])}checked="checked"{/if}/>次日达</label>
+						<label><input type="checkbox" name="delitype[]" value="1" {if:isset($this->categoryRow['delitype']) && in_array(1,$this->categoryRow['delitype'])}checked="checked"{/if}/>即时配送</label>
+						<label><input type="checkbox" name="delitype[]" value="2" {if:isset($this->categoryRow['delitype']) && in_array(2,$this->categoryRow['delitype'])}checked="checked"{/if} />定时达</label>
+						<label><input type="checkbox" name="delitype[]" value="3" {if:isset($this->categoryRow['delitype']) && in_array(3,$this->categoryRow['delitype'])}checked="checked"{/if}/>次日达</label>
 					</td>
 				</tr>
 				<tr>
