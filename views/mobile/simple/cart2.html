@@ -258,8 +258,10 @@ function showDelitime(){
 	$('option.a').attr('disabled',true);
 	$('option.c').attr('disabled',true);
 	option.each(function(index){
+		var itemTime = $(this).val().split('-');
+		itemTime = itemTime[0];
 		if(index>0){
-			time = now.getFullYear()+'/'+parseInt(now.getMonth()+1)+'/'+now.getDate()+' ' +$(this).val()+':00';
+			time = now.getFullYear()+'/'+parseInt(now.getMonth()+1)+'/'+now.getDate()+' ' +itemTime+':00';
 			if(parseInt(now - new Date(time))< -interMin){//有选该时间段
 				//alert(4);
 				$('option.a').attr('disabled',false);
@@ -288,7 +290,9 @@ function showDelitime(){
 		option.eq(0).attr('disabled',true);
 
 		option.each(function(){
-			time = now.getFullYear()+'/'+parseInt(now.getMonth()+1)+'/'+now.getDate()+' ' +$(this).val();
+			var itemTime = $(this).val().split('-');
+			itemTime = itemTime[0];
+			time = now.getFullYear()+'/'+parseInt(now.getMonth()+1)+'/'+now.getDate()+' ' +itemTime;
 			//window.realAlert(parseInt(now - new Date(time)));
 			if(parseInt(now - new Date(time))> -interMin){//不可选该时间段
 				$(this).attr('disabled',true);
@@ -302,7 +306,6 @@ function showDelitime(){
 }
 </script>
 
-{set:$deli_time = explode(',',$siteConfig->deli_time)}
      <div class="pages">
          <header class="wap-header">
 	   		 <div class="wap-topbar">
@@ -452,9 +455,15 @@ function showDelitime(){
 				<div class="qrdds_zf">
 					<h4><i>*</i><span id="deli_day_text">配送日期</span>:</h4>
 					<select style="" name="deliday" >
+						{if:in_array(2,$this->cateData['delitype'])}
 						<option class="a" value="0">定时达</option>
+						{/if}
+						{if:in_array(3,$this->cateData['delitype'])}
 						<option class="b" value="1">次日达</option>
+						{/if}
+						{if:in_array(1,$this->cateData['delitype'])}
 						<option class="c" value="2">即时配送</option>
+						{/if}
 					</select>
 				</div>
 			</div>
@@ -463,7 +472,7 @@ function showDelitime(){
 					<h4><i>*</i><span id="deli_time_text">配送时间</span>:</h4>
 					<select style="" name="delitime" >
 						<option value="-1">即时</option>
-						{foreach:items=$deli_time}
+						{foreach:items=$this->cateData['delitime']}
 						<option value="{$item}">{$item}</option>
 						{/foreach}
 					</select>

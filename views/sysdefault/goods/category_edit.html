@@ -66,6 +66,20 @@
 					</td>
 				</tr>
 				<tr>
+					<th>配送类型：</th>
+					<td>
+						<label><input type="checkbox" name="delitype[]" value="1" {if:isset($this->categoryRow['delitype']) && in_array(1,$this->categoryRow['delitype'])}checked="checked"{/if}/>即时配送</label>
+						<label><input type="checkbox" name="delitype[]" value="2" {if:isset($this->categoryRow['delitype']) && in_array(2,$this->categoryRow['delitype'])}checked="checked"{/if} />定时达</label>
+						<label><input type="checkbox" name="delitype[]" value="3" {if:isset($this->categoryRow['delitype']) && in_array(3,$this->categoryRow['delitype'])}checked="checked"{/if}/>次日达</label>
+					</td>
+				</tr>
+				<tr>
+					<th>可配送时间：</th>
+					<td>
+						<textarea name="delitime"></textarea><span>多个时间或时间段以英文逗号相隔</span>
+					</td>
+				</tr>
+				<tr>
 					<th>排序：</th><td><input class="normal" name="sort" pattern='int' empty alt='排序必须是一个数字' type="text" value=""/></td>
 				</tr>
 				<tr>

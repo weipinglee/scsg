@@ -587,8 +587,11 @@ class Goods extends IController
 		if($category_id)
 		{
 			$categoryObj = new IModel('category');
-			$this->categoryRow = $categoryObj->getObj('id = '.$category_id);
+			$categoryRow = $categoryObj->getObj('id = '.$category_id);
+			$categoryRow['delitype'] = explode(',',$categoryRow['delitype']);
+			$this->categoryRow= $categoryRow;
 		}
+
 		$this->redirect('category_edit');
 	}
 
@@ -608,6 +611,16 @@ class Goods extends IController
 		$descript = IFilter::act(IReq::get('descript'));
 		$hot = IFilter::act(IReq::get('hot'));
 
+		$deliType = IFilter::act(IReq::get('delitype'));
+		$deliTime = IFilter::act(IReq::get('delitime'));
+
+		if(!empty($deliType)){
+			$deliType = join(',',$deliType);
+		}
+		else{
+			$deliType = '1';
+		}
+
 		if(!$name)
 		{
 			$this->category_list();
@@ -623,9 +636,11 @@ class Goods extends IController
 			'keywords'  => $keywords,
 			'descript'  => $descript,
 			'title'     => $title,
-			'hot'       => $hot
+			'hot'       => $hot,
+			'delitype' => $deliType,
+			'delitime' => $deliTime
 		);
-		
+
 		//图片上传
         if((isset($_FILES['img']['name']) && $_FILES['img']['name'] != '') || (isset($_FILES['imghover']['name']) && $_FILES['imghover']['name'] != ''))
         {
