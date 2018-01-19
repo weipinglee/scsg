@@ -1554,6 +1554,23 @@ class Order_Class
 	}
 
 	/**
+	 * 支付状态查询，错误返回字符串
+	 * @param int $order_id 订单id
+	 * @return array | string
+	 */
+	public static function payStatus($order_id){
+		$obj = new IModel('order');
+		$orderRow = $obj->getObj('id='.$order_id,'pay_type');
+		if(empty($orderRow)){
+			return '订单不存在';
+		}
+		$paymentInstance = Payment::createPaymentInstance($orderRow['pay_type']);
+		$paymentData = Payment::getPaymentInfoForQuery($orderRow['pay_type'],$order_id);
+		$res=$paymentInstance->tradeStatusQuery($paymentData);
+		return $res;
+
+	}
+	/**
 	 * @brief 订单退款操作
 	 * @param int $refundId 退款单ID
 	 * @param int $authorId 操作人ID

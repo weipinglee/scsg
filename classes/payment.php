@@ -369,6 +369,30 @@ class Payment
 		return $payment;
 		
 	}
+
+	public static function getPaymentInfoForQuery($payment_id,$order_id){
+		$payment = self::getPaymentParam($payment_id);
+
+		$orderObj = new IModel('order');
+		$orderRow = $orderObj->getObj('id = '.$order_id,'order_no,trade_no,pay_time');
+
+		if(empty($orderRow))
+		{
+			IError::show(403,'订单信息不正确，不能退款');
+		}
+		$tradeObj = new IModel('trade_record');
+		$tradeRecord = $tradeObj->getObj('order_no='.$orderRow['order_no'],'time');
+
+		if(isset($tradeRecord['time'])&&$tradeRecord['time']!=''){
+			$time = $tradeRecord['time'];
+		}
+		else{
+			$time = $orderRow['pay_time'];
+		}
+		$payment['M_time'] = ITime::getDateTime('YmdHis',$time);
+		$payment['M_Order_NO'] = $orderRow['order_no'];
+		return $payment;
+	}
 	/**
 	 * @获取预售退款需要订单数据
 	 * @$payment_id int 支付方式id

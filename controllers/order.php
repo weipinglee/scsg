@@ -2182,4 +2182,17 @@ class Order extends IController
 		}
 		$this->redirect($redi.'_'.$plat);
 	}
+
+
+	public function tradeStatus()
+	{
+		$order_id  = IFilter::act(IReq::get('order_id'),'int');
+        $res = Order_Class::payStatus($order_id);
+		if(is_string($res)){
+			die($res);
+		}
+		else{
+			print_r($res);
+		}
+	}
 }
