@@ -389,7 +389,7 @@ class Payment
 		else{
 			$time = $orderRow['pay_time'];
 		}
-		$payment['M_time'] = ITime::getDateTime('YmdHis',$time);
+		$payment['M_time'] = ITime::getDateTime('YmdHis',ITime::getTime($time));
 		$payment['M_Order_NO'] = $orderRow['order_no'];
 		return $payment;
 	}
