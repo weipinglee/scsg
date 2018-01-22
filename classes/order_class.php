@@ -384,7 +384,8 @@ class Order_Class
 				$checkResult = $orderObj->update('id = '.$orderRow['id']);
 				if($checkResult)
 				{
-					$smsContent = smsTemplate::takeself(array('{orderNo}' => $orderRow['order_no'],'{address}' => $takeselfRow['address'],'{mobile_code}' => $mobile_code,'{phone}' => $takeselfRow['phone'],'{name}' => $takeselfRow['name']));
+					$deli_time = $orderRow['deli_time']? '于'.$orderRow['deli_time'] : '';
+					$smsContent = smsTemplate::takeself(array('{deli_time}'=>$deli_time,'{orderNo}' => $orderRow['order_no'],'{address}' => $takeselfRow['address'],'{mobile_code}' => $mobile_code,'{phone}' => $takeselfRow['phone'],'{name}' => $takeselfRow['name']));
 					Hsms::send($orderRow['mobile'],$smsContent);
 
 					//给自提点发送短信
