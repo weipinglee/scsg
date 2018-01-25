@@ -146,6 +146,26 @@ class scan_wechat extends paymentPlugin
             return(array('code_url' => $result["code_url"],'order_id' => $payment['M_OrderNO'], 'product_id' => $temp,'pay_total' => $payment['M_Amount']*100,'pay_level' => 0));
         }
     }
+
+
+    public function tradeStatusQuery($payment){
+        $payModel = new IModel('payment');
+        $payPara = $payModel->getField('id='.$payment['M_Paymentid'], 'config_param');
+        $paraData = JSON::decode($payPara);
+        $input = new WxPayUnifiedOrder();
+        $M_mchid = $paraData['M_mchid'] ? $paraData['M_mchid'] : WxPayConfig::MCHID;
+        $temp = $M_mchid.date("YmdHis").rand(1,10000);
+        $input->SetAppid($paraData['M_merId']);
+        $input->SetMch_id($M_mchid);
+        $input->SetOut_trade_no($payment['M_Order_NO']);
+        $input->SetNonce_str(md5($temp));
+
+        $result = WxPayApi::orderQuery($input);
+       return $result;
+
+
+
+    }
     
     //记录交易号
     function recordTN($orderNo, $tradeNo, $pay_level)

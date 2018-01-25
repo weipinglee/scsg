@@ -372,7 +372,7 @@ class Payment
 
 	public static function getPaymentInfoForQuery($payment_id,$order_id){
 		$payment = self::getPaymentParam($payment_id);
-
+		$payment['M_Paymentid'] = $payment_id;
 		$orderObj = new IModel('order');
 		$orderRow = $orderObj->getObj('id = '.$order_id,'order_no,trade_no,pay_time');
 
