@@ -126,7 +126,7 @@ class scan_wechat extends paymentPlugin
         $input->SetAttach($payment['R_Name']);
         $M_mchid = $paraData['M_mchid'] ? $paraData['M_mchid'] : WxPayConfig::MCHID;
         $temp = $M_mchid.date("YmdHis");
-        $input->SetOut_trade_no($temp);
+        $input->SetOut_trade_no($payment['M_OrderNO']);
         $input->SetTotal_fee($payment['M_Amount']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
@@ -157,7 +157,9 @@ class scan_wechat extends paymentPlugin
         $temp = $M_mchid.date("YmdHis").rand(1,10000);
         $input->SetAppid($paraData['M_merId']);
         $input->SetMch_id($M_mchid);
-        $input->SetOut_trade_no($payment['M_Order_NO']);
+       // $orderNo = $M_mchid.'20180124153434';
+        $orderNo = $payment['M_Order_NO'];
+        $input->SetOut_trade_no($orderNo);
         $input->SetNonce_str(md5($temp));
 
         $result = WxPayApi::orderQuery($input);
