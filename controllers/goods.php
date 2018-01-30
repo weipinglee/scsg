@@ -613,6 +613,7 @@ class Goods extends IController
 
 		$deliType = IFilter::act(IReq::get('delitype'));
 		$deliTime = IFilter::act(IReq::get('delitime'));
+		$orderTime = IFilter::act(IReq::get('ordertime'));
 
 		if(!empty($deliType)){
 			$deliType = join(',',$deliType);
@@ -620,6 +621,7 @@ class Goods extends IController
 		else{
 			$deliType = '1';
 		}
+
 
 		if(!$name)
 		{
@@ -638,7 +640,8 @@ class Goods extends IController
 			'title'     => $title,
 			'hot'       => $hot,
 			'delitype' => $deliType,
-			'delitime' => $deliTime
+			'delitime' => $deliTime,
+			'ordertime' => $orderTime
 		);
 
 		//图片上传
