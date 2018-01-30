@@ -338,7 +338,7 @@ function showDelitime(){
 					<input type='hidden' value='{$defaultAddress["telphone"]}' name='telphone'/>
 					<input type='hidden' value='{$defaultAddress["mobile"]}' name='mobile'/>
 					<input type='hidden' value='{$defaultAddress["zip"]}' name='zip'/>
-
+					<input type="hidden" name="orderTime" value="{$this->cateData['ordertime']}" />
                  	<p style="padding-left:15px;padding-bottom:10px;">
                  		{if:empty($defaultAddress)}
 						<span style="position: relative;top: 12px;" class="shname">请选择收货信息{$defaultAddress['accept_name']}</span>
