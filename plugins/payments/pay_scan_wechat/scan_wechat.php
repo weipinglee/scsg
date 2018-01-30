@@ -52,7 +52,7 @@ class scan_wechat extends paymentPlugin
      */
     public function getSubmitUrl()
     {
-        return 'http://www.yqtvt.com/site/payCode';
+        return IUrl::getHost().IUrl::creatUrl('/site/payCode');
     }
     
     /**
