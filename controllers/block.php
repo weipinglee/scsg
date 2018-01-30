@@ -944,6 +944,87 @@ class Block extends IController
         echo JSON::encode($msg);
     }
 
+	//微信支付成功回调函数
+	public function wecheat_server_callback()
+	{
+		//从URL中获取支付方式
+		$payment_id      = 13;
+		$paymentInstance = Payment::createPaymentInstance($payment_id);
+
+		if(!is_object($paymentInstance))
+		{
+			die('fail');
+		}
+
+		//初始化参数
+		$money   = '';
+		$message = '支付失败';
+		$orderNo = '';
+
+		//执行接口回调函数
+		$callbackData = array_merge($_POST,$_GET);
+		$pay_level = isset($callbackData['attach']) ? $callbackData['attach'] : 0;
+		unset($callbackData['controller']);
+		unset($callbackData['action']);
+		unset($callbackData['_id']);
+		if($pay_level)
+		{
+			$return = $paymentInstance->server_callback($callbackData,$payment_id,$money,$message,$orderNo,$pay_level);
+		}
+		else
+		{
+			$return = $paymentInstance->serverCallback($callbackData,$payment_id,$money,$message,$orderNo);
+		}
+
+		if($return===true){
+
+			//充值方式
+			if(stripos($orderNo,'recharge') !== false)
+			{
+				$recharge_no = str_replace('recharge','',$orderNo);
+				if(payment::updateRecharge($recharge_no))
+				{
+					$paymentInstance->notifyStop();
+					exit;
+				}
+
+			}
+			elseif(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
+			{
+				$order_id = Preorder_Class::updateOrderStatus($orderNo);
+				if($order_id)
+				{
+					$paymentInstance->notifyStop();
+					exit;
+				}
+
+			}
+			else{
+				$order_id = Order_Class::updateOrderStatus($orderNo, '', '', $pay_level);
+				if($order_id && !is_array($order_id))
+				{
+					$paymentInstance->notifyStop();
+					exit;
+				}
+				elseif(is_array($order_id))
+				{
+					$paymentInstance->notifyStop();
+					exit;
+				}
+
+			}
+		}
+		//支付失败
+		else
+		{
+			$paymentInstance->notifyStop();
+			exit;
+		}
+
+
+
+
+	}
 	/**
      * @brief 【重要】支付中断处理
 	 */
