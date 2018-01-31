@@ -22,7 +22,7 @@ class scan_wechat extends paymentPlugin
     public function __construct($payment_id)
     {
         parent::__construct($payment_id);
-        $this->serverCallbackUrl   = IUrl::getHost().IUrl::creatUrl("/block/wecheat_server_callback/_id/".$payment_id);
+        $this->serverCallbackUrl   = IUrl::getHost().IUrl::creatUrl("/block/wecheat_server_callback");
     }
 
     /*
@@ -42,9 +42,20 @@ class scan_wechat extends paymentPlugin
     /**
      * @see paymentplugin::notifyStop()
      */
-    public function notifyStop()
+    public function notifyStop($msg='')
     {
-        echo "success";
+        if($msg==''){
+            echo '<xml>
+                  <return_code><![CDATA[SUCCESS]]></return_code>
+                  <return_msg><![CDATA[OK]]></return_msg>
+                </xml>';
+        }
+        else{
+            echo '<xml>
+                  <return_code><![CDATA[FAIL]]></return_code>
+                  <return_msg><![CDATA['.$msg.']]></return_msg>
+                </xml>';
+        }
     }
     
     /**
@@ -65,13 +76,13 @@ class scan_wechat extends paymentPlugin
     public function callback($callbackData,&$paymentId,&$money,&$message,&$orderNo){}
     
     public function serverCallback($callbackData,&$paymentId,&$money,&$message,&$orderNo){}
-    public function server_callback($callbackData,&$paymentId,&$money,&$message,&$orderNo,$pay_level)
+    public function server_callback($callbackData,&$paymentId,&$money,&$message,&$orderNo,&$pay_level)
     {
-//        $postXML      = file_get_contents("php://input");
-//        $callbackData = $this->converArray($postXML);
+        $callbackData = $this->converArray($callbackData);
 
         if(isset($callbackData['return_code']) && $callbackData['return_code'] == 'SUCCESS')
         {
+            $pay_level = $callbackData['attach'];
             //除去待签名参数数组中的空值和签名参数
             $para_filter = $this->paraFilter($callbackData);
 

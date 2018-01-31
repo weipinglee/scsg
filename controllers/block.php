@@ -947,6 +947,7 @@ class Block extends IController
 	//微信支付成功回调函数
 	public function wecheat_server_callback()
 	{
+
 		//从URL中获取支付方式
 		$payment_id      = 13;
 		$paymentInstance = Payment::createPaymentInstance($payment_id);
@@ -962,21 +963,16 @@ class Block extends IController
 		$orderNo = '';
 
 		//执行接口回调函数
-		$callbackData = array_merge($_POST,$_GET);
-		$pay_level = isset($callbackData['attach']) ? $callbackData['attach'] : 0;
-		unset($callbackData['controller']);
-		unset($callbackData['action']);
-		unset($callbackData['_id']);
-		if($pay_level)
-		{
-			$return = $paymentInstance->server_callback($callbackData,$payment_id,$money,$message,$orderNo,$pay_level);
-		}
-		else
-		{
-			$return = $paymentInstance->serverCallback($callbackData,$payment_id,$money,$message,$orderNo);
-		}
+		$callbackData      = file_get_contents("php://input");
 
-		if($return===true){
+		$pay_level =  0;
+//		unset($callbackData['controller']);
+//		unset($callbackData['action']);
+//		unset($callbackData['_id']);
+
+		$return = $paymentInstance->server_callback($callbackData,$payment_id,$money,$message,$orderNo,$pay_level);
+
+		if($return){
 
 			//充值方式
 			if(stripos($orderNo,'recharge') !== false)
@@ -1017,7 +1013,7 @@ class Block extends IController
 		//支付失败
 		else
 		{
-			$paymentInstance->notifyStop();
+			$paymentInstance->notifyStop($message);
 			exit;
 		}
 
