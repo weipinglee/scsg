@@ -670,7 +670,7 @@ class Order extends IController
 			}
 			Order_Class::get_order_status_refunds($refunds_id,2);
 			Order_Class::ordergoods_status_refunds(2,$orderGoodsRow,0);
-		if($result)
+		if($result===true)
 		{
 			
 			//记录操作日志
@@ -680,7 +680,8 @@ class Order extends IController
 		}
 		else
 		{
-			die('<script text="text/javascript">parent.actionCallback("退货错误");</script>');
+			$str = is_string($result) ? $result : '退货错误';
+			die('<script text="text/javascript">parent.actionCallback("'.$str.'");</script>');
 		}
 	}
 	/**

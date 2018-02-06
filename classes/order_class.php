@@ -1594,9 +1594,13 @@ class Order_Class
 		//获取支付方式
 		$pay_type = $orderDB->getField('id='.$order_id,'pay_type');
 		if(in_array($pay_type,array(3,12,13))){
-			$paymentInstance = Payment::createPaymentInstance($pay_type);
-			$paymentData = Payment::getPaymentInfoForRefund($pay_type,$refundId,$order_id,$amount);
-			if(!$res=$paymentInstance->refund($paymentData)) return false;//验签失败
+			try{
+				$paymentInstance = Payment::createPaymentInstance($pay_type);
+				$paymentData = Payment::getPaymentInfoForRefund($pay_type,$refundId,$order_id,$amount);
+				if(!$res=$paymentInstance->refund($paymentData)) return false;//验签失败
+			}catch(\Exception $e){
+				return $e->getMessage();
+			}
 		}
 		else if($pay_type==1){//预存款付款打入账户余额
 			$obj = new IModel('member');

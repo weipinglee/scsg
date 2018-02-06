@@ -200,6 +200,10 @@ class wap_wechat extends paymentPlugin
             self::addTrade($resArr);
             return true;
         }
+		else{
+			$err = $result['err_code'].'_'.$result['err_code_des'];
+			throw new \Exception($err);
+		}
         return false;
     }
 
