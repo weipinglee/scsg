@@ -183,6 +183,7 @@ class wap_wechat extends paymentPlugin
         $input->SetRefund_fee($refund_fee);
         $input->SetOut_refund_no($M_mchid.date("YmdHis"));
         $input->SetOp_user_id($M_mchid);
+        $input->setRefund_account('REFUND_SOURCE_RECHARGE_FUNDS');
         $result = WxPayApi::refund($input);
         if(isset($result['result_code']) && $result['result_code'] == 'SUCCESS')
         {
