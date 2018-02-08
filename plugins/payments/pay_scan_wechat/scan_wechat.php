@@ -19,6 +19,12 @@ class scan_wechat extends paymentPlugin
     //支付插件名称
     public $name = '微信二维码';
 
+    public function __construct($payment_id)
+    {
+        parent::__construct($payment_id);
+        $this->serverCallbackUrl   = IUrl::getHost().IUrl::creatUrl("/block/wecheat_server_callback");
+    }
+
     /*
      * @param 获取配置参数
      */
@@ -36,9 +42,20 @@ class scan_wechat extends paymentPlugin
     /**
      * @see paymentplugin::notifyStop()
      */
-    public function notifyStop()
+    public function notifyStop($msg='')
     {
-        echo "success";
+        if($msg==''){
+            echo '<xml>
+                  <return_code><![CDATA[SUCCESS]]></return_code>
+                  <return_msg><![CDATA[OK]]></return_msg>
+                </xml>';
+        }
+        else{
+            echo '<xml>
+                  <return_code><![CDATA[FAIL]]></return_code>
+                  <return_msg><![CDATA['.$msg.']]></return_msg>
+                </xml>';
+        }
     }
     
     /**
@@ -46,7 +63,7 @@ class scan_wechat extends paymentPlugin
      */
     public function getSubmitUrl()
     {
-        return 'http://www.yqtvt.com/site/payCode';
+        return IUrl::getHost().IUrl::creatUrl('/site/payCode');
     }
     
     /**
@@ -59,13 +76,13 @@ class scan_wechat extends paymentPlugin
     public function callback($callbackData,&$paymentId,&$money,&$message,&$orderNo){}
     
     public function serverCallback($callbackData,&$paymentId,&$money,&$message,&$orderNo){}
-    public function server_callback($callbackData,&$paymentId,&$money,&$message,&$orderNo,$pay_level)
+    public function server_callback($callbackData,&$paymentId,&$money,&$message,&$orderNo,&$pay_level)
     {
-        $postXML      = file_get_contents("php://input");
-        $callbackData = $this->converArray($postXML);
+        $callbackData = $this->converArray($callbackData);
 
         if(isset($callbackData['return_code']) && $callbackData['return_code'] == 'SUCCESS')
         {
+            $pay_level = $callbackData['attach'];
             //除去待签名参数数组中的空值和签名参数
             $para_filter = $this->paraFilter($callbackData);
 
@@ -88,7 +105,8 @@ class scan_wechat extends paymentPlugin
                     {
                         $this->recordTradeNo($orderNo,$callbackData['transaction_id'],$pay_level);
                     }
-                    return true;
+                    self::addTradeData($callbackData,1);//添加交易记录
+                    return 1;
                 }
                 else
                 {
@@ -100,6 +118,7 @@ class scan_wechat extends paymentPlugin
                 $message = '签名不匹配';
             }
         }
+        return 0;
     }
     
     public function getSendData($payment)
@@ -112,11 +131,7 @@ class scan_wechat extends paymentPlugin
          * 4、在支付成功通知中需要查单确认是否真正支付成功
          */
          $notifyUrl = $this->serverCallbackUrl;
-        if(isset($payment['pay_level']))
-        {
-            $pay_level = $payment['pay_level'] ? $payment['pay_level'] : 2;
-            $notifyUrl .= '/pay_level/'.$pay_level;
-        }
+
         $notify = new NativePay();
         $payModel = new IModel('payment');
         $payPara = $payModel->getField('id='.$payment['M_Paymentid'], 'config_param');
@@ -126,7 +141,7 @@ class scan_wechat extends paymentPlugin
         $input->SetAttach($payment['R_Name']);
         $M_mchid = $paraData['M_mchid'] ? $paraData['M_mchid'] : WxPayConfig::MCHID;
         $temp = $M_mchid.date("YmdHis");
-        $input->SetOut_trade_no($temp);
+        $input->SetOut_trade_no($payment['M_OrderNO']);
         $input->SetTotal_fee($payment['M_Amount']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
@@ -135,7 +150,12 @@ class scan_wechat extends paymentPlugin
         $input->SetTrade_type("NATIVE");
         $input->SetProduct_id($payment['M_OrderId']);
         $input->SetAppid($paraData['M_merId']);
-        $input->SetMch_id($M_mchid);           
+        $input->SetMch_id($M_mchid);
+        if(isset($payment['pay_level']))
+        {
+            $pay_level = $payment['pay_level'] ? $payment['pay_level'] : 2;
+            $input->SetAttach($pay_level);
+        }
         $result = $notify->GetPayUrl($input);
         if(isset($pay_level))
         {
@@ -146,16 +166,50 @@ class scan_wechat extends paymentPlugin
             return(array('code_url' => $result["code_url"],'order_id' => $payment['M_OrderNO'], 'product_id' => $temp,'pay_total' => $payment['M_Amount']*100,'pay_level' => 0));
         }
     }
-    
-    //记录交易号
-    function recordTN($orderNo, $tradeNo, $pay_level)
-    {
-        $this->recordTradeNo($orderNo, $tradeNo, $pay_level);
+
+
+    public function tradeStatusQuery($payment){
+        $payModel = new IModel('payment');
+        $payPara = $payModel->getField('id='.$payment['M_Paymentid'], 'config_param');
+        $paraData = JSON::decode($payPara);
+        $input = new WxPayUnifiedOrder();
+        $M_mchid = $paraData['M_mchid'] ? $paraData['M_mchid'] : WxPayConfig::MCHID;
+        $temp = $M_mchid.date("YmdHis").rand(1,10000);
+        $input->SetAppid($paraData['M_merId']);
+        $input->SetMch_id($M_mchid);
+       // $orderNo = $M_mchid.'20180124153434';
+        $orderNo = $payment['M_Order_NO'];
+        $input->SetOut_trade_no($orderNo);
+        $input->SetNonce_str(md5($temp));
+
+        $result = WxPayApi::orderQuery($input);
+       return $result;
+
+
+
     }
-    
-    function addTradeData($tradeData)
-    {
-        $this->addTrade($tradeData);
+
+
+
+    /**
+     * 添加交易记录
+     * @param array $tradeData  返回的报文
+     * @param int   $asyn  0:同步处理 1：异步回调
+     */
+    private static function addTradeData($tradeData,$asyn=0,$ids=0){
+        $resArr = array(
+            'trade_no' 	   => $tradeData['transaction_id'],
+            'order_no'     => $tradeData['out_trade_no'],
+            'money'        => $tradeData['cash_fee']/100,
+            'pay_type'     => 13,
+            'trade_type'   => 0,
+            'time'         => $tradeData['time_end'],
+            'order_ids'    => $ids,
+        );
+
+        $resArr['trade_status']=$asyn;
+        return self::addTrade($resArr);
+
     }
     
     //退款

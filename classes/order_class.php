@@ -384,7 +384,8 @@ class Order_Class
 				$checkResult = $orderObj->update('id = '.$orderRow['id']);
 				if($checkResult)
 				{
-					$smsContent = smsTemplate::takeself(array('{orderNo}' => $orderRow['order_no'],'{address}' => $takeselfRow['address'],'{mobile_code}' => $mobile_code,'{phone}' => $takeselfRow['phone'],'{name}' => $takeselfRow['name']));
+					$deli_time = $orderRow['deli_time']? '于'.$orderRow['deli_time'] : '';
+					$smsContent = smsTemplate::takeself(array('{deli_time}'=>$deli_time,'{orderNo}' => $orderRow['order_no'],'{address}' => $takeselfRow['address'],'{mobile_code}' => $mobile_code,'{phone}' => $takeselfRow['phone'],'{name}' => $takeselfRow['name']));
 					Hsms::send($orderRow['mobile'],$smsContent);
 
 					//给自提点发送短信
@@ -1553,6 +1554,23 @@ class Order_Class
 		return 0;
 	}
 
+	/**
+	 * 支付状态查询，错误返回字符串
+	 * @param int $order_id 订单id
+	 * @return array | string
+	 */
+	public static function payStatus($order_id){
+		$obj = new IModel('order');
+		$orderRow = $obj->getObj('id='.$order_id,'pay_type');
+		if(empty($orderRow)){
+			return '订单不存在';
+		}
+		$paymentInstance = Payment::createPaymentInstance($orderRow['pay_type']);
+		$paymentData = Payment::getPaymentInfoForQuery($orderRow['pay_type'],$order_id);
+		$res=$paymentInstance->tradeStatusQuery($paymentData);
+		return $res;
+
+	}
 	/**
 	 * @brief 订单退款操作
 	 * @param int $refundId 退款单ID

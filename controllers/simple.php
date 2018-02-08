@@ -1592,6 +1592,32 @@ class Simple extends IController
         $dataArray     = array();
 		$this->payment_id = $payment;
 
+		//定时达和次日达必须选择配送时间
+		if($deli_day==1 || $deli_day==0){
+			if($deli_time==''){
+				IError::show(403,'请选择配送时间，再提交订单');
+			}
+
+		}
+
+		//判断当前是否处于可下单时间内
+        $order_time = IFilter::act(IReq::get('orderTime'));
+		if($order_time!=''){
+			$now = time();
+			$orderTime = explode(',',$order_time);
+			$date = ITime::getDateTime('Y-m-d');
+			$tag = false;
+			foreach($orderTime as $val){
+				$start = explode('-',$val)[0];
+				$end = explode('-',$val)[1];
+				if($now>ITime::getTime($date.' '.$start) && $now<ITime::getTime($date.' '.$end)){
+					$tag=true;
+					break;
+				}
+			}
+			if(!$tag)
+				IError::show(403,'需要在时间段'.$order_time.'内才能购买');
+		}
 		if($deli_day==1){
 			$deli_day = ITime::getDateTime('Y-m-d',time()+3600*24);
 		}

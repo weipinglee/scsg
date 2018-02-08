@@ -49,7 +49,7 @@ class smsTemplate
 	 */
 	public static function takeself($data = null)
 	{
-		$templateString = "订单已被商家确认，请于9:30点前前往{address}提取您预定的商品、领取验证码为：{mobile_code}。";
+		$templateString = "订单已被商家确认，请{deli_time}前往{address}提取您预定的商品、领取验证码为：{mobile_code}。";
 		return strtr($templateString,$data);
 	}
 

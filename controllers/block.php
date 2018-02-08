@@ -850,100 +850,130 @@ class Block extends IController
 		}
 	}
     
-    //微信支付成功回调函数
+    //微信扫码支付同步回调，只
     public function wecheat_callback()
     {
-        $id = IReq::get('payment_id') ? IReq::get('payment_id') : 13;
-        $paymentInstance = Payment::createPaymentInstance($id);
-
-        if(!is_object($paymentInstance))
-        {
-            IError::show(403,'支付方式不存在');
-        }
         $orderNo = IReq::get('oId');
-        $pay_level = IReq::get('pay_level');
-        $tradeNo = IReq::get('id');
-        $pay_total = IReq::get('pay_total');
-        $paymentInstance->recordTN($orderNo,$tradeNo,$pay_level);
-        $resArr = array(
-                'order_no'     => $orderNo,
-                'trade_no'     => $tradeNo,
-                'trade_type'   => 1,
-                'money'        => $pay_total/100,
-                'pay_type'     => $id,
-                'trade_status' => 1,
-                'time'         => date('Y-m-d H:i:s')
-            );
-        $paymentInstance->addTradeData($resArr);
+
+		$obj = new IModel('order');
+		$data = $obj->getObj('order_no='.$orderNo,'id');
+		$order_id = isset($data['id']) ? $data['id'] : 0;
         $msg = array();
         
         //充值方式
         if(stripos($orderNo,'recharge') !== false)
         {
-            $recharge_no = str_replace('recharge','',$orderNo);
-            if(payment::updateRecharge($recharge_no))
-            {
-                $msg['status'] = 1;
-                $msg['url'] = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode("充值成功").'/?callback=/ucenter/account_log');
-            }
-            else
-            {
-                $msg['status'] = 0;
-                $msg['msg'] = '充值失败';
-            }
+			$msg['status'] = 1;
+			$msg['url'] = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode("充值成功").'/?callback=/ucenter/account_log');
+
         }
         elseif(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
         {
-            $order_id = Preorder_Class::updateOrderStatus($orderNo);
-            if($order_id)
-            {
-                $url  = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode("支付成功"));
-                if(IClient::getDevice()=='mobile'){
-                    $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
-                }
-                else{
-                    $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
-                }
-                
-                $msg['status'] = 1;
-                $msg['url'] = $url;
-            }
-            else
-            {
-                $msg['status'] = 0;
-                $msg['msg'] = '充值失败';
-            }
+			$url  = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode("支付成功"));
+			if(IClient::getDevice()=='mobile'){
+				$url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
+			}
+			else{
+				$url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
+			}
+
+			$msg['status'] = 1;
+			$msg['url'] = $url;
+
         }
         else{
-            $order_id = Order_Class::updateOrderStatus($orderNo, '', '', $pay_level);
-            if($order_id && !is_array($order_id))
-            {
-                $url  = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode("支付成功"));
-                if(IClient::getDevice()=='mobile'){
-                    $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
-                }
-                else{
-                    $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
-                }
-                $msg['status'] = 1;
-                $msg['url'] = $url;
-            }
-            elseif(is_array($order_id))
-            {
-                $url  = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode("支付成功"));
-                $url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
-                $msg['status'] = 1;
-                $msg['url'] = $url;
-            }
-            else
-            {
-                $msg['status'] = 0;
-                $msg['msg'] = '充值失败';
-            }
+
+			$url  = IUrl::getHost().IUrl::creatUrl('/site/success/message/'.urlencode("支付成功"));
+			if(IClient::getDevice()=='mobile'){
+				$url .= ISafe::get('user_id') ? '/?callback=/ucenter/order' : '';
+			}
+			else{
+				$url .= ISafe::get('user_id') ? '/?callback=/ucenter/order_detail/id/'.$order_id : '';
+			}
+			$msg['status'] = 1;
+			$msg['url'] = $url;
+
         }
         echo JSON::encode($msg);
     }
 
+	//微信支付成功回调函数
+	public function wecheat_server_callback()
+	{
+
+		//从URL中获取支付方式
+		$payment_id      = 13;
+		$paymentInstance = Payment::createPaymentInstance($payment_id);
+
+		if(!is_object($paymentInstance))
+		{
+			die('fail');
+		}
+
+		//初始化参数
+		$money   = '';
+		$message = '支付失败';
+		$orderNo = '';
+
+		//执行接口回调函数
+		$callbackData      = file_get_contents("php://input");
+
+		$pay_level =  0;
+//		unset($callbackData['controller']);
+//		unset($callbackData['action']);
+//		unset($callbackData['_id']);
+
+		$return = $paymentInstance->server_callback($callbackData,$payment_id,$money,$message,$orderNo,$pay_level);
+
+		if($return){
+
+			//充值方式
+			if(stripos($orderNo,'recharge') !== false)
+			{
+				$recharge_no = str_replace('recharge','',$orderNo);
+				if(payment::updateRecharge($recharge_no))
+				{
+					$paymentInstance->notifyStop();
+					exit;
+				}
+
+			}
+			elseif(stripos($orderNo,'pre') !== false || stripos($orderNo,'wei') !== false)
+			{
+				$order_id = Preorder_Class::updateOrderStatus($orderNo);
+				if($order_id)
+				{
+					$paymentInstance->notifyStop();
+					exit;
+				}
+
+			}
+			else{
+				$order_id = Order_Class::updateOrderStatus($orderNo, '', '', $pay_level);
+				if($order_id && !is_array($order_id))
+				{
+					$paymentInstance->notifyStop();
+					exit;
+				}
+				elseif(is_array($order_id))
+				{
+					$paymentInstance->notifyStop();
+					exit;
+				}
+
+			}
+		}
+		//支付失败
+		else
+		{
+			$paymentInstance->notifyStop($message);
+			exit;
+		}
+
+
+
+
+	}
 	/**
      * @brief 【重要】支付中断处理
 	 */

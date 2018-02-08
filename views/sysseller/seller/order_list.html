@@ -104,7 +104,7 @@
 					?>
 				</td>
 				<td>
-					<a href="{if:Order_class::isGoDelivery($item) && $deliverStatus}{url:/seller/order_deliver/id/$item[id]}{else:}javascript:alert('此单不满足发货条件');{/if}"><img class="operator" src="{skin:images/main/icn_jump_back.png}" title="立即发货" alt="立即发货" /></a>
+					<a href="{if:Order_class::isGoDelivery($item) && ($deliverStatus>0 || $item['takeself']>0)}{url:/seller/order_deliver/id/$item[id]}{else:}javascript:alert('此单不满足发货条件');{/if}"><img class="operator" src="{skin:images/main/icn_jump_back.png}" title="立即发货" alt="立即发货" /></a>
 					<a href="{url:/seller/order_show/id/$item[id]/pid/$item[pid]}"><img title="订单详情" alt="订单详情" src="{skin:images/main/icn_settings.png}" /></a>
 				</td>
 			</tr>

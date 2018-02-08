@@ -191,7 +191,7 @@ OEF;
 	/**
 	 * 异步通知停止
 	 */
-	abstract public function notifyStop();
+	abstract public function notifyStop($msg='');
 
 	/**
 	 * 获取提交地址

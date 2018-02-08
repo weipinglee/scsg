@@ -261,6 +261,43 @@ class unionpay extends paymentPlugin
 		}
 		return false;
 	}
+
+	/**
+	 * 查询交易状态
+	 * @param $payment
+	 * @return bool|array  成功返回数组，失败返回false
+	 */
+	public function tradeStatusQuery($payment){
+		Common::setCertPwd($payment['M_certPwd']);
+		$return = array(
+				'version' => '5.0.0',				//版本号
+				'encoding' => 'utf-8',				//编码方式
+				'bizType' => '000201',
+				'txnTime'=> $payment['M_time'],      //交易时间
+				'txnType' => '00',				//交易类型
+				'txnSubType' => '00',				//交易子类 01消费
+				'accessType' => '0',		//接入类型
+				'signMethod' => '01',		//签名方法
+				'merId' => $payment['M_merId'],	//商户代码，请改自己的测试商户号
+			    'orderId' => $payment['M_Order_NO'],
+				'certId' => Common::getSignCertId (),			//证书ID
+
+		);
+
+		Common::sign ( $return );
+		$result = sendHttpRequest ( $return, SDK_BACK_TRANS_URL );
+		$result_arr = Common::coverStringToArray ( $result );
+
+		//print_r($result_arr);exit();
+		if(Common::verify ( $result_arr )&&$result_arr['respCode']=='00'){//
+			return $result_arr;
+		}
+		else{
+			echo $result_arr['respMsg'];
+			return false;
+		}
+
+	}
 	/**
 	 * 添加交易记录
 	 * @param array $tradeData  返回的报文
