@@ -18,6 +18,7 @@ class Simple extends IController
 
 	function init()
 	{
+		$this->redirect("/site/index");
 		CheckRights::checkUserRights();
 	}
 
