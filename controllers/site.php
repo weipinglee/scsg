@@ -665,6 +665,7 @@ class Site extends IController
 	//[列表页]商品
 	function pro_list()
 	{
+		$this->redirect('site/index');
 		$this->catId = IFilter::act(IReq::get('cat'),'int');//分类id
 
 		if($this->catId == 0)
@@ -839,6 +840,7 @@ class Site extends IController
 	//商品展示
 	function products()
 	{
+		$this->redirect('site/index');
 		$goods_id = IFilter::act(IReq::get('id'),'int');
         
 		if(!$goods_id)
