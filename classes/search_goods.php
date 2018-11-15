@@ -194,8 +194,12 @@ class search_goods
 	 */
 	public static function getOrderValue($order)
 	{
-		$currentOrder = IFilter::act(IReq::get('order'));
-		return $currentOrder == $order ? $order.'_toggle' : $order;
+        $currentOrder = IFilter::act(IReq::get('order'));
+        if(in_array($currentOrder,array('sale','cpoint','price','new'))){
+            return $currentOrder == $order ? $order.'_toggle' : $order;
+        }else{
+            return 'sale_toggle';
+        }
 	}
 
 	/**

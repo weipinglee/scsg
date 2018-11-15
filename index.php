@@ -10,6 +10,7 @@ define('IS_POST',       REQUEST_METHOD =='POST' ? true : false);
 define('IS_PUT',        REQUEST_METHOD =='PUT' ? true : false);
 define('IS_DELETE',     REQUEST_METHOD =='DELETE' ? true : false);
 define('IS_AJAX',       ((isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')) ? true : false);
+header('Set-Cookie:HttpOnly;Secure');
 IWeb::createWebApp($config)->run();
 
 ?>
